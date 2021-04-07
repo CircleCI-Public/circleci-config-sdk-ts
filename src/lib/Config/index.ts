@@ -9,6 +9,7 @@ import YAML from "yaml"
 import { ExectorSchema } from "../Components/Executor/index.types"
 import { JobSchema } from "../Components/Job/index.types"
 import { WorkflowSchema } from "../Components/Workflow/index.types"
+import { Pipeline } from "./Pipeline"
 
 /**
  * A CircleCI configuration
@@ -19,6 +20,7 @@ export class Config implements CircleCIConfigObject {
 		jobs: Job[] = []
 		commands: Command[] = []
 		workflows: Workflow[] = []
+		pipeline: Pipeline = new Pipeline()
 
 		constructor(jobs?: Job[], workflows?: Workflow[], executors?: Executor[], commands?: Command[]) {
 			this.jobs.concat(jobs || [])
