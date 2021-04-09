@@ -7,11 +7,11 @@ import { WorkflowJobParameters, WorkflowJobSchema } from "./index.types"
  */
 export class WorkflowJob extends Component {
 	job: Job
-	parameters: WorkflowJobParameters = {name: ""}
+	parameters: WorkflowJobParameters = {name: "", requires: []}
 	constructor(job: Job, parameters?: WorkflowJobParameters) {
 		super()
 		this.job = job
-		this.parameters = parameters || {name: this.job.name}
+		this.parameters = parameters || {name: this.job.name, requires: []}
 		this.parameters.name = parameters?.name || this.job.name
 	}
 	requiresJob(workflowJob: WorkflowJob): this {

@@ -35,5 +35,6 @@ export type ParameterTypes =
   | string[]
   | boolean
   | number
-  | ExecutorType
-  | undefined; // | enum // Not yet created enum types
+  | ExecutorType // executor
+  | Command[] // steps
+  | EnumParameter // ennum

@@ -1,4 +1,8 @@
 export class Git {
+	private _isLocal = true
+	constructor(isLocal: boolean) {
+		this._isLocal = isLocal
+	}
 	/**
 	 * The name of the git tag that was pushed to trigger the pipeline. If the pipeline was not triggered by a tag, then this is the empty string.
 	 */

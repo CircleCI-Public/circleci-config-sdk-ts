@@ -12,27 +12,37 @@ export class Pipeline {
 	 */
 	parameters: PipelineParameter<ParameterTypes>[] = []
 	constructor() {
-		process.env.CIRCLECI ? this._isLocal = true : this._isLocal = false
+		process.env.CIRCLECI ? this._isLocal = false : this._isLocal = true
 	}
 	/**
 	 * A globally unique id representing for the pipeline
+	 * @beta
 	 */
 	get id(): string {
-		return "local"
+		if (this._isLocal) {
+			return "local"
+		} else {
+			return "NOT YET SUPPORTED"
+		}
 	}
 	/**
 	 * A project unique integer id for the pipeline
+	 * @beta
 	 */
 	get number(): number {
-		return 0
+		if (this._isLocal) {
+			return 0
+		} else {
+			return -1
+		}
 	}
 	/**
 	 * Project metadata
 	 */
-	project: Project = new Project()
+	project: Project = new Project(this._isLocal)
 	/**
 	 * Git metadata
 	 */
-	git: Git = new Git()
+	git: Git = new Git(this._isLocal)
 }
 export {PipelineParameter}

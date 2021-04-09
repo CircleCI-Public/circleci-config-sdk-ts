@@ -62,6 +62,11 @@ describe("Implement type-safe pipeline parameters", () => {
 describe("Generate valid Pipeline Parameter YAML", () => {
 	const stringParameter = new PipelineParameter("myParameter", "my-string-value")
 	const generated = stringParameter.generate()
-	console.log(generated)
-	expect(generated).toEqual("X")
+	expect(generated).toEqual({"myParameter": {"default": "my-string-value", "enum": [], "type": "string"}})
+})
+
+describe("Check Pipeline Project Parameters", () => {
+	const x = new CircleCI.Pipeline
+	expect(x.project.git_url).toEqual("git.local")
+	expect(x.project.type).toEqual("local")
 })
