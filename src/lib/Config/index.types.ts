@@ -28,10 +28,13 @@ export interface CircleCIConfigSchema {
   workflows: WorkflowSchema;
 }
 
+export type EnumParameter = string[]
+
 export type ParameterTypes =
   | string
   | string[]
   | boolean
   | number
-  | ExecutorType
-  | undefined; // | enum // Not yet created enum types
+  | ExecutorType // executor
+  | Command[] // steps
+  | EnumParameter // ennum

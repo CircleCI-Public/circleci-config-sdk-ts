@@ -7,7 +7,7 @@ export interface WorkflowSchema {
 }
 
 export interface WorkflowJobParameters {
-	requires?: string[],
+	requires: string[],
 	name: string,
 	[key: string]: ParameterTypes
 }

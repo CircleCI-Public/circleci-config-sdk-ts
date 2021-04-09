@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Executor | circleci-config-sdk</title>
+	<title>Run | circleci-config-sdk</title>
 	<meta name="description" content="Documentation for circleci-config-sdk">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,16 @@
 					<a href="../modules.html">circleci-config-sdk</a>
 				</li>
 				<li>
-					<a href="../modules/executor.html">Executor</a>
+					<a href="../modules/index.html">index</a>
 				</li>
 				<li>
-					<a href="executor.executor-1.html">Executor</a>
+					<a href="../modules/index.command.html">Command</a>
+				</li>
+				<li>
+					<a href="index.command.run.html">Run</a>
 				</li>
 			</ul>
-			<h1>Class Executor</h1>
+			<h1>Class Run</h1>
 		</div>
 	</div>
 </header>
@@ -71,11 +74,12 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A generic reusable Executor</p>
+						<p>The Run command step is used for invoking all command-line programs.</p>
 					</div>
 					<dl class="tsd-comment-tags">
-						<dt>abstract</dt>
-						<dd></dd>
+						<dt>param</dt>
+						<dd><p>{@link RunParameters}</p>
+						</dd>
 					</dl>
 				</div>
 			</section>
@@ -83,15 +87,10 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">Component</span>
+						<span class="tsd-signature-type">Command</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">Executor</span>
-								<ul class="tsd-hierarchy">
-									<li>
-										<a href="executor.dockerexecutor.html" class="tsd-signature-type" data-tsd-kind="Class">DockerExecutor</a>
-									</li>
-								</ul>
+								<span class="target">Run</span>
 							</li>
 						</ul>
 					</li>
@@ -104,20 +103,20 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="executor.executor-1.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="index.command.run.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="executor.executor-1.html#description" class="tsd-kind-icon">description</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="executor.executor-1.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="index.command.run.html#parameters" class="tsd-kind-icon">parameters</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="index.command.run.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-inherited">
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="executor.executor-1.html#generate" class="tsd-kind-icon">generate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="index.command.run.html#generate" class="tsd-kind-icon">generate</a></li>
 							</ul>
 						</section>
 					</div>
@@ -129,75 +128,69 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Executor<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, description<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="executor.executor-1.html" class="tsd-signature-type" data-tsd-kind="Class">Executor</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Run<span class="tsd-signature-symbol">(</span>parameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RunParameters</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.command.run.html" class="tsd-signature-type" data-tsd-kind="Class">Run</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides Component.constructor</p>
+								<p>Overrides Command.constructor</p>
 								<ul>
-									<li>Defined in lib/Components/Executor/index.types.ts:9</li>
+									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1720bc3/src/lib/Components/Commands/Native/Run.ts#L8">lib/Components/Commands/Native/Run.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>name: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> description: <span class="tsd-signature-type">string</span></h5>
+									<h5>parameters: <span class="tsd-signature-type">RunParameters</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="executor.executor-1.html" class="tsd-signature-type" data-tsd-kind="Class">Executor</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index.command.run.html" class="tsd-signature-type" data-tsd-kind="Class">Run</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="description" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> description</h3>
-					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+					<a name="parameters" class="tsd-anchor"></a>
+					<h3>parameters</h3>
+					<div class="tsd-signature tsd-kind-icon">parameters<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RunParameters</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides Command.parameters</p>
 						<ul>
-							<li>Defined in lib/Components/Executor/index.types.ts:9</li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1720bc3/src/lib/Components/Commands/Native/Run.ts#L8">lib/Components/Commands/Native/Run.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="type" class="tsd-anchor"></a>
+					<h3>type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from Command.type</p>
 						<ul>
-							<li>Defined in lib/Components/Executor/index.types.ts:8</li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1720bc3/src/lib/Components/Commands/index.types.ts#L8">lib/Components/Commands/index.types.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="generate" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> generate</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">generate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span></li>
+					<h3>generate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">generate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RunCommandSchema</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from Component.generate</p>
+								<p>Overrides Command.generate</p>
 								<ul>
-									<li>Defined in lib/Components/index.types.ts:5</li>
+									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1720bc3/src/lib/Components/Commands/Native/Run.ts#L13">lib/Components/Commands/Native/Run.ts:13</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Generate the CircleCI YAML equivelant JSON for config compilation</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">RunCommandSchema</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -207,37 +200,28 @@
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class=" ">
-						<a href="../modules.html">Exports</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="../modules/command.html">Command</a>
-					</li>
-					<li class="current tsd-kind-namespace">
-						<a href="../modules/executor.html">Executor</a>
+						<a href="../modules.html">Modules</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-namespace">
-						<a href="executor.dockerexecutor.html" class="tsd-kind-icon">Docker<wbr>Executor</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-namespace">
-						<a href="executor.executor-1.html" class="tsd-kind-icon">Executor</a>
+						<a href="index.command.run.html" class="tsd-kind-icon">Run</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-								<a href="executor.executor-1.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="index.command.run.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="executor.executor-1.html#description" class="tsd-kind-icon">description</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+								<a href="index.command.run.html#parameters" class="tsd-kind-icon">parameters</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="executor.executor-1.html#name" class="tsd-kind-icon">name</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="index.command.run.html#type" class="tsd-kind-icon">type</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="executor.executor-1.html#generate" class="tsd-kind-icon">generate</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="index.command.run.html#generate" class="tsd-kind-icon">generate</a>
 							</li>
 						</ul>
 					</li>
@@ -253,12 +237,20 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 			</ul>
 		</div>
 	</div>
