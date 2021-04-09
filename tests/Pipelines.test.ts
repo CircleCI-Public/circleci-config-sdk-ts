@@ -40,8 +40,9 @@ describe("Implement type-safe pipeline parameters", () => {
 	const DockerExecutor = new CircleCI.Executor.DockerExecutor("dockerExecutor", "cimg/base:stable")
 	const myJob = new CircleCI.Job("myJob", DockerExecutor)
 
-	const stringParameter = new PipelineParameter<string>("myParameter", "my-string-value", "string")
-	const booleanParamter = new PipelineParameter<boolean>("myBoolean", true, "boolean")
+	const stringParameter = new PipelineParameter("myParameter", "my-string-value")
+	const booleanParamter = new PipelineParameter("myBoolean", true)
+	const enumParamerer = new PipelineParameter("myEnum", "test", ["all", "possible", "values", "test"])
 
 	const echoCommand = new CircleCI.Command.Run({
 		command: `echo hello ${stringParameter.value}`
@@ -50,5 +51,17 @@ describe("Implement type-safe pipeline parameters", () => {
 	if (booleanParamter.value == false) {
 		myJob.addStep(echoCommand)
 	}
+
 	expect(myJob.steps.length).toEqual(0)
+	expect(stringParameter.type).toEqual("string")
+	expect(booleanParamter.type).toEqual("boolean")
+	expect(enumParamerer.value).toEqual("test")
+
+})
+
+describe("Generate valid Pipeline Parameter YAML", () => {
+	const stringParameter = new PipelineParameter("myParameter", "my-string-value")
+	const generated = stringParameter.generate()
+	console.log(generated)
+	expect(generated).toEqual("X")
 })

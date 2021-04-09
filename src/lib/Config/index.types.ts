@@ -28,6 +28,8 @@ export interface CircleCIConfigSchema {
   workflows: WorkflowSchema;
 }
 
+export type EnumParameter = string[]
+
 export type ParameterTypes =
   | string
   | string[]
