@@ -8,7 +8,7 @@ import { WorkflowJobParameters, WorkflowJobSchema } from "./index.types"
 export class WorkflowJob extends Component {
 	job: Job
 	parameters?: WorkflowJobParameters
-	constructor(job: Job, parameters: WorkflowJobParameters) {
+	constructor(job: Job, parameters?: WorkflowJobParameters) {
 		super()
 		this.job = job
 		if (parameters) {
