@@ -1,0 +1,20 @@
+version: 2.1
+orbs:
+  node: circleci/node@4.2
+
+workflows:
+  build-test-deploy:
+    jobs:
+      - node/test:
+          name: docs-generate
+          run-command: build:docs
+      - node/test:
+          matrix:
+            parameters:
+              version:
+                - 15.14.0
+                - 14.16.1
+                - 13.14.0
+      - node/test:
+          name: build
+          run-command: build
