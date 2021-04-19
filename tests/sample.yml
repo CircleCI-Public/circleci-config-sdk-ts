@@ -17,5 +17,4 @@ jobs:
 workflows:
   myWorkflow:
     jobs:
-      - node-test:
-          name: node-test
+      - node-test: {}

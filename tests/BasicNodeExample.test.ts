@@ -29,7 +29,7 @@ describe("Generate a Hello World config", () => {
 
 	// const configOutputFile = myConfig.stringify()
 	it("Should generate a valid config file", () => {
-		const expectedResult = {"version":2.1,"executors":{"node-executor":{"docker":[{"image":"cimg/node:lts"}]}},"jobs":{"node-test":{"executor":{"name":"node-executor"},"steps":[{"run":{"command":"npm install","name":"NPM Install"}},{"run":{"command":"npm run test","name":"Run tests"}}]}},"workflows":{"myWorkflow":{"jobs":[{"node-test":{"name":"node-test"}}]}}}
+		const expectedResult = {"version":2.1,"executors":{"node-executor":{"docker":[{"image":"cimg/node:lts"}]}},"jobs":{"node-test":{"executor":{"name":"node-executor"},"steps":[{"run":{"command":"npm install","name":"NPM Install"}},{"run":{"command":"npm run test","name":"Run tests"}}]}},"workflows":{"myWorkflow":{"jobs":[{"node-test":{}}]}}}
 		const configYAML = myConfig.stringify()
 		expect(YAML.parse(configYAML)).toEqual(expectedResult)
 	})

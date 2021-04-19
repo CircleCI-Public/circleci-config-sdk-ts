@@ -1,4 +1,4 @@
-import { Command } from "../index.types"
+import { Command, CommandParameters } from "../index.types"
 
 /**
  * The Run command step is used for invoking all command-line programs.
@@ -16,15 +16,11 @@ export class Run extends Command {
 		return command as RunCommandSchema
 	}
 }
-export interface RunParameters {
+export interface RunParameters extends CommandParameters {
 	/**
 	 * Command to run via the shell
 	 */
 	command: string
-	/**
-	 * Title of the step to be shown in the CircleCI UI (default: full command)
-	 */
-	name?: string
 	/**
 	 * Shell to use for execution command (default: See Default Shell Options)
 	 */
