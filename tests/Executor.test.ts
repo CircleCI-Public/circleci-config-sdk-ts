@@ -8,7 +8,6 @@ describe("Instantiate Docker Executor", () => {
   docker:
     - image: cimg/node:lts`
 
-
 	it("Should match the expected output", () => {
 		expect(docker).toEqual(YAML.parse(expectedYAML))
 	})

@@ -7,16 +7,18 @@ import { WorkflowJobParameters, WorkflowJobSchema } from "./index.types"
  */
 export class WorkflowJob extends Component {
 	job: Job
-	parameters: WorkflowJobParameters = {name: "", requires: []}
-	constructor(job: Job, parameters?: WorkflowJobParameters) {
+	parameters?: WorkflowJobParameters
+	constructor(job: Job, parameters: WorkflowJobParameters) {
 		super()
 		this.job = job
-		this.parameters = parameters || {name: this.job.name, requires: []}
-		this.parameters.name = parameters?.name || this.job.name
+		if (parameters) {
+			this.parameters = parameters
+		}
 	}
 	requiresJob(workflowJob: WorkflowJob): this {
+		if (! this.parameters) {this.parameters = {}}
 		if (! this.parameters.requires) {this.parameters.requires = []}
-		this.parameters.requires.push(workflowJob.parameters.name)
+		this.parameters.requires.push(workflowJob.parameters?.name ?? workflowJob.job.name)
 		return this
 	}
 	generate(): WorkflowJobSchema {

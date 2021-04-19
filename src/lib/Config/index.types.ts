@@ -37,4 +37,6 @@ export type ParameterTypes =
   | number
   | ExecutorType // executor
   | Command[] // steps
-  | EnumParameter // ennum
+  | EnumParameter // enum
+  | Map<string, string> // Environment key value pairs
+  | undefined
