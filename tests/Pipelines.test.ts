@@ -1,5 +1,7 @@
 import * as CircleCI from "../src/index"
 import { PipelineParameter } from "../src/lib/Config/Pipeline"
+// Enforce local testing
+delete process.env.CIRCLECI
 describe("Check built-in pipeline parameters", () => {
 	const myConfig = new CircleCI.Config()
 	it("Should return pipeline id", () => {
