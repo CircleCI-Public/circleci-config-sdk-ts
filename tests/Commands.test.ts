@@ -1,4 +1,5 @@
 import * as CircleCI from "../src/index"
+import * as YAML from "yaml"
 
 describe("Instantiate a Run step", () => {
 	const run = new CircleCI.Command.Run({
@@ -6,7 +7,7 @@ describe("Instantiate a Run step", () => {
 	})
 	const runStep = run.generate()
 	const expectedResult = {"run": {"command": "echo hello world"}}
-	it("Should match the expected output", () => {
+	it("Should genreate checkout yaml", () => {
 		expect(runStep).toEqual(expectedResult)
 	})
 })
@@ -20,5 +21,18 @@ describe("Instantiate a Checkout step", () => {
 	const checkoutWithPath = new CircleCI.Command.Checkout({path: "./src"})
 	it("Should produce checkout with path parameter", () => {
 		expect(checkoutWithPath.generate()).toEqual({"checkout":{"path":"./src"}})
+	})
+})
+
+describe("Save and load cache", () => {
+	it("Should generate save cache yaml", () => {
+		const example = {"save_cache":{"key":"v1-myapp-{{ arch }}-{{ checksum \"project.clj\" }}","paths":["/home/ubuntu/.m2"]}}
+		const saveCache = new CircleCI.Command.Cache.Save({key: "v1-myapp-{{ arch }}-{{ checksum \"project.clj\" }}", paths: ["/home/ubuntu/.m2"]})
+		expect(example).toEqual(saveCache.generate())
+	})
+	it("Should generate restore cache yaml", () => {
+		const example = {"restore_cache":{"keys":["v1-npm-deps-{{ checksum \"package-lock.json\" }}","v1-npm-deps-"]}}
+		const restoreCache = new CircleCI.Command.Cache.Restore({keys: ["v1-npm-deps-{{ checksum \"package-lock.json\" }}","v1-npm-deps-"]})
+		expect(example).toEqual(restoreCache.generate())
 	})
 })

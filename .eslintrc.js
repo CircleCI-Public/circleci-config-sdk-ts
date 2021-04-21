@@ -5,7 +5,8 @@ module.exports = {
 	},
 	"extends": [
 		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended"
+		"plugin:@typescript-eslint/recommended",
+		"plugin:security/recommended"
 	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
@@ -14,7 +15,8 @@ module.exports = {
 	},
 	"plugins": [
 		"@typescript-eslint",
-		"eslint-plugin-tsdoc"
+		"eslint-plugin-tsdoc",
+		"security"
 	],
 	"rules": {
 		"tsdoc/syntax": "warn",
@@ -25,10 +27,6 @@ module.exports = {
 		"linebreak-style": [
 			"error",
 			"unix"
-		],
-		"quotes": [
-			"error",
-			"double"
 		],
 		"semi": [
 			"error",
