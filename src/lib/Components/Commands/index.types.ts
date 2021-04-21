@@ -6,11 +6,11 @@ import { RunCommandSchema } from "./Native/Run"
  * Abstract - A generic Command
  */
 export abstract class Command extends Component {
-	type: string
+	name: string
 	abstract parameters?: CommandParameters
-	constructor(type: string) {
+	constructor(name: string) {
 		super()
-		this.type = type
+		this.name = name
 	}
 }
 
