@@ -1,9 +1,17 @@
 import { Command, CommandSchema } from "../Components/Commands/index.types"
-import { Job, Workflow } from "../Components"
-import { Executor } from "../Components/Executor"
-import { ExecutorType, ExectorSchema } from "../Components/Executor/index.types"
+import Job from "../Components/Job"
+import Workflow from "../Components/Workflow"
+import Executor from "../Components/Executor/index.types"
+import {
+	ExecutorType,
+	ExectorSchema,
+} from "../Components/Executor/index.types"
 import { JobSchema } from "../Components/Job/index.types"
-import { WorkflowFilterSchema, WorkflowMatrixSchema, WorkflowSchema } from "../Components/Workflow/index.types"
+import {
+	WorkflowFilterSchema,
+	WorkflowMatrixSchema,
+	WorkflowSchema,
+} from "../Components/Workflow/index.types"
 
 export type ConfigVersion = 2 | 2.1;
 export interface ConfigOrbImport {
@@ -28,7 +36,7 @@ export interface CircleCIConfigSchema {
   workflows: WorkflowSchema;
 }
 
-export type EnumParameter = string[]
+export type EnumParameter = string[];
 
 export type ParameterTypes =
   | string
@@ -41,4 +49,4 @@ export type ParameterTypes =
   | Map<string, string> // Environment key value pairs
   | WorkflowMatrixSchema // Matrix parameters for Workflow jobs
   | WorkflowFilterSchema // Workflow job filter parameters
-  | undefined
+  | undefined;

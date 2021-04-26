@@ -1,5 +1,5 @@
-import { Component } from "../index.types"
-import { Job } from "../Job"
+import Component from "../index.types"
+import Job from "../Job"
 import { WorkflowJobParameters, WorkflowJobSchema } from "./index.types"
 
 /**

@@ -1,4 +1,4 @@
-import * as CircleCI from "../src/index"
+import CircleCI from "../src/index"
 import * as YAML from "yaml"
 
 describe("Instantiate Docker Job", () => {

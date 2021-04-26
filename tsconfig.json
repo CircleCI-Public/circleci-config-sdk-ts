@@ -70,10 +70,9 @@
   },
   "include": ["src/**/*"],
   "typedocOptions": {
-    "entryPoints": ["src/index.ts",
-      "src/index.types.ts",
-      "src/lib/Config/index.types.ts",
-      "src/lib/Config/Pipeline/index.types.ts"],
+    "entryPoints": [
+      "src/index.ts",
+    ],
     "out": "docs"
   },
 }

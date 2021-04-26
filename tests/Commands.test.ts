@@ -1,5 +1,4 @@
-import * as CircleCI from "../src/index"
-import * as YAML from "yaml"
+import CircleCI from "../src/index"
 
 describe("Instantiate a Run step", () => {
 	const run = new CircleCI.Command.Run({

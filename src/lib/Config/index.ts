@@ -1,15 +1,15 @@
 import { Command } from "../Components/Commands/index.types"
-import { Job } from "../Components/Job"
-import { Workflow } from "../Components/Workflow"
+import Job from "../Components/Job"
+import Workflow from "../Components/Workflow"
 import { CircleCIConfigObject, CircleCIConfigSchema, ConfigVersion } from "./index.types"
 
-import { Executor } from "../Components"
+import Executor from "../Components/Executor/index.types"
 
 import YAML from "yaml"
 import { ExectorSchema } from "../Components/Executor/index.types"
 import { JobSchema } from "../Components/Job/index.types"
 import { WorkflowSchema } from "../Components/Workflow/index.types"
-import { Pipeline } from "./Pipeline"
+import Pipeline  from "./Pipeline"
 
 /**
  * A CircleCI configuration
@@ -76,3 +76,4 @@ export class Config implements CircleCIConfigObject {
 		}
 
 }
+export default Config
