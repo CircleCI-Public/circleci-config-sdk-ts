@@ -3,7 +3,7 @@ import { Job, Workflow } from "../Components"
 import { Executor } from "../Components/Executor"
 import { ExecutorType, ExectorSchema } from "../Components/Executor/index.types"
 import { JobSchema } from "../Components/Job/index.types"
-import { WorkflowSchema } from "../Components/Workflow/index.types"
+import { WorkflowFilterSchema, WorkflowMatrixSchema, WorkflowSchema } from "../Components/Workflow/index.types"
 
 export type ConfigVersion = 2 | 2.1;
 export interface ConfigOrbImport {
@@ -39,4 +39,6 @@ export type ParameterTypes =
   | Command[] // steps
   | EnumParameter // enum
   | Map<string, string> // Environment key value pairs
+  | WorkflowMatrixSchema // Matrix parameters for Workflow jobs
+  | WorkflowFilterSchema // Workflow job filter parameters
   | undefined
