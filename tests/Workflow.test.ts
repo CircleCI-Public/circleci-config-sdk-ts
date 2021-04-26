@@ -33,3 +33,27 @@ describe("Instantiate Workflow with a custom name", () => {
 		expect(generatedWorkflow).toEqual(expected)
 	})
 })
+
+describe("Utilize workflow job filters", () => {
+	const docker = new CircleCI.Executor.DockerExecutor("docker-executor", "cimg/node:lts")
+	const helloWorld = new CircleCI.Command.Run({
+		command: "echo hello world"
+	})
+	const job = new CircleCI.Job("my-job", docker, [helloWorld])
+
+	it("Should create branch filter", () => {
+		const myWorkflow = new CircleCI.Workflow("my-workflow")
+		myWorkflow.addJob(job, {filters: {branches: {only: ["/server\\/.*/"]}}})
+		const generatedWorkflowJob = myWorkflow.jobs[0].generate()
+		const expected = {"my-job":{"filters":{"branches":{"only":["/server\\/.*/"]}}}}
+		expect(generatedWorkflowJob).toEqual(expected)
+	})
+
+	it("Should create tag filter", () => {
+		const myWorkflow = new CircleCI.Workflow("my-workflow")
+		myWorkflow.addJob(job, {filters: {tags: {only: ["/^v.*/"]}}})
+		const generatedWorkflowJob = myWorkflow.jobs[0].generate()
+		const expected = {"my-job":{"filters":{"tags":{"only":["/^v.*/"]}}}}
+		expect(generatedWorkflowJob).toEqual(expected)
+	})
+})
