@@ -1,10 +1,10 @@
-import { Component } from "../index.types"
+import Component from "../index.types"
 import { DockerExecutor } from "./DockerExecutor"
 import { DockerExecutorSchema } from "./DockerExecutor.types"
 /**
  * A generic reusable Executor
  */
-export abstract class Executor extends Component {
+export default abstract class Executor extends Component {
 	name: string
 	description?: string
 	constructor(name: string, description?: string) {
@@ -16,4 +16,4 @@ export abstract class Executor extends Component {
 }
 
 export type ExecutorType = DockerExecutor
-export type ExectorSchema = DockerExecutorSchema
+export type ExectorSchema = DockerExecutorSchema;

@@ -1,14 +1,10 @@
-import {
-	Executor
-} from "../../Components/Executor/index.types"
-import {
-	DockerImage
-} from "./DockerImage"
-import {
-	DockerImageMap,
-	DockerExecutorSchema
-} from "./DockerExecutor.types"
+import Executor from "../../Components/Executor/index.types"
+import { DockerImage } from "./DockerImage"
+import { DockerImageMap, DockerExecutorSchema } from "./DockerExecutor.types"
 
+/**
+ * A Docker based CircleCI executor {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#docker}
+ */
 export class DockerExecutor extends Executor {
 	image: DockerImage;
 	serviceImages: DockerImage[] = [];
