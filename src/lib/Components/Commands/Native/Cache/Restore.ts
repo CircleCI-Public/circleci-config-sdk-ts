@@ -8,6 +8,10 @@ export class Restore extends Command {
 		super("Restore_cache")
 		this.parameters = parameters
 	}
+	/**
+	 * Generate Restore Cache Command schema.
+	 * @returns The generated JSON for the Restore Cache Command.
+	 */
 	generate(): RestoreCacheCommandSchema {
 		return {restore_cache: {...this.parameters}} as RestoreCacheCommandSchema
 	}

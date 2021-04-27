@@ -12,14 +12,32 @@ import { WorkflowSchema } from "../Components/Workflow/index.types"
 import Pipeline  from "./Pipeline"
 
 /**
- * A CircleCI configuration
+ * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
  */
 export class Config implements CircleCIConfigObject {
+		/**
+		 * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
+		 */
 		version: ConfigVersion = 2.1
+		/**
+		 * Executors define the environment in which the steps of a job will be run, allowing you to reuse a single executor definition across multiple jobs.
+		 */
 		executors: Executor[] = []
+		/**
+		 * Jobs are collections of steps. All of the steps in the job are executed in a single unit, either within a fresh container or VM.
+		 */
 		jobs: Job[] = []
+		/**
+		 * A command definition defines a sequence of steps as a map to be executed in a job, enabling you to reuse a single command definition across multiple jobs.
+		 */
 		commands: Command[] = []
+		/**
+		 * A Workflow is comprised of one or more uniquely named jobs.
+		 */
 		workflows: Workflow[] = []
+		/**
+		 * Access information about the current pipeline.
+		 */
 		pipeline: Pipeline = new Pipeline()
 
 		constructor(jobs?: Job[], workflows?: Workflow[], executors?: Executor[], commands?: Command[]) {
@@ -37,12 +55,18 @@ export class Config implements CircleCIConfigObject {
 			this.workflows.push(workflow)
 			return this
 		}
-
+		/**
+		 * Add an Executor to the current Config. Chainable
+		 * @param executor - Injectable executor
+		 */
 		addExecutor(executor: Executor): this {
 			this.executors.push(executor)
 			return this
 		}
-
+		/**
+		 * Add a Job to the current Config. Chainable
+		 * @param job - Injectable Job
+		 */
 		addJob(job: Job): this {
 			// Abstract rules later
 			if (this.executors.find(x => x.name == job.executor.name)) {
@@ -54,7 +78,7 @@ export class Config implements CircleCIConfigObject {
 		}
 
 		/**
-		 * Export a dockerfile as a string
+		 * Export the CircleCI configuration as a YAML string.
 		 */
 		stringify(): string {
 			const generatedExecutorConfig: ExectorSchema = {}

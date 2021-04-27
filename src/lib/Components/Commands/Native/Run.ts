@@ -10,12 +10,17 @@ export class Run extends Command {
 		super("run")
 		this.parameters = parameters
 	}
+	/**
+	 * Generate Run Command schema.
+	 * @returns The generated JSON for the Run Command.
+	 */
 	generate(): RunCommandSchema {
 		const command = {run:{}}
 		command.run = { ...command.run, ...this.parameters}
 		return command as RunCommandSchema
 	}
 }
+export default Run
 export interface RunParameters extends CommandParameters {
 	/**
 	 * Command to run via the shell

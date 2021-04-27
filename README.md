@@ -2,9 +2,11 @@
 
 Create and manage your CircleCI config with JavaScript and TypeScript.
 
+[View the SDK Docs](https://furry-adventure-3f2b45c4.pages.github.io/modules.html)
+
 ## Example
 
-Generate a CircleCI config using TypeScript/Javascript, properly typed for full Intellisense support.
+Generate a CircleCI config using TypeScript/Javascript, properly typed for full IntelliSense support.
 
 ```typescript
 // Instantiate new Config

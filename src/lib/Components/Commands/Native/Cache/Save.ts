@@ -8,6 +8,10 @@ export class Save extends Command {
 		super("save_cache")
 		this.parameters = parameters
 	}
+	/**
+	 * Generate Save Cache Command schema.
+	 * @returns The generated JSON for the Save Cache Command.
+	 */
 	generate(): SaveCacheCommandSchema {
 		return {save_cache: {...this.parameters}} as SaveCacheCommandSchema
 	}

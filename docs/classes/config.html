@@ -68,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A CircleCI configuration</p>
+						<p>A CircleCI configuration. Instantiate a new config and add CircleCI config elements.</p>
 					</div>
 				</div>
 			</section>
@@ -131,7 +131,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L23">lib/Config/index.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L41">lib/Config/index.ts:41</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -163,9 +163,14 @@
 					<aside class="tsd-sources">
 						<p>Implementation of CircleCIConfigObject.commands</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L21">lib/Config/index.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L33">lib/Config/index.ts:33</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A command definition defines a sequence of steps as a map to be executed in a job, enabling you to reuse a single command definition across multiple jobs.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="executors" class="tsd-anchor"></a>
@@ -174,9 +179,14 @@
 					<aside class="tsd-sources">
 						<p>Implementation of CircleCIConfigObject.executors</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L19">lib/Config/index.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L25">lib/Config/index.ts:25</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Executors define the environment in which the steps of a job will be run, allowing you to reuse a single executor definition across multiple jobs.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="jobs" class="tsd-anchor"></a>
@@ -185,9 +195,14 @@
 					<aside class="tsd-sources">
 						<p>Implementation of CircleCIConfigObject.jobs</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L20">lib/Config/index.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L29">lib/Config/index.ts:29</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Jobs are collections of steps. All of the steps in the job are executed in a single unit, either within a fresh container or VM.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="pipeline" class="tsd-anchor"></a>
@@ -195,9 +210,14 @@
 					<div class="tsd-signature tsd-kind-icon">pipeline<span class="tsd-signature-symbol">:</span> <a href="pipeline.html" class="tsd-signature-type" data-tsd-kind="Class">Pipeline</a><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L23">lib/Config/index.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L41">lib/Config/index.ts:41</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Access information about the current pipeline.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="version" class="tsd-anchor"></a>
@@ -206,9 +226,14 @@
 					<aside class="tsd-sources">
 						<p>Implementation of CircleCIConfigObject.version</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L18">lib/Config/index.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L21">lib/Config/index.ts:21</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The version field is intended to be used in order to issue warnings for deprecation or breaking changes.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="workflows" class="tsd-anchor"></a>
@@ -217,9 +242,14 @@
 					<aside class="tsd-sources">
 						<p>Implementation of CircleCIConfigObject.workflows</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L22">lib/Config/index.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L37">lib/Config/index.ts:37</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A Workflow is comprised of one or more uniquely named jobs.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -234,13 +264,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L41">lib/Config/index.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L62">lib/Config/index.ts:62</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Add an Executor to the current Config. Chainable</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>executor: <span class="tsd-signature-type">default</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Injectable executor</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="config.html" class="tsd-signature-type" data-tsd-kind="Class">Config</a></h4>
@@ -257,13 +295,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L46">lib/Config/index.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L70">lib/Config/index.ts:70</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Add a Job to the current Config. Chainable</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>job: <a href="job.html" class="tsd-signature-type" data-tsd-kind="Class">Job</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Injectable Job</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="config.html" class="tsd-signature-type" data-tsd-kind="Class">Config</a></h4>
@@ -280,7 +326,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L36">lib/Config/index.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L54">lib/Config/index.ts:54</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -311,12 +357,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Config/index.ts#L59">lib/Config/index.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Config/index.ts#L83">lib/Config/index.ts:83</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Export a dockerfile as a string</p>
+									<p>Export the CircleCI configuration as a YAML string.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -385,12 +431,6 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="workflow.html" class="tsd-kind-icon">Workflow</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../modules.html#command" class="tsd-kind-icon">Command</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../modules.html#executor" class="tsd-kind-icon">Executor</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../modules.html#default" class="tsd-kind-icon">default</a>

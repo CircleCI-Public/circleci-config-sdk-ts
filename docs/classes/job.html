@@ -119,26 +119,45 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Job<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, executor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DockerExecutor</span>, steps<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="job.html" class="tsd-signature-type" data-tsd-kind="Class">Job</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Job<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, executor<span class="tsd-signature-symbol">: </span><a href="executor.dockerexecutor.html" class="tsd-signature-type" data-tsd-kind="Class">DockerExecutor</a>, steps<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="job.html" class="tsd-signature-type" data-tsd-kind="Class">Job</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides Component.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Components/Job/index.ts#L13">lib/Components/Job/index.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Components/Job/index.ts#L21">lib/Components/Job/index.ts:21</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Instantiate a CircleCI Job</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><a href="https://circleci.com/docs/2.0/configuration-reference/?section=configuration#jobs" class="external">https://circleci.com/docs/2.0/configuration-reference/?section=configuration#jobs</a></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Name your job with a unique identifier</p>
+									</div>
 								</li>
 								<li>
-									<h5>executor: <span class="tsd-signature-type">DockerExecutor</span></h5>
+									<h5>executor: <a href="executor.dockerexecutor.html" class="tsd-signature-type" data-tsd-kind="Class">DockerExecutor</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The reusable executor to use for this job. The Executor must have already been instantiated and added to the config.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> steps: <span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A list of Commands to execute within the job in the order which they were added.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="job.html" class="tsd-signature-type" data-tsd-kind="Class">Job</a></h4>
@@ -151,12 +170,17 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="executor" class="tsd-anchor"></a>
 					<h3>executor</h3>
-					<div class="tsd-signature tsd-kind-icon">executor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DockerExecutor</span></div>
+					<div class="tsd-signature tsd-kind-icon">executor<span class="tsd-signature-symbol">:</span> <a href="executor.dockerexecutor.html" class="tsd-signature-type" data-tsd-kind="Class">DockerExecutor</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Components/Job/index.ts#L12">lib/Components/Job/index.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Components/Job/index.ts#L17">lib/Components/Job/index.ts:17</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The reusable executor to use for this job. The Executor must have already been instantiated and added to the config.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="name" class="tsd-anchor"></a>
@@ -164,9 +188,14 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Components/Job/index.ts#L11">lib/Components/Job/index.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Components/Job/index.ts#L13">lib/Components/Job/index.ts:13</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The name of the current Job.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="steps" class="tsd-anchor"></a>
@@ -174,9 +203,14 @@
 					<div class="tsd-signature tsd-kind-icon">steps<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Components/Job/index.ts#L13">lib/Components/Job/index.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Components/Job/index.ts#L21">lib/Components/Job/index.ts:21</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A list of Commands to execute within the job in the order which they were added.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -191,7 +225,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Components/Job/index.ts#L39">lib/Components/Job/index.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Components/Job/index.ts#L57">lib/Components/Job/index.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -223,10 +257,16 @@
 							<aside class="tsd-sources">
 								<p>Overrides Component.generate</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/1eadf2d/src/lib/Components/Job/index.ts#L21">lib/Components/Job/index.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/53bc18a/src/lib/Components/Job/index.ts#L39">lib/Components/Job/index.ts:39</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Generate Job schema</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JobSchema</span></h4>
+							<p>The generated JSON for the Job.</p>
 						</li>
 					</ul>
 				</section>
@@ -277,12 +317,6 @@
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="workflow.html" class="tsd-kind-icon">Workflow</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../modules.html#command" class="tsd-kind-icon">Command</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../modules.html#executor" class="tsd-kind-icon">Executor</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../modules.html#default" class="tsd-kind-icon">default</a>

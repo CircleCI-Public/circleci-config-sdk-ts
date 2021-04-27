@@ -9,13 +9,21 @@ export class Workflow {
 	name: string
 	jobs: WorkflowJob[] = []
 
+	/**
+	 * Instantiate a Workflow
+	 * @param name - Name your workflow. Must be unique.
+	 * @param jobs - A list of jobs to executute as part of your Workflow.
+	 */
 	constructor(name: string, jobs?: Job[]) {
 		this.name = name
 		jobs?.forEach(job => {
 			this.jobs.push(new WorkflowJob(job))
 		})
 	}
-
+	/**
+	 * Generate Workflow schema.
+	 * @returns The generated JSON for the Workflow.
+	 */
 	generate(): WorkflowSchema {
 		const generatedWorkflowJobs: WorkflowJobSchema[] = []
 		this.jobs.forEach(job => {
