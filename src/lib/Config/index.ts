@@ -40,6 +40,13 @@ export class Config implements CircleCIConfigObject {
 		 */
 		pipeline: Pipeline = new Pipeline()
 
+		/**
+		 * Instantiate a new CircleCI config. Build up your config by adding components.
+		 * @param jobs - Instantiate with pre-defined Jobs.
+		 * @param workflows - Instantiate with pre-defined Workflows.
+		 * @param executors - Instantiate with pre-defined reusable Executors.
+		 * @param commands - Instantiate with pre-defined reusable Commands.
+		 */
 		constructor(jobs?: Job[], workflows?: Workflow[], executors?: Executor[], commands?: Command[]) {
 			this.jobs.concat(jobs || [])
 			this.workflows.concat(workflows || [])

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DockerExecutor | circleci-config-sdk</title>
+	<title>Attach | circleci-config-sdk</title>
 	<meta name="description" content="Documentation for circleci-config-sdk">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,16 @@
 					<a href="../modules.html">circleci-config-sdk</a>
 				</li>
 				<li>
-					<a href="../modules/executor.html">Executor</a>
+					<a href="../modules/command.html">Command</a>
 				</li>
 				<li>
-					<a href="executor.dockerexecutor.html">DockerExecutor</a>
+					<a href="../modules/command.workspace.html">Workspace</a>
+				</li>
+				<li>
+					<a href="command.workspace.attach.html">Attach</a>
 				</li>
 			</ul>
-			<h1>Class DockerExecutor</h1>
+			<h1>Class Attach</h1>
 		</div>
 	</div>
 </header>
@@ -71,7 +74,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Executors define the environment in which the steps of a job will be run. <a href="https://circleci.com/docs/2.0/configuration-reference/#executors-requires-version-21" class="external">https://circleci.com/docs/2.0/configuration-reference/#executors-requires-version-21</a></p>
+						<p>Special step used to attach the workflow’s workspace to the current container. The full contents of the workspace are downloaded and copied into the directory the workspace is being attached at.</p>
 					</div>
 				</div>
 			</section>
@@ -79,10 +82,10 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">Executor</span>
+						<span class="tsd-signature-type">Command</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">DockerExecutor</span>
+								<span class="target">Attach</span>
 							</li>
 						</ul>
 					</li>
@@ -95,22 +98,20 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="executor.dockerexecutor.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="command.workspace.attach.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="executor.dockerexecutor.html#description" class="tsd-kind-icon">description</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="executor.dockerexecutor.html#image" class="tsd-kind-icon">image</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="executor.dockerexecutor.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="executor.dockerexecutor.html#serviceimages" class="tsd-kind-icon">service<wbr>Images</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="command.workspace.attach.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="command.workspace.attach.html#parameters" class="tsd-kind-icon">parameters</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="executor.dockerexecutor.html#generate" class="tsd-kind-icon">generate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="command.workspace.attach.html#generate" class="tsd-kind-icon">generate</a></li>
 							</ul>
 						</section>
 					</div>
@@ -122,37 +123,23 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Docker<wbr>Executor<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, image<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="executor.dockerexecutor.html" class="tsd-signature-type" data-tsd-kind="Class">DockerExecutor</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Attach<span class="tsd-signature-symbol">(</span>parameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AttachParameters</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="command.workspace.attach.html" class="tsd-signature-type" data-tsd-kind="Class">Attach</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides Executor.constructor</p>
+								<p>Overrides Command.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/69bcc98/src/lib/Components/Executor/DockerExecutor.ts#L16">lib/Components/Executor/DockerExecutor.ts:16</a></li>
+									<li>Defined in lib/Components/Commands/Native/Workspace/Attach.ts:6</li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Instantiate a Docker executor.</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>name: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The name of this reusable executor.</p>
-									</div>
-								</li>
-								<li>
-									<h5>image: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The primary docker container image.</p>
-									</div>
+									<h5>parameters: <span class="tsd-signature-type">AttachParameters</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="executor.dockerexecutor.html" class="tsd-signature-type" data-tsd-kind="Class">DockerExecutor</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="command.workspace.attach.html" class="tsd-signature-type" data-tsd-kind="Class">Attach</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -160,56 +147,26 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-					<a name="description" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> description</h3>
-					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from Executor.description</p>
-						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/69bcc98/src/lib/Components/Executor/index.types.ts#L9">lib/Components/Executor/index.types.ts:9</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="image" class="tsd-anchor"></a>
-					<h3>image</h3>
-					<div class="tsd-signature tsd-kind-icon">image<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DockerImage</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/69bcc98/src/lib/Components/Executor/DockerExecutor.ts#L12">lib/Components/Executor/DockerExecutor.ts:12</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The name of a custom Socker image to use</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from Executor.name</p>
+						<p>Inherited from Command.name</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/69bcc98/src/lib/Components/Executor/index.types.ts#L8">lib/Components/Executor/index.types.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/69bcc98/src/lib/Components/Commands/index.types.ts#L9">lib/Components/Commands/index.types.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="serviceimages" class="tsd-anchor"></a>
-					<h3>service<wbr>Images</h3>
-					<div class="tsd-signature tsd-kind-icon">service<wbr>Images<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DockerImage</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+					<a name="parameters" class="tsd-anchor"></a>
+					<h3>parameters</h3>
+					<div class="tsd-signature tsd-kind-icon">parameters<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AttachParameters</span></div>
 					<aside class="tsd-sources">
+						<p>Overrides Command.parameters</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/69bcc98/src/lib/Components/Executor/DockerExecutor.ts#L16">lib/Components/Executor/DockerExecutor.ts:16</a></li>
+							<li>Defined in lib/Components/Commands/Native/Workspace/Attach.ts:6</li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Add additional Docker images which will be accessable from the primary container. This is typically used for adding a database as a service container.</p>
-						</div>
-					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -218,23 +175,23 @@
 					<a name="generate" class="tsd-anchor"></a>
 					<h3>generate</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">generate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DockerExecutorSchema</span></li>
+						<li class="tsd-signature tsd-kind-icon">generate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AttachCommandSchema</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides Executor.generate</p>
+								<p>Overrides Command.generate</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/69bcc98/src/lib/Components/Executor/DockerExecutor.ts#L32">lib/Components/Executor/DockerExecutor.ts:32</a></li>
+									<li>Defined in lib/Components/Commands/Native/Workspace/Attach.ts:15</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Generate Docker Executor schema.</p>
+									<p>Generate Save Cache Command schema.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">DockerExecutorSchema</span></h4>
-							<p>The generated JSON for the Docker Executor.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AttachCommandSchema</span></h4>
+							<p>The generated JSON for the Save Cache Command.</p>
 						</li>
 					</ul>
 				</section>
@@ -252,10 +209,10 @@
 					<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
 						<a href="../modules/command.cache.html">Command.<wbr>Cache</a>
 					</li>
-					<li class=" tsd-kind-namespace tsd-parent-kind-namespace">
+					<li class="current tsd-kind-namespace tsd-parent-kind-namespace">
 						<a href="../modules/command.workspace.html">Command.<wbr>Workspace</a>
 					</li>
-					<li class="current tsd-kind-namespace">
+					<li class=" tsd-kind-namespace">
 						<a href="../modules/executor.html">Executor</a>
 					</li>
 				</ul>
@@ -265,30 +222,27 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-namespace">
-						<a href="executor.dockerexecutor.html" class="tsd-kind-icon">Docker<wbr>Executor</a>
+						<a href="command.workspace.attach.html" class="tsd-kind-icon">Attach</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-								<a href="executor.dockerexecutor.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="command.workspace.attach.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="executor.dockerexecutor.html#description" class="tsd-kind-icon">description</a>
+								<a href="command.workspace.attach.html#name" class="tsd-kind-icon">name</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="executor.dockerexecutor.html#image" class="tsd-kind-icon">image</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="executor.dockerexecutor.html#name" class="tsd-kind-icon">name</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="executor.dockerexecutor.html#serviceimages" class="tsd-kind-icon">service<wbr>Images</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+								<a href="command.workspace.attach.html#parameters" class="tsd-kind-icon">parameters</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="executor.dockerexecutor.html#generate" class="tsd-kind-icon">generate</a>
+								<a href="command.workspace.attach.html#generate" class="tsd-kind-icon">generate</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-namespace">
+						<a href="command.workspace.persist.html" class="tsd-kind-icon">Persist</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

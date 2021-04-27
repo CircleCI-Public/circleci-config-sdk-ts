@@ -6,7 +6,7 @@ import Config from "./lib/Config"
 import Pipeline from "./lib/Config/Pipeline/index"
 
 /**
- * The CircleCI config SDK.
+ * The CircleCI config SDK. Access a
  */
 const CircleCI = {
 	Command,

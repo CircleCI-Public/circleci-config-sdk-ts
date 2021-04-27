@@ -6,7 +6,13 @@ import { WorkflowJob } from "./WorkflowJob"
  * A workflow is a set of rules for defining a collection of jobs and their run order.
  */
 export class Workflow {
+	/**
+	 * The name of the Workflow.
+	 */
 	name: string
+	/**
+	 * The jobs to execute when this Workflow is triggered.
+	 */
 	jobs: WorkflowJob[] = []
 
 	/**

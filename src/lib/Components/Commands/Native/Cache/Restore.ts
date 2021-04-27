@@ -16,6 +16,7 @@ export class Restore extends Command {
 		return {restore_cache: {...this.parameters}} as RestoreCacheCommandSchema
 	}
 }
+export default Restore
 
 export interface RestoreCacheParameters extends CommandParameters {
 	/**
