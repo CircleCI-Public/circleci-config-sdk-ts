@@ -2,7 +2,7 @@ import { Command, CommandParameters } from "../index.types"
 
 /**
  * A special step used to check out source code to the configured path (defaults to the working_directory).
- * @param parameters - {@link CheckoutParameters}
+ * @param parameters - CheckoutParameters
  */
 export class Checkout extends Command {
 	parameters?: CheckoutParameters

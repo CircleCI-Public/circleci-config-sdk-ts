@@ -35,3 +35,11 @@ describe("Save and load cache", () => {
 		expect(example).toEqual(restoreCache.generate())
 	})
 })
+
+describe("Store artifacts", () => {
+	it("Should generate the store artifacts command", () => {
+		const example = {"store_artifacts":{"path":"jekyll/_site/docs/","destination":"circleci-docs"}}
+		const storeArtifacts = new CircleCI.Command.StoreArtifacts({path:"jekyll/_site/docs/", destination: "circleci-docs"})
+		expect(example).toEqual(storeArtifacts.generate())
+	})
+})

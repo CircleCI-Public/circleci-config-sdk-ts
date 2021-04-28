@@ -2,7 +2,7 @@ import { Command, CommandParameters } from "../index.types"
 
 /**
  * The Run command step is used for invoking all command-line programs.
- * @param parameters - {@link RunParameters}
+ * @param parameters - RunParameters
  */
 export class Run extends Command {
 	parameters: RunParameters
