@@ -57,3 +57,22 @@ describe("Utilize workflow job filters", () => {
 		expect(generatedWorkflowJob).toEqual(expected)
 	})
 })
+
+describe("Instantiate Workflow with a manual approval job", () => {
+	const docker = new CircleCI.Executor.DockerExecutor("docker-executor", "cimg/node:lts")
+	const helloWorld = new CircleCI.Command.Run({
+		command: "echo hello world"
+	})
+	const jobTest = new CircleCI.Job("test-job", docker, [helloWorld])
+	const jobDeploy = new CircleCI.Job("deploy-job", docker, [helloWorld])
+
+	const myWorkflow = new CircleCI.Workflow("my-workflow")
+	myWorkflow.addJob(jobTest)
+	myWorkflow.addJob(new CircleCI.Job("on-hold", docker), {type: "approval"})
+	myWorkflow.addJob(jobDeploy)
+	it("Should match the expected output", () => {
+		const expected = {"my-workflow":{"jobs":[{"test-job":{}},{"on-hold":{"type":"approval"}},{"deploy-job":{}}]}}
+		const generatedWorkflow = myWorkflow.generate()
+		expect(generatedWorkflow).toEqual(expected)
+	})
+})

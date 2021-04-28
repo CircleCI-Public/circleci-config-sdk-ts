@@ -27,7 +27,6 @@ describe("Generate a config utilizing Workspaces", () => {
 	it("Should generate a config matching the example with a shared workspace", () => {
 		const expectedConfig = {"version":2.1,"executors":{"my-executor":{"docker":[{"image":"cimg/base:stable"}]}},"jobs":{"flow":{"executor":{"name":"my-executor"},"steps":[{"persist_to_workspace":{"root":"workspace","paths":["echo-output"]}}]},"downstream":{"executor":{"name":"my-executor"},"steps":[{"attach_workspace":{"at":"/tmp/workspace"}}]}},"workflows":{"btd":{"jobs":[{"flow":{}},{"downstream":{"requires":["flow"]}}]}}}
 		const generatedConfig = YAML.parse(myConfig.stringify())
-		console.log(JSON.stringify(generatedConfig))
 		expect(expectedConfig).toEqual(generatedConfig)
 	})
 })

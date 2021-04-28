@@ -40,7 +40,6 @@ describe("Store artifacts", () => {
 	it("Should generate the store artifacts command", () => {
 		const example = {"store_artifacts":{"path":"jekyll/_site/docs/","destination":"circleci-docs"}}
 		const storeArtifacts = new CircleCI.Command.StoreArtifacts({path:"jekyll/_site/docs/", destination: "circleci-docs"})
-		console.log("StoreArtifcats: \n", storeArtifacts)
 		expect(example).toEqual(storeArtifacts.generate())
 	})
 })
@@ -49,7 +48,6 @@ describe("Store test results", () => {
 	it("Should generate the test results command", () => {
 		const example = {"store_test_results":{"path":"test-results"}}
 		const storeTestResults = new CircleCI.Command.StoreTestResults({path: "test-results"})
-		console.log("StoreTestResults: \n", storeTestResults)
 		expect(example).toEqual(storeTestResults.generate())
 	})
 })
