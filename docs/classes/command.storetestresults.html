@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>StoreArtifacts | circleci-config-sdk</title>
+	<title>StoreTestResults | circleci-config-sdk</title>
 	<meta name="description" content="Documentation for circleci-config-sdk">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/command.html">Command</a>
 				</li>
 				<li>
-					<a href="command.storeartifacts.html">StoreArtifacts</a>
+					<a href="command.storetestresults.html">StoreTestResults</a>
 				</li>
 			</ul>
-			<h1>Class StoreArtifacts</h1>
+			<h1>Class StoreTestResults</h1>
 		</div>
 	</div>
 </header>
@@ -71,11 +71,11 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A special step used to check out source code to the configured path (defaults to the working_directory).</p>
+						<p>Special step used to upload and store test results for a build. Test results are visible on the CircleCI web application, under each build’s “Test Summary” section. Storing test results is useful for timing analysis of your test suites.</p>
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>param</dt>
-						<dd><p>StoreArtifactsParameters</p>
+						<dd><p>StoreTestResultsParameters</p>
 						</dd>
 					</dl>
 				</div>
@@ -87,7 +87,7 @@
 						<span class="tsd-signature-type">Command</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">StoreArtifacts</span>
+								<span class="target">StoreTestResults</span>
 							</li>
 						</ul>
 					</li>
@@ -100,20 +100,20 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="command.storeartifacts.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="command.storetestresults.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="command.storeartifacts.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="command.storeartifacts.html#parameters" class="tsd-kind-icon">parameters</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="command.storetestresults.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="command.storetestresults.html#parameters" class="tsd-kind-icon">parameters</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="command.storeartifacts.html#generate" class="tsd-kind-icon">generate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="command.storetestresults.html#generate" class="tsd-kind-icon">generate</a></li>
 							</ul>
 						</section>
 					</div>
@@ -125,23 +125,23 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Store<wbr>Artifacts<span class="tsd-signature-symbol">(</span>parameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StoreArtifactsParameters</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="command.storeartifacts.html" class="tsd-signature-type" data-tsd-kind="Class">StoreArtifacts</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Store<wbr>Test<wbr>Results<span class="tsd-signature-symbol">(</span>parameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StoreTestResultsParameters</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="command.storetestresults.html" class="tsd-signature-type" data-tsd-kind="Class">StoreTestResults</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides Command.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/388e136/src/lib/Components/Commands/Native/StoreArtifacts.ts#L8">lib/Components/Commands/Native/StoreArtifacts.ts:8</a></li>
+									<li>Defined in lib/Components/Commands/Native/StoreTestResults.ts:8</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>parameters: <span class="tsd-signature-type">StoreArtifactsParameters</span></h5>
+									<h5>parameters: <span class="tsd-signature-type">StoreTestResultsParameters</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="command.storeartifacts.html" class="tsd-signature-type" data-tsd-kind="Class">StoreArtifacts</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="command.storetestresults.html" class="tsd-signature-type" data-tsd-kind="Class">StoreTestResults</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -162,11 +162,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a name="parameters" class="tsd-anchor"></a>
 					<h3>parameters</h3>
-					<div class="tsd-signature tsd-kind-icon">parameters<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StoreArtifactsParameters</span></div>
+					<div class="tsd-signature tsd-kind-icon">parameters<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">StoreTestResultsParameters</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides Command.parameters</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/388e136/src/lib/Components/Commands/Native/StoreArtifacts.ts#L8">lib/Components/Commands/Native/StoreArtifacts.ts:8</a></li>
+							<li>Defined in lib/Components/Commands/Native/StoreTestResults.ts:8</li>
 						</ul>
 					</aside>
 				</section>
@@ -177,23 +177,23 @@
 					<a name="generate" class="tsd-anchor"></a>
 					<h3>generate</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">generate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StoreArtifactsCommandSchema</span></li>
+						<li class="tsd-signature tsd-kind-icon">generate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">StoreTestResultsCommandSchema</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides Command.generate</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/388e136/src/lib/Components/Commands/Native/StoreArtifacts.ts#L17">lib/Components/Commands/Native/StoreArtifacts.ts:17</a></li>
+									<li>Defined in lib/Components/Commands/Native/StoreTestResults.ts:17</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Generate StoreArtifacts Command schema.</p>
+									<p>Generate StoreTestResults Command schema.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StoreArtifactsCommandSchema</span></h4>
-							<p>The generated JSON for the StoreArtifacts Command.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">StoreTestResultsCommandSchema</span></h4>
+							<p>The generated JSON for the StoreTestResults Command.</p>
 						</li>
 					</ul>
 				</section>
@@ -227,30 +227,30 @@
 					<li class=" tsd-kind-class tsd-parent-kind-namespace">
 						<a href="command.run.html" class="tsd-kind-icon">Run</a>
 					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-namespace">
+						<a href="command.storeartifacts.html" class="tsd-kind-icon">Store<wbr>Artifacts</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-namespace">
-						<a href="command.storeartifacts.html" class="tsd-kind-icon">Store<wbr>Artifacts</a>
+						<a href="command.storetestresults.html" class="tsd-kind-icon">Store<wbr>Test<wbr>Results</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-								<a href="command.storeartifacts.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="command.storetestresults.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="command.storeartifacts.html#name" class="tsd-kind-icon">name</a>
+								<a href="command.storetestresults.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-								<a href="command.storeartifacts.html#parameters" class="tsd-kind-icon">parameters</a>
+								<a href="command.storetestresults.html#parameters" class="tsd-kind-icon">parameters</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="command.storeartifacts.html#generate" class="tsd-kind-icon">generate</a>
+								<a href="command.storetestresults.html#generate" class="tsd-kind-icon">generate</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-namespace">
-						<a href="command.storetestresults.html" class="tsd-kind-icon">Store<wbr>Test<wbr>Results</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
