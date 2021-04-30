@@ -1,46 +1,53 @@
 {
-	"name": "circleci-config-sdk",
-	"version": "0.1.0",
-	"description": "An SDK for building CircleCI Configuration files with JavaScript.",
-	"main": "./dist/index.js",
-	"types": "dist/index.d.ts",
-	"scripts": {
-		"test": "jest",
-		"lint": "npx eslint --fix --ext .js,.jsx,.ts,.tsx .",
-		"build": "npm run lint && npx webpack && npm run build:docs",
-		"build:docs": "typedoc"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/CircleCI-Public/circleci-config-sdk-ts.git"
-	},
-	"author": "@TechSquidTV (Kyle Tryon)",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues"
-	},
-	"homepage": "https://github.com/CircleCI-Public/circleci-config-sdk-ts#readme",
-	"devDependencies": {
-		"@types/jest": "^26.0.22",
-		"@types/node": "^14.14.37",
-		"@types/webpack": "^5.0.0",
-		"@types/webpack-node-externals": "^2.5.1",
-		"@typescript-eslint/eslint-plugin": "^4.20.0",
-		"@typescript-eslint/parser": "^4.20.0",
-		"eslint": "^7.23.0",
-		"eslint-plugin-security": "^1.4.0",
-		"eslint-plugin-tsdoc": "^0.2.11",
-		"jest": "^26.6.3",
-		"ts-jest": "^26.5.4",
-		"ts-loader": "^8.0.18",
-		"ts-node": "^9.1.1",
-		"typedoc": "^0.20.34",
-		"typescript": "^4.2.3",
-		"webpack": "^5.28.0",
-		"webpack-cli": "^4.5.0",
-		"webpack-node-externals": "^2.5.2"
-	},
-	"dependencies": {
-		"yaml": "^1.10.2"
-	}
+  "name": "@circleci/circleci-config-sdk",
+  "version": "0.1.0",
+  "description": "An SDK for building CircleCI Configuration files with JavaScript.",
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "lint": "npx eslint --fix --ext .js,.jsx,.ts,.tsx .",
+    "build": "npm run lint && npx webpack && npm run build:docs",
+    "build:docs": "typedoc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CircleCI-Public/circleci-config-sdk-ts.git"
+  },
+  "author": "@TechSquidTV (Kyle Tryon)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues"
+  },
+  "homepage": "https://github.com/CircleCI-Public/circleci-config-sdk-ts#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "@types/webpack": "^5.0.0",
+    "@types/webpack-node-externals": "^2.5.1",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "eslint": "^7.23.0",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-tsdoc": "^0.2.11",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.4",
+    "ts-loader": "^8.0.18",
+    "ts-node": "^9.1.1",
+    "typedoc": "^0.20.34",
+    "typescript": "^4.2.3",
+    "webpack": "^5.28.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "dependencies": {
+    "yaml": "^1.10.2"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "keywords": [
+    "circleci"
+  ]
 }

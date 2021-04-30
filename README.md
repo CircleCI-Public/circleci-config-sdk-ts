@@ -1,8 +1,30 @@
+![CircleCI Status](https://circleci.com/gh/CircleCI-Public/circleci-config-sdk-ts.svg?style=shield) [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/circleci-public/circleci-config-sdk-ts/blob/main/LICENSE)
+
 # CircleCI Config SDK (TypeScript)
 
 Create and manage your CircleCI config with JavaScript and TypeScript.
 
 [View the SDK Docs](https://furry-adventure-3f2b45c4.pages.github.io/modules.html)
+
+## Installation
+
+Using npm:
+
+```shell
+$ npm i --save @circleci/circleci-config-sdk
+```
+
+In Node.js:
+
+```typescript
+import CircleCI from "@circleci/circleci-config-sdk"
+```
+
+In Browser:
+
+```javascript
+var CircleCI = require('@circleci/circleci-config-sdk');
+```
 
 ## Example
 
@@ -35,29 +57,32 @@ nodeTestJob
 // Add Jobs to Workflow
 myWorkflow.addJob(nodeTestJob)
 
+// The `stringify()` function on `CircleCI.Config` will return the CircleCI YAML equivalent.
+const MyYamlConfig = myConfig.stringify()
+
 ```
 
-The `stringify()` function on the `Config` will return the CircleCI YAML equivalent.
+`MyYamlConfig` will hold the following string (A valid CircleCI Config).
 
 ```yaml
 version: 2.1
 executors:
-  node-executor:
-    docker:
-			- image: cimg/node:lts
+	node-executor:
+		docker:
+		- image: cimg/node:lts
 jobs:
-  node-test:
-    executor:
-      name: node-executor
-    steps:
+	node-test:
+		executor:
+			name: node-executor
+		steps:
 			- run:
-				command: npm install
-				name: NPM Install
+					command: npm install
+					name: NPM Install
 			- run:
-				command: npm run test
-				name: Run tests
+					command: npm run test
+					name: Run tests
 workflows:
-  myWorkflow:
-    jobs:
+	myWorkflow:
+		jobs:
 			- node-test: {}
 ```
