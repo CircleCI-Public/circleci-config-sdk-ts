@@ -1,0 +1,10 @@
+coverage
+docs
+node_modules
+src
+tests
+tsconfig.json
+webpack.config.ts
+.eslintrc.js
+.eslintignore
+jest.config.ts

@@ -1,13 +1,13 @@
 {
   "name": "@circleci/circleci-config-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An SDK for building CircleCI Configuration files with JavaScript.",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "lint": "npx eslint --fix --ext .js,.jsx,.ts,.tsx .",
-    "build": "npm run lint && npx webpack && npm run build:docs",
+    "build": "npm run lint && npx webpack --mode production && npm run build:docs",
     "build:docs": "typedoc"
   },
   "repository": {
