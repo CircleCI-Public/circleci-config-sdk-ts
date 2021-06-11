@@ -18,6 +18,8 @@ jobs:
           name: Deploy Docs
           command: |
             cd docs
+            git config --global user.email "community-partner@circleci.com"
+            git config --global user.name "orb-publisher"
             git init
             git add -A
             git commit -m "Deploy-<<pipeline.git.branch>>-<<pipeline.number>>"
