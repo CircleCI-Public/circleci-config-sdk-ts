@@ -22,7 +22,7 @@ jobs:
             git config --global user.name "orb-publisher"
             git init
             git add -A
-            git commit -m "Deploy-<<pipeline.git.branch>>-<<pipeline.number>>"
+            git commit -m "Deploy-<<pipeline.git.branch>>-<<pipeline.number>> [ci skip]"
             git push -f git@github.com:CircleCI-Public/circleci-config-sdk-ts.git master:gh-pages
 
 workflows:
@@ -35,14 +35,6 @@ workflows:
                 - 15.14.0
                 - 14.16.1
                 - 13.14.0
-          filters:
-              branches:
-                ignore:
-                  - gh-pages
       - deploy-docs:
           requires:
             - node/test
-          filters:
-              branches:
-                ignore:
-                  - gh-pages
