@@ -35,6 +35,14 @@ workflows:
                 - 15.14.0
                 - 14.16.1
                 - 13.14.0
+          filters:
+              branches:
+                ignore:
+                  - gh-pages
       - deploy-docs:
           requires:
             - node/test
+          filters:
+              branches:
+                ignore:
+                  - gh-pages
