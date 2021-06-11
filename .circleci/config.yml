@@ -2,12 +2,27 @@ version: 2.1
 orbs:
   node: circleci/node@4.2
 
+jobs:
+  deploy-docs:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: Build Docs
+          command: npm run build:docs
+      - run:
+          name: Deploy Docs
+          command: |
+            cd docs
+            git init
+            git add -A
+            git commit -m "Deploy-<<pipeline.git.branch>>-<<pipeline.number>>"
+            git push -f git@github.com:CircleCI-Public/circleci-config-sdk-ts.git master:gh-pages
+
 workflows:
-  build-test-deploy:
+  test:
     jobs:
-      - node/test:
-          name: docs-generate
-          run-command: build:docs
       - node/test:
           matrix:
             parameters:
@@ -15,6 +30,6 @@ workflows:
                 - 15.14.0
                 - 14.16.1
                 - 13.14.0
-      - node/test:
-          name: build
-          run-command: build
+      - deploy-docs:
+          requires:
+            - node/test
