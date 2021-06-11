@@ -48,12 +48,12 @@ myConfig.addJob(nodeTestJob)
 
 // Add steps to job
 nodeTestJob
-	.addStep(new CircleCI.Command.Run({
-		command: "npm install",
-		name: "NPM Install"}))
-	.addStep(new CircleCI.Command.Run({
-		command: "npm run test",
-		name: "Run tests"}))
+  .addStep(new CircleCI.Command.Run({
+    command: "npm install",
+    name: "NPM Install"}))
+  .addStep(new CircleCI.Command.Run({
+    command: "npm run test",
+    name: "Run tests"}))
 
 // Add Jobs to Workflow
 myWorkflow.addJob(nodeTestJob)
@@ -68,22 +68,22 @@ const MyYamlConfig = myConfig.stringify()
 ```yaml
 version: 2.1
 executors:
-	node-executor:
-		docker:
-		- image: cimg/node:lts
+  node-executor:
+    docker:
+      - image: cimg/node:lts
 jobs:
-	node-test:
-		executor:
-			name: node-executor
-		steps:
-			- run:
-					command: npm install
-					name: NPM Install
-			- run:
-					command: npm run test
-					name: Run tests
+  node-test:
+    executor:
+      name: node-executor
+    steps:
+      - run:
+          command: npm install
+          name: NPM Install
+      - run:
+          command: npm run test
+          name: Run tests
 workflows:
-	myWorkflow:
-		jobs:
-			- node-test: {}
+  myWorkflow:
+    jobs:
+      - node-test: {}
 ```
