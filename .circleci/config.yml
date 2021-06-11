@@ -7,6 +7,9 @@ jobs:
     executor: node/default
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "fe:98:73:d4:14:87:89:62:38:63:9f:be:33:14:32:01"
       - node/install-packages
       - run:
           name: Build Docs
