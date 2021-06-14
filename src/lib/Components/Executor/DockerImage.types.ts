@@ -1,7 +1,7 @@
 
 export interface DockerImageSchema {
-    image: string
     name?: string
+    image: string
     entrypoint?: string[]
     command?: string[]
     user?: string
