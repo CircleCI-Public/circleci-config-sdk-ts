@@ -1,6 +1,7 @@
 import Component from "../index.types"
 import { DockerExecutor } from "./DockerExecutor"
 import { DockerExecutorSchema } from "./DockerExecutor.types"
+import { MachineExecutor, MachineExecutorSchema } from "./MachineExecutor"
 /**
  * A generic reusable Executor
  */
@@ -15,5 +16,7 @@ export default abstract class Executor extends Component {
 	abstract generate(): ExectorSchema
 }
 
-export type ExecutorType = DockerExecutor
-export type ExectorSchema = DockerExecutorSchema;
+export type ResourceClass = "medium" | "large" | "xlarge" | "2xlarge"
+
+export type ExecutorType = DockerExecutor | MachineExecutor
+export type ExectorSchema = DockerExecutorSchema | MachineExecutorSchema;

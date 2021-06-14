@@ -9,11 +9,11 @@ export class DockerExecutor extends Executor {
 	/**
 	 * The name of a custom Socker image to use
 	 */
-	image: DockerImage;
+	image: DockerImage
 	/**
 	 * Add additional Docker images which will be accessable from the primary container. This is typically used for adding a database as a service container.
 	 */
-	serviceImages: DockerImage[] = [];
+	serviceImages: DockerImage[] = []
 
 	/**
 	 * Instantiate a Docker executor.

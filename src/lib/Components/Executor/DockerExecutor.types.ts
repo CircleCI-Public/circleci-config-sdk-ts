@@ -1,7 +1,7 @@
 import { DockerImageSchema } from "./DockerImage.types"
 
 export interface DockerExecutorSchema {
-	[key: string]: {
+	[name: string]: {
 		docker: DockerImageSchema[]
 	}
 }
