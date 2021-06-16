@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest && npm run build:docs",
     "lint": "npx eslint --fix --ext .js,.jsx,.ts,.tsx .",
-    "build": "npm run lint && npx webpack --mode production && npm run build:docs",
+    "build": "npm run lint && npx webpack --mode production",
     "build:docs": "typedoc"
   },
   "repository": {

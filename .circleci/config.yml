@@ -2,12 +2,46 @@ version: 2.1
 orbs:
   node: circleci/node@4.2
 
+jobs:
+  deploy-docs:
+    executor: node/default
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "fe:98:73:d4:14:87:89:62:38:63:9f:be:33:14:32:01"
+      - node/install-packages
+      - run:
+          name: Build Docs
+          command: npm run build:docs
+      - run:
+          name: Deploy Docs
+          command: |
+            cd docs
+            git config --global user.email "community-partner@circleci.com"
+            git config --global user.name "orb-publisher"
+            git init
+            git add -A
+            git commit -m "Deploy-<<pipeline.git.branch>>-<<pipeline.number>> [ci skip]"
+            git push -f git@github.com:CircleCI-Public/circleci-config-sdk-ts.git master:gh-pages
+  deploy-package:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: Build NPM Module
+          command: npm run build
+      - run:
+          name: Publish NPM Module
+          command: |
+            # Set NPM Auth
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            # Publish
+            npm publish --access restricted
 workflows:
-  build-test-deploy:
+  test:
     jobs:
-      - node/test:
-          name: docs-generate
-          run-command: build:docs
       - node/test:
           matrix:
             parameters:
@@ -15,6 +49,23 @@ workflows:
                 - 15.14.0
                 - 14.16.1
                 - 13.14.0
-      - node/test:
-          name: build
-          run-command: build
+          filters:
+            tags:
+              only: /.*/
+      - deploy-docs:
+          requires:
+            - node/test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
+      - deploy-package:
+          context: CONFIG_SDK_PUBLISHING
+          requires:
+            - node/test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
