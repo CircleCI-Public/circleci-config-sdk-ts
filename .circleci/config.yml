@@ -24,7 +24,21 @@ jobs:
             git add -A
             git commit -m "Deploy-<<pipeline.git.branch>>-<<pipeline.number>> [ci skip]"
             git push -f git@github.com:CircleCI-Public/circleci-config-sdk-ts.git master:gh-pages
-
+  deploy-package:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: Build NPM Module
+          command: npm run build
+      - run:
+          name: Publish NPM Module
+          command: |
+            # Set NPM Auth
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            # Publish
+            npm publish --access restricted
 workflows:
   test:
     jobs:
@@ -35,6 +49,23 @@ workflows:
                 - 15.14.0
                 - 14.16.1
                 - 13.14.0
+          filters:
+            tags:
+              only: /.*/
       - deploy-docs:
           requires:
             - node/test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
+      - deploy-package:
+          context: CONFIG_SDK_PUBLISHING
+          requires:
+            - node/test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
