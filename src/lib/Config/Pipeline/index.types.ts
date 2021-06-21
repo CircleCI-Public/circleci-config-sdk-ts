@@ -1,9 +1,9 @@
-export type ParameterTypeLiteral = "string" | "number" | "boolean" | "enum"
+export type ParameterTypeLiteral = 'string' | 'number' | 'boolean' | 'enum';
 export interface PipelineParameterSchema {
-	[parameterName: string]: {
-		type: ParameterTypeLiteral,
-		default: string | number | boolean,
-		enum?: string[]
-	}
+  [parameterName: string]: {
+    type: ParameterTypeLiteral;
+    default: string | number | boolean;
+    enum?: string[];
+  };
 }
-export type PipelineParameterValueTypes = string | number | boolean
+export type PipelineParameterValueTypes = string | number | boolean;

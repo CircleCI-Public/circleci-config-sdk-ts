@@ -1,4 +1,4 @@
-[![CircleCI Build Status](https://circleci.com/gh/CircleCI-Public/circleci-config-sdk-ts.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/CircleCI-Public/circleci-config-sdk-ts)
+[![CircleCI Build Status](https://circleci.com/gh/CircleCI-Public/circleci-config-sdk-ts.svg?style=shield 'CircleCI Build Status')](https://circleci.com/gh/CircleCI-Public/circleci-config-sdk-ts)
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/circleci-public/circleci-config-sdk-ts/blob/main/LICENSE)
 
 # CircleCI Config SDK (TypeScript)
@@ -18,7 +18,7 @@ $ npm i --save @circleci/circleci-config-sdk
 In Node.js:
 
 ```typescript
-import CircleCI from "@circleci/circleci-config-sdk"
+import CircleCI from '@circleci/circleci-config-sdk';
 ```
 
 In Browser:
@@ -29,38 +29,47 @@ var CircleCI = require('@circleci/circleci-config-sdk');
 
 ## Example
 
-Generate a CircleCI config using TypeScript/Javascript, properly typed for full IntelliSense support.
+Generate a CircleCI config using TypeScript/Javascript, properly typed for full
+IntelliSense support.
 
 ```typescript
 // Instantiate new Config
-const myConfig = new CircleCI.Config()
+const myConfig = new CircleCI.Config();
 // Create new Workflow
-const myWorkflow = new CircleCI.Workflow("myWorkflow")
-myConfig.addWorkflow(myWorkflow)
+const myWorkflow = new CircleCI.Workflow('myWorkflow');
+myConfig.addWorkflow(myWorkflow);
 
 // Create an executor. Reusable.
-const nodeExecutor = new CircleCI.Executor.DockerExecutor("node-executor", "cimg/node:lts")
-myConfig.addExecutor(nodeExecutor)
+const nodeExecutor = new CircleCI.Executor.DockerExecutor(
+  'node-executor',
+  'cimg/node:lts',
+);
+myConfig.addExecutor(nodeExecutor);
 
 // Create Job
-const nodeTestJob = new CircleCI.Job("node-test", nodeExecutor)
-myConfig.addJob(nodeTestJob)
+const nodeTestJob = new CircleCI.Job('node-test', nodeExecutor);
+myConfig.addJob(nodeTestJob);
 
 // Add steps to job
 nodeTestJob
-  .addStep(new CircleCI.Command.Run({
-    command: "npm install",
-    name: "NPM Install"}))
-  .addStep(new CircleCI.Command.Run({
-    command: "npm run test",
-    name: "Run tests"}))
+  .addStep(
+    new CircleCI.Command.Run({
+      command: 'npm install',
+      name: 'NPM Install',
+    }),
+  )
+  .addStep(
+    new CircleCI.Command.Run({
+      command: 'npm run test',
+      name: 'Run tests',
+    }),
+  );
 
 // Add Jobs to Workflow
-myWorkflow.addJob(nodeTestJob)
+myWorkflow.addJob(nodeTestJob);
 
 // The `stringify()` function on `CircleCI.Config` will return the CircleCI YAML equivalent.
-const MyYamlConfig = myConfig.stringify()
-
+const MyYamlConfig = myConfig.stringify();
 ```
 
 `MyYamlConfig` will hold the following string (A valid CircleCI Config).

@@ -1,17 +1,17 @@
-import { Command, CommandSchema } from "../Components/Commands/index.types"
-import Job from "../Components/Job"
-import Workflow from "../Components/Workflow"
-import Executor from "../Components/Executor/index.types"
+import { Command, CommandSchema } from '../Components/Commands/index.types';
+import Job from '../Components/Job';
+import Workflow from '../Components/Workflow';
+import Executor from '../Components/Executor/index.types';
 import {
-	ExecutorType,
-	ExectorSchema,
-} from "../Components/Executor/index.types"
-import { JobSchema } from "../Components/Job/index.types"
+  ExecutorType,
+  ExectorSchema,
+} from '../Components/Executor/index.types';
+import { JobSchema } from '../Components/Job/index.types';
 import {
-	WorkflowFilterSchema,
-	WorkflowMatrixSchema,
-	WorkflowSchema,
-} from "../Components/Workflow/index.types"
+  WorkflowFilterSchema,
+  WorkflowMatrixSchema,
+  WorkflowSchema,
+} from '../Components/Workflow/index.types';
 
 export type ConfigVersion = 2 | 2.1;
 export interface ConfigOrbImport {
