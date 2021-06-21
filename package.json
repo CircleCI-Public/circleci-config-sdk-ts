@@ -6,11 +6,10 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest && npm run build:docs",
-    "lint": "eslint . --fix --ext .js,.jsx,.ts,.tsx --max-warnings 0",
-    "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
+    "lint:": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
     "prettier": "prettier --write .",
     "prettier:ci": "prettier --check .",
-    "stylecheck:ci": "npm run prettier:ci && npm run lint:ci",
+    "lint:ci": "npm run prettier:ci && npm run lint",
     "build": "npx webpack --mode production",
     "build:docs": "typedoc",
     "prepare": "husky install"

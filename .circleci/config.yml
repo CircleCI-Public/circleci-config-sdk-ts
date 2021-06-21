@@ -44,7 +44,7 @@ workflows:
     jobs:
       - node/test:
           name: lint
-          run-command: stylecheck:ci
+          run-command: lint:ci
           version: 15.14.0
           filters:
             tags:
