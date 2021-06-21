@@ -1,28 +1,30 @@
-import { Command, CommandParameters } from "../../index.types"
+import { Command, CommandParameters } from '../../index.types';
 /**
  * Special step used to attach the workflow’s workspace to the current container. The full contents of the workspace are downloaded and copied into the directory the workspace is being attached at.
  */
 export class Attach extends Command {
-	parameters: AttachParameters
-	constructor(parameters: AttachParameters) {
-		super("attach_workspace")
-		this.parameters = parameters
-	}
-	/**
-	 * Generate Save Cache Command schema.
-	 * @returns The generated JSON for the Save Cache Command.
-	 */
-	generate(): AttachCommandSchema {
-		return {attach_workspace: {...this.parameters}} as AttachCommandSchema
-	}
+  parameters: AttachParameters;
+  constructor(parameters: AttachParameters) {
+    super('attach_workspace');
+    this.parameters = parameters;
+  }
+  /**
+   * Generate Save Cache Command schema.
+   * @returns The generated JSON for the Save Cache Command.
+   */
+  generate(): AttachCommandSchema {
+    return {
+      attach_workspace: { ...this.parameters },
+    } as AttachCommandSchema;
+  }
 }
-export default Attach
+export default Attach;
 export interface AttachCommandSchema {
-	attach_workspace: AttachParameters
+  attach_workspace: AttachParameters;
 }
 export interface AttachParameters extends CommandParameters {
-	/**
-	 * Directory to attach the workspace to.
-	 */
-	at: string
+  /**
+   * Directory to attach the workspace to.
+   */
+  at: string;
 }
