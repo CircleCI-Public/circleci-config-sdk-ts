@@ -1,42 +1,46 @@
-import { Command, CommandParameters } from "../index.types"
+import { Command, CommandParameters } from '../index.types';
 
 /**
- * A special step used to check out source code to the configured path (defaults to the working_directory).
+ * A special step used to check out source code to the configured path.
+ * (defaults to the working_directory).
  * @param parameters - CheckoutParameters
  */
 export class Checkout extends Command {
-	parameters?: CheckoutParameters
-	constructor(parameters?: CheckoutParameters) {
-		super("checkout")
-		if (parameters) {
-			this.parameters = parameters
-		}
-	}
-	/**
-	 * Generate Checkout Command schema.
-	 * @returns The generated JSON for the Checkout Command.
-	 */
-	generate(): CheckoutCommandSchema {
-		if (this.parameters) {
-			return {checkout: {...this.parameters}} as CheckoutCommandSchemaObject
-		}
-		else {
-			return "checkout"
-		}
-	}
+  parameters?: CheckoutParameters;
+  constructor(parameters?: CheckoutParameters) {
+    super('checkout');
+    if (parameters) {
+      this.parameters = parameters;
+    }
+  }
+  /**
+   * Generate Checkout Command schema.
+   * @returns The generated JSON for the Checkout Command.
+   */
+  generate(): CheckoutCommandSchema {
+    if (this.parameters) {
+      return {
+        checkout: { ...this.parameters },
+      } as CheckoutCommandSchemaObject;
+    } else {
+      return 'checkout';
+    }
+  }
 }
-export default Checkout
+export default Checkout;
 export interface CheckoutParameters extends CommandParameters {
-	/**
-	 * Checkout directory. Will be interpreted relative to the working_directory of the job).
-	 */
-	path?: string
-
+  /**
+   * Checkout directory.
+   * Will be interpreted relative to the working_directory of the job.
+   */
+  path?: string;
 }
 
 export interface CheckoutCommandSchemaObject {
-	checkout: CheckoutParameters
+  checkout: CheckoutParameters;
 }
-export type CheckoutCommandSchemaString = "checkout"
+export type CheckoutCommandSchemaString = 'checkout';
 
-export type CheckoutCommandSchema = CheckoutCommandSchemaObject | CheckoutCommandSchemaString
+export type CheckoutCommandSchema =
+  | CheckoutCommandSchemaObject
+  | CheckoutCommandSchemaString;
