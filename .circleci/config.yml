@@ -43,6 +43,13 @@ workflows:
   test:
     jobs:
       - node/test:
+          name: lint
+          run-command: stylecheck:ci
+          version: 15.14.0
+          filters:
+            tags:
+              only: /.*/
+      - node/test:
           matrix:
             parameters:
               version:
@@ -55,6 +62,7 @@ workflows:
       - deploy-docs:
           requires:
             - node/test
+            - lint
           filters:
             branches:
               ignore: /.*/
@@ -64,6 +72,7 @@ workflows:
           context: CONFIG_SDK_PUBLISHING
           requires:
             - node/test
+            - lint
           filters:
             branches:
               ignore: /.*/
