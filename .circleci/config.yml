@@ -2,6 +2,16 @@ version: 2.1
 orbs:
   node: circleci/node@4.2
 
+commands:
+  update-version:
+    description: Updates the version in the package.json file to match the tag.
+    steps:
+      - run:
+          name: Set Package Version
+          command:
+            jq --arg semver "$CIRCLE_TAG" '.version = "$semver"' package.json >
+            modified.package.json && mv modified.package.json  package.json
+
 jobs:
   deploy-docs:
     executor: node/default
@@ -11,6 +21,7 @@ jobs:
           fingerprints:
             - 'fe:98:73:d4:14:87:89:62:38:63:9f:be:33:14:32:01'
       - node/install-packages
+      - update-version
       - run:
           name: Build Docs
           command: npm run build:docs
@@ -29,6 +40,7 @@ jobs:
     steps:
       - checkout
       - node/install-packages
+      - update-version
       - run:
           name: Build NPM Module
           command: npm run build

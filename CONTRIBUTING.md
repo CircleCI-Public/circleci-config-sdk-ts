@@ -114,7 +114,7 @@ Scopes should be limited to the following list:
 
 - _**ClassName**_: The name of the TS class being modified or tested
 - **sample/#**: The number of the sample added or modified
-- **package**: For modifying the version number in package.json
+- **pkg**: Anything related to modifying the package.json
 
 #### <a name="pull"></a>Submitting a Pull Request
 
