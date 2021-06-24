@@ -59,6 +59,9 @@
     "circleci"
   ],
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "npm run lint && npm run prettier"
+    "*.{js,jsx,ts,tsx}": [
+      "npm run prettier",
+      "npm run lint"
+    ]
   }
 }
