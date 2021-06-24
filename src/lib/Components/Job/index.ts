@@ -1,7 +1,6 @@
-import { Command } from '../Commands/index.types';
-import { ExecutorType } from '../Executor/index.types';
-import Component from '../index.types';
-import { JobSchema } from './index.types';
+import { Command } from '../Commands/Command';
+import ExecutorType from '../Executor/Executor';
+import Component from '../index';
 
 /**
  * Jobs define a collection of steps to be run within a given executor, and are orchestrated using Workflows.
@@ -60,3 +59,12 @@ export class Job extends Component {
   }
 }
 export default Job;
+
+export interface JobSchema {
+  [key: string]: {
+    executor: {
+      name: string;
+    };
+    steps: unknown[]; // CommandSchemas for any command.
+  };
+}

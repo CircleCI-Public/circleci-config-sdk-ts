@@ -1,4 +1,4 @@
-import { Command, CommandParameters } from '../index.types';
+import { Command, CommandParameters, CommandSchema } from '../Command';
 
 /**
  * The Run command step is used for invoking all command-line programs.
@@ -52,6 +52,6 @@ export interface RunParameters extends CommandParameters {
   when?: 'always' | 'on_success' | 'on_fail';
 }
 
-export interface RunCommandSchema {
+export interface RunCommandSchema extends CommandSchema {
   run: RunParameters;
 }

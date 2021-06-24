@@ -1,6 +1,6 @@
-import Executor from '../../Components/Executor/index.types';
+import Executor from '../../Components/Executor/Executor';
+import { DockerExecutorSchema, DockerImageMap } from './DockerExecutor.types';
 import { DockerImage } from './DockerImage';
-import { DockerImageMap, DockerExecutorSchema } from './DockerExecutor.types';
 
 /**
  * A Docker based CircleCI executor {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#docker}

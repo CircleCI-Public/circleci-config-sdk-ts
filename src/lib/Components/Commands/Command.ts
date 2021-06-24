@@ -1,6 +1,5 @@
-import { ParameterTypes } from '../../Config/index.types';
-import Component from '../index.types';
-import { RunCommandSchema } from './Native/Run';
+import { ParameterTypes } from '../../Config/Parameters';
+import Component from '../index';
 
 /**
  * Abstract - A generic Command
@@ -22,4 +21,6 @@ export interface CommandParameters {
   [key: string]: ParameterTypes;
 }
 
-export type CommandSchema = RunCommandSchema;
+export type CommandSchema = {
+  [key: string]: CommandParameters;
+};

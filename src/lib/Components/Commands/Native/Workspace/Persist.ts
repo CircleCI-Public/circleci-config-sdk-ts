@@ -1,4 +1,4 @@
-import { Command, CommandParameters } from '../../index.types';
+import { Command, CommandParameters, CommandSchema } from '../../Command';
 /**
  * Special step used to Persist the workflow’s workspace to the current container. The full contents of the workspace are downloaded and copied into the directory the workspace is being Persisted at.
  */
@@ -19,7 +19,7 @@ export class Persist extends Command {
   }
 }
 export default Persist;
-export interface PersistCommandSchema {
+export interface PersistCommandSchema extends CommandSchema {
   persist_to_workspace: PersistParameters;
 }
 export interface PersistParameters extends CommandParameters {

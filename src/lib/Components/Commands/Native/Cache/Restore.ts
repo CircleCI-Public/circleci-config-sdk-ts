@@ -1,4 +1,4 @@
-import { Command, CommandParameters } from '../../index.types';
+import { CommandSchema, Command, CommandParameters } from '../../Command';
 /**
  * Restores a previously saved cache based on a key. Cache needs to have been saved first for this key using save_cache step. Learn more in the caching documentation.
  */
@@ -27,6 +27,6 @@ export interface RestoreCacheParameters extends CommandParameters {
   keys: string[];
 }
 
-export interface RestoreCacheCommandSchema {
+export interface RestoreCacheCommandSchema extends CommandSchema {
   restore_cache: RestoreCacheParameters;
 }

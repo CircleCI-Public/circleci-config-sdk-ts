@@ -1,4 +1,4 @@
-import { Command, CommandParameters } from '../index.types';
+import { Command, CommandParameters, CommandSchema } from '../Command';
 
 /**
  * A special step used to check out source code to the configured path (defaults to the working_directory).
@@ -32,6 +32,6 @@ export interface StoreArtifactsParameters extends CommandParameters {
   destination?: string;
 }
 
-export interface StoreArtifactsCommandSchema {
+export interface StoreArtifactsCommandSchema extends CommandSchema {
   store_artifacts: StoreArtifactsParameters;
 }

@@ -1,6 +1,6 @@
-import Component from '../index.types';
+import Component from '../index';
 import Job from '../Job';
-import { WorkflowJobParameters, WorkflowJobSchema } from './index.types';
+import { WorkflowJobParameters, WorkflowJobSchema } from './Workflow';
 
 /**
  * Assign Parameters and Filters to a Job within a Workflow

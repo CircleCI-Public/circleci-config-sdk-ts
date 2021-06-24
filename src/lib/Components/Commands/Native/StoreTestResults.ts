@@ -1,4 +1,4 @@
-import { Command, CommandParameters } from '../index.types';
+import { Command, CommandParameters, CommandSchema } from '../Command';
 
 /**
  * Special step used to upload and store test results for a build. Test results are visible on the CircleCI web application, under each build’s “Test Summary” section. Storing test results is useful for timing analysis of your test suites.
@@ -28,6 +28,6 @@ export interface StoreTestResultsParameters extends CommandParameters {
   path: string;
 }
 
-export interface StoreTestResultsCommandSchema {
+export interface StoreTestResultsCommandSchema extends CommandSchema {
   store_test_results: StoreTestResultsParameters;
 }

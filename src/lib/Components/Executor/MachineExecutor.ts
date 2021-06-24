@@ -1,4 +1,5 @@
-import Executor from '../../Components/Executor/index.types';
+import Executor from '../../Components/Executor/Executor';
+import { MachineExecutorSchema } from './MachineExecutor.types';
 
 export class MachineExecutor extends Executor {
   image = 'ubuntu-2004:202010-01';
@@ -15,12 +16,4 @@ export class MachineExecutor extends Executor {
       },
     };
   }
-}
-
-export interface MachineExecutorSchema {
-  [name: string]: {
-    machine: {
-      image: string;
-    };
-  };
 }

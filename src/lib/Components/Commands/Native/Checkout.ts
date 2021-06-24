@@ -1,4 +1,4 @@
-import { Command, CommandParameters } from '../index.types';
+import { Command, CommandParameters, CommandSchema } from '../Command';
 
 /**
  * A special step used to check out source code to the configured path.
@@ -36,7 +36,7 @@ export interface CheckoutParameters extends CommandParameters {
   path?: string;
 }
 
-export interface CheckoutCommandSchemaObject {
+export interface CheckoutCommandSchemaObject extends CommandSchema {
   checkout: CheckoutParameters;
 }
 export type CheckoutCommandSchemaString = 'checkout';
