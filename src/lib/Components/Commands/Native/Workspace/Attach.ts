@@ -1,4 +1,4 @@
-import { Command, CommandParameters } from '../../index.types';
+import { Command, CommandParameters, CommandSchema } from '../../Command';
 /**
  * Special step used to attach the workflow’s workspace to the current container. The full contents of the workspace are downloaded and copied into the directory the workspace is being attached at.
  */
@@ -19,7 +19,7 @@ export class Attach extends Command {
   }
 }
 export default Attach;
-export interface AttachCommandSchema {
+export interface AttachCommandSchema extends CommandSchema {
   attach_workspace: AttachParameters;
 }
 export interface AttachParameters extends CommandParameters {

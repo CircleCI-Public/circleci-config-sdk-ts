@@ -1,4 +1,5 @@
-import { Command, CommandParameters } from '../../index.types';
+import { CommandSchema, Command, CommandParameters } from '../../Command';
+
 /**
  * Generates and stores a cache of a file or directory of files such as dependencies or source code in our object storage. Later jobs can restore this cache.
  */
@@ -33,6 +34,6 @@ export interface SaveCacheParameters extends CommandParameters {
   when?: 'always' | 'on_success' | 'on_fail';
 }
 
-export interface SaveCacheCommandSchema {
+export interface SaveCacheCommandSchema extends CommandSchema {
   save_cache: SaveCacheParameters;
 }

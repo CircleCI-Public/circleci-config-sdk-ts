@@ -3,7 +3,7 @@ import {
   WorkflowJobParameters,
   WorkflowJobSchema,
   WorkflowSchema,
-} from './index.types';
+} from './Workflow';
 import { WorkflowJob } from './WorkflowJob';
 
 /**

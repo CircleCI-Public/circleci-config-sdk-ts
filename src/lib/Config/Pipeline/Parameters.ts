@@ -1,9 +1,4 @@
-import { EnumParameter } from '../index.types';
-import {
-  ParameterTypeLiteral,
-  PipelineParameterSchema,
-  PipelineParameterValueTypes,
-} from './index.types';
+import { EnumParameter } from '../Parameters';
 
 export class PipelineParameter<ParameterType> {
   name: string;
@@ -64,3 +59,13 @@ export class PipelineParameter<ParameterType> {
     return this.enumValues.includes(input) ? true : false;
   }
 }
+
+export type ParameterTypeLiteral = 'string' | 'number' | 'boolean' | 'enum';
+export interface PipelineParameterSchema {
+  [parameterName: string]: {
+    type: ParameterTypeLiteral;
+    default: string | number | boolean;
+    enum?: string[];
+  };
+}
+export type PipelineParameterValueTypes = string | number | boolean;

@@ -1,19 +1,12 @@
-import { Command } from '../Components/Commands/index.types';
+import { Command, CommandSchema } from '../Components/Commands/Command';
 import Job from '../Components/Job';
-import Workflow from '../Components/Workflow';
-import {
-  CircleCIConfigObject,
-  CircleCIConfigSchema,
-  ConfigVersion,
-} from './index.types';
-
-import Executor from '../Components/Executor/index.types';
-
-import YAML from 'yaml';
-import { ExectorSchema } from '../Components/Executor/index.types';
-import { JobSchema } from '../Components/Job/index.types';
-import { WorkflowSchema } from '../Components/Workflow/index.types';
+import { JobSchema } from '../Components/Job/index';
+import { Workflow } from '../Components/Workflow';
+import { WorkflowSchema } from '../Components/Workflow/Workflow';
+import Executor from '../Components/Executor/Executor';
 import Pipeline from './Pipeline';
+import YAML from 'yaml';
+import { ExecutorSchema } from '../Components/Executor/Executor.types';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
@@ -99,7 +92,7 @@ export class Config implements CircleCIConfigObject {
    * Export the CircleCI configuration as a YAML string.
    */
   stringify(): string {
-    const generatedExecutorConfig: ExectorSchema = {};
+    const generatedExecutorConfig: ExecutorSchema = {};
     this.executors.forEach((executor) => {
       Object.assign(generatedExecutorConfig, executor.generate());
     });
@@ -124,3 +117,26 @@ export class Config implements CircleCIConfigObject {
   }
 }
 export default Config;
+
+export type ConfigVersion = 2 | 2.1;
+export interface ConfigOrbImport {
+  orbAlias: string;
+  orbImport: string;
+}
+
+export interface CircleCIConfigObject {
+  version: ConfigVersion;
+  jobs?: Job[];
+  executors?: Executor[];
+  commands?: Command[];
+  workflows?: Workflow[];
+}
+
+export interface CircleCIConfigSchema {
+  version: ConfigVersion;
+  orbs?: ConfigOrbImport[];
+  jobs: JobSchema;
+  executors?: ExecutorSchema;
+  commands?: CommandSchema;
+  workflows: WorkflowSchema;
+}
