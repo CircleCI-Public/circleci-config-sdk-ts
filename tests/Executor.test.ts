@@ -30,6 +30,22 @@ describe('Instantiate Machine Executor', () => {
   });
 });
 
+describe('Instantiate MacOS Executor', () => {
+  const macos = new CircleCI.Executor.MacOSExecutor(
+    'mac-executor',
+    '13.0.0',
+    'medium',
+  ).generate();
+  const expectedYAML = `mac-executor:
+    macos:
+      xcode: "13.0.0"
+    resource_class: medium`;
+
+  it('Should match the expected output', () => {
+    expect(macos).toEqual(YAML.parse(expectedYAML));
+  });
+});
+
 describe('Instantiate a 2xlarge Docker Executor', () => {
   const xxlDocker = new CircleCI.Executor.DockerExecutor(
     'docker-executor',

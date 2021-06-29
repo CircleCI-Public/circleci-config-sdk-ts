@@ -1,6 +1,6 @@
 import { DockerExecutor } from './DockerExecutor';
 import { MachineExecutor } from './MachineExecutor';
-
+import { MacOSExecutor } from './MacOSExecutor';
 /**
  * Executors define the environment in which the steps of a job will be run. {@link https://circleci.com/docs/2.0/configuration-reference/#executors-requires-version-21}
  */
@@ -10,4 +10,5 @@ export {
    */
   DockerExecutor,
   MachineExecutor,
+  MacOSExecutor,
 };
