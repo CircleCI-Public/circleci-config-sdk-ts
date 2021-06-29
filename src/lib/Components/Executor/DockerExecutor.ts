@@ -1,5 +1,9 @@
 import Executor from '../../Components/Executor/Executor';
-import { DockerExecutorSchema, DockerImageMap } from './DockerExecutor.types';
+import {
+  DockerExecutorSchema,
+  DockerImageMap,
+  DockerResourceClass,
+} from './DockerExecutor.types';
 import { DockerImage } from './DockerImage';
 
 /**
@@ -14,16 +18,21 @@ export class DockerExecutor extends Executor {
    * Add additional Docker images which will be accessable from the primary container. This is typically used for adding a database as a service container.
    */
   serviceImages: DockerImage[] = [];
-
   /**
    * Instantiate a Docker executor.
    * @param name - The name of this reusable executor.
    * @param image - The primary docker container image.
    */
-  constructor(name: string, image: string) {
-    super(name);
+  resourceClass: DockerResourceClass;
+  constructor(
+    name: string,
+    image: string,
+    resourceClass: DockerResourceClass = 'medium',
+  ) {
+    super(name, resourceClass);
     const newImage = new DockerImage(image);
     this.image = newImage;
+    this.resourceClass = resourceClass;
   }
   /**
    * Generate Docker Executor schema.
@@ -41,6 +50,7 @@ export class DockerExecutor extends Executor {
     return {
       [this.name]: {
         docker: dockerImageMap,
+        resource_class: this.resourceClass,
       },
     };
   }

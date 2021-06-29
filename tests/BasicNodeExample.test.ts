@@ -41,7 +41,10 @@ describe('Generate a Hello World config', () => {
     const expectedResult = {
       version: 2.1,
       executors: {
-        'node-executor': { docker: [{ image: 'cimg/node:lts' }] },
+        'node-executor': {
+          docker: [{ image: 'cimg/node:lts' }],
+          resource_class: 'medium',
+        },
       },
       jobs: {
         'node-test': {
