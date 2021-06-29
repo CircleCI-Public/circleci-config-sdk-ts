@@ -36,7 +36,10 @@ describe('Generate a config utilizing Workspaces', () => {
     const expectedConfig = {
       version: 2.1,
       executors: {
-        'my-executor': { docker: [{ image: 'cimg/base:stable' }] },
+        'my-executor': {
+          docker: [{ image: 'cimg/base:stable' }],
+          resource_class: 'medium',
+        },
       },
       jobs: {
         flow: {

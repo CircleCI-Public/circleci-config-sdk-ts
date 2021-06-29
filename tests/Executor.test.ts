@@ -8,7 +8,8 @@ describe('Instantiate Docker Executor', () => {
   ).generate();
   const expectedYAML = `docker-executor:
   docker:
-    - image: cimg/node:lts`;
+    - image: cimg/node:lts
+  resource_class: "medium"`;
 
   it('Should match the expected output', () => {
     expect(docker).toEqual(YAML.parse(expectedYAML));
@@ -21,7 +22,38 @@ describe('Instantiate Machine Executor', () => {
   ).generate();
   const expectedYAML = `machine-executor:
   machine:
-    image: ubuntu-2004:202010-01`;
+    image: ubuntu-2004:202010-01
+  resource_class: "medium"`;
+
+  it('Should match the expected output', () => {
+    expect(machine).toEqual(YAML.parse(expectedYAML));
+  });
+});
+
+describe('Instantiate a 2xlarge Docker Executor', () => {
+  const xxlDocker = new CircleCI.Executor.DockerExecutor(
+    'docker-executor',
+    'cimg/node:lts',
+    '2xlarge',
+  ).generate();
+  const expectedYAML = `docker-executor:
+    docker:
+      - image: cimg/node:lts
+    resource_class: 2xlarge`;
+  it('Should match the expected output', () => {
+    expect(xxlDocker).toEqual(YAML.parse(expectedYAML));
+  });
+});
+
+describe('Instantiate Large Machine Executor', () => {
+  const machine = new CircleCI.Executor.MachineExecutor(
+    'machine-executor',
+    'large',
+  ).generate();
+  const expectedYAML = `machine-executor:
+  machine:
+    image: ubuntu-2004:202010-01
+  resource_class: "large"`;
 
   it('Should match the expected output', () => {
     expect(machine).toEqual(YAML.parse(expectedYAML));

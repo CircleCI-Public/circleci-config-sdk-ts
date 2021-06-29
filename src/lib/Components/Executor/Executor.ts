@@ -7,10 +7,12 @@ import { ExecutorSchema } from './Executor.types';
 export default abstract class Executor extends Component {
   name: string;
   description?: string;
-  constructor(name: string, description?: string) {
+  resourceClass: string;
+  constructor(name: string, resourceClass: string, description?: string) {
     super();
     this.name = name;
     this.description = description;
+    this.resourceClass = resourceClass;
   }
   abstract generate(): ExecutorSchema;
 }
