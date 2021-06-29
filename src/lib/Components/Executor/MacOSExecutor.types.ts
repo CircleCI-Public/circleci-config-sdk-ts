@@ -8,7 +8,7 @@ export interface MacOSExecutorSchema {
 }
 
 /**
- * The available MacOS(Linux) Resource Classes.
- * @see {@link https://circleci.com/docs/2.0/configuration-reference/#MacOS-executor-linux} for specifications of each class.
+ * The available MacOS Resource Classes.
+ * @see {@link https://circleci.com/docs/2.0/configuration-reference/#macos-executor} for specifications of each class.
  */
 export type MacOSResourceClass = 'medium' | 'large';
