@@ -46,6 +46,21 @@ describe('Instantiate MacOS Executor', () => {
   });
 });
 
+describe('Instantiate Windows Executor', () => {
+  const windows = new CircleCI.Executor.WindowsExecutor(
+    'win-executor',
+  ).generate();
+  const expectedYAML = `win-executor:
+  machine:
+    image: "windows-server-2019-vs2019:stable"
+  resource_class: "windows.medium"
+  shell: powershell.exe -ExecutionPolicy Bypass`;
+
+  it('Should match the expected output', () => {
+    expect(windows).toEqual(YAML.parse(expectedYAML));
+  });
+});
+
 describe('Instantiate a 2xlarge Docker Executor', () => {
   const xxlDocker = new CircleCI.Executor.DockerExecutor(
     'docker-executor',
