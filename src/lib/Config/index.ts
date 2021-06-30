@@ -36,7 +36,10 @@ export class Config implements CircleCIConfigObject {
    * Access information about the current pipeline.
    */
   pipeline: Pipeline = new Pipeline();
-
+  /**
+   * Designates the config.yaml for use of CircleCI’s dynamic configuration feature.
+   */
+  setup: boolean;
   /**
    * Instantiate a new CircleCI config. Build up your config by adding components.
    * @param jobs - Instantiate with pre-defined Jobs.
@@ -45,11 +48,13 @@ export class Config implements CircleCIConfigObject {
    * @param commands - Instantiate with pre-defined reusable Commands.
    */
   constructor(
+    setup = false,
     jobs?: Job[],
     workflows?: Workflow[],
     executors?: Executor[],
     commands?: Command[],
   ) {
+    this.setup = setup;
     this.jobs.concat(jobs || []);
     this.workflows.concat(workflows || []);
     this.executors = executors || [];
@@ -109,6 +114,7 @@ export class Config implements CircleCIConfigObject {
 
     const generatedConfig: CircleCIConfigSchema = {
       version: this.version,
+      setup: this.setup,
       executors: generatedExecutorConfig,
       jobs: generatedJobConfig,
       workflows: generatedWorkflowConfig,
@@ -134,6 +140,7 @@ export interface CircleCIConfigObject {
 
 export interface CircleCIConfigSchema {
   version: ConfigVersion;
+  setup: boolean;
   orbs?: ConfigOrbImport[];
   jobs: JobSchema;
   executors?: ExecutorSchema;
