@@ -35,6 +35,7 @@ describe('Generate a config utilizing Workspaces', () => {
   it('Should generate a config matching the example with a shared workspace', () => {
     const expectedConfig = {
       version: 2.1,
+      setup: false,
       executors: {
         'my-executor': {
           docker: [{ image: 'cimg/base:stable' }],

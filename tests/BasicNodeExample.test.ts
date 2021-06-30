@@ -40,6 +40,7 @@ describe('Generate a Hello World config', () => {
   it('Should generate a valid config file', () => {
     const expectedResult = {
       version: 2.1,
+      setup: false,
       executors: {
         'node-executor': {
           docker: [{ image: 'cimg/node:lts' }],
