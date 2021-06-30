@@ -25,6 +25,17 @@ describe('Instantiate a Checkout step', () => {
   });
 });
 
+describe('Instantiate a Setup_Remote_Docker step', () => {
+  const srd = new CircleCI.Command.SetupRemoteDocker();
+  it('Should produce setup_remote_docker step with the current default', () => {
+    expect(srd.generate()).toEqual({
+      setup_remote_docker: {
+        version: '20.10.6',
+      },
+    });
+  });
+});
+
 describe('Save and load cache', () => {
   it('Should generate save cache yaml', () => {
     const example = {
