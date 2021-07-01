@@ -1,4 +1,4 @@
-import CircleCI from '../src/index';
+import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 describe('Generate a Hello World config', () => {
   // Instantiate new Config

@@ -1,4 +1,4 @@
-import CircleCI from '../src/index';
+import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 describe('Generate a config utilizing Workspaces', () => {
   // Create a new CircleCI Config
