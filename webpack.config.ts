@@ -13,7 +13,7 @@ const config: webpack.Configuration = {
       },
     ],
   },
-  target: 'node',
+  target: 'web',
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
