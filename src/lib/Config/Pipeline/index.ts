@@ -2,6 +2,9 @@ import { Project } from './Project';
 import { Git } from './Git';
 import { PipelineParameter } from './Parameters';
 import { ParameterTypes } from '../Parameters';
+/**
+ * Access Pipeline variables from within CircleCI Cloud.
+ */
 export default class Pipeline {
   /**
    * Pipeline parameter values are passed at the config level on CircleCI. These values will not be present on a local system.

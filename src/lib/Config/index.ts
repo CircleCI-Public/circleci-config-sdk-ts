@@ -11,7 +11,7 @@ import { ExecutorSchema } from '../Components/Executor/Executor.types';
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
  */
-export class Config implements CircleCIConfigObject {
+export default class Config implements CircleCIConfigObject {
   /**
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
    */
@@ -122,7 +122,6 @@ export class Config implements CircleCIConfigObject {
     return YAML.stringify(generatedConfig);
   }
 }
-export default Config;
 
 export type ConfigVersion = 2 | 2.1;
 export interface ConfigOrbImport {

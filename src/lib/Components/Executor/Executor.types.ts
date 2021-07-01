@@ -1,5 +1,6 @@
-import { DockerExecutor, MachineExecutor } from '.';
+import { DockerExecutor } from './DockerExecutor';
 import { DockerExecutorSchema } from './DockerExecutor.types';
+import { MachineExecutor } from './MachineExecutor';
 import { MachineExecutorSchema } from './MachineExecutor.types';
 import { MacOSExecutor } from './MacOSExecutor';
 import { MacOSExecutorSchema } from './MacOSExecutor.types';
