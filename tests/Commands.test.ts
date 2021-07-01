@@ -1,4 +1,4 @@
-import CircleCI from '../src/index';
+import * as CircleCI from '../src/index';
 
 describe('Instantiate a Run step', () => {
   const run = new CircleCI.Command.Run({
