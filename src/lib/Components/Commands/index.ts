@@ -6,7 +6,11 @@ import StoreTestResults from './Native/StoreTestResults';
 import StoreArtifacts from './Native/StoreArtifacts';
 import SetupRemoteDocker from './Native/SetupRemoteDocker';
 
-export {
+/**
+ * All available commands that can be used within jobs.
+ * Use the Run command to execute scripts.
+ */
+const Command = {
   Run,
   Checkout,
   Cache,
@@ -15,3 +19,4 @@ export {
   StoreTestResults,
   SetupRemoteDocker,
 };
+export default Command;

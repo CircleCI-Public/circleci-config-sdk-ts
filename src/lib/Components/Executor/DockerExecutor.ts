@@ -6,9 +6,6 @@ import {
 } from './DockerExecutor.types';
 import { DockerImage } from './DockerImage';
 
-/**
- * A Docker based CircleCI executor {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#docker}
- */
 export class DockerExecutor extends Executor {
   /**
    * The name of a custom Socker image to use

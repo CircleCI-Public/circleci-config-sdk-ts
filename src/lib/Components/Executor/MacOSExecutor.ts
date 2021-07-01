@@ -1,6 +1,5 @@
 import Executor from '../../Components/Executor/Executor';
 import { MacOSExecutorSchema, MacOSResourceClass } from './MacOSExecutor.types';
-
 export class MacOSExecutor extends Executor {
   resourceClass: MacOSResourceClass;
   /**
