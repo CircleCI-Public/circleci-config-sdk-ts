@@ -8,12 +8,12 @@ export class PipelineParameter<ParameterType> {
   constructor(
     name: string,
     defaultValue: ParameterType,
-    enumValues?: EnumParameter,
+    enumValues: EnumParameter = [],
   ) {
     this.name = name;
     this.defaultValue = defaultValue as unknown as PipelineParameterValueTypes;
-    this.enumValues = enumValues || [];
-    if (enumValues) {
+    this.enumValues = enumValues;
+    if (enumValues.length > 0) {
       this.type = 'enum';
       if (this.validateEnum(defaultValue as unknown as string) === false) {
         throw new Error(
@@ -27,10 +27,7 @@ export class PipelineParameter<ParameterType> {
           this.type = 'string';
           break;
         case 'number':
-          this.type = 'string';
-          break;
-        case 'object':
-          this.type = 'enum';
+          this.type = 'number';
           break;
         case 'boolean':
           this.type = 'boolean';
@@ -49,7 +46,7 @@ export class PipelineParameter<ParameterType> {
       [this.name]: {
         default: this.defaultValue,
         type: this.type,
-        enum: this.enumValues || [],
+        enum: this.enumValues,
       },
     };
     return schemaObject;

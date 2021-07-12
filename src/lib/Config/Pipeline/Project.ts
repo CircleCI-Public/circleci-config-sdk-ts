@@ -1,5 +1,5 @@
 export class Project {
-  private _isLocal = true;
+  private _isLocal: boolean;
   constructor(isLocal: boolean) {
     this._isLocal = isLocal;
   }
@@ -7,7 +7,7 @@ export class Project {
    * The URL where the current project is hosted. E.g. https://github.com/circleci/circleci-docs
    */
   get git_url(): string {
-    if (this._isLocal) {
+    if (this._isLocal == true) {
       return 'git.local';
     } else {
       return process.env.CIRCLE_REPOSITORY_URL as string;
@@ -20,7 +20,9 @@ export class Project {
     if (this._isLocal) {
       return 'local';
     } else {
-      const host = new URL(process.env.CIRCLE_REPOSITORY_URL as string).host;
+      const host = new URL(
+        process.env.CIRCLE_REPOSITORY_URL as string,
+      ).host.split('.')[0];
       switch (host) {
         case 'github':
           return host;

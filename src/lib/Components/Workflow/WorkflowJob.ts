@@ -15,18 +15,6 @@ export class WorkflowJob extends Component {
       this.parameters = parameters;
     }
   }
-  requiresJob(workflowJob: WorkflowJob): this {
-    if (!this.parameters) {
-      this.parameters = {};
-    }
-    if (!this.parameters.requires) {
-      this.parameters.requires = [];
-    }
-    this.parameters.requires.push(
-      workflowJob.parameters?.name ?? workflowJob.job.name,
-    );
-    return this;
-  }
   generate(): WorkflowJobSchema {
     let result;
     if (this.parameters) {

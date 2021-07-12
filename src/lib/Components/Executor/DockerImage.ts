@@ -26,18 +26,22 @@ export class DockerImage implements DockerImageSchema {
     this.auth = auth;
     this.aws_auth = aws_auth;
   }
-  generate(): DockerImageSchema {
-    return {
-      image: this.image,
-      name: this.name,
-      entrypoint: this.entrypoint,
-      command: this.command,
-      user: this.user,
-      environment: this.environment,
-      auth: this.auth,
-      aws_auth: this.aws_auth,
-    };
-  }
+  // Currently, only the image is used and is fetched via the DockerImage
+  // generate() function.
+  // TODO: Switch to this dockerImage generate function, but only add properties
+  // with values to the output to avoid unncesary properties in the output.
+  // generate(): DockerImageSchema {
+  //   return {
+  //     image: this.image,
+  //     name: this.name,
+  //     entrypoint: this.entrypoint,
+  //     command: this.command,
+  //     user: this.user,
+  //     environment: this.environment,
+  //     auth: this.auth,
+  //     aws_auth: this.aws_auth,
+  //   };
+  //}
 }
 
 export interface DockerImageSchema {
