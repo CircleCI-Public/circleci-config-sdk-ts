@@ -105,3 +105,66 @@ describe('Instantiate Workflow with a manual approval job', () => {
     expect(generatedWorkflow).toEqual(expected);
   });
 });
+
+describe('Instantiate a Workflow with sequential jobs', () => {
+  const docker = new CircleCI.Executor.DockerExecutor(
+    'docker-executor',
+    'cimg/node:lts',
+  );
+  const helloWorld = new CircleCI.Command.Run({
+    command: 'echo hello world',
+  });
+  const jobA = new CircleCI.Job('my-job-A', docker, [helloWorld]);
+  const jobB = new CircleCI.Job('my-job-B', docker, [helloWorld]);
+  const myWorkflow = new CircleCI.Workflow('my-workflow');
+  myWorkflow.addJob(jobA);
+  myWorkflow.addJob(jobB, { requires: ['my-job-A'] });
+  it('Should match the expected output', () => {
+    const expected = {
+      'my-workflow': {
+        jobs: [{ 'my-job-A': {} }, { 'my-job-B': { requires: ['my-job-A'] } }],
+      },
+    };
+    const generatedWorkflow = myWorkflow.generate();
+    expect(generatedWorkflow).toEqual(expected);
+  });
+});
+
+describe('Instantiate a Workflow with 2 jobs', () => {
+  const docker = new CircleCI.Executor.DockerExecutor('node', 'cimg/node:lts');
+  const helloWorld = new CircleCI.Command.Run({ command: 'echo hello world' });
+  const jobA = new CircleCI.Job('my-job-A', docker, [helloWorld]);
+  const jobB = new CircleCI.Job('my-job-B', docker, [helloWorld]);
+  const myWorkflow = new CircleCI.Workflow('my-workflow');
+  myWorkflow.addJob(jobA, { myParam: 'my-value' });
+  myWorkflow.addJob(jobB);
+  it('Should match the expected output', () => {
+    const expected = {
+      'my-workflow': {
+        jobs: [{ 'my-job-A': { myParam: 'my-value' } }, { 'my-job-B': {} }],
+      },
+    };
+    const generatedWorkflow = myWorkflow.generate();
+    expect(generatedWorkflow).toEqual(expected);
+  });
+});
+
+describe('Add a job to a workflow with a custom name parameter', () => {
+  const docker = new CircleCI.Executor.DockerExecutor(
+    'docker-executor',
+    'cimg/node:lts',
+  );
+  const helloWorld = new CircleCI.Command.Run({
+    command: 'echo hello world',
+  });
+  const job = new CircleCI.Job('my-job', docker, [helloWorld]);
+  const myWorkflow = new CircleCI.Workflow('my-workflow');
+  myWorkflow.addJob(job, { name: 'custom-name' });
+  it('Should match the expected output', () => {
+    const expected = {
+      'my-workflow': { jobs: [{ 'my-job': { name: 'custom-name' } }] },
+    };
+    const generatedWorkflow = myWorkflow.generate();
+    expect(generatedWorkflow).toEqual(expected);
+  });
+});

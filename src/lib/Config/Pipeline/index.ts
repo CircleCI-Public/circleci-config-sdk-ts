@@ -9,13 +9,17 @@ export default class Pipeline {
   /**
    * Pipeline parameter values are passed at the config level on CircleCI. These values will not be present on a local system.
    */
-  private _isLocal = true;
+  private _isLocal;
   /**
    * Array of user defined parameters
    */
   parameters: PipelineParameter<ParameterTypes>[] = [];
   constructor() {
-    process.env.CIRCLECI ? (this._isLocal = false) : (this._isLocal = true);
+    if (process.env.CIRCLECI == 'true') {
+      this._isLocal = false;
+    } else {
+      this._isLocal = true;
+    }
   }
   /**
    * A globally unique id representing for the pipeline
@@ -42,10 +46,14 @@ export default class Pipeline {
   /**
    * Project metadata
    */
-  project: Project = new Project(this._isLocal);
+  project(): Project {
+    return new Project(this._isLocal);
+  }
   /**
    * Git metadata
    */
-  git: Git = new Git(this._isLocal);
+  git(): Git {
+    return new Git(this._isLocal);
+  }
 }
 export { PipelineParameter };
