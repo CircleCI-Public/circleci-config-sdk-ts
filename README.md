@@ -1,4 +1,5 @@
 [![CircleCI Build Status](https://circleci.com/gh/CircleCI-Public/circleci-config-sdk-ts.svg?style=shield 'CircleCI Build Status')](https://circleci.com/gh/CircleCI-Public/circleci-config-sdk-ts)
+[![codecov](https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts/branch/main/graph/badge.svg?token=Z4C4RXABS7)](https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts)
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/circleci-public/circleci-config-sdk-ts/blob/main/LICENSE)
 
 # CircleCI Config SDK (TypeScript)

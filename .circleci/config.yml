@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@4.2
+  codecov: codecov/codecov@1.2
 
 commands:
   update-version:
@@ -68,6 +69,9 @@ workflows:
                 - 15.14.0
                 - 14.16.1
                 - 13.14.0
+          post-steps:
+            - codecov/upload:
+                file: coverage/lcov.info
           filters:
             tags:
               only: /.*/
