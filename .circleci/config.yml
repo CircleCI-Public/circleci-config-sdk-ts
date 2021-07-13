@@ -79,7 +79,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^v\d+\.\d+\.\d+$/
+              only: /^\d+\.\d+\.\d+$/
       - deploy-package:
           context: CONFIG_SDK_PUBLISHING
           requires:
@@ -89,4 +89,4 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^v\d+\.\d+\.\d+$/
+              only: /^\d+\.\d+\.\d+$/
