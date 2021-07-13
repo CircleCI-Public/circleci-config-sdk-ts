@@ -13,4 +13,4 @@ jest.config.ts
 .husky
 .prettierrc.js
 .circleci
-
+.npmrc

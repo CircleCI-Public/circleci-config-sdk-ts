@@ -105,3 +105,6 @@ dist
 .tern-port
 
 .DS_Store
+
+# Custom
+.npmrc
