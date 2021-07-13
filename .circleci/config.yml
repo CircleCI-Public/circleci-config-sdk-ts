@@ -10,8 +10,7 @@ commands:
       - run:
           name: Set Package Version
           command:
-            jq --arg semver "$CIRCLE_TAG" '.version = "$semver"' package.json >
-            modified.package.json && mv modified.package.json  package.json
+            jq --arg semver "$CIRCLE_TAG" '.version = $semver' package.json > package.json.tmp && mv package.json.tmp package.json && rm -f package.json.tmp
 
 jobs:
   deploy-docs:
