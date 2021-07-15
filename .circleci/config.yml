@@ -86,7 +86,7 @@ workflows:
             tags:
               only: /^\d+\.\d+\.\d+$/
       - deploy-package:
-          context: CONFIG_SDK_PUBLISHING
+          context: cci-config-sdk-publishing
           requires:
             - node/test
             - lint
