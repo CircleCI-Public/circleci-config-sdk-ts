@@ -1,9 +1,10 @@
-import * as path from 'path';
-import * as webpack from 'webpack';
+import path from 'path';
+import webpack from 'webpack';
 
-const config: webpack.Configuration = {
+export const config: webpack.Configuration = {
   mode: 'production',
   entry: './src/index.ts',
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -13,13 +14,20 @@ const config: webpack.Configuration = {
       },
     ],
   },
-  target: 'web',
+  target: 'node',
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'index.js',
+    filename: 'circleci-config-sdk.js',
+    library: {
+      name: 'CircleCI',
+      type: 'umd',
+    },
+  },
+  optimization: {
+    minimize: true,
   },
 };
 

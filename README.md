@@ -19,7 +19,7 @@ $ npm i --save @circleci/circleci-config-sdk
 In Node.js:
 
 ```typescript
-import * as CircleCI from '@circleci/circleci-config-sdk';
+import CircleCI from '@circleci/circleci-config-sdk';
 ```
 
 In Browser:

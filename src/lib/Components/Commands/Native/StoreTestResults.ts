@@ -20,7 +20,6 @@ export class StoreTestResults extends Command {
     } as StoreTestResultsCommandSchema;
   }
 }
-export default StoreTestResults;
 export interface StoreTestResultsParameters extends CommandParameters {
   /**
    * Path (absolute, or relative to your working_directory) to directory containing subdirectories of JUnit XML or Cucumber JSON test metadata files

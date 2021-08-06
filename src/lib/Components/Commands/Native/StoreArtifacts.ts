@@ -20,7 +20,7 @@ export class StoreArtifacts extends Command {
     } as StoreArtifactsCommandSchema;
   }
 }
-export default StoreArtifacts;
+
 export interface StoreArtifactsParameters extends CommandParameters {
   /**
    * Directory in the primary container to save as job artifacts

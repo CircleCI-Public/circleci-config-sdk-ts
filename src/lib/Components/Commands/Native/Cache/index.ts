@@ -1,3 +1,2 @@
-import Restore from './Restore';
-import Save from './Save';
-export { Restore, Save };
+export { Restore } from './Restore';
+export { Save } from './Save';

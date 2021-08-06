@@ -1,4 +1,4 @@
-import Job from '../Job';
+import { Job } from '../Job';
 import {
   WorkflowJobParameters,
   WorkflowJobSchema,
@@ -55,4 +55,3 @@ export class Workflow {
     return this;
   }
 }
-export default Workflow;

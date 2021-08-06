@@ -18,7 +18,6 @@ export class Attach extends Command {
     } as AttachCommandSchema;
   }
 }
-export default Attach;
 export interface AttachCommandSchema extends CommandSchema {
   attach_workspace: AttachParameters;
 }

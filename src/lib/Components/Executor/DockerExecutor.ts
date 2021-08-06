@@ -1,4 +1,4 @@
-import Executor from '../../Components/Executor/Executor';
+import { AbstractExecutor } from '../../Components/Executor/Executor';
 import {
   DockerExecutorSchema,
   DockerImageMap,
@@ -6,9 +6,13 @@ import {
 } from './DockerExecutor.types';
 import { DockerImage } from './DockerImage';
 
-export class DockerExecutor extends Executor {
+/**
+ * A Docker based CircleCI executor.
+ * @see {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#docker}
+ */
+export class DockerExecutor extends AbstractExecutor {
   /**
-   * The name of a custom Socker image to use
+   * The name of a custom Docker image to use
    */
   image: DockerImage;
   /**

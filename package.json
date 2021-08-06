@@ -2,7 +2,7 @@
   "name": "@circleci/circleci-config-sdk",
   "version": "0.0.0-development",
   "description": "An SDK for building CircleCI Configuration files with JavaScript.",
-  "main": "dist/index.js",
+  "main": "dist/circleci-config-sdk.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest && npm run build:docs",
@@ -10,9 +10,10 @@
     "prettier": "prettier --write .",
     "prettier:ci": "prettier --check .",
     "lint:ci": "npm run prettier:ci && npm run lint",
-    "build": "npx webpack --mode production",
+    "build": "rm -rf ./dist && npx webpack --mode production",
     "build:docs": "typedoc",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "sink": "npm run prettier && npm run lint && npm run test && npm run build && npm run build:docs"
   },
   "repository": {
     "type": "git",

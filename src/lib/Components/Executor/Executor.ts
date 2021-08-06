@@ -1,10 +1,10 @@
-import Component from '../index';
+import { Component } from '../index';
 import { ExecutorSchema } from './Executor.types';
 
 /**
  * A generic reusable Executor
  */
-export default abstract class Executor extends Component {
+export abstract class AbstractExecutor extends Component {
   name: string;
   description?: string;
   resourceClass: string;
