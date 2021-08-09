@@ -20,7 +20,6 @@ export class Run extends Command {
     return command as RunCommandSchema;
   }
 }
-export default Run;
 export interface RunParameters extends CommandParameters {
   /**
    * Command to run via the shell

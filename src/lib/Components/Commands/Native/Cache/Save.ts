@@ -17,7 +17,6 @@ export class Save extends Command {
     return { save_cache: { ...this.parameters } } as SaveCacheCommandSchema;
   }
 }
-export default Save;
 
 export interface SaveCacheParameters extends CommandParameters {
   /**

@@ -27,7 +27,6 @@ export class Checkout extends Command {
     }
   }
 }
-export default Checkout;
 export interface CheckoutParameters extends CommandParameters {
   /**
    * Checkout directory.

@@ -1,17 +1,17 @@
 import { Command, CommandSchema } from '../Components/Commands/Command';
-import Job from '../Components/Job';
+import { Job } from '../Components/Job';
 import { JobSchema } from '../Components/Job/index';
 import { Workflow } from '../Components/Workflow';
 import { WorkflowSchema } from '../Components/Workflow/Workflow';
-import Executor from '../Components/Executor/Executor';
-import Pipeline from './Pipeline';
-import YAML from 'yaml';
+import { AbstractExecutor } from '../Components/Executor/Executor';
+import { Pipeline } from './Pipeline';
+import { stringify as Stringify } from 'yaml';
 import { ExecutorSchema } from '../Components/Executor/Executor.types';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
  */
-export default class Config implements CircleCIConfigObject {
+export class Config implements CircleCIConfigObject {
   /**
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
    */
@@ -19,7 +19,7 @@ export default class Config implements CircleCIConfigObject {
   /**
    * Executors define the environment in which the steps of a job will be run, allowing you to reuse a single executor definition across multiple jobs.
    */
-  executors: Executor[] = [];
+  executors: AbstractExecutor[] = [];
   /**
    * Jobs are collections of steps. All of the steps in the job are executed in a single unit, either within a fresh container or VM.
    */
@@ -51,7 +51,7 @@ export default class Config implements CircleCIConfigObject {
     setup = false,
     jobs?: Job[],
     workflows?: Workflow[],
-    executors?: Executor[],
+    executors?: AbstractExecutor[],
     commands?: Command[],
   ) {
     this.setup = setup;
@@ -73,7 +73,7 @@ export default class Config implements CircleCIConfigObject {
    * Add an Executor to the current Config. Chainable
    * @param executor - Injectable executor
    */
-  addExecutor(executor: Executor): this {
+  addExecutor(executor: AbstractExecutor): this {
     this.executors.push(executor);
     return this;
   }
@@ -119,7 +119,7 @@ export default class Config implements CircleCIConfigObject {
       jobs: generatedJobConfig,
       workflows: generatedWorkflowConfig,
     };
-    return YAML.stringify(generatedConfig);
+    return Stringify(generatedConfig);
   }
 }
 
@@ -132,7 +132,7 @@ export interface ConfigOrbImport {
 export interface CircleCIConfigObject {
   version: ConfigVersion;
   jobs?: Job[];
-  executors?: Executor[];
+  executors?: AbstractExecutor[];
   commands?: Command[];
   workflows?: Workflow[];
 }

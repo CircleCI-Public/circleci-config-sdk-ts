@@ -1,5 +1,5 @@
 import { ParameterTypes } from '../../Config/Parameters';
-import Component from '../index';
+import { Component } from '../index';
 
 /**
  * Abstract - A generic Command

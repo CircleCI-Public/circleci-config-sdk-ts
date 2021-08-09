@@ -18,7 +18,6 @@ export class Restore extends Command {
     } as RestoreCacheCommandSchema;
   }
 }
-export default Restore;
 
 export interface RestoreCacheParameters extends CommandParameters {
   /**

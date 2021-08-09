@@ -1,9 +1,14 @@
-import Executor from '../../Components/Executor/Executor';
+import { AbstractExecutor } from '../../Components/Executor/Executor';
 import {
   MachineExecutorSchema,
   MachineResourceClass,
 } from './MachineExecutor.types';
-export class MachineExecutor extends Executor {
+
+/**
+ * The Linux Virtual Machine Executor.
+ * @see {@link https://circleci.com/docs/2.0/executor-types/#using-machine}
+ */
+export class MachineExecutor extends AbstractExecutor {
   image = 'ubuntu-2004:202010-01';
   resourceClass: MachineResourceClass;
   constructor(

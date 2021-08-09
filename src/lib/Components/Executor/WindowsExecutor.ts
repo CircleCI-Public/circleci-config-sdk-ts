@@ -1,9 +1,14 @@
-import Executor from './Executor';
+import { AbstractExecutor } from './Executor';
 import {
   WindowsExecutorSchema,
   WindowsResourceClass,
 } from './WindowsExecutor.types';
-export class WindowsExecutor extends Executor {
+
+/**
+ * A Windows Virtual Machine (CircleCI Cloud)
+ * @see {@link https://circleci.com/docs/2.0/executor-types/#using-the-windows-executor}
+ */
+export class WindowsExecutor extends AbstractExecutor {
   image = 'windows-server-2019-vs2019:stable';
   resourceClass: WindowsResourceClass;
   constructor(

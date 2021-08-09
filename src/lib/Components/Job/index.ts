@@ -1,6 +1,6 @@
 import { Command } from '../Commands/Command';
-import ExecutorType from '../Executor/Executor';
-import Component from '../index';
+import { AbstractExecutor } from '../Executor/Executor';
+import { Component } from '../index';
 
 /**
  * Jobs define a collection of steps to be run within a given executor, and are orchestrated using Workflows.
@@ -13,7 +13,7 @@ export class Job extends Component {
   /**
    * The reusable executor to use for this job. The Executor must have already been instantiated and added to the config.
    */
-  executor: ExecutorType;
+  executor: AbstractExecutor;
   /**
    * A list of Commands to execute within the job in the order which they were added.
    */
@@ -25,7 +25,7 @@ export class Job extends Component {
    * @param steps - A list of Commands to execute within the job in the order which they were added.
    * @see {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#jobs}
    */
-  constructor(name: string, executor: ExecutorType, steps?: Command[]) {
+  constructor(name: string, executor: AbstractExecutor, steps?: Command[]) {
     super();
     this.name = name;
     this.executor = executor;
@@ -58,8 +58,6 @@ export class Job extends Component {
     return this;
   }
 }
-export default Job;
-
 export interface JobSchema {
   [key: string]: {
     executor: {

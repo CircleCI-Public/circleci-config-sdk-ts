@@ -1,6 +1,11 @@
-import Executor from '../../Components/Executor/Executor';
+import { AbstractExecutor } from '../../Components/Executor/Executor';
 import { MacOSExecutorSchema, MacOSResourceClass } from './MacOSExecutor.types';
-export class MacOSExecutor extends Executor {
+
+/**
+ * A MacOS Virtual Machine with configurable Xcode version.
+ * @see {@link https://circleci.com/docs/2.0/executor-types/#using-macos}
+ */
+export class MacOSExecutor extends AbstractExecutor {
   resourceClass: MacOSResourceClass;
   /**
    * Select an xcode version

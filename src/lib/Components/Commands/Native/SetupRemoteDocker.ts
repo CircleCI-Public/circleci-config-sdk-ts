@@ -23,7 +23,6 @@ export class SetupRemoteDocker extends Command {
     } as SetupRemoteDockerCommandSchema;
   }
 }
-export default SetupRemoteDocker;
 export interface SetupRemoteDockerParameters extends CommandParameters {
   /**
    * SetupRemoteDocker directory.

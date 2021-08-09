@@ -1,5 +1,5 @@
-import Component from '../index';
-import Job from '../Job';
+import { Component } from '../index';
+import { Job } from '../Job';
 import { WorkflowJobParameters, WorkflowJobSchema } from './Workflow';
 
 /**

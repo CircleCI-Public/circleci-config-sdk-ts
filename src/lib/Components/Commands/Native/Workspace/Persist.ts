@@ -18,7 +18,6 @@ export class Persist extends Command {
     } as PersistCommandSchema;
   }
 }
-export default Persist;
 export interface PersistCommandSchema extends CommandSchema {
   persist_to_workspace: PersistParameters;
 }
