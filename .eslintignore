@@ -6,3 +6,5 @@ dist
 coverage
 # dont lint docs
 docs
+# Dont lint samples
+sample 
