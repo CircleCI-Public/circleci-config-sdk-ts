@@ -1,8 +1,8 @@
-coverage
-docs
-node_modules
-src
-tests
+coverage/
+docs/
+node_modules/
+src/
+tests/
 tsconfig.json
 webpack.config.ts
 .eslintrc.js
@@ -14,3 +14,5 @@ jest.config.ts
 .prettierrc.js
 .circleci
 .npmrc
+CONTRIBUTING.md
+sample/
