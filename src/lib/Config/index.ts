@@ -7,7 +7,7 @@ import { AbstractExecutor } from '../Components/Executor/Executor';
 import { Pipeline } from './Pipeline';
 import { stringify as Stringify } from 'yaml';
 import { ExecutorSchema } from '../Components/Executor/Executor.types';
-import { version as SDKVersion } from '../../../package.json';
+import { version as SDKVersion } from '../../package-version.json';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.

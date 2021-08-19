@@ -1,6 +1,6 @@
 import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
-import { version as SDKVersion } from '../package.json';
+import { version as SDKVersion } from '../src/package-version.json';
 
 describe('Generate a Setup workflow config', () => {
   const myConfig = new CircleCI.Config(true).stringify();
