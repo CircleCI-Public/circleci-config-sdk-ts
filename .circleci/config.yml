@@ -9,10 +9,19 @@ commands:
     steps:
       - run:
           name: Set Package Version
-          command:
-            jq --arg semver "$CIRCLE_TAG" '.version = $semver' package.json >
-            package.json.tmp && mv package.json.tmp package.json && rm -f
-            package.json.tmp
+          command: |
+            # If "$CIRCLE_TAG" is not set, then set to dev version
+            if [ -z "$CIRCLE_TAG" ]; then
+              CIRCLE_TAG="0.0.0-development"
+            fi
+            # Set package.json version to match tag
+            jq --arg semver "$CIRCLE_TAG" '.version = $semver' package.json > package.json.tmp
+            mv package.json.tmp package.json
+            rm -f package.json.tmp
+            # update package-version.json
+            rm -f ./src/package-version.json
+            echo "{\"version\": \"$CIRCLE_TAG\"}" > ./src/package-version.json
+
 
 jobs:
   deploy-docs:
