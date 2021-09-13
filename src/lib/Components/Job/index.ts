@@ -1,5 +1,6 @@
 import { Command } from '../Commands/Command';
 import { AbstractExecutor } from '../Executor/Executor';
+import { ExecutorSchema } from '../Executor/Executor.types';
 import { Component } from '../index';
 
 /**
@@ -39,13 +40,13 @@ export class Job extends Component {
     const generatedSteps = this.steps.map((step) => {
       return step.generate();
     });
+    const generatedExecutor = this.executor.generate();
+    const jobContents: JobContentSchema = {
+      steps: generatedSteps,
+      ...generatedExecutor,
+    };
     return {
-      [this.name]: {
-        executor: {
-          name: this.executor.name,
-        },
-        steps: generatedSteps,
-      },
+      [this.name]: jobContents,
     };
   }
 
@@ -58,11 +59,12 @@ export class Job extends Component {
     return this;
   }
 }
+
+export interface JobStepsSchema {
+  steps: unknown[]; // CommandSchemas for any command.
+}
+
+export type JobContentSchema = JobStepsSchema & ExecutorSchema;
 export interface JobSchema {
-  [key: string]: {
-    executor: {
-      name: string;
-    };
-    steps: unknown[]; // CommandSchemas for any command.
-  };
+  [key: string]: JobContentSchema;
 }

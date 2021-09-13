@@ -12,11 +12,16 @@ import { DockerImage } from './DockerImage';
  */
 export class DockerExecutor extends AbstractExecutor {
   /**
-   * The name of a custom Docker image to use
+   * The name of a custom Docker image to use.
+   * @example
+   * ```
+   * "cimg/base:stable"
+   * ```
    */
   image: DockerImage;
   /**
-   * Add additional Docker images which will be accessable from the primary container. This is typically used for adding a database as a service container.
+   * Add additional Docker images which will be accessible from the primary container.
+   * This is typically used for adding a database as a service container.
    */
   serviceImages: DockerImage[] = [];
   /**
@@ -25,12 +30,8 @@ export class DockerExecutor extends AbstractExecutor {
    * @param image - The primary docker container image.
    */
   resourceClass: DockerResourceClass;
-  constructor(
-    name: string,
-    image: string,
-    resourceClass: DockerResourceClass = 'medium',
-  ) {
-    super(name, resourceClass);
+  constructor(image: string, resourceClass: DockerResourceClass = 'medium') {
+    super(resourceClass);
     const newImage = new DockerImage(image);
     this.image = newImage;
     this.resourceClass = resourceClass;
@@ -49,10 +50,8 @@ export class DockerExecutor extends AbstractExecutor {
       });
     });
     return {
-      [this.name]: {
-        docker: dockerImageMap,
-        resource_class: this.resourceClass,
-      },
+      docker: dockerImageMap,
+      resource_class: this.resourceClass,
     };
   }
 }

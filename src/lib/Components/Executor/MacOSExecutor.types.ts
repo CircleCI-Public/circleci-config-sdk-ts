@@ -1,10 +1,8 @@
 export interface MacOSExecutorSchema {
-  [name: string]: {
-    macos: {
-      xcode: string;
-    };
-    resource_class: MacOSResourceClass;
+  macos: {
+    xcode: string;
   };
+  resource_class: MacOSResourceClass;
 }
 
 /**

@@ -40,7 +40,6 @@ describe('Check built-in pipeline parameters', () => {
 
 describe('Implement type-safe pipeline parameters', () => {
   const DockerExecutor = new CircleCI.Executor.DockerExecutor(
-    'dockerExecutor',
     'cimg/base:stable',
   );
   const myJob = new CircleCI.Job('myJob', DockerExecutor);
