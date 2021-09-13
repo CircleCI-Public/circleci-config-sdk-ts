@@ -6,7 +6,7 @@ describe('Instantiate a Run step', () => {
   });
   const runStep = run.generate();
   const expectedResult = { run: { command: 'echo hello world' } };
-  it('Should genreate checkout yaml', () => {
+  it('Should generate checkout yaml', () => {
     expect(runStep).toEqual(expectedResult);
   });
 });

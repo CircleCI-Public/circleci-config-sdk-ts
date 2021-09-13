@@ -8,11 +8,7 @@ describe('Generate a Hello World config', () => {
   myConfig.addWorkflow(myWorkflow);
 
   // Create an executor. Reusable.
-  const nodeExecutor = new CircleCI.Executor.DockerExecutor(
-    'node-executor',
-    'cimg/node:lts',
-  );
-  myConfig.addExecutor(nodeExecutor);
+  const nodeExecutor = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
 
   // Create Job
   const nodeTestJob = new CircleCI.Job('node-test', nodeExecutor);
@@ -41,15 +37,10 @@ describe('Generate a Hello World config', () => {
     const expectedResult = {
       version: 2.1,
       setup: false,
-      executors: {
-        'node-executor': {
-          docker: [{ image: 'cimg/node:lts' }],
-          resource_class: 'medium',
-        },
-      },
       jobs: {
         'node-test': {
-          executor: { name: 'node-executor' },
+          docker: [{ image: 'cimg/node:lts' }],
+          resource_class: 'medium',
           steps: [
             {
               run: {

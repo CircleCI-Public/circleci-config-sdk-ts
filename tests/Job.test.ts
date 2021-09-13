@@ -2,17 +2,15 @@ import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 
 describe('Instantiate Docker Job', () => {
-  const docker = new CircleCI.Executor.DockerExecutor(
-    'docker-executor',
-    'cimg/node:lts',
-  );
+  const docker = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.Command.Run({
     command: 'echo hello world',
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
   const expectedOutput = `my-job:
-  executor:
-    name: docker-executor
+  docker:
+    - image: cimg/node:lts
+  resource_class: medium
   steps:
     - run:
         command: echo hello world`;
@@ -22,7 +20,6 @@ describe('Instantiate Docker Job', () => {
   });
   it('Add job to config and validate', () => {
     const myConfig = new CircleCI.Config();
-    myConfig.addExecutor(docker);
     myConfig.addJob(job);
     expect(myConfig.jobs.length).toBeGreaterThan(0);
   });

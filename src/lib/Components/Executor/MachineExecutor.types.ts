@@ -1,10 +1,8 @@
 export interface MachineExecutorSchema {
-  [name: string]: {
-    machine: {
-      image: string;
-    };
-    resource_class: MachineResourceClass;
+  machine: {
+    image: string;
   };
+  resource_class: MachineResourceClass;
 }
 
 /**

@@ -1,9 +1,7 @@
 import { DockerImageSchema } from './DockerImage';
 export interface DockerExecutorSchema {
-  [name: string]: {
-    docker: DockerImageSchema[];
-    resource_class: DockerResourceClass;
-  };
+  docker: DockerImageSchema[];
+  resource_class: DockerResourceClass;
 }
 export interface DockerImageMap {
   image: string;

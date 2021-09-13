@@ -9,26 +9,20 @@ export class MacOSExecutor extends AbstractExecutor {
   resourceClass: MacOSResourceClass;
   /**
    * Select an xcode version
-   * @see {@link https://circleci.com/docs/2.0/testing-ios/#supported-xcode-versions}
+   * @see {@link https://circleci.com/developer/machine/image/macos}
    */
   xcode: string;
-  constructor(
-    name: string,
-    xcode: string,
-    resourceClass: MacOSResourceClass = 'medium',
-  ) {
-    super(name, resourceClass);
+  constructor(xcode: string, resourceClass: MacOSResourceClass = 'medium') {
+    super(resourceClass);
     this.xcode = xcode;
     this.resourceClass = resourceClass;
   }
   generate(): MacOSExecutorSchema {
     return {
-      [this.name]: {
-        macos: {
-          xcode: this.xcode,
-        },
-        resource_class: this.resourceClass,
+      macos: {
+        xcode: this.xcode,
       },
+      resource_class: this.resourceClass,
     };
   }
 }

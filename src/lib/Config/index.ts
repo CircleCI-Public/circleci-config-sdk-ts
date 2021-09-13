@@ -3,10 +3,8 @@ import { Job } from '../Components/Job';
 import { JobSchema } from '../Components/Job/index';
 import { Workflow } from '../Components/Workflow';
 import { WorkflowSchema } from '../Components/Workflow/Workflow';
-import { AbstractExecutor } from '../Components/Executor/Executor';
 import { Pipeline } from './Pipeline';
 import { stringify as Stringify } from 'yaml';
-import { ExecutorSchema } from '../Components/Executor/Executor.types';
 import { version as SDKVersion } from '../../package-version.json';
 
 /**
@@ -17,10 +15,6 @@ export class Config implements CircleCIConfigObject {
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
    */
   version: ConfigVersion = 2.1;
-  /**
-   * Executors define the environment in which the steps of a job will be run, allowing you to reuse a single executor definition across multiple jobs.
-   */
-  executors: AbstractExecutor[] = [];
   /**
    * Jobs are collections of steps. All of the steps in the job are executed in a single unit, either within a fresh container or VM.
    */
@@ -45,20 +39,17 @@ export class Config implements CircleCIConfigObject {
    * Instantiate a new CircleCI config. Build up your config by adding components.
    * @param jobs - Instantiate with pre-defined Jobs.
    * @param workflows - Instantiate with pre-defined Workflows.
-   * @param executors - Instantiate with pre-defined reusable Executors.
    * @param commands - Instantiate with pre-defined reusable Commands.
    */
   constructor(
     setup = false,
     jobs?: Job[],
     workflows?: Workflow[],
-    executors?: AbstractExecutor[],
     commands?: Command[],
   ) {
     this.setup = setup;
     this.jobs.concat(jobs || []);
     this.workflows.concat(workflows || []);
-    this.executors = executors || [];
     this.commands = commands || [];
   }
 
@@ -71,26 +62,12 @@ export class Config implements CircleCIConfigObject {
     return this;
   }
   /**
-   * Add an Executor to the current Config. Chainable
-   * @param executor - Injectable executor
-   */
-  addExecutor(executor: AbstractExecutor): this {
-    this.executors.push(executor);
-    return this;
-  }
-  /**
    * Add a Job to the current Config. Chainable
    * @param job - Injectable Job
    */
   addJob(job: Job): this {
     // Abstract rules later
-    if (this.executors.find((x) => x.name == job.executor.name)) {
-      this.jobs.push(job);
-    } else {
-      throw new Error(
-        'The selected executor has not yet been added to the config file. Make sure you have first called addExecutor.',
-      );
-    }
+    this.jobs.push(job);
     return this;
   }
 
@@ -106,11 +83,6 @@ export class Config implements CircleCIConfigObject {
    * Export the CircleCI configuration as a YAML string.
    */
   stringify(): string {
-    const generatedExecutorConfig: ExecutorSchema = {};
-    this.executors.forEach((executor) => {
-      Object.assign(generatedExecutorConfig, executor.generate());
-    });
-
     const generatedJobConfig: JobSchema = {};
     this.jobs.forEach((job) => {
       Object.assign(generatedJobConfig, job.generate());
@@ -124,7 +96,6 @@ export class Config implements CircleCIConfigObject {
     const generatedConfig: CircleCIConfigSchema = {
       version: this.version,
       setup: this.setup,
-      executors: generatedExecutorConfig,
       jobs: generatedJobConfig,
       workflows: generatedWorkflowConfig,
     };
@@ -141,7 +112,6 @@ export interface ConfigOrbImport {
 export interface CircleCIConfigObject {
   version: ConfigVersion;
   jobs?: Job[];
-  executors?: AbstractExecutor[];
   commands?: Command[];
   workflows?: Workflow[];
 }
@@ -151,7 +121,6 @@ export interface CircleCIConfigSchema {
   setup: boolean;
   orbs?: ConfigOrbImport[];
   jobs: JobSchema;
-  executors?: ExecutorSchema;
   commands?: CommandSchema;
   workflows: WorkflowSchema;
 }

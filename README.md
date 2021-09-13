@@ -40,14 +40,12 @@ const myConfig = new CircleCI.Config();
 const myWorkflow = new CircleCI.Workflow('myWorkflow');
 myConfig.addWorkflow(myWorkflow);
 
-// Create an executor. Reusable.
-const nodeExecutor = new CircleCI.Executor.DockerExecutor(
-  'node-executor',
-  'cimg/node:lts',
-);
-myConfig.addExecutor(nodeExecutor);
+// Create an executor instance
+// Executors are used directly in jobs
+// and do not need to be added to the config separately
+const nodeExecutor = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
 
-// Create Job
+// Create Job and add it to the config
 const nodeTestJob = new CircleCI.Job('node-test', nodeExecutor);
 myConfig.addJob(nodeTestJob);
 
@@ -77,14 +75,10 @@ const MyYamlConfig = myConfig.stringify();
 
 ```yaml
 version: 2.1
-executors:
-  node-executor:
-    docker:
-      - image: cimg/node:lts
 jobs:
   node-test:
-    executor:
-      name: node-executor
+    docker:
+      - image: cimg/node:lts
     steps:
       - run:
           command: npm install

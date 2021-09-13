@@ -5,11 +5,7 @@ describe('Generate a config utilizing Workspaces', () => {
   const myConfig = new CircleCI.Config();
 
   // Create a Docker-based Executor
-  const myExecutor = new CircleCI.Executor.DockerExecutor(
-    'my-executor',
-    'cimg/base:stable',
-  );
-  myConfig.addExecutor(myExecutor);
+  const myExecutor = new CircleCI.Executor.DockerExecutor('cimg/base:stable');
 
   // Create Jobs
   const jobFlow = new CircleCI.Job('flow', myExecutor, [
@@ -36,15 +32,10 @@ describe('Generate a config utilizing Workspaces', () => {
     const expectedConfig = {
       version: 2.1,
       setup: false,
-      executors: {
-        'my-executor': {
-          docker: [{ image: 'cimg/base:stable' }],
-          resource_class: 'medium',
-        },
-      },
       jobs: {
         flow: {
-          executor: { name: 'my-executor' },
+          docker: [{ image: 'cimg/base:stable' }],
+          resource_class: 'medium',
           steps: [
             {
               persist_to_workspace: {
@@ -55,7 +46,8 @@ describe('Generate a config utilizing Workspaces', () => {
           ],
         },
         downstream: {
-          executor: { name: 'my-executor' },
+          docker: [{ image: 'cimg/base:stable' }],
+          resource_class: 'medium',
           steps: [{ attach_workspace: { at: '/tmp/workspace' } }],
         },
       },

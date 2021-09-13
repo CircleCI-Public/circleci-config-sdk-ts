@@ -2,7 +2,6 @@ const CircleCI = require("@circleci/circleci-config-sdk");
 const fs = require('fs');
 
 // Import Config Components
-const dockerNode = require("./executors/docker-node");
 const jobA = require("./jobs/jobA");
 const jobB = require("./jobs/jobB");
 
@@ -10,7 +9,7 @@ const jobB = require("./jobs/jobB");
 const myConfig = new CircleCI.Config()
 
 // Add elements to the config
-myConfig.addExecutor(dockerNode)
+myConfig
   .addJob(jobA)
   .addJob(jobB)
 
