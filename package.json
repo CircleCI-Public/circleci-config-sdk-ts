@@ -3,7 +3,7 @@
   "version": "0.0.0-development",
   "description": "An SDK for building CircleCI Configuration files with JavaScript.",
   "main": "dist/circleci-config-sdk.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "test": "jest && npm run build:docs",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
