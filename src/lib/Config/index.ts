@@ -83,6 +83,12 @@ export class Config implements CircleCIConfigObject {
    * Export the CircleCI configuration as a YAML string.
    */
   stringify(): string {
+    if (this.jobs.length <= 0) {
+      throw new Error(
+        `There are no jobs defined in this pipeline. A pipeline must have at least one job defined`,
+      );
+    }
+
     const generatedJobConfig: JobSchema = {};
     this.jobs.forEach((job) => {
       Object.assign(generatedJobConfig, job.generate());
