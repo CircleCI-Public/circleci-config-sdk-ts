@@ -1,8 +1,8 @@
 import { Component } from '../index';
-import { ExecutorSchema } from './Executor.types';
 
 /**
  * A generic reusable Executor
+ * @internal
  */
 export abstract class AbstractExecutor extends Component {
   description?: string;
@@ -12,5 +12,5 @@ export abstract class AbstractExecutor extends Component {
     this.description = description;
     this.resourceClass = resourceClass;
   }
-  abstract generate(): ExecutorSchema;
+  abstract generate(): unknown;
 }

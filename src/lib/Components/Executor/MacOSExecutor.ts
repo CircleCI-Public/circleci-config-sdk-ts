@@ -17,12 +17,12 @@ export class MacOSExecutor extends AbstractExecutor {
     this.xcode = xcode;
     this.resourceClass = resourceClass;
   }
-  generate(): MacOSExecutorSchema {
+  generate(): unknown {
     return {
       macos: {
         xcode: this.xcode,
       },
       resource_class: this.resourceClass,
-    };
+    } as MacOSExecutorSchema;
   }
 }

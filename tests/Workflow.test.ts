@@ -2,8 +2,8 @@ import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 
 describe('Instantiate Workflow', () => {
-  const docker = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
-  const helloWorld = new CircleCI.Command.Run({
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.Commands.Run({
     command: 'echo hello world',
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
@@ -19,8 +19,8 @@ describe('Instantiate Workflow', () => {
 });
 
 describe('Instantiate Workflow with a custom name', () => {
-  const docker = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
-  const helloWorld = new CircleCI.Command.Run({
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.Commands.Run({
     command: 'echo hello world',
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
@@ -36,8 +36,8 @@ describe('Instantiate Workflow with a custom name', () => {
 });
 
 describe('Utilize workflow job filters', () => {
-  const docker = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
-  const helloWorld = new CircleCI.Command.Run({
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.Commands.Run({
     command: 'echo hello world',
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
@@ -66,8 +66,8 @@ describe('Utilize workflow job filters', () => {
 });
 
 describe('Instantiate Workflow with a manual approval job', () => {
-  const docker = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
-  const helloWorld = new CircleCI.Command.Run({
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.Commands.Run({
     command: 'echo hello world',
   });
   const jobTest = new CircleCI.Job('test-job', docker, [helloWorld]);
@@ -95,8 +95,8 @@ describe('Instantiate Workflow with a manual approval job', () => {
 });
 
 describe('Instantiate a Workflow with sequential jobs', () => {
-  const docker = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
-  const helloWorld = new CircleCI.Command.Run({
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.Commands.Run({
     command: 'echo hello world',
   });
   const jobA = new CircleCI.Job('my-job-A', docker, [helloWorld]);
@@ -116,8 +116,8 @@ describe('Instantiate a Workflow with sequential jobs', () => {
 });
 
 describe('Instantiate a Workflow with 2 jobs', () => {
-  const docker = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
-  const helloWorld = new CircleCI.Command.Run({ command: 'echo hello world' });
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.Commands.Run({ command: 'echo hello world' });
   const jobA = new CircleCI.Job('my-job-A', docker, [helloWorld]);
   const jobB = new CircleCI.Job('my-job-B', docker, [helloWorld]);
   const myWorkflow = new CircleCI.Workflow('my-workflow');
@@ -135,8 +135,8 @@ describe('Instantiate a Workflow with 2 jobs', () => {
 });
 
 describe('Add a job to a workflow with a custom name parameter', () => {
-  const docker = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
-  const helloWorld = new CircleCI.Command.Run({
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.Commands.Run({
     command: 'echo hello world',
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);

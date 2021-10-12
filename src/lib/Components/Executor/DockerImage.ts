@@ -30,7 +30,7 @@ export class DockerImage implements DockerImageSchema {
   // generate() function.
   // TODO: Switch to this dockerImage generate function, but only add properties
   // with values to the output to avoid unncesary properties in the output.
-  // generate(): DockerImageSchema {
+  // generate(): unknown {
   //   return {
   //     image: this.image,
   //     name: this.name,

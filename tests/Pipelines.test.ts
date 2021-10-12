@@ -39,7 +39,7 @@ describe('Check built-in pipeline parameters', () => {
 });
 
 describe('Implement type-safe pipeline parameters', () => {
-  const DockerExecutor = new CircleCI.Executor.DockerExecutor(
+  const DockerExecutor = new CircleCI.executor.DockerExecutor(
     'cimg/base:stable',
   );
   const myJob = new CircleCI.Job('myJob', DockerExecutor);
@@ -56,7 +56,7 @@ describe('Implement type-safe pipeline parameters', () => {
     'test',
   ]);
 
-  const echoCommand = new CircleCI.Command.Run({
+  const echoCommand = new CircleCI.Commands.Run({
     command: `echo hello ${stringParameter.value}`,
   });
 

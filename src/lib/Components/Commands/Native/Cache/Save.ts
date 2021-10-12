@@ -11,9 +11,9 @@ export class Save extends Command {
   }
   /**
    * Generate Save Cache Command schema.
-   * @returns The generated JSON for the Save Cache Command.
+   * @returns The generated JSON for the Save Cache Commands.
    */
-  generate(): SaveCacheCommandSchema {
+  generate(): unknown {
     return { save_cache: { ...this.parameters } } as SaveCacheCommandSchema;
   }
 }

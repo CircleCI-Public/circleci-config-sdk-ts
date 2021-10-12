@@ -15,8 +15,8 @@ export class WorkflowJob extends Component {
       this.parameters = parameters;
     }
   }
-  generate(): WorkflowJobSchema {
-    let result;
+  generate(): unknown {
+    let result: unknown;
     if (this.parameters) {
       result = {
         [this.job.name]: this.parameters,
@@ -26,6 +26,6 @@ export class WorkflowJob extends Component {
         [this.job.name]: {},
       };
     }
-    return result;
+    return result as WorkflowJobSchema;
   }
 }

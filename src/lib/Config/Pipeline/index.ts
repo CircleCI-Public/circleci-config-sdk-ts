@@ -9,7 +9,7 @@ export class Pipeline {
   /**
    * Pipeline parameter values are passed at the config level on CircleCI. These values will not be present on a local system.
    */
-  private _isLocal;
+  private _isLocal: boolean;
   /**
    * Array of user defined parameters
    */

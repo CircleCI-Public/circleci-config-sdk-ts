@@ -1,6 +1,9 @@
+/**
+ * @internal
+ */
 export abstract class Component {
   /**
-   * Generate the CircleCI YAML equivelant JSON for config compilation
+   * Generate the CircleCI YAML equivalent JSON for config compilation
    */
   abstract generate(): unknown;
 }

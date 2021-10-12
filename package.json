@@ -2,15 +2,17 @@
   "name": "@circleci/circleci-config-sdk",
   "version": "0.0.0-development",
   "description": "An SDK for building CircleCI Configuration files with JavaScript.",
-  "main": "dist/circleci-config-sdk.js",
+  "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
     "test": "jest && npm run build:docs",
+    "build": "jsii",
+    "build:watch": "jsii --watch",
+    "package": "jsii-pacmak",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
     "prettier": "prettier --write .",
     "prettier:ci": "prettier --check .",
     "lint:ci": "npm run prettier:ci && npm run lint",
-    "build": "rm -rf ./dist && npx webpack --mode production",
     "build:docs": "typedoc",
     "prepare": "husky install",
     "sink": "npm run prettier && npm run lint && npm run test && npm run build && npm run build:docs"
@@ -19,7 +21,10 @@
     "type": "git",
     "url": "git+https://github.com/CircleCI-Public/circleci-config-sdk-ts.git"
   },
-  "author": "@TechSquidTV (Kyle Tryon)",
+  "author": {
+    "name": "Kyle Tryon",
+    "email": "community-partner@circleci.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues"
@@ -64,5 +69,28 @@
       "npm run prettier",
       "npm run lint"
     ]
-  }
+  },
+  "stability": "stable",
+  "jsii": {
+        "tsc": {
+          "outDir": "dist",
+          "excludeTypescript": [
+            "sample/**.*",
+            "tests/**.*",
+            "docs/**.*",
+            "coverage/**.*",
+            "node_modules/**.*"
+          ]
+        },
+    "versionFormat": "full",
+    "targets": {
+      "python": {
+        "distName": "circleci-config-sdk.core",
+        "module": "circleci_config_sdk.core"
+      }
+    }
+  },
+  "bundleDependencies": [
+    "yaml"
+  ]
 }

@@ -8,7 +8,7 @@ describe('Generate a Hello World config', () => {
   myConfig.addWorkflow(myWorkflow);
 
   // Create an executor. Reusable.
-  const nodeExecutor = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
+  const nodeExecutor = new CircleCI.executor.DockerExecutor('cimg/node:lts');
 
   // Create Job
   const nodeTestJob = new CircleCI.Job('node-test', nodeExecutor);
@@ -17,13 +17,13 @@ describe('Generate a Hello World config', () => {
   // Add steps to job
   nodeTestJob
     .addStep(
-      new CircleCI.Command.Run({
+      new CircleCI.Commands.Run({
         command: 'npm install',
         name: 'NPM Install',
       }),
     )
     .addStep(
-      new CircleCI.Command.Run({
+      new CircleCI.Commands.Run({
         command: 'npm run test',
         name: 'Run tests',
       }),

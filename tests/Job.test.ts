@@ -2,8 +2,8 @@ import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 
 describe('Instantiate Docker Job', () => {
-  const docker = new CircleCI.Executor.DockerExecutor('cimg/node:lts');
-  const helloWorld = new CircleCI.Command.Run({
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.Commands.Run({
     command: 'echo hello world',
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);

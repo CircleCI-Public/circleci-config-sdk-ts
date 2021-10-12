@@ -20,12 +20,12 @@ export class MachineExecutor extends AbstractExecutor {
     this.image = image || this.image;
     this.resourceClass = resourceClass;
   }
-  generate(): MachineExecutorSchema {
+  generate(): unknown {
     return {
       machine: {
         image: this.image,
       },
       resource_class: this.resourceClass,
-    };
+    } as MachineExecutorSchema;
   }
 }

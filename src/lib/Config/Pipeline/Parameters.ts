@@ -41,7 +41,7 @@ export class PipelineParameter<ParameterType> {
     return this.defaultValue as unknown as ParameterType;
   }
 
-  generate(): PipelineParameterSchema {
+  generate(): unknown {
     const schemaObject: PipelineParameterSchema = {
       [this.name]: {
         default: this.defaultValue,

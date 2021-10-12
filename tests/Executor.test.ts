@@ -2,7 +2,7 @@ import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 
 describe('Instantiate Docker Executor', () => {
-  const docker = new CircleCI.Executor.DockerExecutor(
+  const docker = new CircleCI.executor.DockerExecutor(
     'cimg/node:lts',
   ).generate();
   const expectedYAML = `
@@ -16,7 +16,7 @@ resource_class: "medium"`;
 });
 
 describe('Instantiate Machine Executor', () => {
-  const machine = new CircleCI.Executor.MachineExecutor().generate();
+  const machine = new CircleCI.executor.MachineExecutor().generate();
   const expectedYAML = `
 machine:
   image: ubuntu-2004:202010-01
@@ -28,7 +28,7 @@ resource_class: "medium"`;
 });
 
 describe('Instantiate MacOS Executor', () => {
-  const macos = new CircleCI.Executor.MacOSExecutor(
+  const macos = new CircleCI.executor.MacOSExecutor(
     '13.0.0',
     'medium',
   ).generate();
@@ -43,7 +43,7 @@ resource_class: medium`;
 });
 
 describe('Instantiate Large MacOS Executor', () => {
-  const macos = new CircleCI.Executor.MacOSExecutor(
+  const macos = new CircleCI.executor.MacOSExecutor(
     '13.0.0',
     'large',
   ).generate();
@@ -58,7 +58,7 @@ resource_class: large`;
 });
 
 describe('Instantiate Windows Executor', () => {
-  const windows = new CircleCI.Executor.WindowsExecutor().generate();
+  const windows = new CircleCI.executor.WindowsExecutor().generate();
   const expectedYAML = `
 machine:
   image: "windows-server-2019-vs2019:stable"
@@ -71,7 +71,7 @@ shell: powershell.exe -ExecutionPolicy Bypass`;
 });
 
 describe('Instantiate a 2xlarge Docker Executor', () => {
-  const xxlDocker = new CircleCI.Executor.DockerExecutor(
+  const xxlDocker = new CircleCI.executor.DockerExecutor(
     'cimg/node:lts',
     '2xlarge',
   ).generate();
@@ -85,7 +85,7 @@ resource_class: 2xlarge`;
 });
 
 describe('Instantiate Large Machine Executor', () => {
-  const machine = new CircleCI.Executor.MachineExecutor('large').generate();
+  const machine = new CircleCI.executor.MachineExecutor('large').generate();
   const expectedYAML = `
 machine:
   image: ubuntu-2004:202010-01

@@ -1,5 +1,5 @@
 export class Git {
-  private _isLocal = true;
+  public _isLocal = true;
   constructor(isLocal: boolean) {
     this._isLocal = isLocal;
   }

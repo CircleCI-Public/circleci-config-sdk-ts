@@ -12,9 +12,9 @@ export class StoreArtifacts extends Command {
   }
   /**
    * Generate StoreArtifacts Command schema.
-   * @returns The generated JSON for the StoreArtifacts Command.
+   * @returns The generated JSON for the StoreArtifacts Commands.
    */
-  generate(): StoreArtifactsCommandSchema {
+  generate(): unknown {
     return {
       store_artifacts: { ...this.parameters },
     } as StoreArtifactsCommandSchema;

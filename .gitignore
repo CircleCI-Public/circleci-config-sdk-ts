@@ -108,3 +108,5 @@ dist
 
 # Custom
 .npmrc
+
+.vscode

@@ -12,9 +12,9 @@ export class StoreTestResults extends Command {
   }
   /**
    * Generate StoreTestResults Command schema.
-   * @returns The generated JSON for the StoreTestResults Command.
+   * @returns The generated JSON for the StoreTestResults Commands.
    */
-  generate(): StoreTestResultsCommandSchema {
+  generate(): unknown {
     return {
       store_test_results: { ...this.parameters },
     } as StoreTestResultsCommandSchema;

@@ -36,11 +36,11 @@ export class Job extends Component {
    * Generate Job schema
    * @returns The generated JSON for the Job.
    */
-  generate(): JobSchema {
+  generate(): unknown {
     const generatedSteps = this.steps.map((step) => {
       return step.generate();
     });
-    const generatedExecutor = this.executor.generate();
+    const generatedExecutor = this.executor.generate() as ExecutorSchema;
     const jobContents: JobContentSchema = {
       steps: generatedSteps,
       ...generatedExecutor,

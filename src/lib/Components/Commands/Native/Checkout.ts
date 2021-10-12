@@ -15,9 +15,9 @@ export class Checkout extends Command {
   }
   /**
    * Generate Checkout Command schema.
-   * @returns The generated JSON for the Checkout Command.
+   * @returns The generated JSON for the Checkout Commands.
    */
-  generate(): CheckoutCommandSchema {
+  generate(): unknown {
     if (this.parameters) {
       return {
         checkout: { ...this.parameters },

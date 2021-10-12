@@ -12,9 +12,9 @@ export class Run extends Command {
   }
   /**
    * Generate Run Command schema.
-   * @returns The generated JSON for the Run Command.
+   * @returns The generated JSON for the Run Commands.
    */
-  generate(): RunCommandSchema {
+  generate(): unknown {
     const command = { run: {} };
     command.run = { ...command.run, ...this.parameters };
     return command as RunCommandSchema;

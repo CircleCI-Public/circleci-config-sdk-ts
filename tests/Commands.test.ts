@@ -1,7 +1,7 @@
 import * as CircleCI from '../src/index';
 
 describe('Instantiate a Run step', () => {
-  const run = new CircleCI.Command.Run({
+  const run = new CircleCI.Commands.Run({
     command: 'echo hello world',
   });
   const runStep = run.generate();
@@ -12,12 +12,12 @@ describe('Instantiate a Run step', () => {
 });
 
 describe('Instantiate a Checkout step', () => {
-  const checkout = new CircleCI.Command.Checkout();
+  const checkout = new CircleCI.Commands.Checkout();
   it('Should produce checkout string', () => {
     expect(checkout.generate()).toEqual('checkout');
   });
 
-  const checkoutWithPath = new CircleCI.Command.Checkout({ path: './src' });
+  const checkoutWithPath = new CircleCI.Commands.Checkout({ path: './src' });
   it('Should produce checkout with path parameter', () => {
     expect(checkoutWithPath.generate()).toEqual({
       checkout: { path: './src' },
@@ -26,7 +26,7 @@ describe('Instantiate a Checkout step', () => {
 });
 
 describe('Instantiate a Setup_Remote_Docker step', () => {
-  const srd = new CircleCI.Command.SetupRemoteDocker();
+  const srd = new CircleCI.Commands.SetupRemoteDocker();
   it('Should produce setup_remote_docker step with the current default', () => {
     expect(srd.generate()).toEqual({
       setup_remote_docker: {
@@ -44,11 +44,11 @@ describe('Save and load cache', () => {
         paths: ['/home/ubuntu/.m2'],
       },
     };
-    const saveCache = new CircleCI.Command.Cache.Save({
+    const save_cache = new CircleCI.Commands.cache.Save({
       key: 'v1-myapp-{{ arch }}-{{ checksum "project.clj" }}',
       paths: ['/home/ubuntu/.m2'],
     });
-    expect(example).toEqual(saveCache.generate());
+    expect(example).toEqual(save_cache.generate());
   });
   it('Should generate restore cache yaml', () => {
     const example = {
@@ -59,10 +59,10 @@ describe('Save and load cache', () => {
         ],
       },
     };
-    const restoreCache = new CircleCI.Command.Cache.Restore({
+    const restore_cache = new CircleCI.Commands.cache.Restore({
       keys: ['v1-npm-deps-{{ checksum "package-lock.json" }}', 'v1-npm-deps-'],
     });
-    expect(example).toEqual(restoreCache.generate());
+    expect(example).toEqual(restore_cache.generate());
   });
 });
 
@@ -74,7 +74,7 @@ describe('Store artifacts', () => {
         destination: 'circleci-docs',
       },
     };
-    const storeArtifacts = new CircleCI.Command.StoreArtifacts({
+    const storeArtifacts = new CircleCI.Commands.StoreArtifacts({
       path: 'jekyll/_site/docs/',
       destination: 'circleci-docs',
     });
@@ -85,7 +85,7 @@ describe('Store artifacts', () => {
 describe('Store test results', () => {
   it('Should generate the test results command', () => {
     const example = { store_test_results: { path: 'test-results' } };
-    const storeTestResults = new CircleCI.Command.StoreTestResults({
+    const storeTestResults = new CircleCI.Commands.StoreTestResults({
       path: 'test-results',
     });
     expect(example).toEqual(storeTestResults.generate());

@@ -20,9 +20,23 @@ export class Project {
     if (this._isLocal) {
       return 'local';
     } else {
-      const host = new URL(
-        process.env.CIRCLE_REPOSITORY_URL as string,
-      ).host.split('.')[0];
+      const regexp1 = /https:\/\/(?:www\.)?(github|bitbucket)\.(?:com|org)/;
+      const match = (process.env.CIRCLE_REPOSITORY_URL as string).match(
+        regexp1,
+      );
+      let host: string;
+      if (match) {
+        if (match[1]) {
+          host = match[1];
+        } else {
+          console.log(`DEBUG: match: ${match}`);
+          host = 'ERROR NO MATCH';
+        }
+      } else {
+        console.log(`DEBUG: match: ${match}`);
+        console.log(`DEBUG: Input: ${process.env.CIRCLE_REPOSITORY_URL}`);
+        host = 'ERROR NO MATCH';
+      }
       switch (host) {
         case 'github':
           return host;

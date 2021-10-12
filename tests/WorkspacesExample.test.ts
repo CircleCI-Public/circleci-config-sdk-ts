@@ -1,15 +1,15 @@
 import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
-describe('Generate a config utilizing Workspaces', () => {
+describe('Generate a config utilizing.workspaces', () => {
   // Create a new CircleCI Config
   const myConfig = new CircleCI.Config();
 
   // Create a Docker-based Executor
-  const myExecutor = new CircleCI.Executor.DockerExecutor('cimg/base:stable');
+  const myExecutor = new CircleCI.executor.DockerExecutor('cimg/base:stable');
 
   // Create Jobs
   const jobFlow = new CircleCI.Job('flow', myExecutor, [
-    new CircleCI.Command.Workspace.Persist({
+    new CircleCI.Commands.workspace.Persist({
       root: 'workspace',
       paths: ['echo-output'],
     }),
@@ -17,7 +17,7 @@ describe('Generate a config utilizing Workspaces', () => {
   myConfig.addJob(jobFlow);
 
   const jobDownstream = new CircleCI.Job('downstream', myExecutor, [
-    new CircleCI.Command.Workspace.Attach({ at: '/tmp/workspace' }),
+    new CircleCI.Commands.workspace.Attach({ at: '/tmp/workspace' }),
   ]);
   myConfig.addJob(jobDownstream);
 

@@ -15,9 +15,9 @@ export class SetupRemoteDocker extends Command {
   }
   /**
    * Generate SetupRemoteDocker Command schema.
-   * @returns The generated JSON for the SetupRemoteDocker Command.
+   * @returns The generated JSON for the SetupRemoteDocker Commands.
    */
-  generate(): SetupRemoteDockerCommandSchema {
+  generate(): unknown {
     return {
       setup_remote_docker: { ...this.parameters },
     } as SetupRemoteDockerCommandSchema;

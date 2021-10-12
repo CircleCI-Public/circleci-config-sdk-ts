@@ -1,9 +1,5 @@
 import { AbstractExecutor } from '../../Components/Executor/Executor';
-import {
-  DockerExecutorSchema,
-  DockerImageMap,
-  DockerResourceClass,
-} from './DockerExecutor.types';
+import { DockerImageMap, DockerResourceClass } from './DockerExecutor.types';
 import { DockerImage } from './DockerImage';
 
 /**
@@ -40,7 +36,7 @@ export class DockerExecutor extends AbstractExecutor {
    * Generate Docker Executor schema.
    * @returns The generated JSON for the Docker Executor.
    */
-  generate(): DockerExecutorSchema {
+  generate(): unknown {
     const imagesArray: DockerImage[] = [this.image];
     imagesArray.concat(this.serviceImages);
     const dockerImageMap: DockerImageMap[] = [];

@@ -22,7 +22,7 @@ export class Workflow {
   /**
    * Instantiate a Workflow
    * @param name - Name your workflow. Must be unique.
-   * @param jobs - A list of jobs to executute as part of your Workflow.
+   * @param jobs - A list of jobs to be executed as part of your Workflow.
    */
   constructor(name: string, jobs?: Job[]) {
     this.name = name;
@@ -34,21 +34,20 @@ export class Workflow {
    * Generate Workflow schema.
    * @returns The generated JSON for the Workflow.
    */
-  generate(): WorkflowSchema {
+  generate(): unknown {
     const generatedWorkflowJobs: WorkflowJobSchema[] = [];
     this.jobs.forEach((job) => {
-      generatedWorkflowJobs.push(job.generate());
+      generatedWorkflowJobs.push(job.generate() as WorkflowJobSchema); //Double check this
     });
     return {
       [this.name]: {
         jobs: generatedWorkflowJobs,
       },
-    };
+    } as WorkflowSchema;
   }
 
   /**
    * Add a Job to the current Workflow. Chainable
-   * @param workflowJob - Injectable Job with parameters
    */
   addJob(job: Job, parameters?: WorkflowJobParameters): this {
     this.jobs.push(new WorkflowJob(job, parameters));

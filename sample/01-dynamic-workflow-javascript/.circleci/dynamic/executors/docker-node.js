@@ -1,5 +1,5 @@
 const CircleCI = require("@circleci/circleci-config-sdk");
-const dockerNode = new CircleCI.Executor.DockerExecutor(
+const dockerNode = new CircleCI.executor.DockerExecutor(
   "docker-node",
   "cimg/node:lts"
 );

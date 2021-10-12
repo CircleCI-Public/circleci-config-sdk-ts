@@ -5,12 +5,12 @@ describe('Generate 3 node-based jobs with different node versions', () => {
   const config = new CircleCI.Config();
   const nodeVersions = ['13.0.0', '16.0.0', '18.0.0'];
   const workflow = new CircleCI.Workflow('my-workflow');
-  const helloWorld = new CircleCI.Command.Run({
+  const helloWorld = new CircleCI.Commands.Run({
     command: 'echo hello world',
   });
 
   nodeVersions.forEach((version) => {
-    const docker = new CircleCI.Executor.DockerExecutor(`cimg/node:${version}`);
+    const docker = new CircleCI.executor.DockerExecutor(`cimg/node:${version}`);
     const job = new CircleCI.Job(`test-${version}`, docker, [helloWorld]);
     config.addJob(job);
     workflow.addJob(job);

@@ -103,20 +103,20 @@ export class Config implements CircleCIConfigObject {
   }
 }
 
-export type ConfigVersion = 2 | 2.1;
-export interface ConfigOrbImport {
+type ConfigVersion = 2 | 2.1;
+interface ConfigOrbImport {
   orbAlias: string;
   orbImport: string;
 }
 
-export interface CircleCIConfigObject {
+interface CircleCIConfigObject {
   version: ConfigVersion;
   jobs?: Job[];
   commands?: Command[];
   workflows?: Workflow[];
 }
 
-export interface CircleCIConfigSchema {
+interface CircleCIConfigSchema {
   version: ConfigVersion;
   setup: boolean;
   orbs?: ConfigOrbImport[];

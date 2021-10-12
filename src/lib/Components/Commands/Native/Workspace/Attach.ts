@@ -9,10 +9,10 @@ export class Attach extends Command {
     this.parameters = parameters;
   }
   /**
-   * Generate Save Cache Command schema.
-   * @returns The generated JSON for the Save Cache Command.
+   * Generate Save.cache Command schema.
+   * @returns The generated JSON for the Save.cache Commands.
    */
-  generate(): AttachCommandSchema {
+  generate(): unknown {
     return {
       attach_workspace: { ...this.parameters },
     } as AttachCommandSchema;
