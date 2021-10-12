@@ -72,16 +72,16 @@
   },
   "stability": "stable",
   "jsii": {
-        "tsc": {
-          "outDir": "dist",
-          "excludeTypescript": [
-            "sample/**.*",
-            "tests/**.*",
-            "docs/**.*",
-            "coverage/**.*",
-            "node_modules/**.*"
-          ]
-        },
+    "tsc": {
+      "outDir": "dist",
+      "excludeTypescript": [
+        "sample/**.*",
+        "tests/**.*",
+        "docs/**.*",
+        "coverage/**.*",
+        "node_modules/**.*"
+      ]
+    },
     "versionFormat": "full",
     "targets": {
       "python": {
