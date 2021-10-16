@@ -5,7 +5,6 @@ Please check if your PR fulfills the following requirements:
 - [ ] Tests for the changes have been added (for bug fixes / features)
 - [ ] Documentation has been added or updated where needed.
 
-
 ## PR Type
 What kind of change does this PR introduce?
 
@@ -21,7 +20,6 @@ What kind of change does this PR introduce?
 
 > more details
 
-
 ## What issues are resolved by this PR?
 <!-- All Pull Requests should be a response to an existing issue. Please ensure you have created an issue before submitting a PR. -->
 - #[00]
@@ -31,14 +29,12 @@ What kind of change does this PR introduce?
 
 > Description
 
-
 ## Does this PR introduce a breaking change?
 
 - [ ] Yes
 - [ ] No
 
 <!-- If this PR contains a breaking change, please describe the impact and migration path for existing applications below. -->
-
 
 ## Other information
 <!-- Optional. -->
