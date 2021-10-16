@@ -14,12 +14,16 @@ export class StoreTestResults extends Command {
    * Generate StoreTestResults Command schema.
    * @returns The generated JSON for the StoreTestResults Commands.
    */
-  generate(): unknown {
+  generate(): StoreTestResultsCommandSchema {
     return {
       store_test_results: { ...this.parameters },
     } as StoreTestResultsCommandSchema;
   }
 }
+
+/**
+ * Command parameters for the StoreTestResults command
+ */
 export interface StoreTestResultsParameters extends CommandParameters {
   /**
    * Path (absolute, or relative to your working_directory) to directory containing subdirectories of JUnit XML or Cucumber JSON test metadata files
@@ -27,6 +31,9 @@ export interface StoreTestResultsParameters extends CommandParameters {
   path: string;
 }
 
+/**
+ * JSON Schema for the StoreTestResults command.
+ */
 export interface StoreTestResultsCommandSchema extends CommandSchema {
   store_test_results: StoreTestResultsParameters;
 }

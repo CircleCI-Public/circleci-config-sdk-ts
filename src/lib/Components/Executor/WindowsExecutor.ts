@@ -21,7 +21,7 @@ export class WindowsExecutor extends AbstractExecutor {
     this.image = image || this.image;
     this.resourceClass = resourceClass;
   }
-  generate(): unknown {
+  generate(): WindowsExecutorSchema {
     return {
       machine: {
         image: this.image,
@@ -29,6 +29,6 @@ export class WindowsExecutor extends AbstractExecutor {
       resource_class:
         `windows.${this.resourceClass}` as WindowsResourceClassGenerated,
       shell: 'powershell.exe -ExecutionPolicy Bypass',
-    } as WindowsExecutorSchema;
+    };
   }
 }

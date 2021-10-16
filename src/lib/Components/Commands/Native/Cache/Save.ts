@@ -13,11 +13,14 @@ export class Save extends Command {
    * Generate Save Cache Command schema.
    * @returns The generated JSON for the Save Cache Commands.
    */
-  generate(): unknown {
-    return { save_cache: { ...this.parameters } } as SaveCacheCommandSchema;
+  generate(): SaveCacheCommandSchema {
+    return { save_cache: { ...this.parameters } };
   }
 }
 
+/**
+ * Command parameters for the SaveCache command
+ */
 export interface SaveCacheParameters extends CommandParameters {
   /**
    * List of directories which should be added to the cache
@@ -32,7 +35,9 @@ export interface SaveCacheParameters extends CommandParameters {
    */
   when?: 'always' | 'on_success' | 'on_fail';
 }
-
+/**
+ * JSON Schema for the SaveCache command.
+ */
 export interface SaveCacheCommandSchema extends CommandSchema {
   save_cache: SaveCacheParameters;
 }

@@ -18,7 +18,6 @@ export class Workflow {
    * The jobs to execute when this Workflow is triggered.
    */
   jobs: WorkflowJob[] = [];
-
   /**
    * Instantiate a Workflow
    * @param name - Name your workflow. Must be unique.

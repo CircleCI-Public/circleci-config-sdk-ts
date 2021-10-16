@@ -103,12 +103,22 @@ export class Config implements CircleCIConfigObject {
   }
 }
 
+/**
+ * Selected config version
+ */
 type ConfigVersion = 2 | 2.1;
+
+/**
+ * Orb import object
+ */
 interface ConfigOrbImport {
   orbAlias: string;
   orbImport: string;
 }
 
+/**
+ * CircleCI configuration object
+ */
 interface CircleCIConfigObject {
   version: ConfigVersion;
   jobs?: Job[];
@@ -116,6 +126,9 @@ interface CircleCIConfigObject {
   workflows?: Workflow[];
 }
 
+/**
+ * JSON Schema for the CircleCI config.
+ */
 interface CircleCIConfigSchema {
   version: ConfigVersion;
   setup: boolean;

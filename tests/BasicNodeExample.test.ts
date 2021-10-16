@@ -17,13 +17,13 @@ describe('Generate a Hello World config', () => {
   // Add steps to job
   nodeTestJob
     .addStep(
-      new CircleCI.Commands.Run({
+      new CircleCI.commands.Run({
         command: 'npm install',
         name: 'NPM Install',
       }),
     )
     .addStep(
-      new CircleCI.Commands.Run({
+      new CircleCI.commands.Run({
         command: 'npm run test',
         name: 'Run tests',
       }),

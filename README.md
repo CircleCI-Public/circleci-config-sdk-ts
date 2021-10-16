@@ -1,14 +1,31 @@
-[![CircleCI Build Status](https://circleci.com/gh/CircleCI-Public/circleci-config-sdk-ts.svg?style=shield 'CircleCI Build Status')](https://circleci.com/gh/CircleCI-Public/circleci-config-sdk-ts)
-[![codecov](https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts/branch/main/graph/badge.svg?token=Z4C4RXABS7)](https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts)
+<p align="center">
+
+# CircleCI Config SDK
+
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/circleci-public/circleci-config-sdk-ts/blob/main/LICENSE)
+[![CircleCI](https://img.shields.io/circleci/build/gh/CircleCI-Public/circleci-config-sdk-ts/main?logo=circleci&token=5fcb5715c180e9f7d3a076d95779cd88f75d2093)](https://app.circleci.com/pipelines/github/CircleCI-Public/circleci-config-sdk-ts)
+[![npm](https://img.shields.io/npm/v/@circleci/circleci-config-sdk?logo=npm)](https://www.npmjs.com/package/@circleci/circleci-config-sdk)
+[![codecov](https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts/branch/main/graph/badge.svg?token=Z4C4RXABS7)](https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts)
+[![npm](https://img.shields.io/npm/dm/@circleci/circleci-config-sdk?logo=npm)](https://www.npmjs.com/package/@circleci/circleci-config-sdk)
 
-# CircleCI Config SDK (TypeScript)
+Create and manage your CircleCI configuration files with JavaScript and
+TypeScript.
 
-Create and manage your CircleCI config with JavaScript and TypeScript.
+</p>
 
-[View the SDK Docs](https://furry-adventure-3f2b45c4.pages.github.io/modules.html)
+## Table of Contents
 
-## Installation
+- [Getting Started](#getting-started)
+- [Getting Help](#getting-help)
+- [Contributing](#contributing)
+
+## Getting Started
+
+- [View the Getting Started Wiki](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki)
+- [View the SDK API Docs](http://circleci-public.github.io/circleci-config-sdk-ts)
+- [Examples](https://github.com/CircleCI-Public/circleci-config-sdk-ts/tree/main/sample)
+
+### Installation
 
 Using npm:
 
@@ -25,10 +42,10 @@ import CircleCI from '@circleci/circleci-config-sdk';
 In Browser:
 
 ```javascript
-var CircleCI = require('@circleci/circleci-config-sdk');
+const CircleCI = require('@circleci/circleci-config-sdk');
 ```
 
-## Example
+### Example
 
 Generate a CircleCI config using TypeScript/Javascript, properly typed for full
 IntelliSense support.
@@ -52,13 +69,13 @@ myConfig.addJob(nodeTestJob);
 // Add steps to job
 nodeTestJob
   .addStep(
-    new CircleCI.Commands.Run({
+    new CircleCI.commands.Run({
       command: 'npm install',
       name: 'NPM Install',
     }),
   )
   .addStep(
-    new CircleCI.Commands.Run({
+    new CircleCI.commands.Run({
       command: 'npm run test',
       name: 'Run tests',
     }),
@@ -75,10 +92,12 @@ const MyYamlConfig = myConfig.stringify();
 
 ```yaml
 version: 2.1
+setup: false
 jobs:
   node-test:
     docker:
       - image: cimg/node:lts
+    resource_class: medium
     steps:
       - run:
           command: npm install
@@ -91,3 +110,29 @@ workflows:
     jobs:
       - node-test: {}
 ```
+
+## Getting Help
+
+This open-source project utilized GitHub issues and project boards to manage
+requests and support.
+
+If you can not find an answer to your question in an existing
+[issue](https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues?q=),
+you may open a new issue with the appropriate template. Issues are the best way
+for the CircleCI team and the open-source community to track and interact with
+your questions.
+
+### Resources
+
+Consider checking the following common resources before opening a new issue.
+
+- [CircleCI Config Reference](https://circleci.com/docs/2.0/configuration-reference/)
+- [Config SDK API Documentation](http://circleci-public.github.io/circleci-config-sdk-ts)
+- [FAQ](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki/FAQ#what-features-of-circleci-config-are-not-supported-by-this-sdk)
+
+# Contributing
+
+This repository welcomes community contributions! See our
+[CONTRIBUTING.md](https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/main/CONTRIBUTING.md)
+for guidance on configuring your development environment and how to submit
+quality pull requests.

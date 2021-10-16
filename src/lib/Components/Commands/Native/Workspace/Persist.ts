@@ -12,15 +12,23 @@ export class Persist extends Command {
    * Generate Save.cache Command schema.
    * @returns The generated JSON for the Save.cache Commands.
    */
-  generate(): unknown {
+  generate(): PersistCommandSchema {
     return {
       persist_to_workspace: { ...this.parameters },
-    } as PersistCommandSchema;
+    };
   }
 }
+
+/**
+ * JSON Schema for the Persist command.
+ */
 export interface PersistCommandSchema extends CommandSchema {
   persist_to_workspace: PersistParameters;
 }
+
+/**
+ * Command parameters for the Persist command
+ */
 export interface PersistParameters extends CommandParameters {
   /**
    * Either an absolute path or a path relative to `working_directory`

@@ -12,20 +12,25 @@ export class Restore extends Command {
    * Generate Restore.cache Command schema.
    * @returns The generated JSON for the Restore.cache Commands.
    */
-  generate(): unknown {
+  generate(): RestoreCacheCommandSchema {
     return {
       restore_cache: { ...this.parameters },
-    } as RestoreCacheCommandSchema;
+    };
   }
 }
 
-interface RestoreCacheParameters extends CommandParameters {
+/**
+ * Command parameters for the RestoreCache command
+ */
+export interface RestoreCacheParameters extends CommandParameters {
   /**
    * List of cache keys to lookup for a cache to restore. Only first existing key will be restored.
    */
-  keys: string[];
+  readonly keys: string[];
 }
-
+/**
+ * JSON Schema for the RestoreCache command.
+ */
 interface RestoreCacheCommandSchema extends CommandSchema {
   restore_cache: RestoreCacheParameters;
 }

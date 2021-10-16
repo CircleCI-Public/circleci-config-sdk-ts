@@ -1,7 +1,7 @@
 import * as CircleCI from '../src/index';
 
 describe('Instantiate a Run step', () => {
-  const run = new CircleCI.Commands.Run({
+  const run = new CircleCI.commands.Run({
     command: 'echo hello world',
   });
   const runStep = run.generate();
@@ -12,12 +12,12 @@ describe('Instantiate a Run step', () => {
 });
 
 describe('Instantiate a Checkout step', () => {
-  const checkout = new CircleCI.Commands.Checkout();
+  const checkout = new CircleCI.commands.Checkout();
   it('Should produce checkout string', () => {
-    expect(checkout.generate()).toEqual('checkout');
+    expect(checkout.generate()).toEqual({ checkout: {} });
   });
 
-  const checkoutWithPath = new CircleCI.Commands.Checkout({ path: './src' });
+  const checkoutWithPath = new CircleCI.commands.Checkout({ path: './src' });
   it('Should produce checkout with path parameter', () => {
     expect(checkoutWithPath.generate()).toEqual({
       checkout: { path: './src' },
@@ -26,7 +26,7 @@ describe('Instantiate a Checkout step', () => {
 });
 
 describe('Instantiate a Setup_Remote_Docker step', () => {
-  const srd = new CircleCI.Commands.SetupRemoteDocker();
+  const srd = new CircleCI.commands.SetupRemoteDocker();
   it('Should produce setup_remote_docker step with the current default', () => {
     expect(srd.generate()).toEqual({
       setup_remote_docker: {
@@ -44,7 +44,7 @@ describe('Save and load cache', () => {
         paths: ['/home/ubuntu/.m2'],
       },
     };
-    const save_cache = new CircleCI.Commands.cache.Save({
+    const save_cache = new CircleCI.commands.cache.Save({
       key: 'v1-myapp-{{ arch }}-{{ checksum "project.clj" }}',
       paths: ['/home/ubuntu/.m2'],
     });
@@ -59,7 +59,7 @@ describe('Save and load cache', () => {
         ],
       },
     };
-    const restore_cache = new CircleCI.Commands.cache.Restore({
+    const restore_cache = new CircleCI.commands.cache.Restore({
       keys: ['v1-npm-deps-{{ checksum "package-lock.json" }}', 'v1-npm-deps-'],
     });
     expect(example).toEqual(restore_cache.generate());
@@ -74,7 +74,7 @@ describe('Store artifacts', () => {
         destination: 'circleci-docs',
       },
     };
-    const storeArtifacts = new CircleCI.Commands.StoreArtifacts({
+    const storeArtifacts = new CircleCI.commands.StoreArtifacts({
       path: 'jekyll/_site/docs/',
       destination: 'circleci-docs',
     });
@@ -85,9 +85,23 @@ describe('Store artifacts', () => {
 describe('Store test results', () => {
   it('Should generate the test results command', () => {
     const example = { store_test_results: { path: 'test-results' } };
-    const storeTestResults = new CircleCI.Commands.StoreTestResults({
+    const storeTestResults = new CircleCI.commands.StoreTestResults({
       path: 'test-results',
     });
     expect(example).toEqual(storeTestResults.generate());
+  });
+
+  describe('Add SSH Keys', () => {
+    it('Should generate the add_ssh_keys command schema', () => {
+      const example = {
+        add_ssh_keys: {
+          fingerprints: ['b7:35:a6:4e:9b:0d:6d:d4:78:1e:9a:97:2a:66:6b:be'],
+        },
+      };
+      const addSSHKeys = new CircleCI.commands.AddSSHKeys({
+        fingerprints: ['b7:35:a6:4e:9b:0d:6d:d4:78:1e:9a:97:2a:66:6b:be'],
+      });
+      expect(example).toEqual(addSSHKeys.generate());
+    });
   });
 });

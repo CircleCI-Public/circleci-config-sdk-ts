@@ -6,7 +6,7 @@ import { Command, CommandParameters, CommandSchema } from '../Command';
  * @param parameters - CheckoutParameters
  */
 export class Checkout extends Command {
-  parameters?: CheckoutParameters;
+  parameters?: CheckoutParameters = {};
   constructor(parameters?: CheckoutParameters) {
     super('checkout');
     if (parameters) {
@@ -17,16 +17,16 @@ export class Checkout extends Command {
    * Generate Checkout Command schema.
    * @returns The generated JSON for the Checkout Commands.
    */
-  generate(): unknown {
-    if (this.parameters) {
-      return {
-        checkout: { ...this.parameters },
-      } as CheckoutCommandSchemaObject;
-    } else {
-      return 'checkout';
-    }
+  generate(): CheckoutCommandSchema {
+    return {
+      checkout: { ...this.parameters },
+    };
   }
 }
+
+/**
+ * Command parameters for the Checkout command
+ */
 export interface CheckoutParameters extends CommandParameters {
   /**
    * Checkout directory.
@@ -34,12 +34,6 @@ export interface CheckoutParameters extends CommandParameters {
    */
   path?: string;
 }
-
-export interface CheckoutCommandSchemaObject extends CommandSchema {
+export interface CheckoutCommandSchema extends CommandSchema {
   checkout: CheckoutParameters;
 }
-export type CheckoutCommandSchemaString = 'checkout';
-
-export type CheckoutCommandSchema =
-  | CheckoutCommandSchemaObject
-  | CheckoutCommandSchemaString;

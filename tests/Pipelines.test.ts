@@ -34,7 +34,7 @@ describe('Check built-in pipeline parameters', () => {
   });
   it('Should return project type', () => {
     // On a local machine the project git_url should be "local"
-    expect(myConfig.pipeline.project().type).toEqual('local');
+    expect(myConfig.pipeline.project().vcs).toEqual('local');
   });
 });
 
@@ -56,7 +56,7 @@ describe('Implement type-safe pipeline parameters', () => {
     'test',
   ]);
 
-  const echoCommand = new CircleCI.Commands.Run({
+  const echoCommand = new CircleCI.commands.Run({
     command: `echo hello ${stringParameter.value}`,
   });
 
@@ -68,10 +68,10 @@ describe('Implement type-safe pipeline parameters', () => {
     expect(myJob.steps.length).toEqual(0);
   });
   it('Should validate string Parameter to type STRING', () => {
-    expect(stringParameter.type).toEqual('string');
+    expect(stringParameter.parameterType).toEqual('string');
   });
   it('Should validate boolean Parameter to type BOOLEAN', () => {
-    expect(booleanParameter.type).toEqual('boolean');
+    expect(booleanParameter.parameterType).toEqual('boolean');
   });
   it('Should return the default value from an enum parameter', () => {
     expect(enumParameter.value).toEqual('test');
@@ -86,7 +86,11 @@ describe('Generate valid Pipeline Parameter YAML', () => {
   const generated = stringParameter.generate();
   it('should generate valid pipeline parameter yaml', () => {
     expect(generated).toEqual({
-      myParameter: { default: 'my-string-value', enum: [], type: 'string' },
+      myParameter: {
+        default: 'my-string-value',
+        enum: [],
+        parameterType: 'string',
+      },
     });
   });
 });
@@ -97,7 +101,7 @@ describe('Check Pipeline Project Parameters (local)', () => {
     process.env.CIRCLECI = '';
     const localProject = new CircleCI.Pipeline();
     expect(localProject.project().git_url).toEqual('git.local');
-    expect(localProject.project().type).toEqual('local');
+    expect(localProject.project().vcs).toEqual('local');
   });
 });
 
@@ -110,7 +114,7 @@ describe('Check Pipeline Project Parameters (mock GitHub)', () => {
     expect(GHProject.project().git_url).toEqual(
       'https://github.com/CircleCI-Public/circleci-config-sdk-ts',
     );
-    expect(GHProject.project().type).toEqual('github');
+    expect(GHProject.project().vcs).toEqual('github');
   });
 });
 
@@ -122,7 +126,7 @@ describe('Check Pipeline Project Parameters (mock BitBucket)', () => {
     expect(GHProject.project().git_url).toEqual(
       'https://bitbucket.com/org/repo',
     );
-    expect(GHProject.project().type).toEqual('bitbucket');
+    expect(GHProject.project().vcs).toEqual('bitbucket');
   });
 });
 
@@ -132,9 +136,9 @@ describe('Check Pipeline Project Parameters (mock Unsupported)', () => {
     process.env.CIRCLE_REPOSITORY_URL = 'https://notarealwebsite.com/org/repo';
     const GHProject = new CircleCI.Pipeline();
     expect(() => {
-      GHProject.project().type;
+      GHProject.project().vcs;
     }).toThrow(
-      'Unrecognized VCS provider while obtaining Pipeline.Project.Type via CIRCLE_REPOSITORY_URL.',
+      'Unrecognized VCS provider while obtaining Pipeline.Project.VCS via CIRCLE_REPOSITORY_URL.',
     );
   });
 });
@@ -148,7 +152,11 @@ describe('Add string PipelineParameter to Config', () => {
   myConfig.pipeline.parameters.push(stringParameter);
   it('Should add PipelineParameter to Config', () => {
     const expected = {
-      myParameter: { default: 'my-string-value', enum: [], type: 'string' },
+      myParameter: {
+        default: 'my-string-value',
+        enum: [],
+        parameterType: 'string',
+      },
     };
 
     expect(myConfig.pipeline.parameters[0].generate()).toEqual(expected);
@@ -161,7 +169,7 @@ describe('Add boolean PipelineParameter to Config', () => {
   myConfig.pipeline.parameters.push(booleanParameter);
   it('Should add PipelineParameter to Config', () => {
     const expected = {
-      myBoolean: { default: true, enum: [], type: 'boolean' },
+      myBoolean: { default: true, enum: [], parameterType: 'boolean' },
     };
 
     expect(myConfig.pipeline.parameters[0].generate()).toEqual(expected);
@@ -182,7 +190,7 @@ describe('Add enum PipelineParameter to Config', () => {
       myEnum: {
         default: 'test',
         enum: ['all', 'possible', 'values', 'test'],
-        type: 'enum',
+        parameterType: 'enum',
       },
     };
 
@@ -211,7 +219,7 @@ describe('Add Number PipelineParameter to Config', () => {
   myConfig.pipeline.parameters.push(numberParameter);
   it('Should add PipelineParameter to Config', () => {
     const expected = {
-      myNumber: { default: 1, enum: [], type: 'number' },
+      myNumber: { default: 1, enum: [], parameterType: 'number' },
     };
 
     expect(myConfig.pipeline.parameters[0].generate()).toEqual(expected);

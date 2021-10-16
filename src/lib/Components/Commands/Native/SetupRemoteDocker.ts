@@ -17,12 +17,16 @@ export class SetupRemoteDocker extends Command {
    * Generate SetupRemoteDocker Command schema.
    * @returns The generated JSON for the SetupRemoteDocker Commands.
    */
-  generate(): unknown {
+  generate(): SetupRemoteDockerCommandSchema {
     return {
       setup_remote_docker: { ...this.parameters },
-    } as SetupRemoteDockerCommandSchema;
+    };
   }
 }
+
+/**
+ * Command parameters for the SetupRemoteDocker command
+ */
 export interface SetupRemoteDockerParameters extends CommandParameters {
   /**
    * SetupRemoteDocker directory.
@@ -31,6 +35,9 @@ export interface SetupRemoteDockerParameters extends CommandParameters {
   version: string;
 }
 
+/**
+ * JSON Schema for the SetupRemoteDocker command.
+ */
 export interface SetupRemoteDockerCommandSchema extends CommandSchema {
   setup_remote_docker: SetupRemoteDockerParameters;
 }

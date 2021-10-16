@@ -14,12 +14,16 @@ export class Run extends Command {
    * Generate Run Command schema.
    * @returns The generated JSON for the Run Commands.
    */
-  generate(): unknown {
+  generate(): RunCommandSchema {
     const command = { run: {} };
     command.run = { ...command.run, ...this.parameters };
     return command as RunCommandSchema;
   }
 }
+
+/**
+ * Command parameters for the Run command
+ */
 export interface RunParameters extends CommandParameters {
   /**
    * Command to run via the shell
@@ -51,6 +55,9 @@ export interface RunParameters extends CommandParameters {
   when?: 'always' | 'on_success' | 'on_fail';
 }
 
+/**
+ * JSON Schema for the Run command.
+ */
 export interface RunCommandSchema extends CommandSchema {
   run: RunParameters;
 }

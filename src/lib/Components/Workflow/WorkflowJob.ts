@@ -3,11 +3,14 @@ import { Job } from '../Job';
 import { WorkflowJobParameters, WorkflowJobSchema } from './Workflow';
 
 /**
- * Assign Parameters and Filters to a Job within a Workflow
+ * Assign Parameters and Filters to a Job within a Workflow.
+ * Utility class for assigning parameters to a job.
+ * Should only be instantiated for specific use cases.
+ * @see {@link Workflow.addJob} for general use.
  */
 export class WorkflowJob extends Component {
   job: Job;
-  parameters?: WorkflowJobParameters;
+  parameters?: WorkflowJobParameters = {};
   constructor(job: Job, parameters?: WorkflowJobParameters) {
     super();
     this.job = job;
@@ -15,17 +18,9 @@ export class WorkflowJob extends Component {
       this.parameters = parameters;
     }
   }
-  generate(): unknown {
-    let result: unknown;
-    if (this.parameters) {
-      result = {
-        [this.job.name]: this.parameters,
-      };
-    } else {
-      result = {
-        [this.job.name]: {},
-      };
-    }
-    return result as WorkflowJobSchema;
+  generate(): WorkflowJobSchema {
+    return {
+      [this.job.name]: { ...this.parameters },
+    };
   }
 }

@@ -9,7 +9,7 @@ describe('Generate a config utilizing.workspaces', () => {
 
   // Create Jobs
   const jobFlow = new CircleCI.Job('flow', myExecutor, [
-    new CircleCI.Commands.workspace.Persist({
+    new CircleCI.commands.workspace.Persist({
       root: 'workspace',
       paths: ['echo-output'],
     }),
@@ -17,7 +17,7 @@ describe('Generate a config utilizing.workspaces', () => {
   myConfig.addJob(jobFlow);
 
   const jobDownstream = new CircleCI.Job('downstream', myExecutor, [
-    new CircleCI.Commands.workspace.Attach({ at: '/tmp/workspace' }),
+    new CircleCI.commands.workspace.Attach({ at: '/tmp/workspace' }),
   ]);
   myConfig.addJob(jobDownstream);
 

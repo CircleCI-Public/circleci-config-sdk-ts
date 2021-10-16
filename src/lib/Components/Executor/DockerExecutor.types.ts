@@ -1,4 +1,8 @@
 import { DockerImageSchema } from './DockerImage';
+/**
+ * A JSON representation of the Docker Executor Schema
+ * To be converted to YAML
+ */
 export interface DockerExecutorSchema {
   docker: DockerImageSchema[];
   resource_class: DockerResourceClass;

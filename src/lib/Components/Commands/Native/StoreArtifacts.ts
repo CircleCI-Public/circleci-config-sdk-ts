@@ -14,13 +14,15 @@ export class StoreArtifacts extends Command {
    * Generate StoreArtifacts Command schema.
    * @returns The generated JSON for the StoreArtifacts Commands.
    */
-  generate(): unknown {
+  generate(): StoreArtifactsCommandSchema {
     return {
       store_artifacts: { ...this.parameters },
-    } as StoreArtifactsCommandSchema;
+    };
   }
 }
-
+/**
+ * Command parameters for the StoreArtifacts command
+ */
 export interface StoreArtifactsParameters extends CommandParameters {
   /**
    * Directory in the primary container to save as job artifacts
@@ -32,6 +34,9 @@ export interface StoreArtifactsParameters extends CommandParameters {
   destination?: string;
 }
 
+/**
+ * JSON Schema for the StoreArtifacts command.
+ */
 export interface StoreArtifactsCommandSchema extends CommandSchema {
   store_artifacts: StoreArtifactsParameters;
 }

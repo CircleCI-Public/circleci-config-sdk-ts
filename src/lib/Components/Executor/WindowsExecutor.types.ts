@@ -1,3 +1,7 @@
+/**
+ * A JSON representation of the Windows Executor Schema
+ * To be converted to YAML
+ */
 export interface WindowsExecutorSchema {
   machine: {
     image: string;

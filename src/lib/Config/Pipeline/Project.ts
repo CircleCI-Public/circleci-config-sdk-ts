@@ -1,3 +1,6 @@
+/**
+ * Pipeline Project level information
+ */
 export class Project {
   private _isLocal: boolean;
   constructor(isLocal: boolean) {
@@ -16,7 +19,7 @@ export class Project {
   /**
    * The lower-case name of the VCS provider, E.g. “github”, “bitbucket”
    */
-  get type(): 'bitbucket' | 'github' | 'local' {
+  get vcs(): 'bitbucket' | 'github' | 'local' {
     if (this._isLocal) {
       return 'local';
     } else {
@@ -46,7 +49,7 @@ export class Project {
           break;
         default:
           throw new Error(
-            'Unrecognized VCS provider while obtaining Pipeline.Project.Type via CIRCLE_REPOSITORY_URL.',
+            'Unrecognized VCS provider while obtaining Pipeline.Project.VCS via CIRCLE_REPOSITORY_URL.',
           );
       }
     }

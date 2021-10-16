@@ -1,0 +1,27 @@
+
+name: "\U0001F4CB Beta: Feedback"
+description: Submit any and all general feedback about the beta that does represent a bug or feature request.
+title: 'Feedback: '
+labels: [feedback]
+# assignees: ''
+body:
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: How would you rate your experience with the CircleCI Config SDK? [1 (poor) - 5 (excellent)]
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+        - "5"
+  - type: textarea
+    id: comment
+    attributes:
+      label: "Describe your experience"
+      description: "How has your experience been using the CircleCI Config SDK. Share any comments you may have."
+      placeholder: |
+        I have found the CircleCI Config SDK to be ...
+    validations:
+      required: true

@@ -2,18 +2,16 @@
   "name": "@circleci/circleci-config-sdk",
   "version": "0.0.0-development",
   "description": "An SDK for building CircleCI Configuration files with JavaScript.",
-  "main": "dist/index.js",
+  "main": "dist/circleci-config-sdk.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
     "test": "jest && npm run build:docs",
-    "build": "jsii",
-    "build:watch": "jsii --watch",
-    "package": "jsii-pacmak",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
     "prettier": "prettier --write .",
     "prettier:ci": "prettier --check .",
     "lint:ci": "npm run prettier:ci && npm run lint",
-    "build:docs": "typedoc",
+    "build": "rm -rf ./dist && npx webpack --mode production",
+    "build:docs": "typedoc --logLevel Verbose --listInvalidSymbolLinks --internalNamespace internalTypes",
     "prepare": "husky install",
     "sink": "npm run prettier && npm run lint && npm run test && npm run build && npm run build:docs"
   },
@@ -31,7 +29,7 @@
   },
   "homepage": "https://github.com/CircleCI-Public/circleci-config-sdk-ts#readme",
   "devDependencies": {
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^27.0.2",
     "@types/node": "^14.14.37",
     "@types/webpack": "^5.0.0",
     "@types/webpack-node-externals": "^2.5.1",
@@ -42,15 +40,15 @@
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-tsdoc": "^0.2.11",
     "husky": "^6.0.0",
-    "jest": "^26.6.3",
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.1",
-    "ts-jest": "^26.5.4",
-    "ts-loader": "^8.0.18",
+    "ts-jest": "^27.0.6",
+    "ts-loader": "^9.2.6",
     "ts-node": "^9.1.1",
-    "typedoc": "^0.20.34",
+    "typedoc": "^0.22.5",
+    "typedoc-plugin-missing-exports": "^0.22.3",
     "typescript": "^4.2.3",
-    "webpack": "^5.28.0",
+    "webpack": "^5.58.2",
     "webpack-cli": "^4.5.0",
     "webpack-node-externals": "^2.5.2"
   },
@@ -71,25 +69,6 @@
     ]
   },
   "stability": "stable",
-  "jsii": {
-    "tsc": {
-      "outDir": "dist",
-      "excludeTypescript": [
-        "sample/**.*",
-        "tests/**.*",
-        "docs/**.*",
-        "coverage/**.*",
-        "node_modules/**.*"
-      ]
-    },
-    "versionFormat": "full",
-    "targets": {
-      "python": {
-        "distName": "circleci-config-sdk.core",
-        "module": "circleci_config_sdk.core"
-      }
-    }
-  },
   "bundleDependencies": [
     "yaml"
   ]

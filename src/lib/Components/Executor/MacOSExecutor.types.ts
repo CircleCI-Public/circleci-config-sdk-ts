@@ -1,3 +1,7 @@
+/**
+ * A JSON representation of the MacOS Executor Schema
+ * To be converted to YAML
+ */
 export interface MacOSExecutorSchema {
   macos: {
     xcode: string;

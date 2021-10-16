@@ -22,7 +22,6 @@ commands:
             rm -f ./src/package-version.json
             echo "{\"version\": \"$CIRCLE_TAG\"}" > ./src/package-version.json
 
-
 jobs:
   deploy-docs:
     executor: node/default
