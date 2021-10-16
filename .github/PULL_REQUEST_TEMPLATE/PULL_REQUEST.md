@@ -1,9 +1,9 @@
 ## PR Checklist
 Please check if your PR fulfills the following requirements:
 
-- [ ] The commit message follows our [guidelines](https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/main/CONTRIBUTING.md)
+- [ ] The commit message follows our contributor [guidelines](https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/main/CONTRIBUTING.md).
 - [ ] Tests for the changes have been added (for bug fixes / features)
-- [ ] Docs have been added / updated (for bug fixes / features)
+- [ ] Documentation has been added or updated where needed.
 
 
 ## PR Type
@@ -20,13 +20,12 @@ What kind of change does this PR introduce?
 [ ] Other... Please describe:
 ```
 
-## What is the current behavior?
-<!-- Please describe the current behavior that you are modifying, or link to a relevant issue. -->
+## What issues are resolved by this PR?
+<!-- All Pull Requests should be a response to an existing issue. Please ensure you have created an issue before submitting a PR. -->
+- #[00]
 
-Issue Number: N/A
-
-
-## What is the new behavior?
+## Describe the new behavior.
+<!-- Describe the new behavior introduced by this change. Include an examples or samples needed, such as screenshots or code snippets. -->
 
 
 ## Does this PR introduce a breaking change?
@@ -39,3 +38,4 @@ Issue Number: N/A
 
 
 ## Other information
+<!-- Optional. -->
