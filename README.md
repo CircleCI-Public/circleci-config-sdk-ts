@@ -1,5 +1,3 @@
-<p align="center">
-
 # CircleCI Config SDK
 
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/circleci-public/circleci-config-sdk-ts/blob/main/LICENSE)
@@ -10,8 +8,6 @@
 
 Create and manage your CircleCI configuration files with JavaScript and
 TypeScript.
-
-</p>
 
 ## Table of Contents
 
@@ -30,8 +26,16 @@ TypeScript.
 Using npm:
 
 ```shell
-$ npm i --save @circleci/circleci-config-sdk
+$ npm i @circleci/circleci-config-sdk
 ```
+
+Using yarn:
+
+```shell
+$ yarn add @circleci/circleci-config-sdk
+```
+
+#### Usage
 
 In Node.js:
 
@@ -51,6 +55,7 @@ Generate a CircleCI config using TypeScript/Javascript, properly typed for full
 IntelliSense support.
 
 ```typescript
+const CircleCI = require('@circleci/circleci-config-sdk');
 // Instantiate new Config
 const myConfig = new CircleCI.Config();
 // Create new Workflow
@@ -67,7 +72,7 @@ const nodeTestJob = new CircleCI.Job('node-test', nodeExecutor);
 myConfig.addJob(nodeTestJob);
 
 // Add steps to job
-nodeTestJob
+nodeTestJob.addStep(new CircleCI.commands.Checkout())
   .addStep(
     new CircleCI.commands.Run({
       command: 'npm install',
@@ -99,6 +104,7 @@ jobs:
       - image: cimg/node:lts
     resource_class: medium
     steps:
+      - checkout: {}
       - run:
           command: npm install
           name: NPM Install

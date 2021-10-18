@@ -1,7 +1,7 @@
 name: "\U0001F4A1 Feature Request"
 description: Have an idea for a new feature? Begin by submitting a Feature Request
 title: 'Request: '
-labels: [feature request]
+labels: [feature_request]
 # assignees: ''
 body:
   - type: checkboxes
@@ -31,7 +31,7 @@ body:
       required: true
     attributes:
       label: "Teachability, documentation, adoption, migration strategy"
-      description: "If you can, explain how users will be able to use this and possibly write out a version the docs. Maybe a screenshot or design?"
+      description: "If you can, explain how users will be able to use this and possibly write out a version the docs."
   - type: textarea
     validations:
       required: true
