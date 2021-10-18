@@ -44,11 +44,11 @@ export interface RunParameters extends CommandParameters {
   /**
    * In which directory to run this step. Will be interpreted relative to the working_directory of the job). (default: .)
    */
-  workingDirectory?: string;
+  working_directory?: string;
   /**
    * Elapsed time the command can run without output. The string is a decimal with unit suffix, such as “20m”, “1.25h”, “5s” (default: 10 minutes)
    */
-  noOutputTimeout?: string;
+  no_output_timeout?: string;
   /**
    * Specify when to enable or disable the step. (default: on_success)
    */

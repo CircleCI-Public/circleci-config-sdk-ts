@@ -35,6 +35,22 @@ describe('Instantiate Workflow with a custom name', () => {
   });
 });
 
+describe('Instantiate a new Workflow with a job in the constructor', () => {
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.commands.Run({
+    command: 'echo hello world',
+  });
+  const job = new CircleCI.Job('my-job', docker, [helloWorld]);
+  const myWorkflow = new CircleCI.Workflow('my-workflow', [job]);
+  const generatedWorkflow = myWorkflow.generate();
+  const expected = {
+    'my-workflow': { jobs: [{ 'my-job': {} }] },
+  };
+  it('Should match the expected output', () => {
+    expect(generatedWorkflow).toEqual(expected);
+  });
+});
+
 describe('Utilize workflow job filters', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({

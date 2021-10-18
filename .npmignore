@@ -12,7 +12,8 @@ jest.config.ts
 .github
 .husky
 .prettierrc.js
-.circleci
+.circleci/
 .npmrc
+.vscode/
 CONTRIBUTING.md
 sample/

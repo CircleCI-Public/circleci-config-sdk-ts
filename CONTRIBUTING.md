@@ -14,15 +14,24 @@ get started, we recommend taking a look at the guidelines belowL
 
 Have a question about the CircleCI or the Config SDK?
 
-- **I have a general question about CircleCI or CircleCI's `config.yml` file.**
+### I have a general question about CircleCI or CircleCI's `config.yml` file.
 
-  Contact CircleCI's general support by filing a ticket here:
-  [Submit a request](https://support.circleci.com/hc/en-us/requests/new)
+Contact CircleCI's general support by filing a ticket here:
+[Submit a request](https://support.circleci.com/hc/en-us/requests/new)
 
-- **I have a question about JavaScript or best practices**
+### I have a question about JavaScript or best practices
 
-  Share your question with
-  [CircleCI's community Discuss forum](https://discuss.circleci.com/).
+Share your question with
+[CircleCI's community Discuss forum](https://discuss.circleci.com/).
+
+### I have a question about the CircleCI Config SDK
+
+You can always open a new [issue]() on the repository on GitHub. Before opening
+a ticket, why ask that you take these steps:
+
+- [Review the Wiki](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki)
+  - Try the
+    [FAQ](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki/FAQ)
 
 ## <a name="issue"></a>Discover a Bug?
 

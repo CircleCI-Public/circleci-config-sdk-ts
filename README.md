@@ -143,3 +143,7 @@ This repository welcomes community contributions! See our
 [CONTRIBUTING.md](https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/main/CONTRIBUTING.md)
 for guidance on configuring your development environment and how to submit
 quality pull requests.
+
+# Related
+
+- [Visual Config Editor](https://github.com/CircleCI-Public/visual-config-editor)
