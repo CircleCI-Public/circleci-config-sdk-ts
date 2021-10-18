@@ -72,7 +72,8 @@ const nodeTestJob = new CircleCI.Job('node-test', nodeExecutor);
 myConfig.addJob(nodeTestJob);
 
 // Add steps to job
-nodeTestJob.addStep(new CircleCI.commands.Checkout())
+nodeTestJob
+  .addStep(new CircleCI.commands.Checkout())
   .addStep(
     new CircleCI.commands.Run({
       command: 'npm install',
