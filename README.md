@@ -1,6 +1,6 @@
 # CircleCI Config SDK
 
-[![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/circleci-public/circleci-config-sdk-ts/blob/main/LICENSE)
+[![GitHub](https://img.shields.io/github/license/CircleCI-Public/circleci-config-sdk-ts)](https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/main/LICENSE)
 [![CircleCI](https://img.shields.io/circleci/build/gh/CircleCI-Public/circleci-config-sdk-ts/main?logo=circleci&token=5fcb5715c180e9f7d3a076d95779cd88f75d2093)](https://app.circleci.com/pipelines/github/CircleCI-Public/circleci-config-sdk-ts)
 [![npm](https://img.shields.io/npm/v/@circleci/circleci-config-sdk?logo=npm)](https://www.npmjs.com/package/@circleci/circleci-config-sdk)
 [![codecov](https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts/branch/main/graph/badge.svg?token=Z4C4RXABS7)](https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts)
@@ -18,7 +18,7 @@ TypeScript.
 ## Getting Started
 
 - [View the Getting Started Wiki](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki)
-- [View the SDK API Docs](http://circleci-public.github.io/circleci-config-sdk-ts)
+- [View the SDK API Docs](https://circleci-public.github.io/circleci-config-sdk-ts/)
 - [Examples](https://github.com/CircleCI-Public/circleci-config-sdk-ts/tree/main/sample)
 
 ### Installation
@@ -134,7 +134,7 @@ your questions.
 Consider checking the following common resources before opening a new issue.
 
 - [CircleCI Config Reference](https://circleci.com/docs/2.0/configuration-reference/)
-- [Config SDK API Documentation](http://circleci-public.github.io/circleci-config-sdk-ts)
+- [Config SDK API Documentation](https://circleci-public.github.io/circleci-config-sdk-ts/)
 - [FAQ](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki/FAQ#what-features-of-circleci-config-are-not-supported-by-this-sdk)
 
 # Contributing
