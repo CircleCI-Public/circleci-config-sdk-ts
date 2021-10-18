@@ -1,0 +1,105 @@
+version: 2.1
+orbs:
+  node: circleci/node@4.2
+  codecov: codecov/codecov@1.2
+
+commands:
+  update-version:
+    description: Updates the version in the package.json file to match the tag.
+    steps:
+      - run:
+          name: Set Package Version
+          command: |
+            # If "$CIRCLE_TAG" is not set, then set to dev version
+            if [ -z "$CIRCLE_TAG" ]; then
+              CIRCLE_TAG="0.0.0-development"
+            fi
+            # Set package.json version to match tag
+            jq --arg semver "$CIRCLE_TAG" '.version = $semver' package.json > package.json.tmp
+            mv package.json.tmp package.json
+            rm -f package.json.tmp
+            # update package-version.json
+            rm -f ./src/package-version.json
+            echo "{\"version\": \"$CIRCLE_TAG\"}" > ./src/package-version.json
+
+jobs:
+  deploy-docs:
+    executor: node/default
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - 'fe:98:73:d4:14:87:89:62:38:63:9f:be:33:14:32:01'
+      - node/install-packages
+      - update-version
+      - run:
+          name: Build Docs
+          command: npm run build:docs
+      - run:
+          name: Deploy Docs
+          command: |
+            cd docs
+            git config --global user.email "community-partner@circleci.com"
+            git config --global user.name "orb-publisher"
+            git init
+            git add -A
+            git commit -m "Deploy-<<pipeline.git.branch>>-<<pipeline.number>> [ci skip]"
+            git push -f git@github.com:CircleCI-Public/circleci-config-sdk-ts.git master:gh-pages
+  deploy-package:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages
+      - update-version
+      - run:
+          name: Build NPM Module
+          command: npm run build
+      - run:
+          name: Publish NPM Module
+          command: |
+            # Set NPM Auth
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            # Publish
+            npm publish --access restricted
+workflows:
+  test:
+    jobs:
+      - node/test:
+          name: lint
+          run-command: lint:ci
+          version: 15.14.0
+          filters:
+            tags:
+              only: /.*/
+      - node/test:
+          matrix:
+            parameters:
+              version:
+                - 15.14.0
+                - 14.16.1
+                - 13.14.0
+          post-steps:
+            - codecov/upload:
+                file: coverage/lcov.info
+          filters:
+            tags:
+              only: /.*/
+      - deploy-docs:
+          requires:
+            - node/test
+            - lint
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+      - deploy-package:
+          context: cci-config-sdk-publishing
+          requires:
+            - node/test
+            - lint
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
