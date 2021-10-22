@@ -67,7 +67,7 @@ workflows:
       - node/test:
           name: lint
           run-command: lint:ci
-          version: 15.14.0
+          version: "16.12"
           filters:
             tags:
               only: /.*/
@@ -75,9 +75,11 @@ workflows:
           matrix:
             parameters:
               version:
-                - 15.14.0
-                - 14.16.1
-                - 13.14.0
+                - "current"
+                - "lts"
+                - "16.12"
+                - "15.14"
+                - "12.22"
           post-steps:
             - codecov/upload:
                 file: coverage/lcov.info
