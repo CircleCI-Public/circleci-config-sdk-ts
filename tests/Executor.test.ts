@@ -154,3 +154,30 @@ describe('Instantiate Reusable Executor', () => {
     expect(reusable.generate()).toEqual(YAML.parse(expectedYAML));
   });
 });
+
+describe('Generate a config with a Reusable Executor', () => {
+  const myConfig = new CircleCI.Config();
+
+  const machine = new CircleCI.executor.MachineExecutor('large');
+  const reusable = new CircleCI.executor.ReusableExecutor('default', machine);
+
+  myConfig.addReusableExecutor(reusable);
+
+  it('Should produce a config with executors', () => {
+    const expected = {
+      version: 2.1,
+      setup: false,
+      executors: {
+        default: {
+          machine: {
+            image: 'ubuntu-2004:202010-01',
+          },
+          resource_class: 'large',
+        },
+      },
+      jobs: {},
+      workflows: {},
+    };
+    expect(YAML.parse(myConfig.stringify())).toEqual(expected);
+  });
+});
