@@ -8,6 +8,7 @@ describe('Generate a Setup workflow config', () => {
     const expected = {
       version: 2.1,
       setup: true,
+      executors: {},
       jobs: {},
       workflows: {},
     };

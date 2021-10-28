@@ -6,6 +6,8 @@ import { WorkflowSchema } from '../Components/Workflow/Workflow';
 import { Pipeline } from './Pipeline';
 import { stringify as Stringify } from 'yaml';
 import { version as SDKVersion } from '../../package-version.json';
+import { ReusableExecutor } from '../Components/Executor';
+import { ReusableExecutorsSchema } from '../Components/Executor/ReusableExecutor.types';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
@@ -15,6 +17,10 @@ export class Config implements CircleCIConfigObject {
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
    */
   version: ConfigVersion = 2.1;
+  /**
+   * Reusable executors to be referenced from jobs.
+   */
+  executors: ReusableExecutor[] = [];
   /**
    * Jobs are collections of steps. All of the steps in the job are executed in a single unit, either within a fresh container or VM.
    */
@@ -62,6 +68,14 @@ export class Config implements CircleCIConfigObject {
     return this;
   }
   /**
+   * Add a Workflow to the current Config. Chainable
+   * @param workflow - Injectable Workflow
+   */
+  addReusableExecutor(executor: ReusableExecutor): this {
+    this.executors.push(executor);
+    return this;
+  }
+  /**
    * Add a Job to the current Config. Chainable
    * @param job - Injectable Job
    */
@@ -88,6 +102,15 @@ export class Config implements CircleCIConfigObject {
       Object.assign(generatedJobConfig, job.generate());
     });
 
+    const generatedExecutorConfig: ReusableExecutorsSchema = {};
+
+    Object.assign(
+      generatedExecutorConfig,
+      ...this.executors.map((reusableExecutor) => ({
+        [reusableExecutor.name]: reusableExecutor.executor.generate(),
+      })),
+    );
+
     const generatedWorkflowConfig: WorkflowSchema = {};
     this.workflows.forEach((workflow) => {
       Object.assign(generatedWorkflowConfig, workflow.generate());
@@ -96,6 +119,7 @@ export class Config implements CircleCIConfigObject {
     const generatedConfig: CircleCIConfigSchema = {
       version: this.version,
       setup: this.setup,
+      executors: generatedExecutorConfig,
       jobs: generatedJobConfig,
       workflows: generatedWorkflowConfig,
     };
@@ -132,6 +156,7 @@ interface CircleCIConfigObject {
 interface CircleCIConfigSchema {
   version: ConfigVersion;
   setup: boolean;
+  executors: ReusableExecutorsSchema;
   orbs?: ConfigOrbImport[];
   jobs: JobSchema;
   commands?: CommandSchema;
