@@ -1,6 +1,7 @@
 import { Command } from '../Commands/Command';
 import { AbstractExecutor } from '../Executor/Executor';
 import { ExecutorSchema } from '../Executor/Executor.types';
+import { ReusableExecutor } from '../Executor/ReusableExecutor';
 import { Component } from '../index';
 
 /**
@@ -14,7 +15,7 @@ export class Job extends Component {
   /**
    * The reusable executor to use for this job. The Executor must have already been instantiated and added to the config.
    */
-  executor: AbstractExecutor;
+  executor: AbstractExecutor | ReusableExecutor;
   /**
    * A list of Commands to execute within the job in the order which they were added.
    */
@@ -26,7 +27,11 @@ export class Job extends Component {
    * @param steps - A list of Commands to execute within the job in the order which they were added.
    * @see {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#jobs}
    */
-  constructor(name: string, executor: AbstractExecutor, steps?: Command[]) {
+  constructor(
+    name: string,
+    executor: AbstractExecutor | ReusableExecutor,
+    steps?: Command[],
+  ) {
     super();
     this.name = name;
     this.executor = executor;
