@@ -1,5 +1,6 @@
 export * as commands from './lib/Components/Commands';
 export { Job } from './lib/Components/Job';
+export { ParameterizedJob } from './lib/Components/Job/ParameterizedJob';
 export { Workflow } from './lib/Components/Workflow';
 export { WorkflowJob } from './lib/Components/Workflow/WorkflowJob';
 export { Config } from './lib/Config';

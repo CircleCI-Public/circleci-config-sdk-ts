@@ -32,21 +32,26 @@ export class Job extends Component {
     this.executor = executor;
     this.steps = steps || [];
   }
+
+  /**
+   * Generates the contents of the Job.
+   * @returns The generated JSON for the Job's contents.
+   */
+  generateJobContents(): JobContentSchema {
+    const generatedSteps = this.steps.map((step) => {
+      return step.generate();
+    });
+    const generatedExecutor = this.executor.generate() as ExecutorSchema;
+
+    return { steps: generatedSteps, ...generatedExecutor };
+  }
   /**
    * Generate Job schema
    * @returns The generated JSON for the Job.
    */
   generate(): unknown {
-    const generatedSteps = this.steps.map((step) => {
-      return step.generate();
-    });
-    const generatedExecutor = this.executor.generate() as ExecutorSchema;
-    const jobContents: JobContentSchema = {
-      steps: generatedSteps,
-      ...generatedExecutor,
-    };
     return {
-      [this.name]: jobContents,
+      [this.name]: this.generateJobContents(),
     };
   }
 
