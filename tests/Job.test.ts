@@ -1,6 +1,6 @@
 import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
-import { PrimitiveParameter } from '../src/lib/Components/Parameters/Parameters.types';
+import { ParameterizedJobParameterLiteral } from '../src/lib/Components/Parameters/Parameters.types';
 
 describe('Instantiate Docker Job', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
@@ -32,13 +32,14 @@ describe('Instantiate Docker Job With Custom Parameters', () => {
     command: 'echo << parameters.greeting >>',
   });
   const stringParam =
-    new CircleCI.parameters.CustomParameter<PrimitiveParameter>(
+    new CircleCI.parameters.CustomParameter<ParameterizedJobParameterLiteral>(
       'greeting',
       'string',
       'hello world',
+      undefined,
     );
   const parameters =
-    new CircleCI.parameters.CustomParametersList<PrimitiveParameter>(
+    new CircleCI.parameters.CustomParametersList<ParameterizedJobParameterLiteral>(
       stringParam,
     );
   const job = new CircleCI.ParameterizedJob('my-job', docker, parameters, [

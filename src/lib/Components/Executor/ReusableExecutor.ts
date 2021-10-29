@@ -1,6 +1,6 @@
 import { Component } from '..';
 import { CustomParametersList } from '../Parameters';
-import { PrimitiveParameter } from '../Parameters/Parameters.types';
+import { ReusableCommandParameterLiteral } from '../Parameters/Parameters.types';
 import { AbstractExecutor } from './Executor';
 import { ReusableExecutorSchema } from './ReusableExecutor.types';
 /**
@@ -21,12 +21,12 @@ export class ReusableExecutor extends Component {
   /**
    * Parameters to assign to the executor
    */
-  parameters?: CustomParametersList<PrimitiveParameter>;
+  parameters?: CustomParametersList<ReusableCommandParameterLiteral>;
 
   constructor(
     name: string,
     executor: AbstractExecutor,
-    parameters?: CustomParametersList<PrimitiveParameter>,
+    parameters?: CustomParametersList<ReusableCommandParameterLiteral>,
   ) {
     super();
     this.name = name;

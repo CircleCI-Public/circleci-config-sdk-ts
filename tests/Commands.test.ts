@@ -1,6 +1,6 @@
 import { parse } from 'yaml';
 import * as CircleCI from '../src/index';
-import { PrimitiveParameter } from '../src/lib/Components/Parameters/Parameters.types';
+import { ReusableCommandParameterLiteral } from '../src/lib/Components/Parameters/Parameters.types';
 
 describe('Instantiate a Run step', () => {
   const run = new CircleCI.commands.Run({
@@ -124,13 +124,14 @@ describe('Instantiate a Blank Custom Command', () => {
 
 describe('Instantiate a Custom Command', () => {
   const customParam =
-    new CircleCI.parameters.CustomParameter<PrimitiveParameter>(
+    new CircleCI.parameters.CustomParameter<ReusableCommandParameterLiteral>(
       'greeting',
       'string',
       'hello world',
+      undefined,
     );
   const paramList =
-    new CircleCI.parameters.CustomParametersList<PrimitiveParameter>(
+    new CircleCI.parameters.CustomParametersList<ReusableCommandParameterLiteral>(
       customParam,
     );
   const helloWorld = new CircleCI.commands.Run({
@@ -147,6 +148,46 @@ describe('Instantiate a Custom Command', () => {
     greeting:
       type: string
       default: hello world
+  steps:
+    - run:
+        command: echo << parameters.greeting >>`;
+
+  it('Should generate checkout yaml', () => {
+    expect(customCommand.generate()).toEqual(parse(expectedOutput));
+  });
+});
+
+/**
+ * instantiate a parameter with an enum value of x y z
+ */
+describe('Instantiate a parameter with an enum value of x y z', () => {
+  const customParam =
+    new CircleCI.parameters.CustomParameter<ReusableCommandParameterLiteral>(
+      'greeting',
+      'enum',
+      'x',
+      undefined,
+      ['x', 'y', 'z'],
+    );
+  const paramList =
+    new CircleCI.parameters.CustomParametersList<ReusableCommandParameterLiteral>(
+      customParam,
+    );
+  const helloWorld = new CircleCI.commands.Run({
+    command: 'echo << parameters.greeting >>',
+  });
+  const customCommand = new CircleCI.commands.reusable.CustomCommand(
+    'say_hello',
+    paramList,
+    [helloWorld],
+  );
+
+  const expectedOutput = `say_hello:
+  parameters: 
+    greeting:
+      type: enum
+      default: 'x'
+      enum: [x, y, z]
   steps:
     - run:
         command: echo << parameters.greeting >>`;
