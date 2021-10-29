@@ -1,13 +1,13 @@
+import { stringify as Stringify } from 'yaml';
+import { version as SDKVersion } from '../../package-version.json';
 import { Command, CommandSchema } from '../Components/Commands/Command';
+import { ReusableExecutor } from '../Components/Executor';
+import { ReusableExecutorsSchema } from '../Components/Executor/ReusableExecutor.types';
 import { Job } from '../Components/Job';
 import { JobSchema } from '../Components/Job/index';
 import { Workflow } from '../Components/Workflow';
 import { WorkflowSchema } from '../Components/Workflow/Workflow';
 import { Pipeline } from './Pipeline';
-import { stringify as Stringify } from 'yaml';
-import { version as SDKVersion } from '../../package-version.json';
-import { ReusableExecutor } from '../Components/Executor';
-import { ReusableExecutorsSchema } from '../Components/Executor/ReusableExecutor.types';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
@@ -106,9 +106,14 @@ export class Config implements CircleCIConfigObject {
 
     Object.assign(
       generatedExecutorConfig,
-      ...this.executors.map((reusableExecutor) => ({
-        [reusableExecutor.name]: reusableExecutor.executor.generate(),
-      })),
+      ...this.executors.map((reusableExecutor) => {
+        return {
+          [reusableExecutor.name]: {
+            parameters: reusableExecutor.parameters?.generate(),
+            ...reusableExecutor.executor.generate(),
+          },
+        };
+      }),
     );
 
     const generatedWorkflowConfig: WorkflowSchema = {};

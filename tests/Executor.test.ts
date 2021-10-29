@@ -172,6 +172,7 @@ describe('Generate a config with a Reusable Executor', () => {
           machine: {
             image: 'ubuntu-2004:202010-01',
           },
+          parameters: {},
           resource_class: 'large',
         },
       },
