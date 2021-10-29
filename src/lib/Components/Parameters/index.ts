@@ -1,22 +1,25 @@
 import { Component } from '..';
-import { ParameterValues } from './Parameters.types';
+import { ParameterSchema, ParameterValues } from './Parameters.types';
 
-export class CustomParameter<ParameterType>
-  implements ParameterValues<ParameterType>
+export class CustomParameter<ParameterTypeLiteral>
+  implements ParameterValues<ParameterTypeLiteral>
 {
   name: string;
-  type: ParameterType;
+  type: ParameterTypeLiteral;
   defaultValue?: unknown;
+  description?: string;
   enumValues?: string[];
 
   constructor(
     name: string,
-    type: ParameterType,
+    type: ParameterTypeLiteral,
     defaultValue?: unknown,
+    description?: string,
     enumValues?: string[],
   ) {
     this.name = name;
     this.defaultValue = defaultValue;
+    this.description = description;
     this.enumValues = enumValues;
     this.type = type;
   }
@@ -43,4 +46,4 @@ export class CustomParametersList<ParameterType> extends Component {
   }
 }
 
-export type CustomParametersSchema = Record<string, ParameterValues>;
+export type CustomParametersSchema = Record<string, ParameterSchema>;

@@ -1,6 +1,6 @@
 import { Component } from '../..';
 import { CustomParametersList } from '../../Parameters';
-import { PrimitiveParameter } from '../../Parameters/Parameters.types';
+import { ReusableCommandParameterLiteral } from '../../Parameters/Parameters.types';
 import { Command } from '../Command';
 
 /**
@@ -8,12 +8,12 @@ import { Command } from '../Command';
  */
 export class CustomCommand extends Component {
   name: string;
-  parameters: CustomParametersList<PrimitiveParameter>;
+  parameters: CustomParametersList<ReusableCommandParameterLiteral>;
   steps: Command[];
 
   constructor(
     name: string,
-    parameters?: CustomParametersList<PrimitiveParameter>,
+    parameters?: CustomParametersList<ReusableCommandParameterLiteral>,
     steps?: Command[],
   ) {
     super();
