@@ -6,3 +6,4 @@ export { WorkflowJob } from './lib/Components/Workflow/WorkflowJob';
 export { Config } from './lib/Config';
 export { Pipeline } from './lib/Config/Pipeline/index';
 export * as executor from './lib/Components/Executor';
+export * as parameters from './lib/Components/Parameters';

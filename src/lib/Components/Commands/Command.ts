@@ -1,12 +1,15 @@
-import { ParameterTypes } from '../../Config/Parameters';
 import { Component } from '../index';
+import {
+  AnyParameterTypes,
+  PrimitiveParameterTypes,
+} from '../Parameters/Parameters.types';
 
 /**
  * Abstract - A generic Command
  */
 export abstract class Command extends Component {
   name: string;
-  abstract parameters?: CommandParameters;
+  abstract parameters?: CommandParameters<AnyParameterTypes>;
   constructor(name: string) {
     super();
     this.name = name;
@@ -16,12 +19,15 @@ export abstract class Command extends Component {
 /**
  * Parameter definitions for the command.
  */
-export interface CommandParameters {
+export interface CommandParameters<ParameterType = AnyParameterTypes> {
   /**
    * Title of the step to be shown in the CircleCI UI (default: full command)
    */
-  readonly name?: string;
-  readonly [key: string]: ParameterTypes;
+  name?: string;
+  [key: string]: ParameterType | PrimitiveParameterTypes | undefined;
 }
 
-export type CommandSchema = Record<string, CommandParameters>;
+export type CommandSchema = Record<
+  string,
+  CommandParameters<AnyParameterTypes>
+>;
