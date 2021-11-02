@@ -143,7 +143,7 @@ describe('Instantiate Large Machine Executor', () => {
   });
 });
 
-describe('Instantiate Reusable Executor', () => {
+describe('Instantiate Reusable Executor with parameters', () => {
   const machine = new CircleCI.executor.MachineExecutor('large');
   const reusable = new CircleCI.executor.ReusableExecutor('default', machine);
 
@@ -161,6 +161,7 @@ describe('Generate a config with a Reusable Executor', () => {
   const machine = new CircleCI.executor.MachineExecutor('large');
   const reusable = new CircleCI.executor.ReusableExecutor('default', machine);
 
+  reusable.defineParameter('version', 'string', '1.0.0', undefined);
   myConfig.addReusableExecutor(reusable);
 
   it('Should produce a config with executors', () => {
@@ -172,7 +173,12 @@ describe('Generate a config with a Reusable Executor', () => {
           machine: {
             image: 'ubuntu-2004:202010-01',
           },
-          parameters: {},
+          parameters: {
+            version: {
+              type: 'string',
+              default: '1.0.0',
+            },
+          },
           resource_class: 'large',
         },
       },

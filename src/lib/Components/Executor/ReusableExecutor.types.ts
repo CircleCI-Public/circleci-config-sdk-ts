@@ -1,10 +1,10 @@
-import { PipelineParameterValueTypes } from '../../Config/Pipeline/Parameters';
+import { AbstractParameterType } from '../Parameters/Parameters.types';
 import { ExecutorSchema } from './Executor.types';
 
 export interface ReusableExecutorSchema {
   executor: {
     name: string;
-    [key: string]: PipelineParameterValueTypes;
+    [key: string]: AbstractParameterType;
   };
 }
 

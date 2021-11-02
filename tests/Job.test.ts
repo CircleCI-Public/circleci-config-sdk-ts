@@ -1,6 +1,5 @@
 import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
-import { ParameterizedJobParameterLiteral } from '../src/lib/Components/Parameters/Parameters.types';
 
 describe('Instantiate Docker Job', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
@@ -26,25 +25,16 @@ describe('Instantiate Docker Job', () => {
   });
 });
 
-describe('Instantiate Docker Job With Custom Parameters', () => {
+describe('Instantiate Parameterized Docker Job With Custom Parameters', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
   });
-  const stringParam =
-    new CircleCI.parameters.CustomParameter<ParameterizedJobParameterLiteral>(
-      'greeting',
-      'string',
-      'hello world',
-      undefined,
-    );
-  const parameters =
-    new CircleCI.parameters.CustomParametersList<ParameterizedJobParameterLiteral>(
-      stringParam,
-    );
-  const job = new CircleCI.ParameterizedJob('my-job', docker, parameters, [
-    helloWorld,
-  ]);
+
+  const job = new CircleCI.ParameterizedJob('my-job', docker);
+
+  job.addStep(helloWorld).defineParameter('greeting', 'string', 'hello world');
+
   const expectedOutput = `my-job:
   parameters: 
     greeting:
@@ -60,6 +50,13 @@ describe('Instantiate Docker Job With Custom Parameters', () => {
   it('Should match the expected output', () => {
     expect(job.generate()).toEqual(YAML.parse(expectedOutput));
   });
+
+  it('Should throw error when no enum values are provided', () => {
+    expect(() => {
+      job.defineParameter('axis', 'enum', 'x');
+    }).toThrowError('Enum type requires enum values to be defined');
+  });
+
   it('Add job to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addJob(job);

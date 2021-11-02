@@ -109,7 +109,7 @@ export class Config implements CircleCIConfigObject {
       ...this.executors.map((reusableExecutor) => {
         return {
           [reusableExecutor.name]: {
-            parameters: reusableExecutor.parameters?.generate(),
+            parameters: reusableExecutor.parameters.generate(),
             ...reusableExecutor.executor.generate(),
           },
         };
@@ -128,7 +128,11 @@ export class Config implements CircleCIConfigObject {
       jobs: generatedJobConfig,
       workflows: generatedWorkflowConfig,
     };
-    return this.prependVersionComment(Stringify(generatedConfig));
+
+    // Removes all of the "undefined" keys so they do not appear as null on the final config
+    const cleanedConfig = JSON.parse(JSON.stringify(generatedConfig));
+
+    return this.prependVersionComment(Stringify(cleanedConfig));
   }
 }
 

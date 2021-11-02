@@ -1,19 +1,23 @@
 import { Component } from '../..';
 import { CustomParametersList } from '../../Parameters';
-import { ReusableCommandParameterLiteral } from '../../Parameters/Parameters.types';
+import { ParameterizedComponent } from '../../Parameters/ParameterizedComponent';
+import { CommandParameterLiteral } from '../../Parameters/Parameters.types';
 import { Command } from '../Command';
 
 /**
  * Define a custom command with custom parameer
  */
-export class CustomCommand extends Component {
+export class CustomCommand
+  extends Component
+  implements ParameterizedComponent<CommandParameterLiteral>
+{
   name: string;
-  parameters: CustomParametersList<ReusableCommandParameterLiteral>;
+  parameters: CustomParametersList<CommandParameterLiteral>;
   steps: Command[];
 
   constructor(
     name: string,
-    parameters?: CustomParametersList<ReusableCommandParameterLiteral>,
+    parameters?: CustomParametersList<CommandParameterLiteral>,
     steps?: Command[],
   ) {
     super();
@@ -33,5 +37,23 @@ export class CustomCommand extends Component {
         steps: generatedSteps,
       },
     };
+  }
+
+  addStep(step: Command): CustomCommand {
+    this.steps.push(step);
+
+    return this;
+  }
+
+  defineParameter(
+    name: string,
+    type: CommandParameterLiteral,
+    defaultValue?: unknown,
+    description?: string,
+    enumValues?: string[],
+  ): CustomCommand {
+    this.parameters.define(name, type, defaultValue, description, enumValues);
+
+    return this;
   }
 }

@@ -1,6 +1,7 @@
 import { Command } from '../Commands/Command';
 import { AbstractExecutor } from '../Executor/Executor';
 
+export type EnumParameterLiteral = 'enum';
 /**
  * String literal representing the type associated with a parameter. This value is written to YAML directly.
  */
@@ -8,22 +9,19 @@ export type AnyParameterLiteral =
   | 'string'
   | 'boolean'
   | 'integer'
+  | EnumParameterLiteral
   | 'environment'
-  | 'enum'
   | 'executor'
   | 'steps';
 
-export type ParameterizedJobParameterLiteral = Exclude<
-  AnyParameterLiteral,
-  'environment'
->;
+export type JobParameterLiteral = Exclude<AnyParameterLiteral, 'environment'>;
 
-export type ReusableCommandParameterLiteral = Exclude<
+export type CommandParameterLiteral = Exclude<
   AnyParameterLiteral,
   'executor' | 'environment'
 >;
 
-export type PipelineParameterLiteral = Exclude<
+export type PrimitiveParameterLiteral = Exclude<
   AnyParameterLiteral,
   'executor' | 'environment' | 'steps'
 >;
@@ -73,12 +71,12 @@ export type AbstractParameterType =
   | ExecutorParameter
   | EnvironmentParameter;
 
-export type ReusableJobParameterTypes = Exclude<
+export type JobParameterTypes = Exclude<
   AbstractParameterType,
   EnvironmentParameter
 >;
 
-export type ReusableCommandParameterType = Exclude<
+export type CommandParameterType = Exclude<
   AbstractParameterType,
   EnvironmentParameter | ExecutorParameter
 >;
