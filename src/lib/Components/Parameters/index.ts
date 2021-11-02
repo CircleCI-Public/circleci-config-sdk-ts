@@ -13,9 +13,8 @@ type CustomParameterSchema<ParameterTypeLiteral> = {
 };
 
 type CustomEnumParameterSchema =
-  | CustomParameterSchema<EnumParameterLiteral>
-  | {
-      enumValues: string[];
+  | CustomParameterSchema<EnumParameterLiteral> & {
+      enum?: string[];
     };
 
 export class CustomParameter<ParameterTypeLiteral>
