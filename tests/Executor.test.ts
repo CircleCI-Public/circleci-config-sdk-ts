@@ -168,6 +168,7 @@ describe('Generate a config with a Reusable Executor', () => {
     const expected = {
       version: 2.1,
       setup: false,
+      parameters: {},
       executors: {
         default: {
           machine: {

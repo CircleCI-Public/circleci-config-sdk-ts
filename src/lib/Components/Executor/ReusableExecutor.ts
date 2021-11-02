@@ -55,13 +55,9 @@ export class ReusableExecutor
     defaultValue?: unknown,
     description?: string,
     enumValues?: string[],
-  ): Component {
-    return this.parameters.define(
-      name,
-      type,
-      defaultValue,
-      description,
-      enumValues,
-    );
+  ): ReusableExecutor {
+    this.parameters.define(name, type, defaultValue, description, enumValues);
+
+    return this;
   }
 }
