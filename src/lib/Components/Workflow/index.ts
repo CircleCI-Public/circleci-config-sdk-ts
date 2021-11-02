@@ -23,11 +23,16 @@ export class Workflow {
    * @param name - Name your workflow. Must be unique.
    * @param jobs - A list of jobs to be executed as part of your Workflow.
    */
-  constructor(name: string, jobs?: Job[]) {
+  constructor(name: string, jobs?: Array<Job | WorkflowJob>) {
     this.name = name;
-    jobs?.forEach((job) => {
-      this.jobs.push(new WorkflowJob(job));
-    });
+
+    if (jobs?.find((job: unknown) => job instanceof Job)) {
+      jobs.forEach((job) => {
+        this.jobs.push(new WorkflowJob(job as Job));
+      });
+    } else {
+      this.jobs = (jobs as WorkflowJob[]) || [];
+    }
   }
   /**
    * Generate Workflow schema.

@@ -1,6 +1,5 @@
 import { parse } from 'yaml';
 import * as CircleCI from '../src/index';
-import { ReusableCommandParameterLiteral } from '../src/lib/Components/Parameters/Parameters.types';
 
 describe('Instantiate a Run step', () => {
   const run = new CircleCI.commands.Run({
@@ -123,25 +122,16 @@ describe('Instantiate a Blank Custom Command', () => {
 });
 
 describe('Instantiate a Custom Command', () => {
-  const customParam =
-    new CircleCI.parameters.CustomParameter<ReusableCommandParameterLiteral>(
-      'greeting',
-      'string',
-      'hello world',
-      undefined,
-    );
-  const paramList =
-    new CircleCI.parameters.CustomParametersList<ReusableCommandParameterLiteral>(
-      customParam,
-    );
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
   });
   const customCommand = new CircleCI.commands.reusable.CustomCommand(
     'say_hello',
-    paramList,
-    [helloWorld],
   );
+
+  customCommand
+    .addStep(helloWorld)
+    .defineParameter('greeting', 'string', 'hello world');
 
   const expectedOutput = `say_hello:
   parameters: 
@@ -161,30 +151,20 @@ describe('Instantiate a Custom Command', () => {
  * instantiate a parameter with an enum value of x y z
  */
 describe('Instantiate a parameter with an enum value of x y z', () => {
-  const customParam =
-    new CircleCI.parameters.CustomParameter<ReusableCommandParameterLiteral>(
-      'greeting',
-      'enum',
-      'x',
-      undefined,
-      ['x', 'y', 'z'],
-    );
-  const paramList =
-    new CircleCI.parameters.CustomParametersList<ReusableCommandParameterLiteral>(
-      customParam,
-    );
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
   });
   const customCommand = new CircleCI.commands.reusable.CustomCommand(
     'say_hello',
-    paramList,
-    [helloWorld],
   );
+
+  customCommand
+    .defineParameter('axis', 'enum', 'x', undefined, ['x', 'y', 'z'])
+    .addStep(helloWorld);
 
   const expectedOutput = `say_hello:
   parameters: 
-    greeting:
+    axis:
       type: enum
       default: 'x'
       enum: [x, y, z]

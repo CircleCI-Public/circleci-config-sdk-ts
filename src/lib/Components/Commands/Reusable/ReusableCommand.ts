@@ -1,13 +1,13 @@
 import { CustomCommand } from '.';
-import { ReusableCommandParameterType } from '../../Parameters/Parameters.types';
+import { CommandParameterType } from '../../Parameters/Parameters.types';
 import { Command, CommandParameters, CommandSchema } from '../Command';
 
 export class ReusableCommand extends Command {
-  parameters?: CommandParameters<ReusableCommandParameterType>;
+  parameters?: CommandParameters<CommandParameterType>;
 
   constructor(
     command: CustomCommand,
-    parameters?: CommandParameters<ReusableCommandParameterType>,
+    parameters?: CommandParameters<CommandParameterType>,
   ) {
     super(command.name);
     this.parameters = parameters;
