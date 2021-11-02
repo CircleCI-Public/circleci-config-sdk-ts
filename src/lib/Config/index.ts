@@ -5,6 +5,11 @@ import { ReusableExecutor } from '../Components/Executor';
 import { ReusableExecutorsSchema } from '../Components/Executor/ReusableExecutor.types';
 import { Job } from '../Components/Job';
 import { JobSchema } from '../Components/Job/index';
+import { CustomParametersList } from '../Components/Parameters';
+import {
+  ParameterSchema,
+  PrimitiveParameterLiteral,
+} from '../Components/Parameters/Parameters.types';
 import { Workflow } from '../Components/Workflow';
 import { WorkflowSchema } from '../Components/Workflow/Workflow';
 import { Pipeline } from './Pipeline';
@@ -33,6 +38,12 @@ export class Config implements CircleCIConfigObject {
    * A Workflow is comprised of one or more uniquely named jobs.
    */
   workflows: Workflow[] = [];
+
+  /**
+   * A parameter allows custom data to be passed to a pipeline.
+   */
+  parameters: CustomParametersList<PrimitiveParameterLiteral>;
+
   /**
    * Access information about the current pipeline.
    */
@@ -52,11 +63,13 @@ export class Config implements CircleCIConfigObject {
     jobs?: Job[],
     workflows?: Workflow[],
     commands?: Command[],
+    parameters?: CustomParametersList<PrimitiveParameterLiteral>,
   ) {
     this.setup = setup;
     this.jobs.concat(jobs || []);
     this.workflows.concat(workflows || []);
     this.commands = commands || [];
+    this.parameters = parameters || new CustomParametersList();
   }
 
   /**
@@ -82,6 +95,18 @@ export class Config implements CircleCIConfigObject {
   addJob(job: Job): this {
     // Abstract rules later
     this.jobs.push(job);
+    return this;
+  }
+
+  defineParameter(
+    name: string,
+    type: PrimitiveParameterLiteral,
+    defaultValue?: unknown,
+    description?: string,
+    enumValues?: string[],
+  ): Config {
+    this.parameters.define(name, type, defaultValue, description, enumValues);
+
     return this;
   }
 
@@ -121,9 +146,12 @@ export class Config implements CircleCIConfigObject {
       Object.assign(generatedWorkflowConfig, workflow.generate());
     });
 
+    const generatedParameters = this.parameters.generate();
+
     const generatedConfig: CircleCIConfigSchema = {
       version: this.version,
       setup: this.setup,
+      parameters: generatedParameters,
       executors: generatedExecutorConfig,
       jobs: generatedJobConfig,
       workflows: generatedWorkflowConfig,
@@ -165,6 +193,7 @@ interface CircleCIConfigObject {
 interface CircleCIConfigSchema {
   version: ConfigVersion;
   setup: boolean;
+  parameters: Record<string, ParameterSchema>;
   executors: ReusableExecutorsSchema;
   orbs?: ConfigOrbImport[];
   jobs: JobSchema;

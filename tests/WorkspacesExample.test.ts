@@ -32,6 +32,7 @@ describe('Generate a config utilizing.workspaces', () => {
     const expectedConfig = {
       version: 2.1,
       setup: false,
+      parameters: {},
       executors: {},
       jobs: {
         flow: {

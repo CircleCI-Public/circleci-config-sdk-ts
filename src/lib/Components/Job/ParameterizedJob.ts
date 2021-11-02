@@ -38,13 +38,9 @@ class ParameterizedJob
     description?: string,
     enumValues?: string[],
   ): ParameterizedJob {
-    return this.parameters.define(
-      name,
-      type,
-      defaultValue,
-      description,
-      enumValues,
-    ) as ParameterizedJob;
+    this.parameters.define(name, type, defaultValue, description, enumValues);
+
+    return this;
   }
 }
 

@@ -37,6 +37,7 @@ describe('Generate a Hello World config', () => {
     const expectedResult = {
       version: 2.1,
       setup: false,
+      parameters: {},
       executors: {},
       jobs: {
         'node-test': {
