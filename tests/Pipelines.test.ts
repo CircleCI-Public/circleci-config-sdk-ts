@@ -1,5 +1,4 @@
 import * as CircleCI from '../src/index';
-import { PipelineParameter } from '../src/lib/Config/Pipeline';
 // Enforce local testing
 delete process.env.CIRCLECI;
 describe('Check built-in pipeline parameters', () => {
@@ -51,63 +50,6 @@ describe('Check built-in pipeline parameters exceptions', () => {
   });
 });
 
-describe('Implement type-safe pipeline parameters', () => {
-  const DockerExecutor = new CircleCI.executor.DockerExecutor(
-    'cimg/base:stable',
-  );
-  const myJob = new CircleCI.Job('myJob', DockerExecutor);
-
-  const stringParameter = new PipelineParameter(
-    'myParameter',
-    'my-string-value',
-  );
-  const booleanParameter = new PipelineParameter('myBoolean', true);
-  const enumParameter = new PipelineParameter('myEnum', 'test', [
-    'all',
-    'possible',
-    'values',
-    'test',
-  ]);
-
-  const echoCommand = new CircleCI.commands.Run({
-    command: `echo hello ${stringParameter.value}`,
-  });
-
-  if (booleanParameter.value == false) {
-    myJob.addStep(echoCommand);
-  }
-
-  it('Should not add any steps given the FALSE booleanParameter', () => {
-    expect(myJob.steps.length).toEqual(0);
-  });
-  it('Should validate string Parameter to type STRING', () => {
-    expect(stringParameter.parameterType).toEqual('string');
-  });
-  it('Should validate boolean Parameter to type BOOLEAN', () => {
-    expect(booleanParameter.parameterType).toEqual('boolean');
-  });
-  it('Should return the default value from an enum parameter', () => {
-    expect(enumParameter.value).toEqual('test');
-  });
-});
-
-describe('Generate valid Pipeline Parameter YAML', () => {
-  const stringParameter = new PipelineParameter(
-    'myParameter',
-    'my-string-value',
-  );
-  const generated = stringParameter.generate();
-  it('should generate valid pipeline parameter yaml', () => {
-    expect(generated).toEqual({
-      myParameter: {
-        default: 'my-string-value',
-        enum: [],
-        parameterType: 'string',
-      },
-    });
-  });
-});
-
 describe('Check Pipeline Project Parameters (local)', () => {
   it('Should create a local pipeline project parameter set', () => {
     process.env.CIRCLE_REPOSITORY_URL = '';
@@ -153,88 +95,5 @@ describe('Check Pipeline Project Parameters (mock Unsupported)', () => {
     }).toThrow(
       'Unrecognized VCS provider while obtaining Pipeline.Project.VCS from URL https://notarealwebsite.com/org/repo',
     );
-  });
-});
-
-describe('Add string PipelineParameter to Config', () => {
-  const myConfig = new CircleCI.Config();
-  const stringParameter = new PipelineParameter<string>(
-    'myParameter',
-    'my-string-value',
-  );
-  myConfig.pipeline.parameters.push(stringParameter);
-  it('Should add PipelineParameter to Config', () => {
-    const expected = {
-      myParameter: {
-        default: 'my-string-value',
-        enum: [],
-        parameterType: 'string',
-      },
-    };
-
-    expect(myConfig.pipeline.parameters[0].generate()).toEqual(expected);
-  });
-});
-
-describe('Add boolean PipelineParameter to Config', () => {
-  const myConfig = new CircleCI.Config();
-  const booleanParameter = new PipelineParameter<boolean>('myBoolean', true);
-  myConfig.pipeline.parameters.push(booleanParameter);
-  it('Should add PipelineParameter to Config', () => {
-    const expected = {
-      myBoolean: { default: true, enum: [], parameterType: 'boolean' },
-    };
-
-    expect(myConfig.pipeline.parameters[0].generate()).toEqual(expected);
-  });
-});
-
-describe('Add enum PipelineParameter to Config', () => {
-  const myConfig = new CircleCI.Config();
-  const enumParameter = new PipelineParameter<string>('myEnum', 'test', [
-    'all',
-    'possible',
-    'values',
-    'test',
-  ]);
-  myConfig.pipeline.parameters.push(enumParameter);
-  it('Should add PipelineParameter to Config', () => {
-    const expected = {
-      myEnum: {
-        default: 'test',
-        enum: ['all', 'possible', 'values', 'test'],
-        parameterType: 'enum',
-      },
-    };
-
-    expect(myConfig.pipeline.parameters[0].generate()).toEqual(expected);
-  });
-});
-
-describe('Validate enum', () => {
-  it('Should validate enum', () => {
-    function returnEnum() {
-      return new PipelineParameter('myEnum', 'test', [
-        'all',
-        'possible',
-        'values',
-      ]);
-    }
-    expect(() => {
-      returnEnum();
-    }).toThrow();
-  });
-});
-
-describe('Add Number PipelineParameter to Config', () => {
-  const myConfig = new CircleCI.Config();
-  const numberParameter = new PipelineParameter<number>('myNumber', 1);
-  myConfig.pipeline.parameters.push(numberParameter);
-  it('Should add PipelineParameter to Config', () => {
-    const expected = {
-      myNumber: { default: 1, enum: [], parameterType: 'number' },
-    };
-
-    expect(myConfig.pipeline.parameters[0].generate()).toEqual(expected);
   });
 });
