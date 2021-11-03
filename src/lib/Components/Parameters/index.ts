@@ -17,6 +17,19 @@ type CustomEnumParameterSchema =
       enum?: string[];
     };
 
+/**
+ * Accepted parameters can be assigned to a component.
+ * This is the type definition of the parameter, and does not store the value.
+ * Components which accept parameters will have a {@link defineParameter} implementation.
+ *
+ * @param name - The name of the parameter.
+ * @param type - The type of the parameter.
+ * If using an enum, use the {@link CustomEnumParameter} class.
+ * @param defaultValue - The default value of the parameter.
+ * @param description - A description of the parameter.
+ *
+ * {@label STATIC_2.1}
+ */
 export class CustomParameter<ParameterTypeLiteral>
   extends Component
   implements ParameterValues<ParameterTypeLiteral>
@@ -51,6 +64,16 @@ export class CustomParameter<ParameterTypeLiteral>
   }
 }
 
+/**
+ * An enum parameter can be passed to a component.
+ * @param name - The name of the parameter.
+ * @param enumValues - The values of the enum.
+ * @param defaultValue - The optional default value of the parameter.
+ * Optional, but will be marked as required if not provided.
+ * @param description - An optional description of the parameter.
+ *
+ * {@label STATIC_2.1}
+ */
 export class CustomEnumParameter extends CustomParameter<EnumParameterLiteral> {
   enumValues?: string[];
 
@@ -72,6 +95,13 @@ export class CustomEnumParameter extends CustomParameter<EnumParameterLiteral> {
   }
 }
 
+/**
+ * A list that can be added to a component.
+ *
+ * For use in {@link ParameterizedComponent}
+ *
+ * {@label STATIC_2.1}
+ */
 export class CustomParametersList<
   ParameterTypeLiteral extends AnyParameterLiteral,
 > extends Component {

@@ -7,6 +7,7 @@ import { ReusableExecutorSchema } from './ReusableExecutor.types';
 /**
  * A 2.1 wrapper for reusing CircleCI executor.
  * @see {@link https://circleci.com/docs/2.0/reusing-config/#the-executors-key}
+ * {@label STATIC_2.1}
  */
 export class ReusableExecutor
   extends Component

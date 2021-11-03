@@ -2,6 +2,11 @@ import { CustomCommand } from '.';
 import { CommandParameterType } from '../../Parameters/Parameters.types';
 import { Command, CommandParameters, CommandSchema } from '../Command';
 
+/**
+ * Use a reusable command with parameters.
+ *
+ * {@label STATIC_2.1}
+ */
 export class ReusableCommand extends Command {
   parameters?: CommandParameters<CommandParameterType>;
 

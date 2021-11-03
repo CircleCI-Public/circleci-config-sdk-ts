@@ -54,7 +54,7 @@ export class Job extends Component {
    * Generate Job schema
    * @returns The generated JSON for the Job.
    */
-  generate(): unknown {
+  generate(): JobSchema {
     return {
       [this.name]: this.generateJobContents(),
     };

@@ -26,12 +26,10 @@ export class Workflow {
   constructor(name: string, jobs?: Array<Job | WorkflowJob>) {
     this.name = name;
 
-    if (jobs?.find((job: unknown) => job instanceof Job)) {
-      jobs.forEach((job) => {
-        this.jobs.push(new WorkflowJob(job as Job));
-      });
-    } else {
-      this.jobs = (jobs as WorkflowJob[]) || [];
+    if (jobs) {
+      this.jobs = jobs.map((job) =>
+        job instanceof Job ? new WorkflowJob(job) : job,
+      );
     }
   }
   /**

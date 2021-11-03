@@ -1,8 +1,15 @@
 import { Component } from '../..';
-import { CustomParametersList } from '../../Parameters';
+import { CustomParametersList, CustomParametersSchema } from '../../Parameters';
 import { ParameterizedComponent } from '../../Parameters/ParameterizedComponent';
 import { CommandParameterLiteral } from '../../Parameters/Parameters.types';
-import { Command } from '../Command';
+import { Command, CommandSchema } from '../Command';
+
+type CustomCommandSchema = {
+  [name: string]: {
+    parameters: CustomParametersSchema;
+    steps: CommandSchema[];
+  };
+};
 
 /**
  * Define a custom Command with custom parameters
@@ -26,10 +33,8 @@ export class CustomCommand
     this.steps = steps || [];
   }
 
-  generate(): unknown {
-    const generatedSteps = this.steps.map((step) => {
-      return step.generate();
-    });
+  generate(): CustomCommandSchema {
+    const generatedSteps = this.steps.map((step) => step.generate());
 
     return {
       [this.name]: {
