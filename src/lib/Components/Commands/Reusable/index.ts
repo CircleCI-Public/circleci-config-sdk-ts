@@ -5,7 +5,7 @@ import { CommandParameterLiteral } from '../../Parameters/Parameters.types';
 import { Command } from '../Command';
 
 /**
- * Define a custom command with custom parameer
+ * Define a custom Command with custom parameters
  */
 export class CustomCommand
   extends Component
