@@ -62,12 +62,14 @@ export class Config implements CircleCIConfigObject {
     setup = false,
     jobs?: Job[],
     workflows?: Workflow[],
+    executors?: ReusableExecutor[],
     commands?: Command[],
     parameters?: CustomParametersList<PrimitiveParameterLiteral>,
   ) {
     this.setup = setup;
-    this.jobs.concat(jobs || []);
-    this.workflows.concat(workflows || []);
+    this.jobs = jobs || [];
+    this.workflows = workflows || [];
+    this.executors = executors || [];
     this.commands = commands || [];
     this.parameters = parameters || new CustomParametersList();
   }
