@@ -175,4 +175,10 @@ describe('Instantiate a parameter with an enum value of x y z', () => {
   it('Should generate checkout yaml', () => {
     expect(customCommand.generate()).toEqual(parse(expectedOutput));
   });
+
+  it('Add job to config and validate', () => {
+    const myConfig = new CircleCI.Config();
+    myConfig.addCustomCommand(customCommand);
+    expect(myConfig.commands.length).toBeGreaterThan(0);
+  });
 });

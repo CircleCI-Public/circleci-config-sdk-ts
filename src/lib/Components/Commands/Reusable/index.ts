@@ -4,7 +4,7 @@ import { ParameterizedComponent } from '../../Parameters/ParameterizedComponent'
 import { CommandParameterLiteral } from '../../Parameters/Parameters.types';
 import { Command, CommandSchema } from '../Command';
 
-type CustomCommandSchema = {
+export type CustomCommandSchema = {
   [name: string]: {
     parameters: CustomParametersSchema;
     steps: CommandSchema[];

@@ -1,6 +1,9 @@
 import { stringify as Stringify } from 'yaml';
 import { version as SDKVersion } from '../../package-version.json';
-import { Command, CommandSchema } from '../Components/Commands/Command';
+import {
+  CustomCommand,
+  CustomCommandSchema,
+} from '../Components/Commands/Reusable';
 import { ReusableExecutor } from '../Components/Executor';
 import { ReusableExecutorsSchema } from '../Components/Executor/ReusableExecutor.types';
 import { Job } from '../Components/Job';
@@ -33,7 +36,7 @@ export class Config implements CircleCIConfigObject {
   /**
    * A command definition defines a sequence of steps as a map to be executed in a job, enabling you to reuse a single command definition across multiple jobs.
    */
-  commands: Command[] = [];
+  commands: CustomCommand[] = [];
   /**
    * A Workflow is comprised of one or more uniquely named jobs.
    */
@@ -63,7 +66,7 @@ export class Config implements CircleCIConfigObject {
     jobs?: Job[],
     workflows?: Workflow[],
     executors?: ReusableExecutor[],
-    commands?: Command[],
+    commands?: CustomCommand[],
     parameters?: CustomParametersList<PrimitiveParameterLiteral>,
   ) {
     this.setup = setup;
@@ -80,6 +83,14 @@ export class Config implements CircleCIConfigObject {
    */
   addWorkflow(workflow: Workflow): this {
     this.workflows.push(workflow);
+    return this;
+  }
+  /**
+   * Add a Custom Command to the current Config. Chainable
+   * @param command - Injectable command
+   */
+  addCustomCommand(command: CustomCommand): this {
+    this.commands.push(command);
     return this;
   }
   /**
@@ -100,6 +111,15 @@ export class Config implements CircleCIConfigObject {
     return this;
   }
 
+  /**
+   * Define a pipeline parameter for the current Config. Chainable
+   *
+   * @param name - The name of the parameter
+   * @param type - The type of parameter
+   * @param defaultValue - The default value of the parameter
+   * @param description - A description of the parameter
+   * @param enumValues - An array of possible values for parameters of enum type
+   */
   defineParameter(
     name: string,
     type: PrimitiveParameterLiteral,
@@ -185,7 +205,7 @@ interface ConfigOrbImport {
 interface CircleCIConfigObject {
   version: ConfigVersion;
   jobs?: Job[];
-  commands?: Command[];
+  commands?: CustomCommand[];
   workflows?: Workflow[];
 }
 
@@ -199,6 +219,6 @@ interface CircleCIConfigSchema {
   executors: ReusableExecutorsSchema;
   orbs?: ConfigOrbImport[];
   jobs: JobSchema;
-  commands?: CommandSchema;
+  commands?: CustomCommandSchema;
   workflows: WorkflowSchema;
 }
