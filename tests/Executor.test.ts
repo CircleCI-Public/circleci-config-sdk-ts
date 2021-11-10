@@ -17,7 +17,7 @@ describe('Instantiate Docker Executor', () => {
     myConfig.addReusableExecutor(
       new CircleCI.executor.ReusableExecutor('default', docker),
     );
-    expect(myConfig.executors.length).toBeGreaterThan(0);
+    expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
 });
 
@@ -36,7 +36,7 @@ describe('Instantiate Machine Executor', () => {
     myConfig.addReusableExecutor(
       new CircleCI.executor.ReusableExecutor('default', machine),
     );
-    expect(myConfig.executors.length).toBeGreaterThan(0);
+    expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
 });
 
@@ -55,7 +55,7 @@ describe('Instantiate MacOS Executor', () => {
     myConfig.addReusableExecutor(
       new CircleCI.executor.ReusableExecutor('default', macos),
     );
-    expect(myConfig.executors.length).toBeGreaterThan(0);
+    expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
 });
 
@@ -75,7 +75,7 @@ describe('Instantiate Large MacOS Executor', () => {
     myConfig.addReusableExecutor(
       new CircleCI.executor.ReusableExecutor('default', macos),
     );
-    expect(myConfig.executors.length).toBeGreaterThan(0);
+    expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
 });
 
@@ -96,7 +96,7 @@ describe('Instantiate Windows Executor', () => {
     myConfig.addReusableExecutor(
       new CircleCI.executor.ReusableExecutor('default', windows),
     );
-    expect(myConfig.executors.length).toBeGreaterThan(0);
+    expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
 });
 
@@ -119,27 +119,41 @@ describe('Instantiate a 2xlarge Docker Executor', () => {
     myConfig.addReusableExecutor(
       new CircleCI.executor.ReusableExecutor('default', xxlDocker),
     );
-    expect(myConfig.executors.length).toBeGreaterThan(0);
+    expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
 });
 
-describe('Instantiate Large Machine Executor', () => {
-  const machine = new CircleCI.executor.MachineExecutor('large');
+describe('Instantiate Large and Medium Machine Executor', () => {
+  const machineLarge = new CircleCI.executor.MachineExecutor('large');
 
   it('Should match the expected output', () => {
     const expectedYAML = `
   machine:
     image: ubuntu-2004:202010-01
   resource_class: "large"`;
-    expect(machine.generate()).toEqual(YAML.parse(expectedYAML));
+    expect(machineLarge.generate()).toEqual(YAML.parse(expectedYAML));
   });
 
-  it('Add executor to config and validate', () => {
+  const machineMedium = new CircleCI.executor.MachineExecutor('medium');
+
+  it('Should match the expected output', () => {
+    const expectedYAML = `
+  machine:
+    image: ubuntu-2004:202010-01
+  resource_class: "medium"`;
+    expect(machineMedium.generate()).toEqual(YAML.parse(expectedYAML));
+  });
+
+  it('Add executors to config and validate', () => {
     const myConfig = new CircleCI.Config();
-    myConfig.addReusableExecutor(
-      new CircleCI.executor.ReusableExecutor('default', machine),
-    );
-    expect(myConfig.executors.length).toBeGreaterThan(0);
+    myConfig
+      .addReusableExecutor(
+        new CircleCI.executor.ReusableExecutor('machine_large', machineLarge),
+      )
+      .addReusableExecutor(
+        new CircleCI.executor.ReusableExecutor('machine_medium', machineMedium),
+      );
+    expect(myConfig.executors?.length).toBe(2);
   });
 });
 
@@ -168,7 +182,6 @@ describe('Generate a config with a Reusable Executor', () => {
     const expected = {
       version: 2.1,
       setup: false,
-      parameters: {},
       executors: {
         default: {
           machine: {

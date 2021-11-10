@@ -151,34 +151,60 @@ describe('Instantiate a Custom Command', () => {
  * instantiate a parameter with an enum value of x y z
  */
 describe('Instantiate a parameter with an enum value of x y z', () => {
-  const helloWorld = new CircleCI.commands.Run({
-    command: 'echo << parameters.greeting >>',
-  });
-  const customCommand = new CircleCI.commands.reusable.CustomCommand(
-    'say_hello',
+  const firstCustomCommand = new CircleCI.commands.reusable.CustomCommand(
+    'point_direction',
   );
 
-  customCommand
+  firstCustomCommand
     .defineParameter('axis', 'enum', 'x', undefined, ['x', 'y', 'z'])
-    .addStep(helloWorld);
+    .addStep(
+      new CircleCI.commands.Run({
+        command: 'echo << parameters.axis >>',
+      }),
+    );
 
-  const expectedOutput = `say_hello:
-  parameters: 
-    axis:
-      type: enum
-      default: 'x'
-      enum: [x, y, z]
-  steps:
-    - run:
-        command: echo << parameters.greeting >>`;
+  it('Should match generated yaml', () => {
+    const firstExpectedOutput = `point_direction:
+    parameters: 
+      axis:
+        type: enum
+        default: 'x'
+        enum: [x, y, z]
+    steps:
+      - run:
+          command: echo << parameters.axis >>`;
 
-  it('Should generate checkout yaml', () => {
-    expect(customCommand.generate()).toEqual(parse(expectedOutput));
+    expect(firstCustomCommand.generate()).toEqual(parse(firstExpectedOutput));
   });
 
-  it('Add job to config and validate', () => {
+  const secondCustomCommand = new CircleCI.commands.reusable.CustomCommand(
+    'search_year',
+  );
+
+  secondCustomCommand.defineParameter('year', 'integer', 2021).addStep(
+    new CircleCI.commands.Run({
+      command: 'echo << parameters.year >>',
+    }),
+  );
+
+  it('Should match generated yaml', () => {
+    const secondExpectedOutput = `search_year:
+    parameters: 
+      year:
+        type: integer
+        default: 2021
+    steps:
+      - run:
+          command: echo << parameters.year >>`;
+
+    expect(secondCustomCommand.generate()).toEqual(parse(secondExpectedOutput));
+  });
+
+  it('Add commands to config and validate', () => {
     const myConfig = new CircleCI.Config();
-    myConfig.addCustomCommand(customCommand);
-    expect(myConfig.commands.length).toBeGreaterThan(0);
+    myConfig
+      .addCustomCommand(firstCustomCommand)
+      .addCustomCommand(secondCustomCommand);
+    expect(myConfig.commands?.length).toBe(2);
   });
 });

@@ -8,8 +8,6 @@ describe('Generate a Setup workflow config', () => {
     const expected = {
       version: 2.1,
       setup: true,
-      parameters: {},
-      executors: {},
       jobs: {},
       workflows: {},
     };
@@ -41,7 +39,6 @@ describe('Generate a Setup workflow config', () => {
           default: 'hello world',
         },
       },
-      executors: {},
       jobs: {},
       workflows: {},
     };

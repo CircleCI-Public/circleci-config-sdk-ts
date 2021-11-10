@@ -28,7 +28,7 @@ export class Config implements CircleCIConfigObject {
   /**
    * Reusable executors to be referenced from jobs.
    */
-  executors: ReusableExecutor[] = [];
+  executors?: ReusableExecutor[];
   /**
    * Jobs are collections of steps. All of the steps in the job are executed in a single unit, either within a fresh container or VM.
    */
@@ -36,7 +36,7 @@ export class Config implements CircleCIConfigObject {
   /**
    * A command definition defines a sequence of steps as a map to be executed in a job, enabling you to reuse a single command definition across multiple jobs.
    */
-  commands: CustomCommand[] = [];
+  commands?: CustomCommand[];
   /**
    * A Workflow is comprised of one or more uniquely named jobs.
    */
@@ -45,7 +45,7 @@ export class Config implements CircleCIConfigObject {
   /**
    * A parameter allows custom data to be passed to a pipeline.
    */
-  parameters: CustomParametersList<PrimitiveParameterLiteral>;
+  parameters?: CustomParametersList<PrimitiveParameterLiteral>;
 
   /**
    * Access information about the current pipeline.
@@ -72,9 +72,9 @@ export class Config implements CircleCIConfigObject {
     this.setup = setup;
     this.jobs = jobs || [];
     this.workflows = workflows || [];
-    this.executors = executors || [];
-    this.commands = commands || [];
-    this.parameters = parameters || new CustomParametersList();
+    this.executors = executors;
+    this.commands = commands;
+    this.parameters = parameters;
   }
 
   /**
@@ -90,7 +90,12 @@ export class Config implements CircleCIConfigObject {
    * @param command - Injectable command
    */
   addCustomCommand(command: CustomCommand): this {
-    this.commands.push(command);
+    if (!this.commands) {
+      this.commands = [command];
+    } else {
+      this.commands.push(command);
+    }
+
     return this;
   }
   /**
@@ -98,7 +103,12 @@ export class Config implements CircleCIConfigObject {
    * @param workflow - Injectable Workflow
    */
   addReusableExecutor(executor: ReusableExecutor): this {
-    this.executors.push(executor);
+    if (!this.executors) {
+      this.executors = [executor];
+    } else {
+      this.executors.push(executor);
+    }
+
     return this;
   }
   /**
@@ -127,6 +137,10 @@ export class Config implements CircleCIConfigObject {
     description?: string,
     enumValues?: string[],
   ): Config {
+    if (!this.parameters) {
+      this.parameters = new CustomParametersList<PrimitiveParameterLiteral>();
+    }
+
     this.parameters.define(name, type, defaultValue, description, enumValues);
 
     return this;
@@ -149,26 +163,29 @@ export class Config implements CircleCIConfigObject {
       Object.assign(generatedJobConfig, job.generate());
     });
 
-    const generatedExecutorConfig: ReusableExecutorsSchema = {};
+    let generatedExecutorConfig: ReusableExecutorsSchema | undefined =
+      undefined;
 
-    Object.assign(
-      generatedExecutorConfig,
-      ...this.executors.map((reusableExecutor) => {
-        return {
-          [reusableExecutor.name]: {
-            parameters: reusableExecutor.parameters.generate(),
-            ...reusableExecutor.executor.generate(),
-          },
-        };
-      }),
-    );
+    if (this.executors) {
+      generatedExecutorConfig = Object.assign(
+        {},
+        ...this.executors.map((reusableExecutor) => {
+          return {
+            [reusableExecutor.name]: {
+              parameters: reusableExecutor.parameters.generate(),
+              ...reusableExecutor.executor.generate(),
+            },
+          };
+        }),
+      );
+    }
 
     const generatedWorkflowConfig: WorkflowSchema = {};
     this.workflows.forEach((workflow) => {
       Object.assign(generatedWorkflowConfig, workflow.generate());
     });
 
-    const generatedParameters = this.parameters.generate();
+    const generatedParameters = this.parameters?.generate();
 
     const generatedConfig: CircleCIConfigSchema = {
       version: this.version,
@@ -215,8 +232,8 @@ interface CircleCIConfigObject {
 interface CircleCIConfigSchema {
   version: ConfigVersion;
   setup: boolean;
-  parameters: Record<string, ParameterSchema>;
-  executors: ReusableExecutorsSchema;
+  parameters?: Record<string, ParameterSchema>;
+  executors?: ReusableExecutorsSchema;
   orbs?: ConfigOrbImport[];
   jobs: JobSchema;
   commands?: CustomCommandSchema;

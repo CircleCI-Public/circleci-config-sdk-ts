@@ -107,9 +107,9 @@ export class CustomParametersList<
 > extends Component {
   parameters: CustomParameter<ParameterTypeLiteral>[];
 
-  constructor(...parameters: CustomParameter<ParameterTypeLiteral>[]) {
+  constructor(parameters?: CustomParameter<ParameterTypeLiteral>[]) {
     super();
-    this.parameters = parameters;
+    this.parameters = parameters || [];
   }
 
   generate(): CustomParametersSchema {
@@ -137,7 +137,7 @@ export class CustomParametersList<
     defaultValue?: unknown,
     description?: string,
     enumValues?: string[],
-  ): Component {
+  ): CustomParameter<ParameterTypeLiteral> {
     let parameter: CustomParameter<unknown> | undefined = undefined;
 
     if (type === 'enum') {
@@ -155,9 +155,11 @@ export class CustomParametersList<
       parameter = new CustomParameter(name, type, defaultValue, description);
     }
 
-    this.parameters.push(parameter as CustomParameter<ParameterTypeLiteral>);
+    const customParameter = parameter as CustomParameter<ParameterTypeLiteral>;
 
-    return this;
+    this.parameters.push(customParameter);
+
+    return customParameter;
   }
 }
 
