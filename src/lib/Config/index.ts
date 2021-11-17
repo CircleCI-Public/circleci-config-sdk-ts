@@ -13,14 +13,37 @@ import {
   ParameterSchema,
   PrimitiveParameterLiteral,
 } from '../Components/Parameters/Parameters.types';
+import {
+  anyParameterListSchema,
+  anyParameterSchema,
+  commandParameterListSchema,
+  commandParameterSchema,
+  enumParameterSchema,
+  jobParameterListSchema,
+  jobParameterSchema,
+  primitiveParameterListSchema,
+  primitiveParameterSchema,
+} from '../Components/Parameters/schema';
 import { Workflow } from '../Components/Workflow';
 import { WorkflowSchema } from '../Components/Workflow/Workflow';
+import { ConfigValidator } from './ConfigValidator';
 import { Pipeline } from './Pipeline';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
  */
 export class Config implements CircleCIConfigObject {
+  public static validator = new ConfigValidator(
+    primitiveParameterSchema,
+    enumParameterSchema,
+    commandParameterSchema,
+    jobParameterSchema,
+    anyParameterSchema,
+    anyParameterListSchema,
+    primitiveParameterListSchema,
+    jobParameterListSchema,
+    commandParameterListSchema,
+  );
   /**
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
    */

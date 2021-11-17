@@ -157,6 +157,7 @@ describe('Instantiate a parameter with an enum value of x y z', () => {
 
   firstCustomCommand
     .defineParameter('axis', 'enum', 'x', undefined, ['x', 'y', 'z'])
+    .defineParameter('angle', 'integer', 90)
     .addStep(
       new CircleCI.commands.Run({
         command: 'echo << parameters.axis >>',
@@ -170,6 +171,9 @@ describe('Instantiate a parameter with an enum value of x y z', () => {
         type: enum
         default: 'x'
         enum: [x, y, z]
+      angle:
+        type: integer
+        default: 90
     steps:
       - run:
           command: echo << parameters.axis >>`;
