@@ -1,4 +1,4 @@
-import { stringify as Stringify } from 'yaml';
+import { Scalar, stringify as Stringify } from 'yaml';
 import { version as SDKVersion } from '../../package-version.json';
 import {
   CustomCommand,
@@ -222,7 +222,14 @@ export class Config implements CircleCIConfigObject {
     // Removes all of the "undefined" keys so they do not appear as null on the final config
     const cleanedConfig = JSON.parse(JSON.stringify(generatedConfig));
 
-    return this.prependVersionComment(Stringify(cleanedConfig));
+    return this.prependVersionComment(
+      Stringify(cleanedConfig, {
+        defaultStringType: Scalar.PLAIN,
+        lineWidth: 0,
+        minContentWidth: 0,
+        doubleQuotedMinMultiLineLength: 999,
+      }),
+    );
   }
 }
 

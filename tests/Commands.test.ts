@@ -1,4 +1,13 @@
-import { parse } from 'yaml';
+import {
+  CreateNodeOptions,
+  DocumentOptions,
+  parse,
+  ParseOptions,
+  Scalar,
+  SchemaOptions,
+  stringify,
+  ToStringOptions,
+} from 'yaml';
 import * as CircleCI from '../src/index';
 
 describe('Instantiate a Run step', () => {
@@ -134,7 +143,7 @@ describe('Instantiate a Custom Command', () => {
     .defineParameter('greeting', 'string', 'hello world');
 
   const expectedOutput = `say_hello:
-  parameters: 
+  parameters:
     greeting:
       type: string
       default: hello world
@@ -166,7 +175,7 @@ describe('Instantiate a parameter with an enum value of x y z', () => {
 
   it('Should match generated yaml', () => {
     const firstExpectedOutput = `point_direction:
-    parameters: 
+    parameters:
       axis:
         type: enum
         default: 'x'
@@ -193,7 +202,7 @@ describe('Instantiate a parameter with an enum value of x y z', () => {
 
   it('Should match generated yaml', () => {
     const secondExpectedOutput = `search_year:
-    parameters: 
+    parameters:
       year:
         type: integer
         default: 2021
@@ -210,5 +219,56 @@ describe('Instantiate a parameter with an enum value of x y z', () => {
       .addCustomCommand(firstCustomCommand)
       .addCustomCommand(secondCustomCommand);
     expect(myConfig.commands?.length).toBe(2);
+  });
+});
+
+const StringifyConfig:
+  | (DocumentOptions &
+      SchemaOptions &
+      ParseOptions &
+      CreateNodeOptions &
+      ToStringOptions)
+  | undefined = {
+  defaultStringType: Scalar.PLAIN,
+  lineWidth: 0,
+  minContentWidth: 0,
+  doubleQuotedMinMultiLineLength: 999,
+};
+
+// Test a Run command with a multi-line command string
+describe('Instantiate a Run command with a multi-line command string', () => {
+  const multiLineCommand = new CircleCI.commands.Run({
+    command: `echo "hello world 1"
+echo "hello world 2"
+echo "hello world 3"
+echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line`,
+  });
+  const expectedOutput = `run:
+  command: |-
+    echo "hello world 1"
+    echo "hello world 2"
+    echo "hello world 3"
+    echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
+`;
+  it('Should match expectedOutput', () => {
+    expect(stringify(multiLineCommand.generate(), StringifyConfig)).toEqual(
+      expectedOutput,
+    );
+  });
+});
+
+// Test a Run command with 70 characters in the command string and ensure it remains a single string
+describe('Instantiate a Run command with 70 characters in the command string and ensure it remains a single string', () => {
+  const longCommand = new CircleCI.commands.Run({
+    command: `echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line`,
+  });
+  const expectedOutput = `run:
+  command: echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
+`;
+  it('Should match expectedOutput', () => {
+    console.log(stringify(longCommand.generate()));
+    expect(stringify(longCommand.generate(), StringifyConfig)).toEqual(
+      expectedOutput,
+    );
   });
 });
