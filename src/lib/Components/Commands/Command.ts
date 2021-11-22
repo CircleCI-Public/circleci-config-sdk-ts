@@ -1,5 +1,5 @@
 import { Component } from '../index';
-import { AbstractParameterType } from '../Parameters/Parameters.types';
+import { AbstractParameterType } from '../Parameters/types/Parameters.types';
 
 /**
  * Abstract - A generic Command

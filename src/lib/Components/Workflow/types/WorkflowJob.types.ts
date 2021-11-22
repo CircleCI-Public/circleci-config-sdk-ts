@@ -1,43 +1,55 @@
-import { ParameterTypes } from '../../Config/Parameters';
+import { AbstractParameterType } from '../../Parameters/types/Parameters.types';
 
-export type WorkflowParameterTypes =
-  | ParameterTypes
+export type WorkflowJobParameters =
+  | AbstractParameterType
   | WorkflowMatrixSchema
   | WorkflowFilterSchema;
 
-export interface WorkflowSchema {
-  [workflowName: string]: {
-    jobs: WorkflowJobSchema[];
-  };
-}
-
-export interface WorkflowJobParameters {
+/**
+ * CircleCI provided parameters for all workflow jobs
+ * @see WorkflowJobParameterSchema
+ */
+export interface BuiltInWorkflowJobParameterSchema {
   /**
    * A list of jobs that must succeed for the job to start. Note: When jobs in the current workflow that are listed as dependencies are not executed (due to a filter function for example), their requirement as a dependency for other jobs will be ignored by the requires option. However, if all dependencies of a job are filtered, then that job will not be executed either.
    */
-  readonly requires?: string[];
-  readonly name?: string;
-  readonly context?: string[];
+  requires?: string[];
+  name?: string;
+  context?: string[];
   /**
    * {@link https://circleci.com/docs/2.0/configuration-reference/#filters} Filter workflow job's execution by branch or git tag.
    */
-  readonly filters?: WorkflowFilterSchema;
+  filters?: WorkflowFilterSchema;
   /**
    * {@link https://circleci.com/docs/2.0/configuration-reference/#matrix-requires-version-21} The matrix stanza allows you to run a parameterized job multiple times with different arguments.
    */
-  readonly matrix?: WorkflowMatrixSchema;
+  matrix?: WorkflowMatrixSchema;
   /**
    * An "approval" type job is a special job which pauses the workflow. This "job" is not defined outside of the workflow, you may enter any potential name for the job name. As long as the parameter of "type" is present and equal to "approval" this job will act as a placeholder that awaits user input to continue.
    */
-  readonly jobType?: 'approval';
-  [key: string]: WorkflowParameterTypes;
+  type?: 'approval';
 }
+
+/**
+ * Custom parameters for workflow jobs
+ * @see WorkflowJobParameterSchema
+ */
+export interface CustomWorkflowJobParameterSchema {
+  [key: string]: WorkflowJobParameters;
+}
+
+/**
+ * Full Workflow Job parameter type
+ */
+export type WorkflowJobParameterSchema =
+  | CustomWorkflowJobParameterSchema
+  | BuiltInWorkflowJobParameterSchema;
 
 export interface WorkflowJobSchema {
   [workflowJobName: string]: {
     requires?: string[];
     context?: string[];
-    jobType?: 'approval';
+    type?: 'approval';
     filters?: WorkflowFilterSchema;
     matrix?: WorkflowMatrixSchema;
   };

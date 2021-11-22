@@ -1,6 +1,9 @@
-import { Component } from '../index';
-import { Job } from '../Job';
-import { WorkflowJobParameters, WorkflowJobSchema } from './Workflow';
+import { Component } from '../../index';
+import { Job } from '../../Job';
+import {
+  WorkflowJobParameterSchema,
+  WorkflowJobSchema,
+} from '../types/WorkflowJob.types';
 
 /**
  * Assign Parameters and Filters to a Job within a Workflow.
@@ -10,8 +13,8 @@ import { WorkflowJobParameters, WorkflowJobSchema } from './Workflow';
  */
 export class WorkflowJob extends Component {
   job: Job;
-  parameters?: WorkflowJobParameters = {};
-  constructor(job: Job, parameters?: WorkflowJobParameters) {
+  parameters: WorkflowJobParameterSchema = {};
+  constructor(job: Job, parameters?: WorkflowJobParameterSchema) {
     super();
     this.job = job;
     if (parameters) {

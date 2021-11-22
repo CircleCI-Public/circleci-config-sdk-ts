@@ -1,7 +1,7 @@
 import { Component } from '../..';
 import { CustomParametersList, CustomParametersSchema } from '../../Parameters';
 import { ParameterizedComponent } from '../../Parameters/ParameterizedComponent';
-import { CommandParameterLiteral } from '../../Parameters/Parameters.types';
+import { CommandParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { Command, CommandSchema } from '../Command';
 
 export type CustomCommandSchema = {

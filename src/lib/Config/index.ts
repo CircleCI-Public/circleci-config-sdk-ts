@@ -9,10 +9,7 @@ import { ReusableExecutorsSchema } from '../Components/Executor/ReusableExecutor
 import { Job } from '../Components/Job';
 import { JobSchema } from '../Components/Job/index';
 import { CustomParametersList } from '../Components/Parameters';
-import {
-  ParameterSchema,
-  PrimitiveParameterLiteral,
-} from '../Components/Parameters/Parameters.types';
+import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
 import {
   anyParameterListSchema,
   anyParameterSchema,
@@ -25,9 +22,10 @@ import {
   primitiveParameterSchema,
 } from '../Components/Parameters/schema';
 import { Workflow } from '../Components/Workflow';
-import { WorkflowSchema } from '../Components/Workflow/Workflow';
+import { WorkflowSchema } from '../Components/Workflow/types/Workflow.types';
 import { ConfigValidator } from './ConfigValidator';
 import { Pipeline } from './Pipeline';
+import { ParameterSchema } from '../Components/Parameters/types/Parameters.types';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
@@ -68,7 +66,7 @@ export class Config implements CircleCIConfigObject {
   /**
    * A parameter allows custom data to be passed to a pipeline.
    */
-  parameters?: CustomParametersList<PrimitiveParameterLiteral>;
+  parameters?: CustomParametersList<PipelineParameterLiteral>;
 
   /**
    * Access information about the current pipeline.
@@ -90,7 +88,7 @@ export class Config implements CircleCIConfigObject {
     workflows?: Workflow[],
     executors?: ReusableExecutor[],
     commands?: CustomCommand[],
-    parameters?: CustomParametersList<PrimitiveParameterLiteral>,
+    parameters?: CustomParametersList<PipelineParameterLiteral>,
   ) {
     this.setup = setup;
     this.jobs = jobs || [];
@@ -155,13 +153,13 @@ export class Config implements CircleCIConfigObject {
    */
   defineParameter(
     name: string,
-    type: PrimitiveParameterLiteral,
+    type: PipelineParameterLiteral,
     defaultValue?: unknown,
     description?: string,
     enumValues?: string[],
   ): Config {
     if (!this.parameters) {
-      this.parameters = new CustomParametersList<PrimitiveParameterLiteral>();
+      this.parameters = new CustomParametersList<PipelineParameterLiteral>();
     }
 
     this.parameters.define(name, type, defaultValue, description, enumValues);

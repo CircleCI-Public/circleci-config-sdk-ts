@@ -2,11 +2,7 @@ import { ValidatorResult } from 'jsonschema';
 import { Component } from '..';
 import { Config } from '../../Config';
 import { CustomParametersList } from './CustomParameterList';
-import {
-  EnumParameterLiteral,
-  ParameterSchema,
-  ParameterValues,
-} from './Parameters.types';
+import { ParameterSchema, ParameterValues } from './types/Parameters.types';
 import {
   anyParameterSchema,
   commandParameterSchema,
@@ -14,6 +10,10 @@ import {
   jobParameterSchema,
   primitiveParameterSchema,
 } from './schema';
+import {
+  AnyParameterLiteral,
+  EnumParameterLiteral,
+} from './types/CustomParameterLiterals.types';
 
 type CustomParameterSchema<ParameterTypeLiteral> = {
   type: ParameterTypeLiteral;
@@ -39,7 +39,7 @@ type CustomEnumParameterSchema =
  *
  * {@label STATIC_2.1}
  */
-export class CustomParameter<ParameterTypeLiteral>
+export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
   extends Component
   implements ParameterValues<ParameterTypeLiteral>
 {

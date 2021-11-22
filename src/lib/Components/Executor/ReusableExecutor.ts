@@ -1,7 +1,7 @@
 import { Component } from '..';
 import { CustomParametersList } from '../Parameters';
 import { ParameterizedComponent } from '../Parameters/ParameterizedComponent';
-import { PrimitiveParameterLiteral } from '../Parameters/Parameters.types';
+import { ExecutorParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
 import { AbstractExecutor } from './Executor';
 import { ReusableExecutorSchema } from './ReusableExecutor.types';
 /**
@@ -11,7 +11,7 @@ import { ReusableExecutorSchema } from './ReusableExecutor.types';
  */
 export class ReusableExecutor
   extends Component
-  implements ParameterizedComponent<PrimitiveParameterLiteral>
+  implements ParameterizedComponent<ExecutorParameterLiteral>
 {
   /**
    * The name of a defined executor to use.
@@ -26,12 +26,12 @@ export class ReusableExecutor
   /**
    * Parameters to assign to the executor
    */
-  parameters: CustomParametersList<PrimitiveParameterLiteral>;
+  parameters: CustomParametersList<ExecutorParameterLiteral>;
 
   constructor(
     name: string,
     executor: AbstractExecutor,
-    parameters?: CustomParametersList<PrimitiveParameterLiteral>,
+    parameters?: CustomParametersList<ExecutorParameterLiteral>,
   ) {
     super();
     this.name = name;
@@ -52,7 +52,7 @@ export class ReusableExecutor
 
   defineParameter(
     name: string,
-    type: PrimitiveParameterLiteral,
+    type: ExecutorParameterLiteral,
     defaultValue?: unknown,
     description?: string,
     enumValues?: string[],

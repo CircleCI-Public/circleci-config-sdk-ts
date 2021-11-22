@@ -1,10 +1,10 @@
 import { Job } from '../Job';
+import { WorkflowSchema } from './types/Workflow.types';
+import { WorkflowJob } from './exports/WorkflowJob';
 import {
-  WorkflowJobParameters,
   WorkflowJobSchema,
-  WorkflowSchema,
-} from './Workflow';
-import { WorkflowJob } from './WorkflowJob';
+  WorkflowJobParameterSchema,
+} from './types/WorkflowJob.types';
 
 /**
  * A workflow is a set of rules for defining a collection of jobs and their run order.
@@ -51,7 +51,7 @@ export class Workflow {
   /**
    * Add a Job to the current Workflow. Chainable
    */
-  addJob(job: Job, parameters?: WorkflowJobParameters): this {
+  addJob(job: Job, parameters?: WorkflowJobParameterSchema): this {
     this.jobs.push(new WorkflowJob(job, parameters));
     return this;
   }

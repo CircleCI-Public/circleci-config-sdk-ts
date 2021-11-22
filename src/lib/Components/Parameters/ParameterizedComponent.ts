@@ -1,10 +1,9 @@
 import { CustomParametersList } from '.';
 import { Component } from '..';
-import { AnyParameterLiteral } from './Parameters.types';
+import { AnyParameterLiteral } from './types/CustomParameterLiterals.types';
 
 /**
  * Interface implemented on components to enforce parameter functionality.
- *
  * {@label STATIC_2.1}
  */
 export interface ParameterizedComponent<

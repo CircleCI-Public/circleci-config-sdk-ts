@@ -6,7 +6,7 @@ import {
 } from '.';
 import { Component } from '..';
 import { Config } from '../../Config';
-import { AnyParameterLiteral } from './Parameters.types';
+import { AnyParameterLiteral } from './types/CustomParameterLiterals.types';
 import {
   anyParameterListSchema,
   commandParameterListSchema,
@@ -76,7 +76,7 @@ export class CustomParametersList<
     description?: string,
     enumValues?: string[],
   ): CustomParameter<ParameterTypeLiteral> {
-    let parameter: CustomParameter<unknown> | undefined = undefined;
+    let parameter = undefined;
 
     if (type === 'enum') {
       if (enumValues) {

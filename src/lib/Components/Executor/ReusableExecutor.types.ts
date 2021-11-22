@@ -1,4 +1,4 @@
-import { AbstractParameterType } from '../Parameters/Parameters.types';
+import { AbstractParameterType } from '../Parameters/types/Parameters.types';
 import { ExecutorSchema } from './Executor.types';
 
 export interface ReusableExecutorSchema {
