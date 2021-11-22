@@ -1,7 +1,7 @@
 import { ValidatorResult } from 'jsonschema';
 import { Component } from '..';
 import { Config } from '../../Config';
-import { CustomParametersList } from './CustomParameterList';
+import { CustomParametersList } from './exports/CustomParameterList';
 import { ParameterSchema, ParameterValues } from './types/Parameters.types';
 import {
   anyParameterSchema,

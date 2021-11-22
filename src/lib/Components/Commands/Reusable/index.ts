@@ -1,6 +1,6 @@
 import { Component } from '../..';
 import { CustomParametersList, CustomParametersSchema } from '../../Parameters';
-import { ParameterizedComponent } from '../../Parameters/ParameterizedComponent';
+import { ParameterizedComponent } from '../../Parameters/exports/ParameterizedComponent';
 import { CommandParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { Command, CommandSchema } from '../Command';
 

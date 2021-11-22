@@ -1,6 +1,6 @@
 import { Component } from '..';
 import { CustomParametersList } from '../Parameters';
-import { ParameterizedComponent } from '../Parameters/ParameterizedComponent';
+import { ParameterizedComponent } from '../Parameters/exports/ParameterizedComponent';
 import { ExecutorParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
 import { AbstractExecutor } from './Executor';
 import { ReusableExecutorSchema } from './ReusableExecutor.types';

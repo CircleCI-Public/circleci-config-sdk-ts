@@ -3,16 +3,16 @@ import {
   CustomEnumParameter,
   CustomParameter,
   CustomParametersSchema,
-} from '.';
-import { Component } from '..';
-import { Config } from '../../Config';
-import { AnyParameterLiteral } from './types/CustomParameterLiterals.types';
+} from '..';
+import { Component } from '../..';
+import { Config } from '../../../Config';
+import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
 import {
   anyParameterListSchema,
   commandParameterListSchema,
   jobParameterListSchema,
   primitiveParameterListSchema,
-} from './schema';
+} from '../schema';
 
 /**
  * A list that can be added to a component.

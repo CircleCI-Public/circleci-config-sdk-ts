@@ -2,7 +2,7 @@ import { Job, JobContentSchema } from '.';
 import { Command } from '../Commands/Command';
 import { AbstractExecutor } from '../Executor/Executor';
 import { CustomParametersList, CustomParametersSchema } from '../Parameters';
-import { ParameterizedComponent } from '../Parameters/ParameterizedComponent';
+import { ParameterizedComponent } from '../Parameters/exports/ParameterizedComponent';
 import { JobParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
 /**
  * Parameterized are a type of Job which defines parameters it can accept.
