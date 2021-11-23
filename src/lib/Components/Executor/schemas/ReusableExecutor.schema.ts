@@ -8,13 +8,21 @@ const ExecutorSchema: SchemaObject = {
   required: ['executor'],
   properties: {
     executor: {
-      type: 'object',
-      additionalProperties: false,
       oneOf: [
-        { $ref: '/executors/DockerExecutor' },
-        { $ref: '/executors/MachineExecutor' },
-        { $ref: '/executors/WindowsExecutor' },
-        { $ref: '/executors/MacOSExecutor' },
+        {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            name: {
+              type: 'string',
+              pattern: '^[a-z][a-z0-9_-]+$',
+            },
+          },
+        },
+        {
+          type: 'string',
+          pattern: '^[a-z][a-z0-9_-]+$',
+        },
       ],
     },
   },

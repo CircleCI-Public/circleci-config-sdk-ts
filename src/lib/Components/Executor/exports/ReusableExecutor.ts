@@ -1,9 +1,12 @@
 import { Component } from '../..';
+import { Config } from '../../../Config';
+import { ValidationResult } from '../../../Config/ConfigValidator';
 import { CustomParametersList } from '../../Parameters';
 import { ParameterizedComponent } from '../../Parameters/exports/ParameterizedComponent';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
-import { Executor } from './Executor';
+import ExecutorSchema from '../schemas/ReusableExecutor.schema';
 import { ReusableExecutorShape } from '../types/ReusableExecutor.types';
+import { Executor } from './Executor';
 /**
  * A 2.1 wrapper for reusing CircleCI executor.
  * @see {@link https://circleci.com/docs/2.0/reusing-config/#the-executors-key}
@@ -64,5 +67,9 @@ export class ReusableExecutor
     this.parameters.define(name, type, defaultValue, description, enumValues);
 
     return this;
+  }
+
+  static validate(input: unknown): ValidationResult {
+    return Config.validator.validateData(ExecutorSchema, input);
   }
 }
