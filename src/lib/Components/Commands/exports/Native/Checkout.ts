@@ -16,7 +16,7 @@ export class Checkout extends Command {
     }
   }
   /**
-   * Generate Checkout Command schema.
+   * Generate Checkout Command shape.
    * @returns The generated JSON for the Checkout Commands.
    */
   generate(): CheckoutCommandShape {

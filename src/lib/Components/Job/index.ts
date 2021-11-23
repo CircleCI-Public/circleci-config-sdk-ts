@@ -3,6 +3,7 @@ import { Executor } from '../Executor/exports/Executor';
 import { ExecutorShape as ExecutorShape } from '../Executor/types/Executor.types';
 import { ReusableExecutor } from '../Executor/exports/ReusableExecutor';
 import { Component } from '../index';
+import { JobContentShape, JobShape } from './types/Job.types';
 
 /**
  * Jobs define a collection of steps to be run within a given executor, and are orchestrated using Workflows.
@@ -68,13 +69,4 @@ export class Job extends Component {
     this.steps.push(command);
     return this;
   }
-}
-
-export interface JobStepsShape {
-  steps: unknown[]; // CommandSchemas for any command.
-}
-
-export type JobContentShape = JobStepsShape & ExecutorShape;
-export interface JobShape {
-  [key: string]: JobContentShape;
 }

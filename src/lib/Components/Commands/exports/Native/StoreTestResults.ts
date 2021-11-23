@@ -13,7 +13,7 @@ export class StoreTestResults extends Command {
     this.parameters = parameters;
   }
   /**
-   * Generate StoreTestResults Command schema.
+   * Generate StoreTestResults Command shape.
    * @returns The generated JSON for the StoreTestResults Commands.
    */
   generate(): StoreTestResultsCommandShape {
@@ -34,7 +34,7 @@ export interface StoreTestResultsParameters extends CommandParameters {
 }
 
 /**
- * JSON Schema for the StoreTestResults command.
+ * Generated Shape of the StoreTestResults command.
  */
 export interface StoreTestResultsCommandShape extends CommandShape {
   store_test_results: StoreTestResultsParameters;

@@ -17,7 +17,7 @@ export class Run extends Command {
     this.parameters = parameters;
   }
   /**
-   * Generate Run Command schema.
+   * Generate Run Command component object.
    * @returns The generated JSON for the Run Commands.
    */
   generate(): RunCommandShape {
@@ -62,7 +62,7 @@ export interface RunParameters extends CommandParameters {
 }
 
 /**
- * JSON Schema for the Run command.
+ * Run Command Shape
  */
 export interface RunCommandShape extends CommandShape {
   run: RunParameters;

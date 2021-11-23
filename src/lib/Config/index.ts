@@ -14,7 +14,7 @@ import {
 } from '../Components/Executor/schemas/Executor.schema';
 import { ReusableExecutorsShape } from '../Components/Executor/types/ReusableExecutor.types';
 import { Job } from '../Components/Job';
-import { JobShape } from '../Components/Job/index';
+import { JobShape } from '../Components/Job/types/Job.types';
 import { CustomParametersList } from '../Components/Parameters';
 import {
   anyParameterListSchema,
@@ -26,7 +26,7 @@ import {
   jobParameterSchema,
   primitiveParameterListSchema,
   primitiveParameterSchema,
-} from '../Components/Parameters/schema';
+} from '../Components/Parameters/schemas/Parameter.schema';
 import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
 import { ParameterShape } from '../Components/Parameters/types/Parameters.types';
 import { Workflow } from '../Components/Workflow';
@@ -219,7 +219,7 @@ export class Config implements CircleCIConfigObject {
 
     const generatedParameters = this.parameters?.generate();
 
-    const generatedConfig: CircleCIConfigSchema = {
+    const generatedConfig: CircleCIConfigShape = {
       version: this.version,
       setup: this.setup,
       parameters: generatedParameters,
@@ -266,9 +266,9 @@ interface CircleCIConfigObject {
 }
 
 /**
- * JSON Schema for the CircleCI config.
+ * Generated Shape of the CircleCI config.
  */
-interface CircleCIConfigSchema {
+interface CircleCIConfigShape {
   version: ConfigVersion;
   setup: boolean;
   parameters?: Record<string, ParameterShape>;

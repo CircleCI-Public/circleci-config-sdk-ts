@@ -16,7 +16,7 @@ export class SetupRemoteDocker extends Command {
     this.parameters = parameters;
   }
   /**
-   * Generate SetupRemoteDocker Command schema.
+   * Generate SetupRemoteDocker Command shape.
    * @returns The generated JSON for the SetupRemoteDocker Commands.
    */
   generate(): SetupRemoteDockerCommandShape {
@@ -38,7 +38,7 @@ export interface SetupRemoteDockerParameters extends CommandParameters {
 }
 
 /**
- * JSON Schema for the SetupRemoteDocker command.
+ * Generated Shape of the SetupRemoteDocker command.
  */
 export interface SetupRemoteDockerCommandShape extends CommandShape {
   setup_remote_docker: SetupRemoteDockerParameters;

@@ -12,7 +12,7 @@ import {
   commandParameterListSchema,
   jobParameterListSchema,
   primitiveParameterListSchema,
-} from '../schema';
+} from '../schemas/Parameter.schema';
 
 /**
  * A list that can be added to a component.

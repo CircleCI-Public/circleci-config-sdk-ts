@@ -1,9 +1,10 @@
-import { Job, JobContentShape } from '.';
-import { Command } from '../Commands/exports/Command';
-import { Executor } from '../Executor/exports/Executor';
-import { CustomParametersList, CustomParametersShape } from '../Parameters';
-import { ParameterizedComponent } from '../Parameters/exports/ParameterizedComponent';
-import { JobParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
+import { JobContentShape } from '../types/Job.types';
+import { Command } from '../../Commands/exports/Command';
+import { Executor } from '../../Executor/exports/Executor';
+import { CustomParametersList, CustomParametersShape } from '../../Parameters';
+import { ParameterizedComponent } from '../../Parameters/exports/ParameterizedComponent';
+import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
+import { Job } from '..';
 /**
  * Parameterized are a type of Job which defines parameters it can accept.
  * {@label STATIC_2.1}

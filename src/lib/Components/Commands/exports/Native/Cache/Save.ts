@@ -15,7 +15,7 @@ export class Save extends Command {
     this.parameters = parameters;
   }
   /**
-   * Generate Save Cache Command schema.
+   * Generate Save Cache Command shape.
    * @returns The generated JSON for the Save Cache Commands.
    */
   generate(): SaveCacheCommandShape {
@@ -41,7 +41,7 @@ export interface SaveCacheParameters extends CommandParameters {
   when?: 'always' | 'on_success' | 'on_fail';
 }
 /**
- * JSON Schema for the SaveCache command.
+ * Generated Shape of the SaveCache command.
  */
 export interface SaveCacheCommandShape extends CommandShape {
   save_cache: SaveCacheParameters;
