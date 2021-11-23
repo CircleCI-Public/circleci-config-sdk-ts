@@ -1,7 +1,7 @@
-import { WorkflowJobSchema } from './WorkflowJob.types';
+import { WorkflowJobParameters } from './WorkflowJob.types';
 
-export interface WorkflowSchema {
+export interface WorkflowShape {
   [workflowName: string]: {
-    jobs: WorkflowJobSchema[];
+    jobs: WorkflowJobParameters[];
   };
 }

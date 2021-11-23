@@ -2,7 +2,7 @@ import { ValidatorResult } from 'jsonschema';
 import { Component } from '..';
 import { Config } from '../../Config';
 import { CustomParametersList } from './exports/CustomParameterList';
-import { ParameterSchema, ParameterValues } from './types/Parameters.types';
+import { ParameterShape, ParameterValues } from './types/Parameters.types';
 import {
   anyParameterSchema,
   commandParameterSchema,
@@ -127,5 +127,5 @@ export class CustomEnumParameter extends CustomParameter<EnumParameterLiteral> {
   }
 }
 
-export type CustomParametersSchema = Record<string, ParameterSchema>;
+export type CustomParametersShape = Record<string, ParameterShape>;
 export { CustomParametersList };

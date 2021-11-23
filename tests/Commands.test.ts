@@ -266,7 +266,6 @@ describe('Instantiate a Run command with 70 characters in the command string and
   command: echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
 `;
   it('Should match expectedOutput', () => {
-    console.log(stringify(longCommand.generate()));
     expect(stringify(longCommand.generate(), StringifyConfig)).toEqual(
       expectedOutput,
     );

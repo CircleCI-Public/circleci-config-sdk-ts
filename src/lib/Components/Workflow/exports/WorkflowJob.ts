@@ -1,8 +1,9 @@
 import { Component } from '../../index';
 import { Job } from '../../Job';
 import {
-  WorkflowJobParameterSchema,
-  WorkflowJobSchema,
+  WorkflowJobParameters,
+  WorkflowJobParametersShape,
+  WorkflowJobShape,
 } from '../types/WorkflowJob.types';
 
 /**
@@ -13,17 +14,26 @@ import {
  */
 export class WorkflowJob extends Component {
   job: Job;
-  parameters: WorkflowJobParameterSchema = {};
-  constructor(job: Job, parameters?: WorkflowJobParameterSchema) {
+  parameters: WorkflowJobParameters = {};
+  constructor(job: Job, parameters?: WorkflowJobParameters) {
     super();
     this.job = job;
     if (parameters) {
       this.parameters = parameters;
     }
   }
-  generate(): WorkflowJobSchema {
+  generate(): WorkflowJobShape {
+    const { matrix, ...jobParameters } = this.parameters;
+    const parameters: WorkflowJobParametersShape = { ...jobParameters };
+
+    if (matrix) {
+      parameters.matrix = {
+        parameters: matrix,
+      };
+    }
+
     return {
-      [this.job.name]: { ...this.parameters },
+      [this.job.name]: parameters,
     };
   }
 }

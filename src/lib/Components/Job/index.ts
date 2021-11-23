@@ -1,7 +1,7 @@
-import { Command } from '../Commands/Command';
-import { AbstractExecutor } from '../Executor/Executor';
-import { ExecutorSchema } from '../Executor/Executor.types';
-import { ReusableExecutor } from '../Executor/ReusableExecutor';
+import { Command } from '../Commands/exports/Command';
+import { Executor } from '../Executor/exports/Executor';
+import { ExecutorShape as ExecutorShape } from '../Executor/types/Executor.types';
+import { ReusableExecutor } from '../Executor/exports/ReusableExecutor';
 import { Component } from '../index';
 
 /**
@@ -15,7 +15,7 @@ export class Job extends Component {
   /**
    * The reusable executor to use for this job. The Executor must have already been instantiated and added to the config.
    */
-  executor: AbstractExecutor | ReusableExecutor;
+  executor: Executor | ReusableExecutor;
   /**
    * A list of Commands to execute within the job in the order which they were added.
    */
@@ -29,7 +29,7 @@ export class Job extends Component {
    */
   constructor(
     name: string,
-    executor: AbstractExecutor | ReusableExecutor,
+    executor: Executor | ReusableExecutor,
     steps?: Command[],
   ) {
     super();
@@ -42,11 +42,11 @@ export class Job extends Component {
    * Generates the contents of the Job.
    * @returns The generated JSON for the Job's contents.
    */
-  generateJobContents(): JobContentSchema {
+  generateJobContents(): JobContentShape {
     const generatedSteps = this.steps.map((step) => {
       return step.generate();
     });
-    const generatedExecutor = this.executor.generate() as ExecutorSchema;
+    const generatedExecutor = this.executor.generate() as ExecutorShape;
 
     return { steps: generatedSteps, ...generatedExecutor };
   }
@@ -54,7 +54,7 @@ export class Job extends Component {
    * Generate Job schema
    * @returns The generated JSON for the Job.
    */
-  generate(): JobSchema {
+  generate(): JobShape {
     return {
       [this.name]: this.generateJobContents(),
     };
@@ -70,11 +70,11 @@ export class Job extends Component {
   }
 }
 
-export interface JobStepsSchema {
+export interface JobStepsShape {
   steps: unknown[]; // CommandSchemas for any command.
 }
 
-export type JobContentSchema = JobStepsSchema & ExecutorSchema;
-export interface JobSchema {
-  [key: string]: JobContentSchema;
+export type JobContentShape = JobStepsShape & ExecutorShape;
+export interface JobShape {
+  [key: string]: JobContentShape;
 }

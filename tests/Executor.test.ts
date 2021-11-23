@@ -1,15 +1,27 @@
-import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
+import * as CircleCI from '../src/index';
+import {
+  DockerExecutor,
+  MachineExecutor,
+  MacOSExecutor,
+  WindowsExecutor,
+} from '../src/lib/Components/Executor';
 
 describe('Instantiate Docker Executor', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const equivalent = {
+    docker: [{ image: 'cimg/node:lts' }],
+    resource_class: 'medium',
+  };
 
   it('Should match the expected output', () => {
-    const expectedYAML = `
-  docker:
-    - image: cimg/node:lts
-  resource_class: "medium"`;
-    expect(docker.generate()).toEqual(YAML.parse(expectedYAML));
+    const result = DockerExecutor.validate(equivalent);
+
+    expect(result.valid).toBeTruthy();
+  });
+
+  it('Should match the expected output', () => {
+    expect(docker.generate()).toEqual(equivalent);
   });
 
   it('Add executor to config and validate', () => {
@@ -23,14 +35,21 @@ describe('Instantiate Docker Executor', () => {
 
 describe('Instantiate Machine Executor', () => {
   const machine = new CircleCI.executor.MachineExecutor();
+  const equivalent = {
+    machine: { image: 'ubuntu-2004:202010-01' },
+    resource_class: 'medium',
+  };
 
   it('Should match the expected output', () => {
-    const expectedYAML = `
-  machine:
-    image: ubuntu-2004:202010-01
-  resource_class: "medium"`;
-    expect(machine.generate()).toEqual(YAML.parse(expectedYAML));
+    const result = MachineExecutor.validate(equivalent);
+
+    expect(result.valid).toBeTruthy();
   });
+
+  it('Should match the expected output', () => {
+    expect(machine.generate()).toEqual(equivalent);
+  });
+
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(
@@ -42,14 +61,23 @@ describe('Instantiate Machine Executor', () => {
 
 describe('Instantiate MacOS Executor', () => {
   const macos = new CircleCI.executor.MacOSExecutor('13.0.0');
+  const equivalent = {
+    macos: {
+      xcode: '13.0.0',
+    },
+    resource_class: 'medium',
+  };
 
   it('Should match the expected output', () => {
-    const expectedYAML = `
-  macos:
-    xcode: "13.0.0"
-  resource_class: medium`;
-    expect(macos.generate()).toEqual(YAML.parse(expectedYAML));
+    const result = MacOSExecutor.validate(equivalent);
+
+    expect(result.valid).toBeTruthy();
   });
+
+  it('Should match the expected output', () => {
+    expect(macos.generate()).toEqual(equivalent);
+  });
+
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(
@@ -79,16 +107,45 @@ describe('Instantiate Large MacOS Executor', () => {
   });
 });
 
-describe('Instantiate Windows Executor', () => {
+/**
+  This test is an edge case where the shell parameter is manually removed from the executor
+ */
+describe('Instantiate Windows Executor and remove shell', () => {
   const windows = new CircleCI.executor.WindowsExecutor();
 
+  windows.parameters.shell = undefined;
+
+  const equivalent = {
+    machine: {
+      image: 'windows-server-2019-vs2019:stable',
+    },
+    resource_class: 'windows.medium',
+    shell: 'powershell.exe -ExecutionPolicy Bypass',
+  };
+
   it('Should match the expected output', () => {
-    const expectedYAML = `
-  machine:
-    image: "windows-server-2019-vs2019:stable"
-  resource_class: "windows.medium"
-  shell: powershell.exe -ExecutionPolicy Bypass`;
-    expect(windows.generate()).toEqual(YAML.parse(expectedYAML));
+    expect(windows.generate()).toEqual(equivalent);
+  });
+});
+
+describe('Instantiate Windows Executor', () => {
+  const windows = new CircleCI.executor.WindowsExecutor();
+  const equivalent = {
+    machine: {
+      image: 'windows-server-2019-vs2019:stable',
+    },
+    resource_class: 'windows.medium',
+    shell: 'powershell.exe -ExecutionPolicy Bypass',
+  };
+
+  it('Should match the expected output', () => {
+    const result = WindowsExecutor.validate(equivalent);
+
+    expect(result.valid).toBeTruthy();
+  });
+
+  it('Should match the expected output', () => {
+    expect(windows.generate()).toEqual(equivalent);
   });
 
   it('Add executor to config and validate', () => {
@@ -157,7 +214,7 @@ describe('Instantiate Large and Medium Machine Executor', () => {
   });
 });
 
-describe('Instantiate Reusable Executor with parameters', () => {
+describe('Generate a config with a Reusable Executor without parameters', () => {
   const machine = new CircleCI.executor.MachineExecutor('large');
   const reusable = new CircleCI.executor.ReusableExecutor('default', machine);
 
@@ -166,6 +223,28 @@ describe('Instantiate Reusable Executor with parameters', () => {
   executor:
     name: default`;
     expect(reusable.generate()).toEqual(YAML.parse(expectedYAML));
+  });
+
+  const myConfig = new CircleCI.Config();
+
+  myConfig.addReusableExecutor(reusable);
+
+  it('Should produce a config with executors', () => {
+    const expected = {
+      version: 2.1,
+      setup: false,
+      executors: {
+        default: {
+          machine: {
+            image: 'ubuntu-2004:202010-01',
+          },
+          resource_class: 'large',
+        },
+      },
+      jobs: {},
+      workflows: {},
+    };
+    expect(YAML.parse(myConfig.stringify())).toEqual(expected);
   });
 });
 

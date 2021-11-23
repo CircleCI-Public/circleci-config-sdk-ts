@@ -1,5 +1,5 @@
-import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
+import * as CircleCI from '../src/index';
 
 describe('Instantiate Docker Job', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');

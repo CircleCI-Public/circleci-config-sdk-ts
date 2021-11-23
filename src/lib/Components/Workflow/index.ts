@@ -1,9 +1,9 @@
 import { Job } from '../Job';
-import { WorkflowSchema } from './types/Workflow.types';
+import { WorkflowShape } from './types/Workflow.types';
 import { WorkflowJob } from './exports/WorkflowJob';
 import {
-  WorkflowJobSchema,
-  WorkflowJobParameterSchema,
+  WorkflowJobShape,
+  WorkflowJobParameters,
 } from './types/WorkflowJob.types';
 
 /**
@@ -33,25 +33,25 @@ export class Workflow {
     }
   }
   /**
-   * Generate Workflow schema.
+   * Generate Workflow Shape.
    * @returns The generated JSON for the Workflow.
    */
   generate(): unknown {
-    const generatedWorkflowJobs: WorkflowJobSchema[] = [];
+    const generatedWorkflowJobs: WorkflowJobShape[] = [];
     this.jobs.forEach((job) => {
-      generatedWorkflowJobs.push(job.generate() as WorkflowJobSchema); //Double check this
+      generatedWorkflowJobs.push(job.generate() as WorkflowJobShape); //Double check this
     });
     return {
       [this.name]: {
         jobs: generatedWorkflowJobs,
       },
-    } as WorkflowSchema;
+    } as WorkflowShape;
   }
 
   /**
    * Add a Job to the current Workflow. Chainable
    */
-  addJob(job: Job, parameters?: WorkflowJobParameterSchema): this {
+  addJob(job: Job, parameters?: WorkflowJobParameters): this {
     this.jobs.push(new WorkflowJob(job, parameters));
     return this;
   }

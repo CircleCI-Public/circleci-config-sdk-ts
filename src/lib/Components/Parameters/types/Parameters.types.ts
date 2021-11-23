@@ -1,28 +1,29 @@
-import { Command } from '../../Commands/Command';
-import { AbstractExecutor } from '../../Executor/Executor';
+import { Command } from '../../Commands/exports/Command';
+import { Executor } from '../../Executor/exports/Executor';
 import { AnyParameterLiteral } from './CustomParameterLiterals.types';
-
 // CircleCI Parameter Types
 
 /**
  * All possible Parameter types across CircleCI. Used as an "abstract" type. Use the appropriate ParameterType for your component.
  */
-export type AbstractParameterType =
+export type AnyParameterType =
   | EnumParameter
   | StringParameter
   | BooleanParameter
   | IntegerParameter
   | StepsParameter
   | ExecutorParameter
-  | EnvironmentParameter;
+  | EnvironmentParameter
+  | MatrixParameter
+  | FilterParameter;
 
 export interface ParameterValues<
   ParameterTypeLiteral extends AnyParameterLiteral,
 > {
   type: ParameterTypeLiteral;
-  description?: string;
+  description?: StringParameter;
   defaultValue?: unknown;
-  enumValues?: string[];
+  enumValues?: EnumParameter;
 }
 
 /**
@@ -56,17 +57,48 @@ export type StepsParameter = Command[];
 /**
  * Parameter type for Executors. Available for Parameterizable jobs.
  */
-export type ExecutorParameter = AbstractExecutor;
+export type ExecutorParameter = Executor;
 /**
  * Parameter type for a map of environment variables. Can only be set on non-parameterizable jobs.
  */
 export type EnvironmentParameter = Map<string, string>;
 
-export interface ParameterSchema<
-  T = NonNullable<Exclude<AbstractParameterType, EnvironmentParameter>>,
+export type FilterParameter = {
+  /**
+   * A map defining rules for execution on specific branches
+   */
+  branches?: {
+    /**
+     * Either a single branch specifier, or a list of branch specifiers
+     */
+    only?: ListParameter;
+    /**
+     * Either a single branch specifier, or a list of branch specifiers
+     */
+    ignore?: ListParameter;
+  };
+  /**
+   * A map defining rules for execution on specific tags
+   */
+  tags?: {
+    /**
+     * Either a single tag specifier, or a list of tag specifiers
+     */
+    only?: ListParameter;
+    /**
+     * Either a single tag specifier, or a list of tag specifiers
+     */
+    ignore?: ListParameter;
+  };
+};
+
+export type MatrixParameter = Record<string, ListParameter>;
+
+export interface ParameterShape<
+  T = NonNullable<Exclude<AnyParameterType, EnvironmentParameter>>,
 > {
   type: AnyParameterLiteral;
-  description?: string;
+  description?: StringParameter;
   default: T;
-  enum?: string[]; // Enum must be set if 'type' is of "enum", otherwise set to null
+  enum?: ListParameter; // Enum must be set if 'type' is of "enum", otherwise set to null
 }

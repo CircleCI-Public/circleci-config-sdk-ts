@@ -1,5 +1,5 @@
-import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
+import * as CircleCI from '../src/index';
 
 describe('Instantiate Workflow', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
@@ -94,6 +94,34 @@ describe('Utilize workflow job filters', () => {
     const generatedWorkflowJob = myWorkflow.jobs[0].generate();
     const expected = {
       'my-job': { filters: { tags: { only: ['/^v.*/'] } } },
+    };
+    expect(generatedWorkflowJob).toEqual(expected);
+  });
+});
+
+describe('Utilize workflow job matrix', () => {
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.commands.Run({
+    command: 'echo hello world',
+  });
+  const job = new CircleCI.Job('my-job', docker, [helloWorld]);
+
+  it('Should create a parameter matrix', () => {
+    const myWorkflow = new CircleCI.Workflow('my-workflow');
+    myWorkflow.addJob(job, {
+      matrix: {
+        versions: ['1.0.0', '2.0.0'],
+      },
+    });
+    const generatedWorkflowJob = myWorkflow.jobs[0].generate();
+    const expected = {
+      'my-job': {
+        matrix: {
+          parameters: {
+            versions: ['1.0.0', '2.0.0'],
+          },
+        },
+      },
     };
     expect(generatedWorkflowJob).toEqual(expected);
   });

@@ -2,7 +2,7 @@ import { ValidatorResult } from 'jsonschema';
 import {
   CustomEnumParameter,
   CustomParameter,
-  CustomParametersSchema,
+  CustomParametersShape,
 } from '..';
 import { Component } from '../..';
 import { Config } from '../../../Config';
@@ -31,7 +31,7 @@ export class CustomParametersList<
     this.parameters = parameters || [];
   }
 
-  generate(): CustomParametersSchema {
+  generate(): CustomParametersShape {
     const generatedParameters = this.parameters.map((parameter) => ({
       [parameter.name]: {
         ...parameter.generate(),

@@ -1,7 +1,7 @@
-import { Job, JobContentSchema } from '.';
-import { Command } from '../Commands/Command';
-import { AbstractExecutor } from '../Executor/Executor';
-import { CustomParametersList, CustomParametersSchema } from '../Parameters';
+import { Job, JobContentShape } from '.';
+import { Command } from '../Commands/exports/Command';
+import { Executor } from '../Executor/exports/Executor';
+import { CustomParametersList, CustomParametersShape } from '../Parameters';
 import { ParameterizedComponent } from '../Parameters/exports/ParameterizedComponent';
 import { JobParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
 /**
@@ -16,7 +16,7 @@ class ParameterizedJob
 
   constructor(
     name: string,
-    executor: AbstractExecutor,
+    executor: Executor,
     parameters?: CustomParametersList<JobParameterLiteral>,
     steps?: Command[],
   ) {
@@ -44,8 +44,8 @@ class ParameterizedJob
   }
 }
 
-export type ParameterizedJobContents = JobContentSchema & {
-  parameters: CustomParametersSchema;
+export type ParameterizedJobContents = JobContentShape & {
+  parameters: CustomParametersShape;
 };
 
 export { ParameterizedJob };

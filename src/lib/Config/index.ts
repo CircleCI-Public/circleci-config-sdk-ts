@@ -2,14 +2,20 @@ import { Scalar, stringify as Stringify } from 'yaml';
 import { version as SDKVersion } from '../../package-version.json';
 import {
   CustomCommand,
-  CustomCommandSchema,
-} from '../Components/Commands/Reusable';
+  CustomCommandShape,
+} from '../Components/Commands/exports/Reusable';
 import { ReusableExecutor } from '../Components/Executor';
-import { ReusableExecutorsSchema } from '../Components/Executor/ReusableExecutor.types';
+import {
+  abstractExecutorSchema,
+  dockerExecutorSchema,
+  machineExecutorSchema,
+  macOSExecutorSchema,
+  windowsExecutorSchema,
+} from '../Components/Executor/schemas/Executor.schema';
+import { ReusableExecutorsShape } from '../Components/Executor/types/ReusableExecutor.types';
 import { Job } from '../Components/Job';
-import { JobSchema } from '../Components/Job/index';
+import { JobShape } from '../Components/Job/index';
 import { CustomParametersList } from '../Components/Parameters';
-import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
 import {
   anyParameterListSchema,
   anyParameterSchema,
@@ -21,11 +27,12 @@ import {
   primitiveParameterListSchema,
   primitiveParameterSchema,
 } from '../Components/Parameters/schema';
+import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
+import { ParameterShape } from '../Components/Parameters/types/Parameters.types';
 import { Workflow } from '../Components/Workflow';
-import { WorkflowSchema } from '../Components/Workflow/types/Workflow.types';
+import { WorkflowShape } from '../Components/Workflow/types/Workflow.types';
 import { ConfigValidator } from './ConfigValidator';
 import { Pipeline } from './Pipeline';
-import { ParameterSchema } from '../Components/Parameters/types/Parameters.types';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
@@ -41,6 +48,11 @@ export class Config implements CircleCIConfigObject {
     primitiveParameterListSchema,
     jobParameterListSchema,
     commandParameterListSchema,
+    abstractExecutorSchema,
+    dockerExecutorSchema,
+    machineExecutorSchema,
+    macOSExecutorSchema,
+    windowsExecutorSchema,
   );
   /**
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
@@ -179,13 +191,12 @@ export class Config implements CircleCIConfigObject {
    * Export the CircleCI configuration as a YAML string.
    */
   stringify(): string {
-    const generatedJobConfig: JobSchema = {};
+    const generatedJobConfig: JobShape = {};
     this.jobs.forEach((job) => {
       Object.assign(generatedJobConfig, job.generate());
     });
 
-    let generatedExecutorConfig: ReusableExecutorsSchema | undefined =
-      undefined;
+    let generatedExecutorConfig: ReusableExecutorsShape | undefined = undefined;
 
     if (this.executors) {
       generatedExecutorConfig = Object.assign(
@@ -193,7 +204,7 @@ export class Config implements CircleCIConfigObject {
         ...this.executors.map((reusableExecutor) => {
           return {
             [reusableExecutor.name]: {
-              parameters: reusableExecutor.parameters.generate(),
+              parameters: reusableExecutor.parameters?.generate(),
               ...reusableExecutor.executor.generate(),
             },
           };
@@ -201,7 +212,7 @@ export class Config implements CircleCIConfigObject {
       );
     }
 
-    const generatedWorkflowConfig: WorkflowSchema = {};
+    const generatedWorkflowConfig: WorkflowShape = {};
     this.workflows.forEach((workflow) => {
       Object.assign(generatedWorkflowConfig, workflow.generate());
     });
@@ -260,10 +271,10 @@ interface CircleCIConfigObject {
 interface CircleCIConfigSchema {
   version: ConfigVersion;
   setup: boolean;
-  parameters?: Record<string, ParameterSchema>;
-  executors?: ReusableExecutorsSchema;
+  parameters?: Record<string, ParameterShape>;
+  executors?: ReusableExecutorsShape;
   orbs?: ConfigOrbImport[];
-  jobs: JobSchema;
-  commands?: CustomCommandSchema;
-  workflows: WorkflowSchema;
+  jobs: JobShape;
+  commands?: CustomCommandShape;
+  workflows: WorkflowShape;
 }
