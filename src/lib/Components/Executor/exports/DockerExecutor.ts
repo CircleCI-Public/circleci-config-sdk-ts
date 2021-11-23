@@ -1,4 +1,3 @@
-import { ValidatorResult } from 'jsonschema';
 import { Executor } from './Executor';
 import { Config } from '../../../Config';
 import {
@@ -7,7 +6,8 @@ import {
   DockerResourceClass,
 } from '../types/DockerExecutor.types';
 import { DockerImage } from './DockerImage';
-import { dockerExecutorSchema } from '../schemas/Executor.schema';
+import { ValidationResult } from '../../../Config/ConfigValidator';
+import DockerExecutorSchema from '../schemas/DockerExecutor.schema';
 
 /**
  * A Docker based CircleCI executor.
@@ -55,7 +55,7 @@ export class DockerExecutor extends Executor {
     };
   }
 
-  static validate(input: unknown): ValidatorResult {
-    return Config.validator.validate(input, dockerExecutorSchema);
+  static validate(input: unknown): ValidationResult {
+    return Config.validator.validateData(DockerExecutorSchema, input);
   }
 }

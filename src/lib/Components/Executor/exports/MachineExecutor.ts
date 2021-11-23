@@ -1,11 +1,11 @@
-import { ValidatorResult } from 'jsonschema';
-import { Executor } from './Executor';
 import { Config } from '../../../Config';
-import { machineExecutorSchema } from '../schemas/Executor.schema';
+import { ValidationResult } from '../../../Config/ConfigValidator';
+import MachineExecutorSchema from '../schemas/MachineExecutor.schema';
 import {
   MachineExecutorShape,
   MachineResourceClass,
 } from '../types/MachineExecutor.types';
+import { Executor } from './Executor';
 
 /**
  * The Linux Virtual Machine Executor.
@@ -32,7 +32,7 @@ export class MachineExecutor extends Executor {
     };
   }
 
-  static validate(input: unknown): ValidatorResult {
-    return Config.validator.validate(input, machineExecutorSchema);
+  static validate(input: unknown): ValidationResult {
+    return Config.validator.validateData(MachineExecutorSchema, input);
   }
 }

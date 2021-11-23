@@ -40,7 +40,7 @@ export type CommandParameterLiteral = Extract<
  */
 export type ExecutorParameterLiteral = Extract<
   AnyParameterLiteral,
-  'string' | 'integer'
+  'string' | 'integer' | EnumParameterLiteral
 >;
 
 /**
@@ -50,3 +50,12 @@ export type PipelineParameterLiteral = Extract<
   AnyParameterLiteral,
   'string' | 'boolean' | 'integer' | EnumParameterLiteral
 >;
+
+/*
+ * Component types which can be parameterized.
+ */
+export type ParameterizedComponentLiteral =
+  | 'job'
+  | 'command'
+  | 'executor'
+  | 'pipeline';

@@ -5,7 +5,7 @@ import {
   CustomParametersList,
 } from '../src/lib/Components/Parameters';
 
-describe('Parse yaml parameters and validate', () => {
+describe('Parse yaml pipeline parameters and validate', () => {
   it('Should validate parameters', () => {
     const parameters = parse(`parameters: 
       axis:
@@ -16,19 +16,19 @@ describe('Parse yaml parameters and validate', () => {
         type: integer
         default: 90`);
 
-    const result = CustomParametersList.validate(parameters, 'primitive');
+    const result = CustomParametersList.validate(parameters, 'pipeline');
 
-    expect(result?.valid).toBeTruthy();
+    expect(result).toEqual(true);
   });
 
-  it('Should validate primitive parameter', () => {
+  it('Should validate pipeline parameter', () => {
     const parameter = parse(`
     type: integer
     default: 2021`);
 
-    const result = CustomParameter.validate(parameter, 'primitive');
+    const result = CustomParameter.validate(parameter, 'pipeline');
 
-    expect(result?.valid).toBeTruthy();
+    expect(result).toEqual(true);
   });
 
   it('Should validate enum parameter', () => {
@@ -39,6 +39,6 @@ describe('Parse yaml parameters and validate', () => {
 
     const result = CustomEnumParameter.validate(parameter);
 
-    expect(result.valid).toBeTruthy();
+    expect(result).toEqual(true);
   });
 });

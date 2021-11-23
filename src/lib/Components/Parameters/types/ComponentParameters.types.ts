@@ -16,7 +16,7 @@ import {
 /**
  * Available parameter types for Jobs
  */
-export type WorkflowJobParameterTypes = Extract<
+export type JobParameterTypes = Extract<
   AnyParameterType,
   | EnumParameter
   | StringParameter
@@ -34,11 +34,12 @@ export type WorkflowJobParameterTypes = Extract<
  */
 export type CommandParameterTypes = Extract<
   AnyParameterType,
+  | EnumParameter
   | StringParameter
   | IntegerParameter
   | BooleanParameter
-  | EnvironmentVariableNameParameter
   | StepsParameter
+  | EnvironmentVariableNameParameter
   | EnvironmentParameter
   | ListParameter
 >;
@@ -48,7 +49,7 @@ export type CommandParameterTypes = Extract<
  */
 export type ExecutorParameterTypes = Extract<
   AnyParameterType,
-  StringParameter | IntegerParameter | EnvironmentParameter
+  EnumParameter | StringParameter | IntegerParameter | EnvironmentParameter
 >;
 
 /**

@@ -1,6 +1,6 @@
 import {
   ComponentParameter,
-  WorkflowJobParameterTypes,
+  JobParameterTypes,
 } from '../../Parameters/types/ComponentParameters.types';
 import {
   FilterParameter,
@@ -14,7 +14,7 @@ import {
  * @see WorkflowJobParameterShape
  */
 export interface WorkflowJobParameters
-  extends ComponentParameter<WorkflowJobParameterTypes> {
+  extends ComponentParameter<JobParameterTypes> {
   /**
    * A list of jobs that must succeed for the job to start. Note: When jobs in the current workflow that are listed as dependencies are not executed (due to a filter function for example), their requirement as a dependency for other jobs will be ignored by the requires option. However, if all dependencies of a job are filtered, then that job will not be executed either.
    */
@@ -53,7 +53,7 @@ export interface WorkflowJobParametersShape {
   type?: approval;
   filters?: FilterParameter;
   matrix?: WorkflowMatrixShape;
-  [key: string]: WorkflowJobParameterTypes | WorkflowMatrixShape | undefined;
+  [key: string]: JobParameterTypes | WorkflowMatrixShape | undefined;
 }
 
 /**

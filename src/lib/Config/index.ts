@@ -5,28 +5,10 @@ import {
   CustomCommandShape,
 } from '../Components/Commands/exports/Reusable';
 import { ReusableExecutor } from '../Components/Executor';
-import {
-  abstractExecutorSchema,
-  dockerExecutorSchema,
-  machineExecutorSchema,
-  macOSExecutorSchema,
-  windowsExecutorSchema,
-} from '../Components/Executor/schemas/Executor.schema';
 import { ReusableExecutorsShape } from '../Components/Executor/types/ReusableExecutor.types';
 import { Job } from '../Components/Job';
 import { JobShape } from '../Components/Job/index';
 import { CustomParametersList } from '../Components/Parameters';
-import {
-  anyParameterListSchema,
-  anyParameterSchema,
-  commandParameterListSchema,
-  commandParameterSchema,
-  enumParameterSchema,
-  jobParameterListSchema,
-  jobParameterSchema,
-  primitiveParameterListSchema,
-  primitiveParameterSchema,
-} from '../Components/Parameters/schema';
 import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
 import { ParameterShape } from '../Components/Parameters/types/Parameters.types';
 import { Workflow } from '../Components/Workflow';
@@ -38,22 +20,7 @@ import { Pipeline } from './Pipeline';
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
  */
 export class Config implements CircleCIConfigObject {
-  public static validator = new ConfigValidator(
-    primitiveParameterSchema,
-    enumParameterSchema,
-    commandParameterSchema,
-    jobParameterSchema,
-    anyParameterSchema,
-    anyParameterListSchema,
-    primitiveParameterListSchema,
-    jobParameterListSchema,
-    commandParameterListSchema,
-    abstractExecutorSchema,
-    dockerExecutorSchema,
-    machineExecutorSchema,
-    macOSExecutorSchema,
-    windowsExecutorSchema,
-  );
+  public static validator = new ConfigValidator();
   /**
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
    */

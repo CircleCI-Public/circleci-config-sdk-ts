@@ -1,13 +1,13 @@
-import { ValidatorResult } from 'jsonschema';
 import { Config } from '../../../Config';
-import { Executor } from './Executor';
-import { windowsExecutorSchema } from '../schemas/Executor.schema';
+import { ValidationResult } from '../../../Config/ConfigValidator';
+import WindowsExecutorSchema from '../schemas/WindowsExecutor.schema';
+import { ExecutorParameters } from '../types/ExecutorParameters.types';
 import {
   WindowsExecutorShape,
   WindowsResourceClass,
   WindowsResourceClassGenerated,
 } from '../types/WindowsExecutor.types';
-import { ExecutorParameters } from '../types/ExecutorParameters.types';
+import { Executor } from './Executor';
 
 /**
  * A Windows Virtual Machine (CircleCI Cloud)
@@ -49,7 +49,7 @@ export class WindowsExecutor extends Executor {
     };
   }
 
-  static validate(input: unknown): ValidatorResult {
-    return Config.validator.validate(input, windowsExecutorSchema);
+  static validate(input: unknown): ValidationResult {
+    return Config.validator.validateData(WindowsExecutorSchema, input);
   }
 }

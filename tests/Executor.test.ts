@@ -17,7 +17,9 @@ describe('Instantiate Docker Executor', () => {
   it('Should match the expected output', () => {
     const result = DockerExecutor.validate(equivalent);
 
-    expect(result.valid).toBeTruthy();
+    console.log(result);
+
+    expect(result).toEqual(true);
   });
 
   it('Should match the expected output', () => {
@@ -43,7 +45,7 @@ describe('Instantiate Machine Executor', () => {
   it('Should match the expected output', () => {
     const result = MachineExecutor.validate(equivalent);
 
-    expect(result.valid).toBeTruthy();
+    expect(result).toEqual(true);
   });
 
   it('Should match the expected output', () => {
@@ -71,7 +73,7 @@ describe('Instantiate MacOS Executor', () => {
   it('Should match the expected output', () => {
     const result = MacOSExecutor.validate(equivalent);
 
-    expect(result.valid).toBeTruthy();
+    expect(result).toEqual(true);
   });
 
   it('Should match the expected output', () => {
@@ -141,7 +143,7 @@ describe('Instantiate Windows Executor', () => {
   it('Should match the expected output', () => {
     const result = WindowsExecutor.validate(equivalent);
 
-    expect(result.valid).toBeTruthy();
+    expect(result).toEqual(true);
   });
 
   it('Should match the expected output', () => {

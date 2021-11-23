@@ -1,4 +1,3 @@
-import { ValidatorResult } from 'jsonschema';
 import {
   CustomEnumParameter,
   CustomParameter,
@@ -6,13 +5,17 @@ import {
 } from '..';
 import { Component } from '../..';
 import { Config } from '../../../Config';
-import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
 import {
-  anyParameterListSchema,
-  commandParameterListSchema,
-  jobParameterListSchema,
-  primitiveParameterListSchema,
-} from '../schema';
+  AnyParameterLiteral,
+  ParameterizedComponentLiteral,
+} from '../types/CustomParameterLiterals.types';
+import { ValidationResult } from '../../../Config/ConfigValidator';
+import {
+  CommandParameterListSchema,
+  ExecutorParameterListSchema,
+  JobParameterListSchema,
+  PipelineParameterListSchema,
+} from '../schemas/ComponentParameterLists.schema';
 
 /**
  * A list that can be added to a component.
@@ -43,21 +46,23 @@ export class CustomParametersList<
 
   static validate(
     input: unknown,
-    type: 'any' | 'job' | 'command' | 'primitive',
-  ): ValidatorResult | undefined {
+    type: ParameterizedComponentLiteral,
+  ): ValidationResult {
     const schemas = {
-      any: anyParameterListSchema,
-      job: jobParameterListSchema,
-      command: commandParameterListSchema,
-      primitive: primitiveParameterListSchema,
+      job: JobParameterListSchema,
+      command: CommandParameterListSchema,
+      executor: ExecutorParameterListSchema,
+      pipeline: PipelineParameterListSchema,
     };
 
     // prevent object sink injection
     const schema = Object.entries(schemas).find(([key]) => key === type);
 
     if (schema && schema[1]) {
-      return Config.validator.validate(input, schema[1]);
+      return Config.validator.validateData(schema[1], input);
     }
+
+    return false;
   }
 
   /**

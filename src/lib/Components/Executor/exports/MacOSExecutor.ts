@@ -1,11 +1,11 @@
-import { ValidatorResult } from 'jsonschema';
 import { Executor } from './Executor';
 import { Config } from '../../../Config';
-import { macOSExecutorSchema } from '../schemas/Executor.schema';
 import {
   MacOSExecutorShape,
   MacOSResourceClass,
 } from '../types/MacOSExecutor.types';
+import { ValidationResult } from '../../../Config/ConfigValidator';
+import MacOSExecutorSchema from '../schemas/MacosExecutor.schema';
 
 /**
  * A MacOS Virtual Machine with configurable Xcode version.
@@ -32,7 +32,7 @@ export class MacOSExecutor extends Executor {
     };
   }
 
-  static validate(input: unknown): ValidatorResult {
-    return Config.validator.validate(input, macOSExecutorSchema);
+  static validate(input: unknown): ValidationResult {
+    return Config.validator.validateData(MacOSExecutorSchema, input);
   }
 }

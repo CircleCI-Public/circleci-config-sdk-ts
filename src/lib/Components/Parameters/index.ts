@@ -1,19 +1,18 @@
-import { ValidatorResult } from 'jsonschema';
 import { Component } from '..';
 import { Config } from '../../Config';
+import { ValidationResult } from '../../Config/ConfigValidator';
 import { CustomParametersList } from './exports/CustomParameterList';
-import { ParameterShape, ParameterValues } from './types/Parameters.types';
-import {
-  anyParameterSchema,
-  commandParameterSchema,
-  enumParameterSchema,
-  jobParameterSchema,
-  primitiveParameterSchema,
-} from './schema';
+import CommandParameterSchema from './schemas/CommandParameter.schema';
+import ExecutorParameterSchema from './schemas/ExecutorParameter.schema';
+import JobParameterSchema from './schemas/JobParameter.schema';
+import { EnumParameterSchema } from './schemas/ParameterTypes.schema';
+import PipelineParameterSchema from './schemas/PipelineParameter.schema';
 import {
   AnyParameterLiteral,
   EnumParameterLiteral,
+  ParameterizedComponentLiteral,
 } from './types/CustomParameterLiterals.types';
+import { ParameterShape, ParameterValues } from './types/Parameters.types';
 
 type CustomParameterSchema<ParameterTypeLiteral> = {
   type: ParameterTypeLiteral;
@@ -74,21 +73,23 @@ export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
 
   static validate(
     input: unknown,
-    type: 'any' | 'job' | 'command' | 'primitive',
-  ): ValidatorResult | undefined {
+    type: ParameterizedComponentLiteral,
+  ): ValidationResult {
     const schemas = {
-      any: anyParameterSchema,
-      job: jobParameterSchema,
-      command: commandParameterSchema,
-      primitive: primitiveParameterSchema,
+      job: JobParameterSchema,
+      command: CommandParameterSchema,
+      executor: ExecutorParameterSchema,
+      pipeline: PipelineParameterSchema,
     };
 
     // prevent object sink injection
     const schema = Object.entries(schemas).find(([key]) => key === type);
 
     if (schema && schema[1]) {
-      return Config.validator.validate(input, schema[1]);
+      return Config.validator.validateData(schema[1], input);
     }
+
+    return false;
   }
 }
 
@@ -122,8 +123,8 @@ export class CustomEnumParameter extends CustomParameter<EnumParameterLiteral> {
     };
   }
 
-  static validate(input: unknown): ValidatorResult {
-    return Config.validator.validate(input, enumParameterSchema);
+  static validate(input: unknown): ValidationResult {
+    return Config.validator.validateData(EnumParameterSchema, input);
   }
 }
 
