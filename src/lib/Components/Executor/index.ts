@@ -8,11 +8,10 @@ import { MacOSExecutor } from './exports/MacOSExecutor';
 import { ReusableExecutor } from './exports/ReusableExecutor';
 import { WindowsExecutor } from './exports/WindowsExecutor';
 import { DockerResourceClass } from './types/DockerExecutor.types';
+import { ExecutorLiteral } from './types/Executor.types';
 import { MachineResourceClass } from './types/MachineExecutor.types';
 import { MacOSResourceClass } from './types/MacOSExecutor.types';
 import { WindowsResourceClass } from './types/WindowsExecutor.types';
-
-export type ExecutorLiteral = 'docker' | 'machine' | 'macos';
 
 /**
  * Parse executor type from an object with an executor.
