@@ -14,7 +14,7 @@ export class Persist extends Command {
     this.parameters = parameters;
   }
   /**
-   * Generate Save.cache Command schema.
+   * Generate Save.cache Command shape.
    * @returns The generated JSON for the Save.cache Commands.
    */
   generate(): PersistCommandShape {
@@ -25,7 +25,7 @@ export class Persist extends Command {
 }
 
 /**
- * JSON Schema for the Persist command.
+ * Generated Shape of the Persist command.
  */
 export interface PersistCommandShape extends CommandShape {
   persist_to_workspace: PersistParameters;

@@ -13,7 +13,7 @@ export class StoreArtifacts extends Command {
     this.parameters = parameters;
   }
   /**
-   * Generate StoreArtifacts Command schema.
+   * Generate StoreArtifacts Command shape.
    * @returns The generated JSON for the StoreArtifacts Commands.
    */
   generate(): StoreArtifactsCommandShape {
@@ -37,7 +37,7 @@ export interface StoreArtifactsParameters extends CommandParameters {
 }
 
 /**
- * JSON Schema for the StoreArtifacts command.
+ * Generated Shape of the StoreArtifacts command.
  */
 export interface StoreArtifactsCommandShape extends CommandShape {
   store_artifacts: StoreArtifactsParameters;

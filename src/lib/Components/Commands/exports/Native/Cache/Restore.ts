@@ -11,7 +11,7 @@ export class Restore extends Command {
     this.parameters = parameters;
   }
   /**
-   * Generate Restore.cache Command schema.
+   * Generate Restore.cache Command shape.
    * @returns The generated JSON for the Restore.cache Commands.
    */
   generate(): RestoreCacheCommandShape {
@@ -31,7 +31,7 @@ export interface RestoreCacheParameters extends CommandParameters {
   readonly keys: ListParameter;
 }
 /**
- * JSON Schema for the RestoreCache command.
+ * Generated Shape of the RestoreCache command.
  */
 interface RestoreCacheCommandShape extends CommandShape {
   restore_cache: RestoreCacheParameters;

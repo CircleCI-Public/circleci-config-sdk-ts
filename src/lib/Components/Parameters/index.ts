@@ -12,18 +12,12 @@ import {
   EnumParameterLiteral,
   ParameterizedComponentLiteral,
 } from './types/CustomParameterLiterals.types';
-import { ParameterShape, ParameterValues } from './types/Parameters.types';
-
-type CustomParameterSchema<ParameterTypeLiteral> = {
-  type: ParameterTypeLiteral;
-  default: unknown;
-  description?: string;
-};
-
-type CustomEnumParameterSchema =
-  | CustomParameterSchema<EnumParameterLiteral> & {
-      enum?: string[];
-    };
+import {
+  CustomEnumParameterShape,
+  CustomParameterShape,
+  ParameterShape,
+  ParameterValues,
+} from './types/Parameters.types';
 
 /**
  * Accepted parameters can be assigned to a component.
@@ -63,7 +57,7 @@ export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
   /**
    * @returns JSON schema of parameter's contents
    */
-  generate(): CustomParameterSchema<ParameterTypeLiteral> {
+  generate(): CustomParameterShape<ParameterTypeLiteral> {
     return {
       type: this.type,
       default: this.defaultValue,
@@ -116,7 +110,7 @@ export class CustomEnumParameter extends CustomParameter<EnumParameterLiteral> {
     this.enumValues = enumValues;
   }
 
-  generate(): CustomEnumParameterSchema {
+  generate(): CustomEnumParameterShape {
     return {
       ...super.generate(),
       enum: this.enumValues,

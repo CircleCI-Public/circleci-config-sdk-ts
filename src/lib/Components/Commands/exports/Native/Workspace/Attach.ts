@@ -11,7 +11,7 @@ export class Attach extends Command {
     this.parameters = parameters;
   }
   /**
-   * Generate Save.cache Command schema.
+   * Generate Save.cache Command shape.
    * @returns The generated JSON for the Save.cache Commands.
    */
   generate(): AttachCommandShape {
@@ -22,7 +22,7 @@ export class Attach extends Command {
 }
 
 /**
- * JSON Schema for the Attach command.
+ * Generated Shape of the Attach command.
  */
 export interface AttachCommandShape extends CommandShape {
   attach_workspace: AttachParameters;

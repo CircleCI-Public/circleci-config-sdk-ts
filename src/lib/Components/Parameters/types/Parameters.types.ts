@@ -1,6 +1,9 @@
 import { Command } from '../../Commands/exports/Command';
 import { Executor } from '../../Executor/exports/Executor';
-import { AnyParameterLiteral } from './CustomParameterLiterals.types';
+import {
+  AnyParameterLiteral,
+  EnumParameterLiteral,
+} from './CustomParameterLiterals.types';
 // CircleCI Parameter Types
 
 /**
@@ -102,3 +105,14 @@ export interface ParameterShape<
   default: T;
   enum?: ListParameter; // Enum must be set if 'type' is of "enum", otherwise set to null
 }
+
+export type CustomParameterShape<ParameterTypeLiteral> = {
+  type: ParameterTypeLiteral;
+  default: unknown;
+  description?: string;
+};
+
+export type CustomEnumParameterShape =
+  | CustomParameterShape<EnumParameterLiteral> & {
+      enum?: string[];
+    };
