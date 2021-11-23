@@ -17,7 +17,7 @@ export class Run extends Command {
     this.parameters = parameters;
   }
   /**
-   * Generate Run Command component object.
+   * Generate Run Command shape.
    * @returns The generated JSON for the Run Commands.
    */
   generate(): RunCommandShape {
