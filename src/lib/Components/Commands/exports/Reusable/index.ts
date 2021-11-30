@@ -40,7 +40,7 @@ export class CustomCommand
   ) {
     super();
     this.name = name;
-    this.parameters = parameters || new CustomParametersList();
+    this.parameters = parameters;
     this.steps = steps || [];
     this.description = description;
   }

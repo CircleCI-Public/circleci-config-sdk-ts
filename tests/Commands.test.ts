@@ -123,7 +123,6 @@ describe('Instantiate a Blank Custom Command', () => {
   );
 
   const expectedOutput = `say_hello:
-  parameters: {}
   steps: []`;
 
   it('Should generate checkout yaml', () => {

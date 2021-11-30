@@ -29,7 +29,7 @@ export class WindowsExecutor extends Executor {
     image?: string,
     parameters?: ExecutorParameters,
   ) {
-    super(resource_class);
+    super(resource_class, parameters);
 
     this.image = image || this.image;
     this.resource_class = resource_class;

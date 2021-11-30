@@ -8,6 +8,7 @@ import {
 import { DockerImage } from './DockerImage';
 import { ValidationResult } from '../../../Config/ConfigValidator';
 import DockerExecutorSchema from '../schemas/DockerExecutor.schema';
+import { ExecutorParameters } from '../types/ExecutorParameters.types';
 
 /**
  * A Docker based CircleCI executor.
@@ -30,8 +31,12 @@ export class DockerExecutor extends Executor {
    * @param image - The primary docker container image.
    */
   resource_class: DockerResourceClass;
-  constructor(image: string, resource_class: DockerResourceClass = 'medium') {
-    super(resource_class);
+  constructor(
+    image: string,
+    resource_class: DockerResourceClass = 'medium',
+    parameters?: ExecutorParameters,
+  ) {
+    super(resource_class, parameters);
     const newImage = new DockerImage(image);
     this.image = newImage;
     this.resource_class = resource_class;
