@@ -11,7 +11,7 @@ import { ReusableCommand } from './ReusableCommand';
 
 export type CustomCommandShape = {
   [name: string]: {
-    parameters: CustomParametersShape;
+    parameters?: CustomParametersShape;
     steps: CommandShape[];
     description?: string;
   };
@@ -25,7 +25,7 @@ export class CustomCommand
   implements ParameterizedComponent<CommandParameterLiteral>
 {
   name: string;
-  parameters: CustomParametersList<CommandParameterLiteral>;
+  parameters?: CustomParametersList<CommandParameterLiteral>;
   steps: Command[];
   /**
    * A string that describes the purpose of the command.
@@ -50,7 +50,7 @@ export class CustomCommand
 
     return {
       [this.name]: {
-        parameters: this.parameters.generate(),
+        parameters: this.parameters?.generate(),
         steps: generatedSteps,
         description: this.description,
       },
@@ -70,6 +70,10 @@ export class CustomCommand
     description?: string,
     enumValues?: string[],
   ): CustomCommand {
+    if (!this.parameters) {
+      this.parameters = new CustomParametersList<CommandParameterLiteral>();
+    }
+
     this.parameters.define(name, type, defaultValue, description, enumValues);
 
     return this;

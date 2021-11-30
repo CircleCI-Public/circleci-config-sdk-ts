@@ -40,7 +40,7 @@ export type CommandParameterLiteral = Extract<
  */
 export type ExecutorParameterLiteral = Extract<
   AnyParameterLiteral,
-  'string' | 'integer' | EnumParameterLiteral
+  'string' | 'boolean' | 'integer' | EnumParameterLiteral
 >;
 
 /**
