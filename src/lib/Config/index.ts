@@ -179,6 +179,15 @@ export class Config implements CircleCIConfigObject {
       );
     }
 
+    let generatedCommands: CustomCommandShape | undefined = undefined;
+
+    if (this.commands) {
+      generatedCommands = {};
+      this.commands.forEach((command) => {
+        Object.assign(generatedCommands, command.generate());
+      });
+    }
+
     const generatedWorkflowConfig: WorkflowShape = {};
     this.workflows.forEach((workflow) => {
       Object.assign(generatedWorkflowConfig, workflow.generate());
@@ -190,6 +199,7 @@ export class Config implements CircleCIConfigObject {
       version: this.version,
       setup: this.setup,
       parameters: generatedParameters,
+      commands: generatedCommands,
       executors: generatedExecutorConfig,
       jobs: generatedJobConfig,
       workflows: generatedWorkflowConfig,

@@ -157,7 +157,7 @@ describe('Instantiate a Custom Command', () => {
   });
 });
 
-describe('Instantiate a Custom Command', () => {
+describe('Instantiate a Reusable Command', () => {
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
   });
