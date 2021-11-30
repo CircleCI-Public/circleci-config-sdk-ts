@@ -7,11 +7,13 @@ import { ParameterizedComponent } from '../../../Parameters/exports/Parameterize
 import { CommandParameterLiteral } from '../../../Parameters/types/CustomParameterLiterals.types';
 import { CommandShape } from '../../types/Command.types';
 import { Command } from '../Command';
+import { ReusableCommand } from './ReusableCommand';
 
 export type CustomCommandShape = {
   [name: string]: {
     parameters: CustomParametersShape;
     steps: CommandShape[];
+    description?: string;
   };
 };
 
@@ -25,16 +27,22 @@ export class CustomCommand
   name: string;
   parameters: CustomParametersList<CommandParameterLiteral>;
   steps: Command[];
+  /**
+   * A string that describes the purpose of the command.
+   */
+  description?: string;
 
   constructor(
     name: string,
-    parameters?: CustomParametersList<CommandParameterLiteral>,
     steps?: Command[],
+    parameters?: CustomParametersList<CommandParameterLiteral>,
+    description?: string,
   ) {
     super();
     this.name = name;
     this.parameters = parameters || new CustomParametersList();
     this.steps = steps || [];
+    this.description = description;
   }
 
   generate(): CustomCommandShape {
@@ -44,6 +52,7 @@ export class CustomCommand
       [this.name]: {
         parameters: this.parameters.generate(),
         steps: generatedSteps,
+        description: this.description,
       },
     };
   }
@@ -66,3 +75,5 @@ export class CustomCommand
     return this;
   }
 }
+
+export { ReusableCommand };

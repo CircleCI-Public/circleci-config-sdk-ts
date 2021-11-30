@@ -9,6 +9,7 @@ import {
   ToStringOptions,
 } from 'yaml';
 import * as CircleCI from '../src/index';
+import { CustomParametersList } from '../src/lib/Components/Parameters';
 
 describe('Instantiate a Run step', () => {
   const run = new CircleCI.commands.Run({
@@ -153,6 +154,35 @@ describe('Instantiate a Custom Command', () => {
 
   it('Should generate checkout yaml', () => {
     expect(customCommand.generate()).toEqual(parse(expectedOutput));
+  });
+});
+
+describe('Instantiate a Custom Command', () => {
+  const helloWorld = new CircleCI.commands.Run({
+    command: 'echo << parameters.greeting >>',
+  });
+
+  const customCommand = new CircleCI.commands.reusable.CustomCommand(
+    'say_hello',
+    [helloWorld],
+    new CustomParametersList([
+      new CircleCI.parameters.CustomParameter('greeting', 'string'),
+    ]),
+  );
+
+  const reusableCommand = new CircleCI.commands.reusable.ReusableCommand(
+    customCommand,
+    { greeting: 'hello world' },
+  );
+
+  const expected = {
+    say_hello: {
+      greeting: 'hello world',
+    },
+  };
+
+  it('Should generate checkout yaml', () => {
+    expect(reusableCommand.generate()).toEqual(expected);
   });
 });
 
