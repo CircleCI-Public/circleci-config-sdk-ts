@@ -1,14 +1,16 @@
 import { SchemaObject } from 'ajv';
 
-const PipelineParameterSchema: SchemaObject = {
-  $id: '/parameters/PipelineParameter',
+const JobParametersSchema: SchemaObject = {
+  $id: '/parameters/JobParameters',
   type: 'object',
   oneOf: [
     { $ref: '/parameters/EnumParameter' },
     { $ref: '/parameters/StringParameter' },
     { $ref: '/parameters/IntegerParameter' },
     { $ref: '/parameters/BooleanParameter' },
+    { $ref: '/parameters/StepsParameter' },
+    { $ref: '/parameters/ExecutorParameter' },
   ],
 };
 
-export default PipelineParameterSchema;
+export default JobParametersSchema;

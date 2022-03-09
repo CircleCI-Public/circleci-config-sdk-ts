@@ -1,3 +1,4 @@
+import { GenerableType } from '../../../../Config/types/Config.types';
 import { StringParameter } from '../../../Parameters/types/Parameters.types';
 import { CommandParameters, CommandShape } from '../../types/Command.types';
 import { Command } from '../Command';
@@ -7,12 +8,11 @@ import { Command } from '../Command';
  * @see {@link https://circleci.com/docs/2.0/configuration-reference/#setupremotedocker}
  * @param parameters - SetupRemoteDockerParameters
  */
-export class SetupRemoteDocker extends Command {
+export class SetupRemoteDocker implements Command {
   parameters: SetupRemoteDockerParameters;
   constructor(
     parameters: SetupRemoteDockerParameters = { version: '20.10.6' },
   ) {
-    super('setup_remote_docker');
     this.parameters = parameters;
   }
   /**
@@ -23,6 +23,14 @@ export class SetupRemoteDocker extends Command {
     return {
       setup_remote_docker: { ...this.parameters },
     };
+  }
+
+  get name(): StringParameter {
+    return 'setup_remote_docker';
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.SETUP_REMOTE_DOCKER;
   }
 }
 

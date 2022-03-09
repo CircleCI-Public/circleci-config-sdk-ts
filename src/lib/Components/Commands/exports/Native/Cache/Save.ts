@@ -1,3 +1,4 @@
+import { GenerableType } from '../../../../../Config/types/Config.types';
 import {
   ListParameter,
   StringParameter,
@@ -8,10 +9,9 @@ import { Command } from '../../Command';
 /**
  * Generates and stores a cache of a file or directory of files such as dependencies or source code in our object storage. Later jobs can restore this cache.
  */
-export class Save extends Command {
+export class Save implements Command {
   parameters: SaveCacheParameters;
   constructor(parameters: SaveCacheParameters) {
-    super('save_cache');
     this.parameters = parameters;
   }
   /**
@@ -20,6 +20,14 @@ export class Save extends Command {
    */
   generate(): SaveCacheCommandShape {
     return { save_cache: { ...this.parameters } };
+  }
+
+  get name(): StringParameter {
+    return 'save_cache';
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.SAVE;
   }
 }
 

@@ -2,13 +2,14 @@ import { Command } from '../Commands/exports/Command';
 import { Executor } from '../Executor/exports/Executor';
 import { ExecutorShape as ExecutorShape } from '../Executor/types/Executor.types';
 import { ReusableExecutor } from '../Executor/exports/ReusableExecutor';
-import { Component } from '../index';
+import { Generable } from '../index';
 import { JobContentShape, JobShape } from './types/Job.types';
+import { GenerableType } from '../../Config/types/Config.types';
 
 /**
  * Jobs define a collection of steps to be run within a given executor, and are orchestrated using Workflows.
  */
-export class Job extends Component {
+export class Job implements Generable {
   /**
    * The name of the current Job.
    */
@@ -33,7 +34,6 @@ export class Job extends Component {
     executor: Executor | ReusableExecutor,
     steps?: Command[],
   ) {
-    super();
     this.name = name;
     this.executor = executor;
     this.steps = steps || [];
@@ -68,5 +68,9 @@ export class Job extends Component {
   addStep(command: Command): this {
     this.steps.push(command);
     return this;
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.JOB;
   }
 }

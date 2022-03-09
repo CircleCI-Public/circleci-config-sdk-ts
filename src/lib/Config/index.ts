@@ -1,9 +1,7 @@
 import { Scalar, stringify as Stringify } from 'yaml';
 import { version as SDKVersion } from '../../package-version.json';
-import {
-  CustomCommand,
-  CustomCommandShape,
-} from '../Components/Commands/exports/Reusable';
+import { CustomCommand } from '../Components/Commands/exports/Reusable';
+import { CustomCommandShape } from '../Components/Commands/types/Command.types';
 import { ReusableExecutor } from '../Components/Executor';
 import { ReusableExecutorsShape } from '../Components/Executor/types/ReusableExecutor.types';
 import { Job } from '../Components/Job';
@@ -13,14 +11,12 @@ import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomP
 import { ParameterShape } from '../Components/Parameters/types/Parameters.types';
 import { Workflow } from '../Components/Workflow';
 import { WorkflowShape } from '../Components/Workflow/types/Workflow.types';
-import { ConfigValidator } from './ConfigValidator';
 import { Pipeline } from './Pipeline';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
  */
 export class Config implements CircleCIConfigObject {
-  public static validator = new ConfigValidator();
   /**
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
    */
@@ -41,12 +37,10 @@ export class Config implements CircleCIConfigObject {
    * A Workflow is comprised of one or more uniquely named jobs.
    */
   workflows: Workflow[] = [];
-
   /**
    * A parameter allows custom data to be passed to a pipeline.
    */
   parameters?: CustomParametersList<PipelineParameterLiteral>;
-
   /**
    * Access information about the current pipeline.
    */
@@ -227,25 +221,25 @@ type ConfigVersion = 2 | 2.1;
 /**
  * Orb import object
  */
-interface ConfigOrbImport {
+type ConfigOrbImport = {
   orbAlias: string;
   orbImport: string;
-}
+};
 
 /**
  * CircleCI configuration object
  */
-interface CircleCIConfigObject {
+type CircleCIConfigObject = {
   version: ConfigVersion;
   jobs?: Job[];
   commands?: CustomCommand[];
   workflows?: Workflow[];
-}
+};
 
 /**
  * Generated Shape of the CircleCI config.
  */
-interface CircleCIConfigShape {
+type CircleCIConfigShape = {
   version: ConfigVersion;
   setup: boolean;
   parameters?: Record<string, ParameterShape>;
@@ -254,4 +248,4 @@ interface CircleCIConfigShape {
   jobs: JobShape;
   commands?: CustomCommandShape;
   workflows: WorkflowShape;
-}
+};

@@ -24,5 +24,6 @@ module.exports = {
     '@typescript-eslint/indent': 'off',
     'linebreak-style': ['error', 'unix'],
     'prettier/prettier': 'error',
+    'security/detect-object-injection': 'off',
   },
 };

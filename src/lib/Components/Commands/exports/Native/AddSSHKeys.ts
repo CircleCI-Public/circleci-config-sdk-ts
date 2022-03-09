@@ -1,4 +1,8 @@
-import { ListParameter } from '../../../Parameters/types/Parameters.types';
+import { GenerableType } from '../../../../Config/types/Config.types';
+import {
+  ListParameter,
+  StringParameter,
+} from '../../../Parameters/types/Parameters.types';
 import { CommandParameters, CommandShape } from '../../types/Command.types';
 import { Command } from '../Command';
 
@@ -6,10 +10,9 @@ import { Command } from '../Command';
  * The AddSSHKeys command is a special step that adds SSH keys from a project’s settings to a container. Also configures SSH to use these keys.
  * @param parameters - AddSSHKeysParameters
  */
-export class AddSSHKeys extends Command {
+export class AddSSHKeys implements Command {
   parameters: AddSSHKeysParameters;
   constructor(parameters: AddSSHKeysParameters) {
-    super('add_ssh_keys');
     this.parameters = parameters;
   }
   /**
@@ -20,6 +23,14 @@ export class AddSSHKeys extends Command {
     const command = { add_ssh_keys: {} };
     command.add_ssh_keys = { ...command.add_ssh_keys, ...this.parameters };
     return command as AddSSHKeysCommandShape;
+  }
+
+  get name(): StringParameter {
+    return 'add_ssh_keys';
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.ADD_SSH_KEYS;
   }
 }
 

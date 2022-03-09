@@ -1,3 +1,4 @@
+import { GenerableType } from '../../../../Config/types/Config.types';
 import { StringParameter } from '../../../Parameters/types/Parameters.types';
 import { CommandParameters, CommandShape } from '../../types/Command.types';
 import { Command } from '../Command';
@@ -7,10 +8,9 @@ import { Command } from '../Command';
  * (defaults to the working_directory).
  * @param parameters - CheckoutParameters
  */
-export class Checkout extends Command {
+export class Checkout implements Command {
   parameters?: CheckoutParameters = {};
   constructor(parameters?: CheckoutParameters) {
-    super('checkout');
     if (parameters) {
       this.parameters = parameters;
     }
@@ -23,6 +23,14 @@ export class Checkout extends Command {
     return {
       checkout: { ...this.parameters },
     };
+  }
+
+  get name(): StringParameter {
+    return 'checkout';
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.CHECKOUT;
   }
 }
 

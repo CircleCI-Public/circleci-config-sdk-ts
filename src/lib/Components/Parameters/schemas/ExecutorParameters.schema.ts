@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
-const ExecutorParameterSchema: SchemaObject = {
-  $id: '/parameters/ExecutorParameter',
+const ExecutorParametersSchema: SchemaObject = {
+  $id: '/parameters/ExecutorParameters',
   type: 'object',
   oneOf: [
     { $ref: '/parameters/EnumParameter' },
@@ -10,4 +10,4 @@ const ExecutorParameterSchema: SchemaObject = {
   ],
 };
 
-export default ExecutorParameterSchema;
+export default ExecutorParametersSchema;

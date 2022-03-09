@@ -22,6 +22,7 @@ const ExecutorSchema: SchemaObject = {
     additionalProperties: false,
     anyOf: [
       {
+        type: 'object',
         properties: {
           shell: {
             description:
@@ -31,6 +32,7 @@ const ExecutorSchema: SchemaObject = {
         },
       },
       {
+        type: 'object',
         properties: {
           working_directory: {
             description: 'In which directory to run the steps.',
@@ -39,6 +41,7 @@ const ExecutorSchema: SchemaObject = {
         },
       },
       {
+        type: 'object',
         properties: {
           environment: {
             description: 'A map of environment variable names and values.',

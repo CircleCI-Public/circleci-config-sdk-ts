@@ -13,7 +13,10 @@ export type AnyParameterLiteral =
   | 'steps'
   | 'env_var_name';
 
-export type EnumParameterLiteral = 'enum'; // Try to discover why this was created separately.
+/*
+ * Enum parameter type literal.
+ */
+export type EnumParameterLiteral = 'enum';
 
 /**
  * Custom Parameter types available to Jobs

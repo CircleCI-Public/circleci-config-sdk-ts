@@ -1,6 +1,4 @@
-import { Config } from '../../../Config';
-import { ValidationResult } from '../../../Config/ConfigValidator';
-import MachineExecutorSchema from '../schemas/MachineExecutor.schema';
+import { GenerableType } from '../../../Config/types/Config.types';
 import { ExecutorParameters } from '../types/ExecutorParameters.types';
 import {
   MachineExecutorShape,
@@ -37,7 +35,7 @@ export class MachineExecutor extends Executor {
     };
   }
 
-  static validate(input: unknown): ValidationResult {
-    return Config.validator.validateData(MachineExecutorSchema, input);
+  get generableType(): GenerableType {
+    return GenerableType.MACHINE_EXECUTOR;
   }
 }

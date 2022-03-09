@@ -1,14 +1,12 @@
-import { Executor } from './Executor';
-import { Config } from '../../../Config';
+import { GenerableType } from '../../../Config/types/Config.types';
 import {
   DockerExecutorShape,
   DockerImageMap,
   DockerResourceClass,
 } from '../types/DockerExecutor.types';
-import { DockerImage } from './DockerImage';
-import { ValidationResult } from '../../../Config/ConfigValidator';
-import DockerExecutorSchema from '../schemas/DockerExecutor.schema';
 import { ExecutorParameters } from '../types/ExecutorParameters.types';
+import { DockerImage } from './DockerImage';
+import { Executor } from './Executor';
 
 /**
  * A Docker based CircleCI executor.
@@ -60,7 +58,7 @@ export class DockerExecutor extends Executor {
     };
   }
 
-  static validate(input: unknown): ValidationResult {
-    return Config.validator.validateData(DockerExecutorSchema, input);
+  get generableType(): GenerableType {
+    return GenerableType.DOCKER_EXECUTOR;
   }
 }

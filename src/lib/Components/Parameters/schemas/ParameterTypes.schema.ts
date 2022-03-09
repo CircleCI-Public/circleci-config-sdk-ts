@@ -104,9 +104,29 @@ const StepsParameterSchema: SchemaObject = {
     default: {
       type: 'array',
       items: {
-        // TODO: add step schema
-        $ref: '/definitions/step',
+        $ref: '/definitions/Step',
       },
+    },
+  },
+};
+
+const ExecutorParameterSchema: SchemaObject = {
+  $id: '/parameters/ExecutorParameter',
+  type: 'object',
+  additionalProperties: false,
+  description:
+    'https://circleci.com/docs/2.0/reusing-config/#steps\n\nSteps are used when you have a job or command that needs to mix predefined and user-defined steps. When passed in to a command or job invocation, the steps passed as parameters are always defined as a sequence, even if only one step is provided.',
+  required: ['type'],
+  properties: {
+    type: {
+      enum: ['executor'],
+    },
+    description: {
+      type: 'string',
+    },
+    default: {
+      type: 'object',
+      // $ref: '/executors/Executor',
     },
   },
 };
@@ -138,5 +158,6 @@ export {
   IntegerParameterSchema,
   EnumParameterSchema,
   StepsParameterSchema,
+  ExecutorParameterSchema,
   EnvVarNameParameterSchema,
 };

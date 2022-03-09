@@ -1,13 +1,16 @@
-import { ListParameter } from '../../../../Parameters/types/Parameters.types';
+import { GenerableType } from '../../../../../Config/types/Config.types';
+import {
+  ListParameter,
+  StringParameter,
+} from '../../../../Parameters/types/Parameters.types';
 import { CommandParameters, CommandShape } from '../../../types/Command.types';
 import { Command } from '../../Command';
 /**
  * Restores a previously saved cache based on a key..cache needs to have been saved first for this key using save_cache step. Learn more in the caching documentation.
  */
-export class Restore extends Command {
+export class Restore implements Command {
   parameters: RestoreCacheParameters;
   constructor(parameters: RestoreCacheParameters) {
-    super('Restore_cache');
     this.parameters = parameters;
   }
   /**
@@ -18,6 +21,14 @@ export class Restore extends Command {
     return {
       restore_cache: { ...this.parameters },
     };
+  }
+
+  get name(): StringParameter {
+    return 'restore_cache';
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.RESTORE;
   }
 }
 

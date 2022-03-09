@@ -1,6 +1,8 @@
 /**
  * Instantiate a CircleCI Executor, the build environment for a job. Select a type of executor and supply the required parameters.
  */
+import { GenerableType } from '../../Config/types/Config.types';
+import { ConfigValidator } from '../../Config/ConfigValidator';
 import { DockerExecutor } from './exports/DockerExecutor';
 import { Executor } from './exports/Executor';
 import { MachineExecutor } from './exports/MachineExecutor';
@@ -27,7 +29,7 @@ function parse(executorIn: {
     docker: (args) => {
       const dockerArgs = args as [{ image: string }];
 
-      if (DockerExecutor.validate(dockerArgs)) {
+      if (ConfigValidator.validate(GenerableType.DOCKER_EXECUTOR, dockerArgs)) {
         return new DockerExecutor(
           dockerArgs[0].image || 'cimg/base:stable',
           executorIn.resource_class as DockerResourceClass,
@@ -35,21 +37,27 @@ function parse(executorIn: {
       }
     },
     machine: (args) => {
-      const windowsResourceClass = executorIn.resource_class.substring(
-        'windows.'.length,
-      ) as WindowsResourceClass;
+      const winPrefix = 'windows.';
 
-      if (executorIn.resource_class.startsWith('windows.')) {
+      if (executorIn.resource_class?.startsWith(winPrefix)) {
+        const windowsResourceClass = executorIn.resource_class.substring(
+          winPrefix.length,
+        ) as WindowsResourceClass;
+
         const windowsArgs = args as Partial<WindowsExecutor>;
 
-        if (WindowsExecutor.validate(windowsArgs)) {
+        if (
+          ConfigValidator.validate(GenerableType.WINDOWS_EXECUTOR, windowsArgs)
+        ) {
           return new WindowsExecutor(windowsResourceClass, windowsArgs.image);
         }
       }
 
       const machineArgs = args as Partial<MachineExecutor>;
 
-      if (MachineExecutor.validate(machineArgs)) {
+      if (
+        ConfigValidator.validate(GenerableType.MACHINE_EXECUTOR, machineArgs)
+      ) {
         return new MachineExecutor(
           executorIn.resource_class as MachineResourceClass,
           machineArgs.image,
@@ -59,7 +67,7 @@ function parse(executorIn: {
     macos: (args) => {
       const macOSArgs = args as Partial<MacOSExecutor>;
 
-      if (MacOSExecutor.validate(macOSArgs)) {
+      if (ConfigValidator.validate(GenerableType.MACOS_EXECUTOR, macOSArgs)) {
         return new MacOSExecutor(
           macOSArgs.xcode || '13.1',
           executorIn.resource_class as MacOSResourceClass,

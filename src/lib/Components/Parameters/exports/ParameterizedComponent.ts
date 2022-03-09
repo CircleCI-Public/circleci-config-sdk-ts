@@ -1,12 +1,12 @@
 import { CustomParametersList } from '..';
-import { Component } from '../..';
+import { Generable } from '../..';
 import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
 
 /**
  * Interface implemented on components to enforce parameter functionality.
  * {@label STATIC_2.1}
  */
-export interface ParameterizedComponent<
+export interface Parameterized<
   ParameterTypeLiteral extends AnyParameterLiteral,
 > {
   parameters?: CustomParametersList<ParameterTypeLiteral>;
@@ -17,5 +17,5 @@ export interface ParameterizedComponent<
     defaultValue?: unknown,
     description?: string,
     enumValues?: string[],
-  ): Component;
+  ): Generable;
 }

@@ -1,3 +1,4 @@
+import { GenerableType } from '../../../../Config/types/Config.types';
 import { StringParameter } from '../../../Parameters/types/Parameters.types';
 import { CommandParameters, CommandShape } from '../../types/Command.types';
 import { Command } from '../Command';
@@ -6,10 +7,9 @@ import { Command } from '../Command';
  * A special step used to check out source code to the configured path (defaults to the working_directory).
  * @param parameters - StoreArtifactsParameters
  */
-export class StoreArtifacts extends Command {
+export class StoreArtifacts implements Command {
   parameters: StoreArtifactsParameters;
   constructor(parameters: StoreArtifactsParameters) {
-    super('store_artifacts');
     this.parameters = parameters;
   }
   /**
@@ -20,6 +20,14 @@ export class StoreArtifacts extends Command {
     return {
       store_artifacts: { ...this.parameters },
     };
+  }
+
+  get name(): StringParameter {
+    return 'store_artifacts';
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.STORE_TEST_RESULTS;
   }
 }
 /**

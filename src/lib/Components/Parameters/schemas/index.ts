@@ -10,7 +10,7 @@ const genParameterListSchema = (type: string): SchemaObject => {
           'https://circleci.com/docs/2.0/reusing-config/#using-the-parameters-declaration\n\nA map of parameter keys.',
         type: 'object',
         patternProperties: {
-          '^[a-z][a-z0-9_-]+$': { $ref: `/parameters/${type}Parameter` },
+          '^[a-z][a-z0-9_-]+$': { $ref: `/parameters/${type}Parameters` },
         },
       },
     },
