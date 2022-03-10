@@ -1,6 +1,6 @@
 import { SchemaObject } from 'ajv';
 
-const CommandSchema: SchemaObject = {
+const StepsSchema: SchemaObject = {
   $id: '/definitions/Step',
   type: 'object',
   anyOf: [
@@ -84,4 +84,4 @@ const CommandSchema: SchemaObject = {
   ],
 };
 
-export default CommandSchema;
+export default StepsSchema;

@@ -27,10 +27,10 @@ export type CustomCommandShape = {
  * The valid native commands found on an step object
  */
 export type NativeCommandLiteral =
-  | 'restore'
-  | 'save'
-  | 'attach'
-  | 'persist'
+  | 'restore_cache'
+  | 'save_cache'
+  | 'attach_workspace'
+  | 'persist_workspace'
   | 'add_ssh_keys'
   | 'checkout'
   | 'run'

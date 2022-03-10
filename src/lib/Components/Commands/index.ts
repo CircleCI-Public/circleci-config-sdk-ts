@@ -1,6 +1,12 @@
+import { parameters } from '../../..';
 import { Config } from '../../Config';
-import { GenerableType } from '../../Config/types/Config.types';
 import { ConfigValidator } from '../../Config/ConfigValidator';
+import {
+  GenerableType,
+  ParameterizedComponent,
+} from '../../Config/types/Config.types';
+import { CustomParametersList } from '../Parameters';
+import { CommandParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
 import { Command } from './exports/Command';
 import { AddSSHKeys, AddSSHKeysParameters } from './exports/Native/AddSSHKeys';
 import { Restore, Save } from './exports/Native/Cache';
@@ -23,34 +29,38 @@ import {
 import { Attach, Persist } from './exports/Native/Workspace';
 import { AttachParameters } from './exports/Native/Workspace/Attach';
 import { PersistParameters } from './exports/Native/Workspace/Persist';
-import { ReusableCommand } from './exports/Reusable';
-import { CommandParameters, NativeCommandLiteral } from './types/Command.types';
+import { CustomCommand, ReusableCommand } from './exports/Reusable';
+import {
+  CommandParameters,
+  CustomCommandBodyShape,
+  NativeCommandLiteral,
+} from './types/Command.types';
 
 const nativeSubtypes: {
   [key in NativeCommandLiteral]: (args: unknown) => Command | undefined;
 } = {
-  restore: (args) => {
+  restore_cache: (args) => {
     const restoreArgs = args as RestoreCacheParameters;
 
     if (ConfigValidator.validate(GenerableType.RESTORE, restoreArgs)) {
       return new Restore(args as RestoreCacheParameters);
     }
   },
-  save: (args) => {
+  save_cache: (args) => {
     const saveArgs = args as SaveCacheParameters;
 
     if (ConfigValidator.validate(GenerableType.SAVE, saveArgs)) {
       return new Save(args as SaveCacheParameters);
     }
   },
-  attach: (args) => {
+  attach_workspace: (args) => {
     const attachArgs = args as AttachParameters;
 
     if (ConfigValidator.validate(GenerableType.ATTACH, attachArgs)) {
       return new Attach(args as AttachParameters);
     }
   },
-  persist: (args) => {
+  persist_workspace: (args) => {
     const persistArgs = args as PersistParameters;
 
     if (ConfigValidator.validate(GenerableType.PERSIST, persistArgs)) {
@@ -117,15 +127,17 @@ const nativeSubtypes: {
 };
 
 function parseSteps(
-  commandIn: { [key: string]: unknown },
+  commandIn: { [key: string]: unknown }[],
   config?: Config,
 ): Command[] {
-  return Object.keys(commandIn).map((subtype) =>
-    parseCommand(subtype, commandIn[subtype], config),
-  );
+  return commandIn.map((subtype) => {
+    const commandName = Object.keys(subtype)[0];
+
+    return parseCommand(commandName, subtype[commandName], config);
+  });
 }
 
-function parseCommand(name: string, args: unknown, config?: Config): Command {
+function parseCommand(name: string, args?: unknown, config?: Config): Command {
   let parsedCommand;
 
   if (name in nativeSubtypes) {
@@ -137,7 +149,7 @@ function parseCommand(name: string, args: unknown, config?: Config): Command {
       parsedCommand = new ReusableCommand(command, args as CommandParameters);
     } else {
       throw new Error(
-        `Failed to parse: Custom command ${name} not found in provided config.`,
+        `Failed to parse - Custom command ${name} not found in provided config.`,
       );
     }
   }
@@ -146,14 +158,36 @@ function parseCommand(name: string, args: unknown, config?: Config): Command {
     return parsedCommand;
   }
 
-  throw new Error(`Failed to parse: Unknown native command: ${name}.`);
+  throw new Error(`Failed to parse - Unknown native command: ${name}.`);
 }
 
-// function parseCustomCommand(name: string, args: unknown): CustomCommand {
-//   const parametersList = parameters
+function parseCustomCommand(
+  name: string,
+  args: unknown,
+  config?: Config,
+): CustomCommand {
+  if (ConfigValidator.validate(GenerableType.CUSTOM_COMMAND, args)) {
+    const command_args = args as CustomCommandBodyShape;
 
-//   return new CustomCommand(name, steps, parameters, description);
-// }
+    const parametersList = command_args.parameters
+      ? (parameters.parseLists(
+          command_args.parameters,
+          ParameterizedComponent.COMMAND,
+        ) as CustomParametersList<CommandParameterLiteral>)
+      : undefined;
+
+    const steps = parseSteps(command_args.steps, config);
+
+    return new CustomCommand(
+      name,
+      steps,
+      parametersList,
+      command_args.description,
+    );
+  }
+
+  throw new Error(`Failed to parse custom command.`);
+}
 
 export * as cache from './exports/Native/Cache';
 export * as workspace from './exports/Native/Workspace';
@@ -164,4 +198,4 @@ export { Run };
 export { SetupRemoteDocker };
 export { StoreArtifacts };
 export { StoreTestResults };
-export { parseSteps };
+export { parseSteps, parseCommand, parseCustomCommand };

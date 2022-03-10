@@ -3,13 +3,14 @@ import AddSSHKeysSchema from '../Components/Commands/schema/Native/AddSSHKeys.sc
 import RestoreSchema from '../Components/Commands/schema/Native/Cache/Restore.schema';
 import SaveSchema from '../Components/Commands/schema/Native/Cache/Save.schema';
 import CheckoutSchema from '../Components/Commands/schema/Native/Checkout.schema';
-import CommandSchema from '../Components/Commands/schema/Native/Command.schema';
+import StepsSchema from '../Components/Commands/schema/Steps.schema';
 import RunSchema from '../Components/Commands/schema/Native/Run.schema';
 import SetupRemoteDockerSchema from '../Components/Commands/schema/Native/SetupRemoteDocker.schema';
 import StoreArtifactsSchema from '../Components/Commands/schema/Native/StoreArtifacts.schema';
 import StoreTestResultsSchema from '../Components/Commands/schema/Native/StoreTestResults.schema';
 import AttachWorkspaceSchema from '../Components/Commands/schema/Native/Workspace/Attach.schema';
 import PersistSchema from '../Components/Commands/schema/Native/Workspace/Persist.schema';
+import CustomCommandSchema from '../Components/Commands/schema/Reusable/CustomCommand.schema';
 import DockerExecutorSchema from '../Components/Executor/schemas/DockerExecutor.schema';
 import MachineExecutorSchema from '../Components/Executor/schemas/MachineExecutor.schema';
 import MacOSExecutorSchema from '../Components/Executor/schemas/MacosExecutor.schema';
@@ -37,7 +38,7 @@ import PipelineParametersSchema from '../Components/Parameters/schemas/PipelineP
 import {
   GenerableSubtypes,
   GenerableType,
-  ParametersListSubtype,
+  ParameterizedComponent,
   ParameterSubtype,
   ValidationMap,
   ValidationResult,
@@ -45,7 +46,7 @@ import {
 
 const schemaRegistry: ValidationMap = {
   [GenerableType.REUSABLE_COMMAND]: {},
-  [GenerableType.CUSTOM_COMMAND]: {},
+  [GenerableType.CUSTOM_COMMAND]: CustomCommandSchema,
   [GenerableType.RESTORE]: RestoreSchema,
   [GenerableType.SAVE]: SaveSchema,
   [GenerableType.ATTACH]: AttachWorkspaceSchema,
@@ -63,17 +64,17 @@ const schemaRegistry: ValidationMap = {
   [GenerableType.WINDOWS_EXECUTOR]: WindowsExecutorSchema,
   [GenerableType.REUSABLE_EXECUTOR]: ExecutorSchema,
 
-  [GenerableType.STEP]: CommandSchema,
+  [GenerableType.STEP]: StepsSchema,
   [GenerableType.JOB]: {},
   [GenerableType.WORKFLOW_JOB]: {},
 
   [GenerableType.CUSTOM_PARAMETER]: {
     /* Custom Parameter Config Components */
-    [ParameterSubtype.JOB_PARAMS]: JobParametersSchema,
-    [ParameterSubtype.COMMAND_PARAMS]: CommandParametersSchema,
-    [ParameterSubtype.EXECUTOR_PARAMS]: ExecutorParametersSchema,
-    [ParameterSubtype.PIPELINE_PARAMS]: PipelineParametersSchema,
-    /** Custom Parameter Types */
+    [ParameterizedComponent.JOB]: JobParametersSchema,
+    [ParameterizedComponent.COMMAND]: CommandParametersSchema,
+    [ParameterizedComponent.EXECUTOR]: ExecutorParametersSchema,
+    [ParameterizedComponent.PIPELINE]: PipelineParametersSchema,
+    /** Custom Parameter Singletons */
     [ParameterSubtype.STRING]: StringParameterSchema,
     [ParameterSubtype.BOOLEAN]: BooleanParameterSchema,
     [ParameterSubtype.INTEGER]: IntegerParameterSchema,
@@ -83,10 +84,10 @@ const schemaRegistry: ValidationMap = {
   },
   [GenerableType.CUSTOM_ENUM_PARAMETER]: EnumParameterSchema,
   [GenerableType.CUSTOM_PARAMETERS_LIST]: {
-    [ParametersListSubtype.JOB]: JobParameterListSchema,
-    [ParametersListSubtype.COMMAND]: CommandParameterListSchema,
-    [ParametersListSubtype.EXECUTOR]: ExecutorParameterListSchema,
-    [ParametersListSubtype.PIPELINE]: PipelineParameterListSchema,
+    [ParameterizedComponent.JOB]: JobParameterListSchema,
+    [ParameterizedComponent.COMMAND]: CommandParameterListSchema,
+    [ParameterizedComponent.EXECUTOR]: ExecutorParameterListSchema,
+    [ParameterizedComponent.PIPELINE]: PipelineParameterListSchema,
   },
 };
 

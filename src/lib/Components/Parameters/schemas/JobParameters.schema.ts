@@ -10,6 +10,7 @@ const JobParametersSchema: SchemaObject = {
     { $ref: '/parameters/BooleanParameter' },
     { $ref: '/parameters/StepsParameter' },
     { $ref: '/parameters/ExecutorParameter' },
+    { $ref: '/parameters/EnvVarNameParameter' },
   ],
 };
 
