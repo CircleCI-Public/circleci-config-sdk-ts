@@ -1,6 +1,18 @@
-import { GenerableType } from '../../../../Config/types/Config.types';
+import { commands, parameters } from '../../../../..';
+import { Config } from '../../../../Config';
+import { ConfigValidator } from '../../../../Config/ConfigValidator';
+import {
+  GenerableType,
+  ParameterizedComponent,
+} from '../../../../Config/types/Config.types';
+import { CustomParametersList } from '../../../Parameters';
+import { CommandParameterLiteral } from '../../../Parameters/types/CustomParameterLiterals.types';
 import { StringParameter } from '../../../Parameters/types/Parameters.types';
-import { CommandParameters, CommandShape } from '../../types/Command.types';
+import {
+  CommandParameters,
+  CommandShape,
+  CustomCommandBodyShape,
+} from '../../types/Command.types';
 import { Command } from '../Command';
 import { CustomCommand } from './CustomCommand';
 
@@ -37,6 +49,45 @@ export class ReusableCommand implements Command {
   get generableType(): GenerableType {
     return GenerableType.REUSABLE_COMMAND;
   }
+}
+
+export function parseCustomCommands(
+  commandListIn: { [key: string]: unknown }[],
+  config?: Config,
+): CustomCommand[] {
+  return commandListIn.map((subtype) => {
+    const commandName = Object.keys(subtype)[0];
+
+    return parseCustomCommand(commandName, subtype[commandName], config);
+  });
+}
+
+export function parseCustomCommand(
+  name: string,
+  args: unknown,
+  config?: Config,
+): CustomCommand {
+  if (ConfigValidator.validate(GenerableType.CUSTOM_COMMAND, args)) {
+    const command_args = args as CustomCommandBodyShape;
+
+    const parametersList = command_args.parameters
+      ? (parameters.parseList(
+          command_args.parameters,
+          ParameterizedComponent.COMMAND,
+        ) as CustomParametersList<CommandParameterLiteral>)
+      : undefined;
+
+    const steps = commands.parseSteps(command_args.steps, config);
+
+    return new CustomCommand(
+      name,
+      steps,
+      parametersList,
+      command_args.description,
+    );
+  }
+
+  throw new Error(`Failed to parse custom command.`);
 }
 
 export { CustomCommand };

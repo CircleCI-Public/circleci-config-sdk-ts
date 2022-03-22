@@ -2,7 +2,7 @@ import { ErrorObject, SchemaObject } from 'ajv';
 
 export enum GenerableType {
   REUSABLE_COMMAND = 'reusable_command',
-  CUSTOM_COMMAND = 'custom_command',
+  CUSTOM_COMMAND = 'command',
   RESTORE = 'restore',
   SAVE = 'save',
   ATTACH = 'attach',
@@ -15,9 +15,11 @@ export enum GenerableType {
   STORE_TEST_RESULTS = 'store_test_results',
 
   STEP = 'step',
+  STEP_LIST = 'steps',
   JOB = 'job',
   WORKFLOW_JOB = 'workflow_job',
 
+  ANY_EXECUTOR = 'executor',
   DOCKER_EXECUTOR = 'docker_executor',
   MACHINE_EXECUTOR = 'machine_executor',
   MACOS_EXECUTOR = 'macos_executor',

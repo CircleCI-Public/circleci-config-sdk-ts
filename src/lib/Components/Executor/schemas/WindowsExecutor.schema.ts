@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const WindowsExecutorSchema: SchemaObject = {
-  $id: '/executors/WindowsExecutor',
+  $id: '/executor/WindowsExecutor',
   type: 'object',
   required: ['machine', 'resource_class'],
   properties: {

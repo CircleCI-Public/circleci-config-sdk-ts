@@ -1,67 +1,44 @@
 import { SchemaObject } from 'ajv';
 
-const StepsSchema: SchemaObject = {
+const StepSchema: SchemaObject = {
   $id: '/definitions/Step',
   type: 'object',
-  anyOf: [
-    {
-      // $ref: '#/definitions/builtinSteps/documentation/checkout',
-      enum: ['checkout'],
-    },
-    {
-      // $ref: '#/definitions/builtinSteps/documentation/setup_remote_docker',
-      enum: ['setup_remote_docker'],
-    },
-    {
-      // $ref: '#/definitions/builtinSteps/documentation/add_ssh_keys',
-      enum: ['add_ssh_keys'],
-    },
-    {
-      description:
-        'https://circleci.com/docs/2.0/reusing-config/#invoking-reusable-commands\n\nA custom command defined via the top level commands key',
-      type: 'string',
-      pattern: '^[a-z][a-z0-9_-]+$',
-    },
-    {
-      description:
-        'https://circleci.com/docs/2.0/using-orbs/#commands\n\nA custom command defined via an orb.',
-      type: 'string',
-      pattern: '^[a-z][a-z0-9_-]+/[a-z][a-z0-9_-]+$',
-    },
-    {
+  $merge: {
+    source: {
       type: 'object',
       minProperties: 1,
       maxProperties: 1,
+      additionalProperties: false,
       properties: {
         run: {
-          $ref: '/commands/native/Run',
+          $ref: '/commands/native/run',
         },
         checkout: {
-          $ref: '/commands/native/Checkout',
+          $ref: '/commands/native/checkout',
         },
         setup_remote_docker: {
-          $ref: '/commands/native/SetupRemoteDocker',
+          $ref: '/commands/native/setup_remote_docker',
         },
         save_cache: {
-          $ref: '/commands/native/cache/Save',
+          $ref: '/commands/native/save_cache',
         },
         restore_cache: {
-          $ref: '/commands/native/cache/Restore',
+          $ref: '/commands/native/restore_cache',
         },
         store_artifacts: {
-          $ref: '/commands/native/StoreArtifacts',
+          $ref: '/commands/native/store_artifacts',
         },
         store_test_results: {
-          $ref: '/commands/native/StoreTestResults',
+          $ref: '/commands/native/store_test_results',
         },
         persist_to_workspace: {
-          $ref: '/commands/native/workspace/Persist',
+          $ref: '/commands/native/persist_to_workspace',
         },
         attach_workspace: {
-          $ref: '/commands/native/workspace/Attach',
+          $ref: '/commands/native/attach_workspace',
         },
         add_ssh_keys: {
-          $ref: '/commands/native/AddSSHKeys',
+          $ref: '/commands/native/add_ssh_keys',
         },
         // when: {
         //   $ref: '/commands/native/when',
@@ -70,18 +47,28 @@ const StepsSchema: SchemaObject = {
         //   $ref: '/commands/native/unless',
         // },
       },
-      patternProperties: {
-        '^[a-z][a-z0-9_-]+$': {
-          description:
-            'https://circleci.com/docs/2.0/reusing-config/#invoking-reusable-commands\n\nA custom command defined via the top level commands key',
-        },
-        '^[a-z][a-z0-9_-]+/[a-z][a-z0-9_-]+$': {
-          description:
-            'https://circleci.com/docs/2.0/using-orbs/#commands\n\nA custom command defined via an orb.',
-        },
-      },
+      // patternProperties: {
+      //   '^[a-z][a-z0-9_-]+$': {
+      //     description:
+      //       'https://circleci.com/docs/2.0/reusing-config/#invoking-reusable-commands\n\nA custom command defined via the top level commands key',
+      //   },
+      //   '^[a-z][a-z0-9_-]+/[a-z][a-z0-9_-]+$': {
+      //     description:
+      //       'https://circleci.com/docs/2.0/using-orbs/#commands\n\nA custom command defined via an orb.',
+      //   },
+      // },
     },
-  ],
+    with: {
+      $ref: '/custom/commands',
+    },
+  },
 };
 
-export default StepsSchema;
+const StepsSchema: SchemaObject = {
+  $id: '/definitions/Steps',
+  type: 'array',
+  minItems: 1,
+  items: { $ref: '/definitions/Step' },
+};
+
+export { StepSchema, StepsSchema };

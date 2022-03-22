@@ -2,7 +2,7 @@ import { Job } from '..';
 import { Command } from '../../Commands/exports/Command';
 import { Executor } from '../../Executor/exports/Executor';
 import { CustomParametersList } from '../../Parameters';
-import { Parameterized } from '../../Parameters/exports/ParameterizedComponent';
+import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { CustomParametersListShape } from '../../Parameters/types/Parameters.types';
 import { JobContentShape } from '../types/Job.types';

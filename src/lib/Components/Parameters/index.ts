@@ -171,7 +171,7 @@ export function parse(
   }
 }
 
-export function parseLists(
+export function parseList(
   customParamListIn: unknown,
   subtype?: ParameterizedComponent,
 ): CustomParametersList<AnyParameterLiteral> {

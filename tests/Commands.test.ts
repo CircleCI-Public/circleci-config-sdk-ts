@@ -11,6 +11,7 @@ import {
 import * as CircleCI from '../src/index';
 import { Run } from '../src/lib/Components/Commands';
 import { CustomParametersList } from '../src/lib/Components/Parameters';
+import { GenerableType } from '../src/lib/Config/types/Config.types';
 
 describe('Instantiate a Run step', () => {
   const run = new CircleCI.commands.Run({
@@ -214,7 +215,10 @@ describe('Instantiate a Blank Custom Command', () => {
 
   it('Should parse and match example', () => {
     expect(
-      CircleCI.commands.parseCustomCommand('say_hello', example.say_hello),
+      CircleCI.commands.reusable.parseCustomCommand(
+        'say_hello',
+        example.say_hello,
+      ),
     ).toEqual(customCommand);
   });
 });
@@ -277,7 +281,7 @@ describe('Instantiate a Reusable Command', () => {
 /**
  * instantiate a parameter with an enum value of x y z
  */
-describe('Instantiate a parameter with an enum value of x y z', () => {
+describe('Instantiate reusable commands', () => {
   const firstCustomCommand = new CircleCI.commands.reusable.CustomCommand(
     'point_direction',
   );
@@ -312,18 +316,23 @@ describe('Instantiate a parameter with an enum value of x y z', () => {
     'search_year',
   );
 
-  secondCustomCommand.defineParameter('year', 'integer', 2021).addStep(
-    new CircleCI.commands.Run({
-      command: 'echo << parameters.year >>',
-    }),
-  );
+  secondCustomCommand
+    .defineParameter('year', 'integer')
+    .defineParameter('type', 'string', 'gregorian')
+    .addStep(
+      new CircleCI.commands.Run({
+        command: 'echo << parameters.year >>',
+      }),
+    );
 
   it('Should match generated yaml', () => {
     const secondExpectedOutput = `search_year:
     parameters:
+      type:
+        type: string
+        default: 'gregorian'
       year:
         type: integer
-        default: 2021
     steps:
       - run:
           command: echo << parameters.year >>`;
@@ -331,16 +340,116 @@ describe('Instantiate a parameter with an enum value of x y z', () => {
     expect(secondCustomCommand.generate()).toEqual(parse(secondExpectedOutput));
   });
 
+  const myConfig = new CircleCI.Config();
+  myConfig
+    .addCustomCommand(firstCustomCommand)
+    .addCustomCommand(secondCustomCommand);
+
   it('Add commands to config and validate', () => {
-    const myConfig = new CircleCI.Config();
-    myConfig
-      .addCustomCommand(firstCustomCommand)
-      .addCustomCommand(secondCustomCommand);
     expect(myConfig.commands?.length).toBe(2);
+  });
+
+  const validator = myConfig.getValidator();
+
+  it('Should validate with the proper parameters', () => {
+    const result = validator.validateGenerable(GenerableType.STEP_LIST, [
+      {
+        search_year: {
+          year: 2022,
+          type: 'solar',
+        },
+      },
+      {
+        point_direction: {
+          axis: 'x',
+        },
+      },
+      {
+        run: {
+          command: 'echo "Hello, World!"',
+        },
+      },
+    ]);
+    expect(result).toEqual(true);
+  });
+
+  it('Should not validate with malformed list', () => {
+    const result = validator.validateGenerable(GenerableType.STEP_LIST, [
+      {
+        search_year: {
+          year: 2022,
+          type: 'solar',
+        },
+        point_direction: {
+          axis: 'x',
+        },
+      },
+    ]);
+    expect(result).not.toEqual(true);
+  });
+
+  it('Should not validate with an incorrect enum value', () => {
+    const result = validator.validateGenerable(GenerableType.STEP_LIST, [
+      {
+        search_year: {
+          year: 2022,
+          type: 'solar',
+        },
+        point_direction: {
+          axis: 'w',
+        },
+      },
+    ]);
+    expect(result).not.toEqual(true);
+  });
+
+  it('Should not validate without the required parameter', () => {
+    const result = validator.validateGenerable(GenerableType.STEP_LIST, [
+      {
+        search_year: {
+          type: 'solar',
+        },
+      },
+    ]);
+    expect(result).not.toEqual(true);
+  });
+
+  it('Should not validate with an improper command', () => {
+    const result = validator.validateGenerable(GenerableType.STEP_LIST, [
+      {
+        search_yaer: {
+          year: 2022,
+        },
+      },
+    ]);
+    expect(result).not.toEqual(true);
+  });
+
+  it('Should not validate with an improper parameter type', () => {
+    const result = validator.validateGenerable(GenerableType.STEP_LIST, [
+      {
+        search_year: {
+          year: '2022',
+        },
+      },
+    ]);
+    expect(result).not.toEqual(true);
+  });
+
+  it('Should not validate with an improper parameter', () => {
+    const result = validator.validateGenerable(GenerableType.STEP_LIST, [
+      {
+        search_year: {
+          day: 232,
+          year: 2022,
+        },
+      },
+    ]);
+    expect(result).not.toEqual(true);
   });
 });
 
-const StringifyConfig:
+const stringifyOptions:
   | (DocumentOptions &
       SchemaOptions &
       ParseOptions &
@@ -369,7 +478,7 @@ echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single
     echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
 `;
   it('Should match expectedOutput', () => {
-    expect(stringify(multiLineCommand.generate(), StringifyConfig)).toEqual(
+    expect(stringify(multiLineCommand.generate(), stringifyOptions)).toEqual(
       expectedOutput,
     );
   });
@@ -384,7 +493,7 @@ describe('Instantiate a Run command with 70 characters in the command string and
   command: echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
 `;
   it('Should match expectedOutput', () => {
-    expect(stringify(longCommand.generate(), StringifyConfig)).toEqual(
+    expect(stringify(longCommand.generate(), stringifyOptions)).toEqual(
       expectedOutput,
     );
   });

@@ -1,7 +1,7 @@
 import { Generable } from '../../..';
 import { GenerableType } from '../../../../Config/types/Config.types';
 import { CustomParametersList } from '../../../Parameters';
-import { Parameterized } from '../../../Parameters/exports/ParameterizedComponent';
+import { Parameterized } from '../../../Parameters/exports/Parameterized';
 import { CommandParameterLiteral } from '../../../Parameters/types/CustomParameterLiterals.types';
 import { CommandShape, CustomCommandShape } from '../../types/Command.types';
 import { Command } from '../Command';

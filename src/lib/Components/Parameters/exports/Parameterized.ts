@@ -1,5 +1,6 @@
 import { CustomParametersList } from '..';
 import { Generable } from '../..';
+import { Config } from '../../../Config';
 import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
 
 /**
@@ -17,5 +18,5 @@ export interface Parameterized<
     defaultValue?: unknown,
     description?: string,
     enumValues?: string[],
-  ): Generable;
+  ): Generable | Config;
 }

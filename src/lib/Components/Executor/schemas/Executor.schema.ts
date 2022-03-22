@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const ExecutorSchema: SchemaObject = {
-  $id: '/executors/Executor',
+  $id: '/executor/Executor',
   description:
     'Executors define the environment in which the steps of a job will be run, allowing you to reuse a single executor definition across multiple jobs.',
   type: 'object',

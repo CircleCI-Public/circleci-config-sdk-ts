@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const SaveSchema: SchemaObject = {
-  $id: '/commands/native/cache/Save',
+  $id: '/commands/native/save_cache',
   type: 'object',
   required: ['paths', 'key'],
   properties: {

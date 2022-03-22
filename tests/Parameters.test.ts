@@ -1,27 +1,36 @@
 import { parse as yamlParse } from 'yaml';
+import * as CircleCI from '../src/index';
 import {
   CustomEnumParameter,
   CustomParameter,
+  CustomParametersList,
 } from '../src/lib/Components/Parameters';
+import { PipelineParameterLiteral } from '../src/lib/Components/Parameters/types/CustomParameterLiterals.types';
+import { ConfigValidator } from '../src/lib/Config/ConfigValidator';
 import {
   GenerableType,
   ParameterizedComponent,
   ParameterSubtype,
 } from '../src/lib/Config/types/Config.types';
-import { ConfigValidator } from '../src/lib/Config/ConfigValidator';
-import * as CircleCI from '../src/index';
 
 describe('Parse yaml pipeline parameters and validate', () => {
-  it('Should validate parameters', () => {
-    const parametersIn = yamlParse(`parameters: 
-      axis:
-        type: enum
-        default: 'x'
-        enum: [x, y, z]
-      angle:
-        type: integer
-        default: 90`);
+  const parametersIn = yamlParse(`parameters: 
+    axis:
+      type: enum
+      default: 'x'
+      enum: [x, y, z]
+    angle:
+      type: integer
+      default: 90`);
 
+  const expectedParameters = new CustomParametersList<PipelineParameterLiteral>(
+    [
+      new CustomEnumParameter('axis', ['x', 'y', 'z'], 'x'),
+      new CustomParameter('angle', ParameterSubtype.INTEGER, 90),
+    ],
+  );
+
+  it('Should validate parameters', () => {
     const result = ConfigValidator.validate(
       GenerableType.CUSTOM_PARAMETERS_LIST,
       parametersIn,
@@ -32,22 +41,9 @@ describe('Parse yaml pipeline parameters and validate', () => {
   });
 
   it('Should parse parameters', () => {
-    const parametersIn = yamlParse(`parameters: 
-      axis:
-        type: enum
-        default: 'x'
-        enum: [x, y, z]
-      angle:
-        type: integer
-        default: 90`);
-
-    const result = ConfigValidator.validate(
-      GenerableType.CUSTOM_PARAMETERS_LIST,
-      parametersIn,
-      ParameterizedComponent.PIPELINE,
+    expect(CircleCI.parameters.parseList(parametersIn)).toEqual(
+      expectedParameters,
     );
-
-    expect(result).toEqual(true);
   });
 
   it('Should validate integer parameters', () => {
@@ -62,6 +58,20 @@ describe('Parse yaml pipeline parameters and validate', () => {
     );
 
     expect(result).toEqual(true);
+  });
+
+  it('Should not validate float parameters', () => {
+    const parameterIn = yamlParse(`
+    type: integer
+    default: 1.01`);
+
+    const result = ConfigValidator.validate(
+      GenerableType.CUSTOM_PARAMETER,
+      parameterIn,
+      ParameterizedComponent.PIPELINE,
+    );
+
+    expect(result).not.toEqual(true);
   });
 });
 

@@ -1,12 +1,6 @@
-import { parameters } from '../../..';
 import { Config } from '../../Config';
 import { ConfigValidator } from '../../Config/ConfigValidator';
-import {
-  GenerableType,
-  ParameterizedComponent,
-} from '../../Config/types/Config.types';
-import { CustomParametersList } from '../Parameters';
-import { CommandParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
+import { GenerableType } from '../../Config/types/Config.types';
 import { Command } from './exports/Command';
 import { AddSSHKeys, AddSSHKeysParameters } from './exports/Native/AddSSHKeys';
 import { Restore, Save } from './exports/Native/Cache';
@@ -29,12 +23,8 @@ import {
 import { Attach, Persist } from './exports/Native/Workspace';
 import { AttachParameters } from './exports/Native/Workspace/Attach';
 import { PersistParameters } from './exports/Native/Workspace/Persist';
-import { CustomCommand, ReusableCommand } from './exports/Reusable';
-import {
-  CommandParameters,
-  CustomCommandBodyShape,
-  NativeCommandLiteral,
-} from './types/Command.types';
+import { ReusableCommand } from './exports/Reusable';
+import { CommandParameters, NativeCommandLiteral } from './types/Command.types';
 
 const nativeSubtypes: {
   [key in NativeCommandLiteral]: (args: unknown) => Command | undefined;
@@ -127,17 +117,24 @@ const nativeSubtypes: {
 };
 
 function parseSteps(
-  commandIn: { [key: string]: unknown }[],
+  commandListIn: { [key: string]: unknown }[],
   config?: Config,
 ): Command[] {
-  return commandIn.map((subtype) => {
+  return commandListIn.map((subtype) => {
     const commandName = Object.keys(subtype)[0];
 
-    return parseCommand(commandName, subtype[commandName], config);
+    return parseStep(commandName, subtype[commandName], config);
   });
 }
 
-function parseCommand(name: string, args?: unknown, config?: Config): Command {
+/**
+ * Parse a native or reusable command.
+ * @param name - The name of the command.
+ * @param args - The arguments to the command.
+ * @param config - Required to parse reusable commands
+ * @returns Command or ReusableCommand
+ */
+function parseStep(name: string, args?: unknown, config?: Config): Command {
   let parsedCommand;
 
   if (name in nativeSubtypes) {
@@ -161,34 +158,6 @@ function parseCommand(name: string, args?: unknown, config?: Config): Command {
   throw new Error(`Failed to parse - Unknown native command: ${name}.`);
 }
 
-function parseCustomCommand(
-  name: string,
-  args: unknown,
-  config?: Config,
-): CustomCommand {
-  if (ConfigValidator.validate(GenerableType.CUSTOM_COMMAND, args)) {
-    const command_args = args as CustomCommandBodyShape;
-
-    const parametersList = command_args.parameters
-      ? (parameters.parseLists(
-          command_args.parameters,
-          ParameterizedComponent.COMMAND,
-        ) as CustomParametersList<CommandParameterLiteral>)
-      : undefined;
-
-    const steps = parseSteps(command_args.steps, config);
-
-    return new CustomCommand(
-      name,
-      steps,
-      parametersList,
-      command_args.description,
-    );
-  }
-
-  throw new Error(`Failed to parse custom command.`);
-}
-
 export * as cache from './exports/Native/Cache';
 export * as workspace from './exports/Native/Workspace';
 export * as reusable from './exports/Reusable';
@@ -198,4 +167,4 @@ export { Run };
 export { SetupRemoteDocker };
 export { StoreArtifacts };
 export { StoreTestResults };
-export { parseSteps, parseCommand, parseCustomCommand };
+export { parseSteps, parseStep as parseCommand };

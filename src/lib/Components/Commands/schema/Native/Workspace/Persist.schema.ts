@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const PersistSchema: SchemaObject = {
-  $id: '/commands/native/workspace/Persist',
+  $id: '/commands/native/persist_to_workspace',
   type: 'object',
   required: ['root', 'paths'],
   properties: {

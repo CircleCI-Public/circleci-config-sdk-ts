@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const AttachWorkspaceSchema: SchemaObject = {
-  $id: '/commands/native/workspace/Attach',
+  $id: '/commands/native/attach_workspace',
   type: 'object',
   required: ['at'],
   properties: {

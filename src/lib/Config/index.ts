@@ -7,16 +7,20 @@ import { ReusableExecutorsShape } from '../Components/Executor/types/ReusableExe
 import { Job } from '../Components/Job';
 import { JobShape } from '../Components/Job/types/Job.types';
 import { CustomParametersList } from '../Components/Parameters';
+import { Parameterized } from '../Components/Parameters/exports/Parameterized';
 import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
 import { ParameterShape } from '../Components/Parameters/types/Parameters.types';
 import { Workflow } from '../Components/Workflow';
 import { WorkflowShape } from '../Components/Workflow/types/Workflow.types';
+import { ConfigValidator } from './ConfigValidator';
 import { Pipeline } from './Pipeline';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
  */
-export class Config implements CircleCIConfigObject {
+export class Config
+  implements CircleCIConfigObject, Parameterized<PipelineParameterLiteral>
+{
   /**
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
    */
@@ -49,6 +53,13 @@ export class Config implements CircleCIConfigObject {
    * Designates the config.yaml for use of CircleCI’s dynamic configuration feature.
    */
   setup: boolean;
+
+  /**
+   * ajv validation instance for this config.
+   * accessible through getValidator()
+   */
+  private validator?: ConfigValidator;
+
   /**
    * Instantiate a new CircleCI config. Build up your config by adding components.
    * @param jobs - Instantiate with pre-defined Jobs.
@@ -79,6 +90,7 @@ export class Config implements CircleCIConfigObject {
     this.workflows.push(workflow);
     return this;
   }
+
   /**
    * Add a Custom Command to the current Config. Chainable
    * @param command - Injectable command
@@ -92,6 +104,7 @@ export class Config implements CircleCIConfigObject {
 
     return this;
   }
+
   /**
    * Add a Workflow to the current Config. Chainable
    * @param workflow - Injectable Workflow
@@ -105,6 +118,7 @@ export class Config implements CircleCIConfigObject {
 
     return this;
   }
+
   /**
    * Add a Job to the current Config. Chainable
    * @param job - Injectable Job
@@ -210,6 +224,18 @@ export class Config implements CircleCIConfigObject {
         doubleQuotedMinMultiLineLength: 999,
       }),
     );
+  }
+
+  /**
+   * Get validation instance for this config.
+   * @returns ajv validation
+   */
+  getValidator(): ConfigValidator {
+    if (!this.validator) {
+      this.validator = new ConfigValidator(this);
+    }
+
+    return this.validator;
   }
 }
 

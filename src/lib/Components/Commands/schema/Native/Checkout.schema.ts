@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const CheckoutSchema: SchemaObject = {
-  $id: '/commands/native/Checkout',
+  $id: '/commands/native/checkout',
   type: 'object',
   properties: {
     path: {

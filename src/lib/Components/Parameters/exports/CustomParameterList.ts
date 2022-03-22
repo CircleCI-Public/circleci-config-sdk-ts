@@ -31,6 +31,10 @@ export class CustomParametersList<
     return Object.assign({}, ...generatedParameters);
   }
 
+  [Symbol.iterator](): IterableIterator<CustomParameter<ParameterTypeLiteral>> {
+    return this.parameters[Symbol.iterator]();
+  }
+
   /**
    * Define a parameter to be available to the workflow job. Useful for static configurations.
    * @param name - name of the parameter
@@ -69,6 +73,12 @@ export class CustomParametersList<
     this.parameters.push(customParameter);
 
     return customParameter;
+  }
+
+  remove(name: string): void {
+    this.parameters = this.parameters.filter(
+      (parameter) => parameter.name !== name,
+    );
   }
 
   get generableType(): GenerableType {

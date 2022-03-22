@@ -1,7 +1,7 @@
 import { Generable } from '../..';
 import { GenerableType } from '../../../Config/types/Config.types';
 import { CustomParametersList } from '../../Parameters';
-import { Parameterized } from '../../Parameters/exports/ParameterizedComponent';
+import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { ReusableExecutorShape } from '../types/ReusableExecutor.types';
 import { Executor } from './Executor';
