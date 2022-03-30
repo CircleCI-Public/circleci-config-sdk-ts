@@ -32,49 +32,81 @@ const nativeSubtypes: {
   restore_cache: (args) => {
     const restoreArgs = args as RestoreCacheParameters;
 
-    if (ConfigValidator.validate(GenerableType.RESTORE, restoreArgs)) {
+    if (
+      ConfigValidator.getGeneric().validateGenerable(
+        GenerableType.RESTORE,
+        restoreArgs,
+      )
+    ) {
       return new Restore(args as RestoreCacheParameters);
     }
   },
   save_cache: (args) => {
     const saveArgs = args as SaveCacheParameters;
 
-    if (ConfigValidator.validate(GenerableType.SAVE, saveArgs)) {
+    if (
+      ConfigValidator.getGeneric().validateGenerable(
+        GenerableType.SAVE,
+        saveArgs,
+      )
+    ) {
       return new Save(args as SaveCacheParameters);
     }
   },
   attach_workspace: (args) => {
     const attachArgs = args as AttachParameters;
 
-    if (ConfigValidator.validate(GenerableType.ATTACH, attachArgs)) {
+    if (
+      ConfigValidator.getGeneric().validateGenerable(
+        GenerableType.ATTACH,
+        attachArgs,
+      )
+    ) {
       return new Attach(args as AttachParameters);
     }
   },
   persist_workspace: (args) => {
     const persistArgs = args as PersistParameters;
 
-    if (ConfigValidator.validate(GenerableType.PERSIST, persistArgs)) {
+    if (
+      ConfigValidator.getGeneric().validateGenerable(
+        GenerableType.PERSIST,
+        persistArgs,
+      )
+    ) {
       return new Persist(args as PersistParameters);
     }
   },
   add_ssh_keys: (args) => {
     const addSSHKeysArgs = args as AddSSHKeysParameters;
 
-    if (ConfigValidator.validate(GenerableType.ADD_SSH_KEYS, addSSHKeysArgs)) {
+    if (
+      ConfigValidator.getGeneric().validateGenerable(
+        GenerableType.ADD_SSH_KEYS,
+        addSSHKeysArgs,
+      )
+    ) {
       return new AddSSHKeys(args as AddSSHKeysParameters);
     }
   },
   checkout: (args) => {
     const checkoutArgs = args as CheckoutParameters;
 
-    if (ConfigValidator.validate(GenerableType.CHECKOUT, checkoutArgs)) {
+    if (
+      ConfigValidator.getGeneric().validateGenerable(
+        GenerableType.CHECKOUT,
+        checkoutArgs,
+      )
+    ) {
       return new Checkout(args as CheckoutParameters);
     }
   },
   run: (args) => {
     const runArgs = args as RunParameters;
 
-    if (ConfigValidator.validate(GenerableType.RUN, runArgs)) {
+    if (
+      ConfigValidator.getGeneric().validateGenerable(GenerableType.RUN, runArgs)
+    ) {
       return new Run(args as RunParameters);
     }
   },
@@ -82,7 +114,7 @@ const nativeSubtypes: {
     const setupRemoteDockerArgs = args as SetupRemoteDockerParameters;
 
     if (
-      ConfigValidator.validate(
+      ConfigValidator.getGeneric().validateGenerable(
         GenerableType.SETUP_REMOTE_DOCKER,
         setupRemoteDockerArgs,
       )
@@ -94,7 +126,7 @@ const nativeSubtypes: {
     const storeArtifactsArgs = args as StoreArtifactsParameters;
 
     if (
-      ConfigValidator.validate(
+      ConfigValidator.getGeneric().validateGenerable(
         GenerableType.STORE_ARTIFACTS,
         storeArtifactsArgs,
       )
@@ -106,7 +138,7 @@ const nativeSubtypes: {
     const storeTestResultsArgs = args as StoreTestResultsParameters;
 
     if (
-      ConfigValidator.validate(
+      ConfigValidator.getGeneric().validateGenerable(
         GenerableType.STORE_TEST_RESULTS,
         storeTestResultsArgs,
       )

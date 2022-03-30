@@ -1,13 +1,13 @@
 import { SchemaObject } from 'ajv';
 
 const CustomCommandSchema: SchemaObject = {
-  $id: '/commands/native/Save',
+  $id: '/commands/custom_command',
   type: 'object',
   required: ['steps'],
   properties: {
     parameters: {
       type: 'object',
-      $ref: '/parameters/CommandParameters',
+      $ref: '/parameters/CommandParameterList',
     },
     steps: {
       type: 'array',

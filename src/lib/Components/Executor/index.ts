@@ -10,26 +10,37 @@ import { MacOSExecutor } from './exports/MacOSExecutor';
 import { ReusableExecutor } from './exports/ReusableExecutor';
 import { WindowsExecutor } from './exports/WindowsExecutor';
 import { DockerResourceClass } from './types/DockerExecutor.types';
-import { ExecutorLiteral } from './types/Executor.types';
+import { ExecutorLiteral, ExecutorLiteralUsage } from './types/Executor.types';
 import { MachineResourceClass } from './types/MachineExecutor.types';
 import { MacOSResourceClass } from './types/MacOSExecutor.types';
 import { WindowsResourceClass } from './types/WindowsExecutor.types';
+import { Config } from '../../Config';
 
 /**
  * Parse executor type from an object with an executor.
  * @returns Executor of the corresponding type
  */
-function parse(executorIn: {
-  resource_class: string;
-  [key: string]: unknown;
-}): Executor | undefined {
+function parse(
+  executorIn: {
+    resource_class: string;
+    [key: string]: unknown;
+  },
+  config?: Config,
+): Executor | ReusableExecutor | undefined {
   const subtypes: {
-    [key in ExecutorLiteral]: (args: unknown) => Executor | undefined;
+    [key in ExecutorLiteralUsage]: (
+      args: unknown,
+    ) => Executor | ReusableExecutor | undefined;
   } = {
     docker: (args) => {
       const dockerArgs = args as [{ image: string }];
 
-      if (ConfigValidator.validate(GenerableType.DOCKER_EXECUTOR, dockerArgs)) {
+      if (
+        ConfigValidator.getGeneric().validateGenerable(
+          GenerableType.DOCKER_EXECUTOR,
+          dockerArgs,
+        )
+      ) {
         return new DockerExecutor(
           dockerArgs[0].image || 'cimg/base:stable',
           executorIn.resource_class as DockerResourceClass,
@@ -47,7 +58,10 @@ function parse(executorIn: {
         const windowsArgs = args as Partial<WindowsExecutor>;
 
         if (
-          ConfigValidator.validate(GenerableType.WINDOWS_EXECUTOR, windowsArgs)
+          ConfigValidator.getGeneric().validateGenerable(
+            GenerableType.WINDOWS_EXECUTOR,
+            windowsArgs,
+          )
         ) {
           return new WindowsExecutor(windowsResourceClass, windowsArgs.image);
         }
@@ -56,7 +70,10 @@ function parse(executorIn: {
       const machineArgs = args as Partial<MachineExecutor>;
 
       if (
-        ConfigValidator.validate(GenerableType.MACHINE_EXECUTOR, machineArgs)
+        ConfigValidator.getGeneric().validateGenerable(
+          GenerableType.MACHINE_EXECUTOR,
+          machineArgs,
+        )
       ) {
         return new MachineExecutor(
           executorIn.resource_class as MachineResourceClass,
@@ -67,12 +84,35 @@ function parse(executorIn: {
     macos: (args) => {
       const macOSArgs = args as Partial<MacOSExecutor>;
 
-      if (ConfigValidator.validate(GenerableType.MACOS_EXECUTOR, macOSArgs)) {
+      if (
+        ConfigValidator.getGeneric().validateGenerable(
+          GenerableType.MACOS_EXECUTOR,
+          macOSArgs,
+        )
+      ) {
         return new MacOSExecutor(
           macOSArgs.xcode || '13.1',
           executorIn.resource_class as MacOSResourceClass,
         );
       }
+    },
+    executor: (args) => {
+      const executorArgs = args as
+        | { name: string; [key: string]: unknown }
+        | string;
+
+      const name =
+        typeof executorArgs === 'string' ? executorArgs : executorArgs.name;
+
+      const executor = config?.executors?.find(
+        (executor) => executor.name === name,
+      );
+
+      if (executor) {
+        return executor;
+      }
+
+      throw new Error('Reusable executor not found on config');
     },
   };
 

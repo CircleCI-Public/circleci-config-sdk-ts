@@ -1,5 +1,9 @@
 import { SchemaObject } from 'ajv';
 
+/**
+  These are the valid commands that can be used in a step.
+  One command per step is valid.
+*/
 const StepSchema: SchemaObject = {
   $id: '/definitions/Step',
   type: 'object',
@@ -47,19 +51,9 @@ const StepSchema: SchemaObject = {
         //   $ref: '/commands/native/unless',
         // },
       },
-      // patternProperties: {
-      //   '^[a-z][a-z0-9_-]+$': {
-      //     description:
-      //       'https://circleci.com/docs/2.0/reusing-config/#invoking-reusable-commands\n\nA custom command defined via the top level commands key',
-      //   },
-      //   '^[a-z][a-z0-9_-]+/[a-z][a-z0-9_-]+$': {
-      //     description:
-      //       'https://circleci.com/docs/2.0/using-orbs/#commands\n\nA custom command defined via an orb.',
-      //   },
-      // },
     },
     with: {
-      $ref: '/custom/commands',
+      $ref: '/custom/command',
     },
   },
 };

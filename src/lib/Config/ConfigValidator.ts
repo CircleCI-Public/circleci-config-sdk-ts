@@ -20,7 +20,10 @@ import DockerExecutorSchema from '../Components/Executor/schemas/DockerExecutor.
 import ExecutorSchema from '../Components/Executor/schemas/Executor.schema';
 import MachineExecutorSchema from '../Components/Executor/schemas/MachineExecutor.schema';
 import MacOSExecutorSchema from '../Components/Executor/schemas/MacosExecutor.schema';
-import ReusableExecutorSchema from '../Components/Executor/schemas/ReusableExecutor.schema';
+import {
+  ReusableExecutorSchema,
+  ReusableExecutorsListSchema,
+} from '../Components/Executor/schemas/ReusableExecutor.schema';
 import WindowsExecutorSchema from '../Components/Executor/schemas/WindowsExecutor.schema';
 import { Job } from '../Components/Job';
 import { ParameterizedJob } from '../Components/Job/exports/ParameterizedJob';
@@ -55,6 +58,8 @@ import {
   ValidationResult,
 } from './types/Config.types';
 import ajvMergePatch from 'ajv-merge-patch';
+import JobSchema from '../Components/Job/schema/Job.schema';
+import { ReusableExecutor } from '../Components/Executor';
 
 const schemaRegistry: ValidationMap = {
   [GenerableType.REUSABLE_COMMAND]: {},
@@ -76,10 +81,11 @@ const schemaRegistry: ValidationMap = {
   [GenerableType.MACOS_EXECUTOR]: MacOSExecutorSchema,
   [GenerableType.WINDOWS_EXECUTOR]: WindowsExecutorSchema,
   [GenerableType.REUSABLE_EXECUTOR]: ReusableExecutorSchema,
+  [GenerableType.REUSABLE_EXECUTOR_LIST]: ReusableExecutorsListSchema,
 
   [GenerableType.STEP]: StepSchema,
   [GenerableType.STEP_LIST]: StepsSchema,
-  [GenerableType.JOB]: {},
+  [GenerableType.JOB]: JobSchema,
   [GenerableType.WORKFLOW_JOB]: {},
 
   [GenerableType.CUSTOM_PARAMETER]: {
@@ -108,12 +114,42 @@ const schemaRegistry: ValidationMap = {
 // TODO: Potentially make name an interface so that we can have a type guard without this type
 export type NamedGenerable = Generable &
   Parameterized<AnyParameterLiteral> & { name: string };
+
 export class ConfigValidator extends Ajv {
   private config?: Config;
   private static genericInstance: ConfigValidator;
 
+  schemaGroups: { [key: string]: SchemaObject } = {
+    command: {
+      $id: `/custom/command`,
+      type: 'object',
+      minProperties: 1,
+      maxProperties: 1,
+      additionalProperties: false,
+      properties: {},
+    },
+    job: {
+      $id: `/custom/job`,
+      type: 'object',
+      minProperties: 1,
+      maxProperties: 1,
+      additionalProperties: false,
+      properties: {},
+    },
+    executor: {
+      $id: `/custom/executor`,
+      oneOf: [
+        {
+          enum: [''], // TODO: Do not validate with an empty name
+        },
+      ],
+    },
+  };
+
   constructor(config?: Config) {
     super();
+
+    this.config = config;
 
     ajvMergePatch(this);
 
@@ -128,83 +164,67 @@ export class ConfigValidator extends Ajv {
       }
     });
 
-    if (config) {
-      this.config = config;
+    if (this.config) {
       const configSchema = this.buildParameterizedSchema(
         this.config,
         'pipeline',
         'config',
       );
 
-      const customSchemas = {
-        commands: this.config.commands,
-        job: this.config.jobs,
-        executor: this.config.executors,
-      };
+      if (configSchema) {
+        this.addSchema(configSchema);
+      }
+    }
 
-      Object.entries(customSchemas).forEach(([generableType, list]) => {
-        const schemaGroup: SchemaObject = {
-          $id: `/custom/${generableType}`,
-          type: 'object',
-          minProperties: 1,
-          maxProperties: 1,
-          additionalProperties: false,
-          properties: {},
-        };
+    const customSchemas = {
+      command: this.config?.commands,
+      job: this.config?.jobs,
+      executor: this.config?.executors,
+    };
 
-        /*
+    Object.entries(customSchemas).forEach(([generableType, list]) => {
+      /*
          example: {
            $id: `/custom/commands`,
            type: 'object',
            additionalProperties: false,
            properties: {
-             search_year: {
-               $ref: '/command/custom/search_year',
+             search_year: { * command name
+               $ref: '/command/custom/search_year', * command parameters
              },
            },
          };
         */
 
-        if (list) {
-          list.forEach((generable) => {
-            if (
-              generable instanceof ParameterizedJob ||
-              !(generable instanceof Job)
-            ) {
-              const schema = this.buildGenerableSchema(generable);
+      if (list) {
+        list.forEach((generable) => {
+          if (
+            generable instanceof ParameterizedJob ||
+            !(generable instanceof Job)
+          ) {
+            const schema = this.buildGenerableSchema(generable);
 
-              if (schema) {
-                this.addSchema(schema, schema.$id);
-                schemaGroup.properties[generable.name] = {
+            if (schema) {
+              this.addSchema(schema, schema.$id);
+
+              if (generable instanceof ReusableExecutor) {
+                this.schemaGroups[generableType].oneOf.push({
+                  $ref: schema.$id,
+                });
+              } else {
+                this.schemaGroups[generableType].properties[generable.name] = {
                   $ref: schema.$id,
                 };
-                console.log(schema);
               }
             }
-          });
-        }
-
-        console.log(schemaGroup);
-
-        this.addSchema(schemaGroup, schemaGroup.$id);
-      });
-
-      if (configSchema) {
-        this.addSchema(configSchema);
+          }
+        });
       }
-    } else {
-      // TODO - this is a hack to get configless schema to validate
-      ['commands', 'job', 'executor'].forEach((generableType) => {
-        const schemaGroup: SchemaObject = {
-          $id: `/custom/${generableType}`,
-          type: 'object',
-          additionalProperties: false,
-          properties: {},
-        };
 
-        this.addSchema(schemaGroup, schemaGroup.$id);
-      });
-    }
+      const schemaGroup = this.schemaGroups[generableType];
+
+      this.addSchema(schemaGroup, schemaGroup.$id);
+    });
   }
 
   /**
@@ -219,6 +239,29 @@ export class ConfigValidator extends Ajv {
     }
 
     return ConfigValidator.genericInstance;
+  }
+
+  addGenerableSchema(generable: NamedGenerable): void {
+    const schema = this.buildGenerableSchema(generable);
+
+    if (schema && generable.generableType in this.schemaGroups) {
+      const type = generable.generableType as 'command' | 'job' | 'executor';
+      this.removeSchema(`/custom/${generable.generableType}`);
+      const schemaGroup: SchemaObject = this.schemaGroups[type];
+
+      if (generable instanceof ReusableExecutor) {
+        schemaGroup.oneOf.push({
+          $ref: schema.$id,
+        });
+      } else {
+        schemaGroup.properties[generable.name] = {
+          $ref: schema.$id,
+        };
+      }
+
+      this.addSchema(schema, schema.$id);
+      this.addSchema(schemaGroup, schemaGroup.$id);
+    }
   }
 
   /**
@@ -244,16 +287,11 @@ export class ConfigValidator extends Ajv {
     type: string,
     name: string,
   ): SchemaObject | undefined {
-    if (!parameterized.parameters) {
-      return undefined;
-    }
-
-    const schema: SchemaObject = {
-      $id: `/${type}/custom/${name}`,
+    const parametersSchema: SchemaObject = {
       type: 'object',
       required: [],
-      additionalProperties: false,
       properties: {},
+      additionalProperties: false,
     };
 
     /* example: {
@@ -289,7 +327,7 @@ export class ConfigValidator extends Ajv {
         oneOf: [{ $ref: `/executor/Executor` }, { $ref: `/custom/executor` }],
       },
       steps: {
-        oneOf: [{ $ref: `/definitions/Step` }, { $ref: `/custom/commands` }],
+        $ref: '/definitions/steps',
       },
       env_var_name: {
         type: 'string',
@@ -297,34 +335,48 @@ export class ConfigValidator extends Ajv {
       },
     };
 
-    for (const parameter of parameterized.parameters) {
-      const type = paramTypes[parameter.type];
-      schema.properties[parameter.name] =
-        typeof type === 'object' ? type : type(parameter);
-      if (!parameter.defaultValue) {
-        schema.required.push(parameter.name);
+    let someRequired = false;
+
+    if (parameterized.parameters) {
+      for (const parameter of parameterized.parameters) {
+        const type = paramTypes[parameter.type];
+        parametersSchema.properties[parameter.name] =
+          typeof type === 'object' ? type : type(parameter);
+        if (!parameter.defaultValue) {
+          someRequired = true;
+          parametersSchema.required.push(parameter.name);
+        }
       }
     }
 
-    return schema;
-  }
+    if (parameterized instanceof ReusableExecutor) {
+      if (!someRequired) {
+        this.schemaGroups.executor.oneOf[0].enum.push(parameterized.name);
+      }
 
-  /**
-   * Validate an unknown generable config object
-   * @param generable - The class name of a generable config component
-   * @param subtype - The subtype of the config component - Required for CustomParameter
-   * @returns
-   */
-  static validate(
-    generable: GenerableType,
-    input: unknown,
-    subtype?: GenerableSubtypes,
-  ): ValidationResult {
-    return ConfigValidator.getGeneric().validateGenerable(
-      generable,
-      input,
-      subtype,
-    );
+      const reuseExecutorSchema: SchemaObject = {
+        $id: `/${type}/custom/${name}`,
+        type: 'object',
+        ...parametersSchema,
+        properties: {
+          name: {
+            enum: [name],
+          },
+          ...parametersSchema.properties,
+        },
+      };
+
+      return reuseExecutorSchema;
+    } else {
+      if (!parameterized.parameters) {
+        return undefined;
+      }
+
+      return {
+        $id: `/${type}/custom/${name}`,
+        ...parametersSchema,
+      };
+    }
   }
 
   /**

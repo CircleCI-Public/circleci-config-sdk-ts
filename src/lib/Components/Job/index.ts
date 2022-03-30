@@ -5,6 +5,9 @@ import { ReusableExecutor } from '../Executor/exports/ReusableExecutor';
 import { Generable } from '../index';
 import { JobContentShape, JobShape } from './types/Job.types';
 import { GenerableType } from '../../Config/types/Config.types';
+import { ConfigValidator } from '../../Config/ConfigValidator';
+import { commands, executor } from '../../..';
+import { Config } from '../../Config';
 
 /**
  * Jobs define a collection of steps to be run within a given executor, and are orchestrated using Workflows.
@@ -73,4 +76,29 @@ export class Job implements Generable {
   get generableType(): GenerableType {
     return GenerableType.JOB;
   }
+}
+
+export function parseJob(name: string, jobIn: unknown, config?: Config): Job {
+  const jobArgs = jobIn as {
+    [key: string]: unknown;
+    steps: { [key: string]: unknown }[];
+    resource_class: string;
+    parameters?: { [key: string]: unknown };
+  };
+
+  if (
+    config?.getValidator().validateGenerable(GenerableType.JOB, jobArgs) ||
+    ConfigValidator.getGeneric().validateGenerable(GenerableType.JOB, jobArgs)
+  ) {
+    const exec = executor.parse(jobArgs);
+    const steps = commands.parseSteps(jobArgs.steps, config);
+
+    if (exec) {
+      return new Job(name, exec, steps);
+    } else {
+      throw new Error('Could not parse job - could not parse executor');
+    }
+  }
+
+  throw new Error('Could not parse job - provided input was invalid');
 }

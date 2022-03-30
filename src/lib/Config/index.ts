@@ -5,6 +5,7 @@ import { CustomCommandShape } from '../Components/Commands/types/Command.types';
 import { ReusableExecutor } from '../Components/Executor';
 import { ReusableExecutorsShape } from '../Components/Executor/types/ReusableExecutor.types';
 import { Job } from '../Components/Job';
+import { ParameterizedJob } from '../Components/Job/exports/ParameterizedJob';
 import { JobShape } from '../Components/Job/types/Job.types';
 import { CustomParametersList } from '../Components/Parameters';
 import { Parameterized } from '../Components/Parameters/exports/Parameterized';
@@ -12,7 +13,7 @@ import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomP
 import { ParameterShape } from '../Components/Parameters/types/Parameters.types';
 import { Workflow } from '../Components/Workflow';
 import { WorkflowShape } from '../Components/Workflow/types/Workflow.types';
-import { ConfigValidator } from './ConfigValidator';
+import { ConfigValidator, NamedGenerable } from './ConfigValidator';
 import { Pipeline } from './Pipeline';
 
 /**
@@ -102,6 +103,8 @@ export class Config
       this.commands.push(command);
     }
 
+    this.addGenerableSchemas(command);
+
     return this;
   }
 
@@ -116,6 +119,8 @@ export class Config
       this.executors.push(executor);
     }
 
+    this.addGenerableSchemas(executor);
+
     return this;
   }
 
@@ -124,9 +129,19 @@ export class Config
    * @param job - Injectable Job
    */
   addJob(job: Job): this {
-    // Abstract rules later
     this.jobs.push(job);
+
+    if (job instanceof ParameterizedJob) {
+      this.addGenerableSchemas(job);
+    }
+
     return this;
+  }
+
+  private addGenerableSchemas(generable: NamedGenerable): void {
+    if (this.validator) {
+      this.validator.addGenerableSchema(generable);
+    }
   }
 
   /**

@@ -133,7 +133,7 @@ export function parse(
   };
 
   const isEnum = type === 'enum';
-  const valid = ConfigValidator.validate(
+  const valid = ConfigValidator.getGeneric().validateGenerable(
     isEnum
       ? GenerableType.CUSTOM_ENUM_PARAMETER
       : GenerableType.CUSTOM_PARAMETER,
@@ -176,7 +176,7 @@ export function parseList(
   subtype?: ParameterizedComponent,
 ): CustomParametersList<AnyParameterLiteral> {
   if (subtype) {
-    const valid = ConfigValidator.validate(
+    const valid = ConfigValidator.getGeneric().validateGenerable(
       GenerableType.CUSTOM_PARAMETERS_LIST,
       customParamListIn,
       subtype,
@@ -193,7 +193,7 @@ export function parseList(
 
   const customParamList = customParamListIn as CustomParametersListShape;
   return new CustomParametersList(
-    Object.entries(customParamList.parameters).map(([name, properties]) =>
+    Object.entries(customParamList).map(([name, properties]) =>
       parse(properties, name),
     ),
   );

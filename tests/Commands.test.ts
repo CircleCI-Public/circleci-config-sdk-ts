@@ -341,15 +341,16 @@ describe('Instantiate reusable commands', () => {
   });
 
   const myConfig = new CircleCI.Config();
-  myConfig
-    .addCustomCommand(firstCustomCommand)
-    .addCustomCommand(secondCustomCommand);
+  myConfig.addCustomCommand(firstCustomCommand);
+
+  const validator = myConfig.getValidator();
+
+  // Testing that the validator will update the schema with new command
+  myConfig.addCustomCommand(secondCustomCommand);
 
   it('Add commands to config and validate', () => {
     expect(myConfig.commands?.length).toBe(2);
   });
-
-  const validator = myConfig.getValidator();
 
   it('Should validate with the proper parameters', () => {
     const result = validator.validateGenerable(GenerableType.STEP_LIST, [

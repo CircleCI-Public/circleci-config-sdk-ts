@@ -2,63 +2,34 @@ import { SchemaObject } from 'ajv';
 
 const ReusableExecutorSchema: SchemaObject = {
   $id: '/executor/ReusableExecutor',
-  description:
-    'Executors define the environment in which the steps of a job will be run, allowing you to reuse a single executor definition across multiple jobs.',
   type: 'object',
   required: ['executor'],
   properties: {
     executor: {
-      oneOf: [
-        {
-          type: 'object',
-          additionalProperties: false,
-          properties: {
-            name: {
-              type: 'string',
-              pattern: '^[a-z][a-z0-9_-]+$',
-            },
-          },
-        },
-        {
-          type: 'string',
-          pattern: '^[a-z][a-z0-9_-]+$',
-        },
-      ],
+      $ref: '/custom/executor',
     },
-  },
-  additionalProperties: {
-    additionalProperties: false,
-    anyOf: [
-      {
-        properties: {
-          shell: {
-            description:
-              'Shell to use for execution command in all steps. Can be overridden by shell in each step (default: See [Default Shell Options](https://circleci.com/docs/2.0/configuration-reference/#default-shell-options)',
-            type: 'string',
-          },
-        },
-      },
-      {
-        properties: {
-          working_directory: {
-            description: 'In which directory to run the steps.',
-            type: 'string',
-          },
-        },
-      },
-      {
-        properties: {
-          environment: {
-            description: 'A map of environment variable names and values.',
-            type: 'object',
-            additionalProperties: {
-              anyOf: [{ type: 'string' }, { type: 'number' }],
-            },
-          },
-        },
-      },
-    ],
   },
 };
 
-export default ReusableExecutorSchema;
+const ReusableExecutorsListSchema: SchemaObject = {
+  $id: '/definitions/ReusableExecutorsList',
+  type: 'object',
+  required: ['executor'],
+  patternProperties: {
+    '^[a-z][a-z0-9_-]+$': {
+      $merge: {
+        source: {
+          parameters: {
+            type: 'object',
+            $ref: '/parameters/ExecutorParameterList',
+          },
+        },
+        with: {
+          $ref: '/executor/Executor',
+        },
+      },
+    },
+  },
+};
+
+export { ReusableExecutorSchema, ReusableExecutorsListSchema };

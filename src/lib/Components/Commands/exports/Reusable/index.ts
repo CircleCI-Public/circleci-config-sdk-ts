@@ -67,7 +67,15 @@ export function parseCustomCommand(
   args: unknown,
   config?: Config,
 ): CustomCommand {
-  if (ConfigValidator.validate(GenerableType.CUSTOM_COMMAND, args)) {
+  if (
+    config
+      ?.getValidator()
+      .validateGenerable(GenerableType.CUSTOM_COMMAND, args) ||
+    ConfigValidator.getGeneric().validateGenerable(
+      GenerableType.CUSTOM_COMMAND,
+      args,
+    )
+  ) {
     const command_args = args as CustomCommandBodyShape;
 
     const parametersList = command_args.parameters

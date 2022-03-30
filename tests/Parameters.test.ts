@@ -14,7 +14,7 @@ import {
 } from '../src/lib/Config/types/Config.types';
 
 describe('Parse yaml pipeline parameters and validate', () => {
-  const parametersIn = yamlParse(`parameters: 
+  const parametersIn = yamlParse(`
     axis:
       type: enum
       default: 'x'
@@ -31,7 +31,7 @@ describe('Parse yaml pipeline parameters and validate', () => {
   );
 
   it('Should validate parameters', () => {
-    const result = ConfigValidator.validate(
+    const result = ConfigValidator.getGeneric().validateGenerable(
       GenerableType.CUSTOM_PARAMETERS_LIST,
       parametersIn,
       ParameterizedComponent.PIPELINE,
@@ -51,7 +51,7 @@ describe('Parse yaml pipeline parameters and validate', () => {
     type: integer
     default: 2021`);
 
-    const result = ConfigValidator.validate(
+    const result = ConfigValidator.getGeneric().validateGenerable(
       GenerableType.CUSTOM_PARAMETER,
       parameterIn,
       ParameterizedComponent.PIPELINE,
@@ -65,7 +65,7 @@ describe('Parse yaml pipeline parameters and validate', () => {
     type: integer
     default: 1.01`);
 
-    const result = ConfigValidator.validate(
+    const result = ConfigValidator.getGeneric().validateGenerable(
       GenerableType.CUSTOM_PARAMETER,
       parameterIn,
       ParameterizedComponent.PIPELINE,
@@ -96,7 +96,7 @@ describe('Parse yaml integer parameters and validate', () => {
     ParameterizedComponent.EXECUTOR,
   ].map((subtype) =>
     it(`Should validate integer parameter with subtype ${subtype}`, () => {
-      const result = ConfigValidator.validate(
+      const result = ConfigValidator.getGeneric().validateGenerable(
         GenerableType.CUSTOM_PARAMETER,
         parameterIn,
         ParameterSubtype.INTEGER,
@@ -127,7 +127,7 @@ describe('Parse yaml string parameter and validate', () => {
   );
 
   it('Should validate string parameter', () => {
-    const result = ConfigValidator.validate(
+    const result = ConfigValidator.getGeneric().validateGenerable(
       GenerableType.CUSTOM_PARAMETER,
       parameterIn,
       ParameterSubtype.STRING,
@@ -171,7 +171,7 @@ describe('Parse yaml boolean parameter and validate', () => {
     ParameterizedComponent.COMMAND,
   ].map((subtype) =>
     it(`Should validate boolean parameter with subtype ${subtype}`, () => {
-      const result = ConfigValidator.validate(
+      const result = ConfigValidator.getGeneric().validateGenerable(
         GenerableType.CUSTOM_PARAMETER,
         parameterIn,
         ParameterSubtype.BOOLEAN,
@@ -214,7 +214,7 @@ describe('Parse yaml enum parameter and validate', () => {
     ParameterizedComponent.EXECUTOR,
   ].map((subtype) =>
     it(`Should validate env_var_name parameter with subtype ${subtype}`, () => {
-      const result = ConfigValidator.validate(
+      const result = ConfigValidator.getGeneric().validateGenerable(
         subtype
           ? GenerableType.CUSTOM_PARAMETER
           : GenerableType.CUSTOM_ENUM_PARAMETER,
@@ -252,7 +252,7 @@ describe('Parse yaml env_var_name parameter and validate', () => {
     ParameterizedComponent.COMMAND,
   ].map((subtype) =>
     it(`Should validate env_var_name parameter with subtype ${subtype}`, () => {
-      const result = ConfigValidator.validate(
+      const result = ConfigValidator.getGeneric().validateGenerable(
         GenerableType.CUSTOM_PARAMETER,
         parameterIn,
         subtype,
