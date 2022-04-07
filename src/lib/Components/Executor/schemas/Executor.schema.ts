@@ -1,14 +1,14 @@
 import { SchemaObject } from 'ajv';
 
 const ExecutorSchema: SchemaObject = {
-  $id: '/executor/Executor',
+  $id: '#/executor/Executor',
   $merge: {
     source: {
       oneOf: [
-        { $ref: '/executor/DockerExecutor' },
-        { $ref: '/executor/MachineExecutor' },
-        { $ref: '/executor/WindowsExecutor' },
-        { $ref: '/executor/MacOSExecutor' },
+        { $ref: '#/executor/DockerExecutor' },
+        { $ref: '#/executor/MachineExecutor' },
+        { $ref: '#/executor/WindowsExecutor' },
+        { $ref: '#/executor/MacOSExecutor' },
       ],
     },
     with: {

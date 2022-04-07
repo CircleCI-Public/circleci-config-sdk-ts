@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const RunSchema: SchemaObject = {
-  $id: '/commands/native/run',
+  $id: '#/commands/native/run',
   type: 'object',
   required: ['command'],
   properties: {

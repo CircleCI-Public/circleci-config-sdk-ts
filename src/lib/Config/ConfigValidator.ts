@@ -1,21 +1,22 @@
 import Ajv, { SchemaObject } from 'ajv';
-import { Config } from '.';
+import ajvMergePatch from 'ajv-merge-patch';
 import { Generable } from '../Components';
-import AddSSHKeysSchema from '../Components/Commands/schema/Native/AddSSHKeys.schema';
-import RestoreSchema from '../Components/Commands/schema/Native/Cache/Restore.schema';
-import SaveSchema from '../Components/Commands/schema/Native/Cache/Save.schema';
-import CheckoutSchema from '../Components/Commands/schema/Native/Checkout.schema';
-import RunSchema from '../Components/Commands/schema/Native/Run.schema';
-import SetupRemoteDockerSchema from '../Components/Commands/schema/Native/SetupRemoteDocker.schema';
-import StoreArtifactsSchema from '../Components/Commands/schema/Native/StoreArtifacts.schema';
-import StoreTestResultsSchema from '../Components/Commands/schema/Native/StoreTestResults.schema';
-import AttachWorkspaceSchema from '../Components/Commands/schema/Native/Workspace/Attach.schema';
-import PersistSchema from '../Components/Commands/schema/Native/Workspace/Persist.schema';
-import CustomCommandSchema from '../Components/Commands/schema/Reusable/CustomCommand.schema';
+import AddSSHKeysSchema from '../Components/Commands/schemas/Native/AddSSHKeys.schema';
+import RestoreSchema from '../Components/Commands/schemas/Native/Cache/Restore.schema';
+import SaveSchema from '../Components/Commands/schemas/Native/Cache/Save.schema';
+import CheckoutSchema from '../Components/Commands/schemas/Native/Checkout.schema';
+import RunSchema from '../Components/Commands/schemas/Native/Run.schema';
+import SetupRemoteDockerSchema from '../Components/Commands/schemas/Native/SetupRemoteDocker.schema';
+import StoreArtifactsSchema from '../Components/Commands/schemas/Native/StoreArtifacts.schema';
+import StoreTestResultsSchema from '../Components/Commands/schemas/Native/StoreTestResults.schema';
+import AttachWorkspaceSchema from '../Components/Commands/schemas/Native/Workspace/Attach.schema';
+import PersistSchema from '../Components/Commands/schemas/Native/Workspace/Persist.schema';
+import CustomCommandSchema from '../Components/Commands/schemas/Reusable/CustomCommand.schema';
+import ReusableCommandSchema from '../Components/Commands/schemas/Reusable/ReusableCommand.schema';
 import {
   StepSchema,
   StepsSchema,
-} from '../Components/Commands/schema/Steps.schema';
+} from '../Components/Commands/schemas/Steps.schema';
 import DockerExecutorSchema from '../Components/Executor/schemas/DockerExecutor.schema';
 import ExecutorSchema from '../Components/Executor/schemas/Executor.schema';
 import MachineExecutorSchema from '../Components/Executor/schemas/MachineExecutor.schema';
@@ -25,9 +26,7 @@ import {
   ReusableExecutorsListSchema,
 } from '../Components/Executor/schemas/ReusableExecutor.schema';
 import WindowsExecutorSchema from '../Components/Executor/schemas/WindowsExecutor.schema';
-import { Job } from '../Components/Job';
-import { ParameterizedJob } from '../Components/Job/exports/ParameterizedJob';
-import { CustomEnumParameter, CustomParameter } from '../Components/Parameters';
+import JobSchema from '../Components/Job/schemas/Job.schema';
 import { Parameterized } from '../Components/Parameters/exports/Parameterized';
 import CommandParametersSchema from '../Components/Parameters/schemas/CommandParameters.schema';
 import {
@@ -49,6 +48,9 @@ import {
 } from '../Components/Parameters/schemas/ParameterTypes.schema';
 import PipelineParametersSchema from '../Components/Parameters/schemas/PipelineParameters.schema';
 import { AnyParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
+import WorkflowSchema from '../Components/Workflow/schemas/Workflow.schema';
+import WorkflowJobSchema from '../Components/Workflow/schemas/WorkflowJob.schema';
+import ConfigSchema from './schemas/Config.schema';
 import {
   GenerableSubtypes,
   GenerableType,
@@ -57,12 +59,10 @@ import {
   ValidationMap,
   ValidationResult,
 } from './types/Config.types';
-import ajvMergePatch from 'ajv-merge-patch';
-import JobSchema from '../Components/Job/schema/Job.schema';
-import { ReusableExecutor } from '../Components/Executor';
 
 const schemaRegistry: ValidationMap = {
-  [GenerableType.REUSABLE_COMMAND]: {},
+  [GenerableType.CONFIG]: ConfigSchema,
+  [GenerableType.REUSABLE_COMMAND]: ReusableCommandSchema,
   [GenerableType.CUSTOM_COMMAND]: CustomCommandSchema,
   [GenerableType.RESTORE]: RestoreSchema,
   [GenerableType.SAVE]: SaveSchema,
@@ -86,7 +86,8 @@ const schemaRegistry: ValidationMap = {
   [GenerableType.STEP]: StepSchema,
   [GenerableType.STEP_LIST]: StepsSchema,
   [GenerableType.JOB]: JobSchema,
-  [GenerableType.WORKFLOW_JOB]: {},
+  [GenerableType.WORKFLOW_JOB]: WorkflowJobSchema,
+  [GenerableType.WORKFLOW]: WorkflowSchema,
 
   [GenerableType.CUSTOM_PARAMETER]: {
     /* Custom Parameter Config Components */
@@ -113,43 +114,13 @@ const schemaRegistry: ValidationMap = {
 
 // TODO: Potentially make name an interface so that we can have a type guard without this type
 export type NamedGenerable = Generable &
-  Parameterized<AnyParameterLiteral> & { name: string };
+  Partial<Parameterized<AnyParameterLiteral>> & { name: string };
 
 export class ConfigValidator extends Ajv {
-  private config?: Config;
   private static genericInstance: ConfigValidator;
 
-  schemaGroups: { [key: string]: SchemaObject } = {
-    command: {
-      $id: `/custom/command`,
-      type: 'object',
-      minProperties: 1,
-      maxProperties: 1,
-      additionalProperties: false,
-      properties: {},
-    },
-    job: {
-      $id: `/custom/job`,
-      type: 'object',
-      minProperties: 1,
-      maxProperties: 1,
-      additionalProperties: false,
-      properties: {},
-    },
-    executor: {
-      $id: `/custom/executor`,
-      oneOf: [
-        {
-          enum: [''], // TODO: Do not validate with an empty name
-        },
-      ],
-    },
-  };
-
-  constructor(config?: Config) {
+  private constructor() {
     super();
-
-    this.config = config;
 
     ajvMergePatch(this);
 
@@ -163,69 +134,18 @@ export class ConfigValidator extends Ajv {
         });
       }
     });
-
-    if (this.config) {
-      const configSchema = this.buildParameterizedSchema(
-        this.config,
-        'pipeline',
-        'config',
-      );
-
-      if (configSchema) {
-        this.addSchema(configSchema);
-      }
-    }
-
-    const customSchemas = {
-      command: this.config?.commands,
-      job: this.config?.jobs,
-      executor: this.config?.executors,
-    };
-
-    Object.entries(customSchemas).forEach(([generableType, list]) => {
-      /*
-         example: {
-           $id: `/custom/commands`,
-           type: 'object',
-           additionalProperties: false,
-           properties: {
-             search_year: { * command name
-               $ref: '/command/custom/search_year', * command parameters
-             },
-           },
-         };
-        */
-
-      if (list) {
-        list.forEach((generable) => {
-          if (
-            generable instanceof ParameterizedJob ||
-            !(generable instanceof Job)
-          ) {
-            const schema = this.buildGenerableSchema(generable);
-
-            if (schema) {
-              this.addSchema(schema, schema.$id);
-
-              if (generable instanceof ReusableExecutor) {
-                this.schemaGroups[generableType].oneOf.push({
-                  $ref: schema.$id,
-                });
-              } else {
-                this.schemaGroups[generableType].properties[generable.name] = {
-                  $ref: schema.$id,
-                };
-              }
-            }
-          }
-        });
-      }
-
-      const schemaGroup = this.schemaGroups[generableType];
-
-      this.addSchema(schemaGroup, schemaGroup.$id);
-    });
   }
+
+  // static validateWithConfig(
+  //   generable: GenerableType,
+  //   input: unknown,
+  //   config?: Config,
+  //   subtype?: GenerableSubtypes,
+  // ): ValidationResult {
+  //   const validator = config?.getValidator() ?? ConfigValidator.getGeneric();
+
+  //   return validator.validateGenerable(generable, input, subtype);
+  // }
 
   /**
    * Access a generic singleton instance of the ConfigValidator
@@ -233,6 +153,7 @@ export class ConfigValidator extends Ajv {
    * Use the config's validator if Config has parameterized components.
    * @returns generic instance of ConfigValidator
    */
+
   static getGeneric(): ConfigValidator {
     if (!ConfigValidator.genericInstance) {
       ConfigValidator.genericInstance = new ConfigValidator();
@@ -241,60 +162,60 @@ export class ConfigValidator extends Ajv {
     return ConfigValidator.genericInstance;
   }
 
-  addGenerableSchema(generable: NamedGenerable): void {
-    const schema = this.buildGenerableSchema(generable);
+  // addGenerableSchema(generable: NamedGenerable): void {
+  //   const schema = this.buildGenerableSchema(generable);
 
-    if (schema && generable.generableType in this.schemaGroups) {
-      const type = generable.generableType as 'command' | 'job' | 'executor';
-      this.removeSchema(`/custom/${generable.generableType}`);
-      const schemaGroup: SchemaObject = this.schemaGroups[type];
+  //   if (schema && generable.generableType in this.schemaGroups) {
+  //     const type = generable.generableType as 'command' | 'job' | 'executor';
+  //     this.removeSchema(`#/custom/${generable.generableType}`);
+  //     const schemaGroup: SchemaObject = this.schemaGroups[type];
 
-      if (generable instanceof ReusableExecutor) {
-        schemaGroup.oneOf.push({
-          $ref: schema.$id,
-        });
-      } else {
-        schemaGroup.properties[generable.name] = {
-          $ref: schema.$id,
-        };
-      }
+  //     if (generable instanceof ReusableExecutor) {
+  //       schemaGroup.oneOf.push({
+  //         $ref: schema.$id,
+  //       });
+  //     } else {
+  //       schemaGroup.properties[generable.name] = {
+  //         $ref: schema.$id,
+  //       };
+  //     }
 
-      this.addSchema(schema, schema.$id);
-      this.addSchema(schemaGroup, schemaGroup.$id);
-    }
-  }
+  //     this.addSchema(schema, schema.$id);
+  //     this.addSchema(schemaGroup, schemaGroup.$id);
+  //   }
+  // }
 
   /**
    * Generate a schema for a given Generable component
    * @param generable - Generable component to generate a schema for
    * @returns schema for the given Generable
    */
-  buildGenerableSchema(generable: NamedGenerable): SchemaObject | undefined {
-    return this.buildParameterizedSchema(
-      generable,
-      generable.generableType,
-      generable.name,
-    );
-  }
+  // buildGenerableSchema(generable: NamedGenerable): SchemaObject | undefined {
+  //   return this.buildParameterizedSchema(
+  //     generable,
+  //     generable.generableType,
+  //     generable.name,
+  //   );
+  // }
 
   /**
    * Generate a schema for a given Parameterized component
    * @param parameterized - Parameterized component to generate a schema for
    * @returns schema for the given Parameterized
    */
-  buildParameterizedSchema(
-    parameterized: Parameterized<AnyParameterLiteral>,
-    type: string,
-    name: string,
-  ): SchemaObject | undefined {
-    const parametersSchema: SchemaObject = {
-      type: 'object',
-      required: [],
-      properties: {},
-      additionalProperties: false,
-    };
+  // buildParameterizedSchema(
+  //   parameterized: Partial<Parameterized<AnyParameterLiteral>>,
+  //   type: string,
+  //   name: string,
+  // ): SchemaObject | undefined {
+  //   const parametersSchema: SchemaObject = {
+  //     type: 'object',
+  //     required: [],
+  //     properties: {},
+  //     additionalProperties: false,
+  //   };
 
-    /* example: {
+  /* example: {
       $id: `/command/custom/search_year`,
       type: 'object',
       required: [],
@@ -306,78 +227,74 @@ export class ConfigValidator extends Ajv {
       },
     };
     */
-    const paramTypes: {
-      [key in AnyParameterLiteral]:
-        | SchemaObject
-        | ((parameter: CustomParameter<AnyParameterLiteral>) => SchemaObject);
-    } = {
-      string: {
-        type: 'string',
-      },
-      boolean: {
-        type: 'boolean',
-      },
-      integer: {
-        type: 'integer',
-      },
-      enum: (parameter) => ({
-        enum: (parameter as CustomEnumParameter).enumValues,
-      }),
-      executor: {
-        oneOf: [{ $ref: `/executor/Executor` }, { $ref: `/custom/executor` }],
-      },
-      steps: {
-        $ref: '/definitions/steps',
-      },
-      env_var_name: {
-        type: 'string',
-        pattern: '^[a-zA-Z][a-zA-Z0-9_-]+$',
-      },
-    };
+  //   const paramTypes: {
+  //     [key in AnyParameterLiteral]:
+  //       | SchemaObject
+  //       | ((parameter: CustomParameter<AnyParameterLiteral>) => SchemaObject);
+  //   } = {
+  //     string: {
+  //       type: 'string',
+  //     },
+  //     boolean: {
+  //       type: 'boolean',
+  //     },
+  //     integer: {
+  //       type: 'integer',
+  //     },
+  //     enum: (parameter) => ({
+  //       enum: (parameter as CustomEnumParameter).enumValues,
+  //     }),
+  //     executor: {
+  //       oneOf: [{ $ref: `#/executor/Executor` }, { $ref: `#/custom/executor` }],
+  //     },
+  //     steps: {
+  //       $ref: '#/definitions/steps',
+  //     },
+  //     env_var_name: {
+  //       type: 'string',
+  //       pattern: '^[a-zA-Z][a-zA-Z0-9_-]+$',
+  //     },
+  //   };
 
-    let someRequired = false;
+  //   let someRequired = false;
 
-    if (parameterized.parameters) {
-      for (const parameter of parameterized.parameters) {
-        const type = paramTypes[parameter.type];
-        parametersSchema.properties[parameter.name] =
-          typeof type === 'object' ? type : type(parameter);
-        if (!parameter.defaultValue) {
-          someRequired = true;
-          parametersSchema.required.push(parameter.name);
-        }
-      }
-    }
+  //   if (parameterized.parameters) {
+  //     for (const parameter of parameterized.parameters) {
+  //       const type = paramTypes[parameter.type];
+  //       parametersSchema.properties[parameter.name] =
+  //         typeof type === 'object' ? type : type(parameter);
+  //       if (!parameter.defaultValue) {
+  //         someRequired = true;
+  //         parametersSchema.required.push(parameter.name);
+  //       }
+  //     }
+  //   }
 
-    if (parameterized instanceof ReusableExecutor) {
-      if (!someRequired) {
-        this.schemaGroups.executor.oneOf[0].enum.push(parameterized.name);
-      }
+  //   if (parameterized instanceof ReusableExecutor) {
+  //     if (!someRequired) {
+  //       this.schemaGroups.executor.oneOf[0].enum.push(parameterized.name);
+  //     }
 
-      const reuseExecutorSchema: SchemaObject = {
-        $id: `/${type}/custom/${name}`,
-        type: 'object',
-        ...parametersSchema,
-        properties: {
-          name: {
-            enum: [name],
-          },
-          ...parametersSchema.properties,
-        },
-      };
+  //     const reuseExecutorSchema: SchemaObject = {
+  //       $id: `#/${type}/custom/${name}`,
+  //       type: 'object',
+  //       ...parametersSchema,
+  //       properties: {
+  //         name: {
+  //           enum: [name],
+  //         },
+  //         ...parametersSchema.properties,
+  //       },
+  //     };
 
-      return reuseExecutorSchema;
-    } else {
-      if (!parameterized.parameters) {
-        return undefined;
-      }
-
-      return {
-        $id: `/${type}/custom/${name}`,
-        ...parametersSchema,
-      };
-    }
-  }
+  //     return reuseExecutorSchema;
+  //   } else {
+  //     return {
+  //       $id: `#/${type}/custom/${name}`,
+  //       ...parametersSchema,
+  //     };
+  //   }
+  // }
 
   /**
    * Validate an unknown generable config object
@@ -385,7 +302,7 @@ export class ConfigValidator extends Ajv {
    * @param subtype - The subtype of the config component - Required for CustomParameter
    * @returns
    */
-  validateGenerable(
+  static validateGenerable(
     generable: GenerableType,
     input: unknown,
     subtype?: GenerableSubtypes,
@@ -395,11 +312,11 @@ export class ConfigValidator extends Ajv {
     if ('$id' in schemaSource) {
       const schema = schemaSource as SchemaObject;
 
-      return this.validateComponent(schema, input);
+      return ConfigValidator.getGeneric().validateComponent(schema, input);
     } else if (subtype !== undefined && subtype in schemaSource) {
       const schema = schemaSource[subtype] as ValidationMap;
 
-      return this.validateComponent(schema, input);
+      return ConfigValidator.getGeneric().validateComponent(schema, input);
     } else {
       throw new Error(`No validator found for ${generable}:${subtype}`);
     }

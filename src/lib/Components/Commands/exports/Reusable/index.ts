@@ -1,5 +1,4 @@
 import { commands, parameters } from '../../../../..';
-import { Config } from '../../../../Config';
 import { ConfigValidator } from '../../../../Config/ConfigValidator';
 import {
   GenerableType,
@@ -51,41 +50,32 @@ export class ReusableCommand implements Command {
   }
 }
 
+// TODO: Handle circular references
 export function parseCustomCommands(
-  commandListIn: { [key: string]: unknown }[],
-  config?: Config,
+  commandListIn: { [key: string]: unknown },
+  custom_commands?: CustomCommand[],
 ): CustomCommand[] {
-  return commandListIn.map((subtype) => {
-    const commandName = Object.keys(subtype)[0];
-
-    return parseCustomCommand(commandName, subtype[commandName], config);
-  });
+  return Object.entries(commandListIn).map(([name, args]) =>
+    parseCustomCommand(name, args, custom_commands),
+  );
 }
 
 export function parseCustomCommand(
   name: string,
   args: unknown,
-  config?: Config,
+  custom_commands?: CustomCommand[],
 ): CustomCommand {
-  if (
-    config
-      ?.getValidator()
-      .validateGenerable(GenerableType.CUSTOM_COMMAND, args) ||
-    ConfigValidator.getGeneric().validateGenerable(
-      GenerableType.CUSTOM_COMMAND,
-      args,
-    )
-  ) {
+  if (ConfigValidator.validateGenerable(GenerableType.CUSTOM_COMMAND, args)) {
     const command_args = args as CustomCommandBodyShape;
 
-    const parametersList = command_args.parameters
-      ? (parameters.parseList(
-          command_args.parameters,
-          ParameterizedComponent.COMMAND,
-        ) as CustomParametersList<CommandParameterLiteral>)
-      : undefined;
+    const parametersList =
+      command_args.parameters &&
+      (parameters.parseList(
+        command_args.parameters,
+        ParameterizedComponent.COMMAND,
+      ) as CustomParametersList<CommandParameterLiteral>);
 
-    const steps = commands.parseSteps(command_args.steps, config);
+    const steps = commands.parseSteps(command_args.steps, custom_commands);
 
     return new CustomCommand(
       name,

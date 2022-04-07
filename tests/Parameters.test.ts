@@ -6,7 +6,6 @@ import {
   CustomParametersList,
 } from '../src/lib/Components/Parameters';
 import { PipelineParameterLiteral } from '../src/lib/Components/Parameters/types/CustomParameterLiterals.types';
-import { ConfigValidator } from '../src/lib/Config/ConfigValidator';
 import {
   GenerableType,
   ParameterizedComponent,
@@ -31,7 +30,7 @@ describe('Parse yaml pipeline parameters and validate', () => {
   );
 
   it('Should validate parameters', () => {
-    const result = ConfigValidator.getGeneric().validateGenerable(
+    const result = CircleCI.ConfigValidator.validateGenerable(
       GenerableType.CUSTOM_PARAMETERS_LIST,
       parametersIn,
       ParameterizedComponent.PIPELINE,
@@ -51,7 +50,7 @@ describe('Parse yaml pipeline parameters and validate', () => {
     type: integer
     default: 2021`);
 
-    const result = ConfigValidator.getGeneric().validateGenerable(
+    const result = CircleCI.ConfigValidator.validateGenerable(
       GenerableType.CUSTOM_PARAMETER,
       parameterIn,
       ParameterizedComponent.PIPELINE,
@@ -65,7 +64,7 @@ describe('Parse yaml pipeline parameters and validate', () => {
     type: integer
     default: 1.01`);
 
-    const result = ConfigValidator.getGeneric().validateGenerable(
+    const result = CircleCI.ConfigValidator.validateGenerable(
       GenerableType.CUSTOM_PARAMETER,
       parameterIn,
       ParameterizedComponent.PIPELINE,
@@ -96,7 +95,7 @@ describe('Parse yaml integer parameters and validate', () => {
     ParameterizedComponent.EXECUTOR,
   ].map((subtype) =>
     it(`Should validate integer parameter with subtype ${subtype}`, () => {
-      const result = ConfigValidator.getGeneric().validateGenerable(
+      const result = CircleCI.ConfigValidator.validateGenerable(
         GenerableType.CUSTOM_PARAMETER,
         parameterIn,
         ParameterSubtype.INTEGER,
@@ -127,7 +126,7 @@ describe('Parse yaml string parameter and validate', () => {
   );
 
   it('Should validate string parameter', () => {
-    const result = ConfigValidator.getGeneric().validateGenerable(
+    const result = CircleCI.ConfigValidator.validateGenerable(
       GenerableType.CUSTOM_PARAMETER,
       parameterIn,
       ParameterSubtype.STRING,
@@ -171,7 +170,7 @@ describe('Parse yaml boolean parameter and validate', () => {
     ParameterizedComponent.COMMAND,
   ].map((subtype) =>
     it(`Should validate boolean parameter with subtype ${subtype}`, () => {
-      const result = ConfigValidator.getGeneric().validateGenerable(
+      const result = CircleCI.ConfigValidator.validateGenerable(
         GenerableType.CUSTOM_PARAMETER,
         parameterIn,
         ParameterSubtype.BOOLEAN,
@@ -214,7 +213,7 @@ describe('Parse yaml enum parameter and validate', () => {
     ParameterizedComponent.EXECUTOR,
   ].map((subtype) =>
     it(`Should validate env_var_name parameter with subtype ${subtype}`, () => {
-      const result = ConfigValidator.getGeneric().validateGenerable(
+      const result = CircleCI.ConfigValidator.validateGenerable(
         subtype
           ? GenerableType.CUSTOM_PARAMETER
           : GenerableType.CUSTOM_ENUM_PARAMETER,
@@ -252,7 +251,7 @@ describe('Parse yaml env_var_name parameter and validate', () => {
     ParameterizedComponent.COMMAND,
   ].map((subtype) =>
     it(`Should validate env_var_name parameter with subtype ${subtype}`, () => {
-      const result = ConfigValidator.getGeneric().validateGenerable(
+      const result = CircleCI.ConfigValidator.validateGenerable(
         GenerableType.CUSTOM_PARAMETER,
         parameterIn,
         subtype,

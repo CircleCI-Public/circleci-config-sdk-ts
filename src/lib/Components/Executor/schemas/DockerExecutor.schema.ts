@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const DockerExecutorSchema: SchemaObject = {
-  $id: '/executor/DockerExecutor',
+  $id: '#/executor/DockerExecutor',
   type: 'object',
   required: ['docker', 'resource_class'],
   properties: {

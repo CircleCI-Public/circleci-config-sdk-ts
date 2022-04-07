@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const MacOSExecutorSchema: SchemaObject = {
-  $id: '/executor/MacOSExecutor',
+  $id: '#/executor/MacOSExecutor',
   type: 'object',
   required: ['macos', 'resource_class'],
   properties: {

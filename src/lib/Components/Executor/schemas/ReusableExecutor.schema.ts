@@ -1,18 +1,32 @@
 import { SchemaObject } from 'ajv';
 
-const ReusableExecutorSchema: SchemaObject = {
-  $id: '/executor/ReusableExecutor',
+const ReusableExecutorRefSchema: SchemaObject = {
+  $id: '#/executor/ReusableExecutor',
   type: 'object',
   required: ['executor'],
-  properties: {
-    executor: {
-      $ref: '/custom/executor',
+  oneOf: [
+    {
+      properties: {
+        executor: { type: 'string' },
+      },
+      additionalProperties: false,
     },
-  },
+    {
+      properties: {
+        executor: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+          },
+        },
+        additionalProperties: false,
+      },
+    },
+  ],
 };
 
 const ReusableExecutorsListSchema: SchemaObject = {
-  $id: '/definitions/ReusableExecutorsList',
+  $id: '#/definitions/ReusableExecutorsList',
   type: 'object',
   required: ['executor'],
   patternProperties: {
@@ -21,15 +35,18 @@ const ReusableExecutorsListSchema: SchemaObject = {
         source: {
           parameters: {
             type: 'object',
-            $ref: '/parameters/ExecutorParameterList',
+            $ref: '#/parameters/ExecutorParameterList',
           },
         },
         with: {
-          $ref: '/executor/Executor',
+          $ref: '#/executor/Executor',
         },
       },
     },
   },
 };
 
-export { ReusableExecutorSchema, ReusableExecutorsListSchema };
+export {
+  ReusableExecutorRefSchema as ReusableExecutorSchema,
+  ReusableExecutorsListSchema,
+};

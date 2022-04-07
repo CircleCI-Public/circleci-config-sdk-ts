@@ -1,8 +1,14 @@
 /**
  * Instantiate a CircleCI Executor, the build environment for a job. Select a type of executor and supply the required parameters.
  */
-import { GenerableType } from '../../Config/types/Config.types';
+import { parameters } from '../../..';
 import { ConfigValidator } from '../../Config/ConfigValidator';
+import {
+  GenerableType,
+  ParameterizedComponent,
+} from '../../Config/types/Config.types';
+import { CustomParametersList } from '../Parameters';
+import { ExecutorParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
 import { DockerExecutor } from './exports/DockerExecutor';
 import { Executor } from './exports/Executor';
 import { MachineExecutor } from './exports/MachineExecutor';
@@ -14,19 +20,22 @@ import { ExecutorLiteral, ExecutorLiteralUsage } from './types/Executor.types';
 import { MachineResourceClass } from './types/MachineExecutor.types';
 import { MacOSResourceClass } from './types/MacOSExecutor.types';
 import { WindowsResourceClass } from './types/WindowsExecutor.types';
-import { Config } from '../../Config';
+
+export type UnknownExecutorShape = {
+  resource_class: string;
+  [key: string]: unknown;
+};
 
 /**
  * Parse executor type from an object with an executor.
  * @returns Executor of the corresponding type
  */
-function parse(
-  executorIn: {
-    resource_class: string;
-    [key: string]: unknown;
-  },
-  config?: Config,
+export function parse(
+  executorIn: unknown,
+  executors?: ReusableExecutor[],
 ): Executor | ReusableExecutor | undefined {
+  const executorArgs = executorIn as UnknownExecutorShape;
+
   const subtypes: {
     [key in ExecutorLiteralUsage]: (
       args: unknown,
@@ -36,29 +45,29 @@ function parse(
       const dockerArgs = args as [{ image: string }];
 
       if (
-        ConfigValidator.getGeneric().validateGenerable(
+        ConfigValidator.validateGenerable(
           GenerableType.DOCKER_EXECUTOR,
           dockerArgs,
         )
       ) {
         return new DockerExecutor(
           dockerArgs[0].image || 'cimg/base:stable',
-          executorIn.resource_class as DockerResourceClass,
+          executorArgs.resource_class as DockerResourceClass,
         );
       }
     },
     machine: (args) => {
       const winPrefix = 'windows.';
 
-      if (executorIn.resource_class?.startsWith(winPrefix)) {
-        const windowsResourceClass = executorIn.resource_class.substring(
+      if (executorArgs.resource_class?.startsWith(winPrefix)) {
+        const windowsResourceClass = executorArgs.resource_class.substring(
           winPrefix.length,
         ) as WindowsResourceClass;
 
         const windowsArgs = args as Partial<WindowsExecutor>;
 
         if (
-          ConfigValidator.getGeneric().validateGenerable(
+          ConfigValidator.validateGenerable(
             GenerableType.WINDOWS_EXECUTOR,
             windowsArgs,
           )
@@ -70,13 +79,13 @@ function parse(
       const machineArgs = args as Partial<MachineExecutor>;
 
       if (
-        ConfigValidator.getGeneric().validateGenerable(
+        ConfigValidator.validateGenerable(
           GenerableType.MACHINE_EXECUTOR,
           machineArgs,
         )
       ) {
         return new MachineExecutor(
-          executorIn.resource_class as MachineResourceClass,
+          executorArgs.resource_class as MachineResourceClass,
           machineArgs.image,
         );
       }
@@ -85,14 +94,14 @@ function parse(
       const macOSArgs = args as Partial<MacOSExecutor>;
 
       if (
-        ConfigValidator.getGeneric().validateGenerable(
+        ConfigValidator.validateGenerable(
           GenerableType.MACOS_EXECUTOR,
           macOSArgs,
         )
       ) {
         return new MacOSExecutor(
           macOSArgs.xcode || '13.1',
-          executorIn.resource_class as MacOSResourceClass,
+          executorArgs.resource_class as MacOSResourceClass,
         );
       }
     },
@@ -104,9 +113,7 @@ function parse(
       const name =
         typeof executorArgs === 'string' ? executorArgs : executorArgs.name;
 
-      const executor = config?.executors?.find(
-        (executor) => executor.name === name,
-      );
+      const executor = executors?.find((executor) => executor.name === name);
 
       if (executor) {
         return executor;
@@ -116,7 +123,7 @@ function parse(
     },
   };
 
-  const executorType = Object.keys(executorIn).find(
+  const executorType = Object.keys(executorArgs).find(
     (subtype) => subtype in subtypes,
   ) as ExecutorLiteral | undefined;
 
@@ -126,9 +133,40 @@ function parse(
   }
 
   // eslint-disable-next-line security/detect-object-injection
-  const parsedExecutor = subtypes[executorType](executorIn[executorType]);
+  const parsedExecutor = subtypes[executorType](executorArgs[executorType]);
 
   return parsedExecutor;
+}
+
+export function parseReusableExecutors(
+  executorListIn: unknown,
+): ReusableExecutor[] {
+  const executorListArgs = executorListIn as {
+    [key: string]: (UnknownExecutorShape & {
+      parameters?: { [key: string]: unknown };
+    })[]; // TODO: Clean this
+  };
+
+  const parametersList =
+    executorListArgs.parameters &&
+    (parameters.parseList(
+      executorListArgs.parameters,
+      ParameterizedComponent.EXECUTOR,
+    ) as CustomParametersList<ExecutorParameterLiteral> | undefined);
+
+  return Object.entries(executorListArgs).map(([name, executor]) => {
+    const parsedExecutor = parse(executor, undefined);
+
+    if (parsedExecutor) {
+      return new ReusableExecutor(
+        name,
+        parsedExecutor as Executor,
+        parametersList,
+      );
+    }
+
+    throw new Error('Invalid executor has been passed');
+  });
 }
 
 export {
@@ -137,5 +175,5 @@ export {
   MacOSExecutor,
   WindowsExecutor,
   ReusableExecutor,
-  parse,
+  Executor,
 };

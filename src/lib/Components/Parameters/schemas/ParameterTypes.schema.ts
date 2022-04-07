@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const StringParameterSchema: SchemaObject = {
-  $id: '/parameters/StringParameter',
+  $id: '#/parameters/StringParameter',
   type: 'object',
   additionalProperties: false,
   description:
@@ -21,7 +21,7 @@ const StringParameterSchema: SchemaObject = {
 };
 
 const BooleanParameterSchema: SchemaObject = {
-  $id: '/parameters/BooleanParameter',
+  $id: '#/parameters/BooleanParameter',
   type: 'object',
   additionalProperties: false,
   description:
@@ -41,7 +41,7 @@ const BooleanParameterSchema: SchemaObject = {
 };
 
 const IntegerParameterSchema: SchemaObject = {
-  $id: '/parameters/IntegerParameter',
+  $id: '#/parameters/IntegerParameter',
   type: 'object',
   additionalProperties: false,
   description:
@@ -61,7 +61,7 @@ const IntegerParameterSchema: SchemaObject = {
 };
 
 const EnumParameterSchema: SchemaObject = {
-  $id: '/parameters/EnumParameter',
+  $id: '#/parameters/EnumParameter',
   type: 'object',
   description:
     'https://circleci.com/docs/2.0/reusing-config/#enum\n\nThe `enum` parameter may be a list of any values. Use the `enum` parameter type when you want to enforce that the value must be one from a specific set of string values.',
@@ -88,7 +88,7 @@ const EnumParameterSchema: SchemaObject = {
 };
 
 const StepsParameterSchema: SchemaObject = {
-  $id: '/parameters/StepsParameter',
+  $id: '#/parameters/StepsParameter',
   type: 'object',
   additionalProperties: false,
   description:
@@ -104,14 +104,14 @@ const StepsParameterSchema: SchemaObject = {
     default: {
       type: 'array',
       items: {
-        $ref: '/definitions/Step',
+        $ref: '#/definitions/Step',
       },
     },
   },
 };
 
 const ExecutorParameterSchema: SchemaObject = {
-  $id: '/parameters/ExecutorParameter',
+  $id: '#/parameters/ExecutorParameter',
   type: 'object',
   additionalProperties: false,
   description:
@@ -132,7 +132,7 @@ const ExecutorParameterSchema: SchemaObject = {
 };
 
 const EnvVarNameParameterSchema: SchemaObject = {
-  $id: '/parameters/EnvVarNameParameter',
+  $id: '#/parameters/EnvVarNameParameter',
   type: 'object',
   additionalProperties: false,
   description:

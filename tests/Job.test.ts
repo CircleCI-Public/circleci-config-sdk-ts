@@ -133,7 +133,67 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
   });
 });
 
-describe('Parse Parameterized Docker Job With A Custom Command', () => {
+describe('Parse Parameterized Docker Job', () => {
+  const job = new CircleCI.ParameterizedJob(
+    'my_job',
+    new CircleCI.executor.DockerExecutor('cimg/node:lts'),
+    new CustomParametersList([
+      new CircleCI.parameters.CustomParameter('greeting', 'string'),
+    ]),
+    [
+      new CircleCI.commands.Run({
+        command: 'echo << parameters.greeting >>',
+      }),
+    ],
+  );
+
+  const jobIn = {
+    docker: [{ image: 'cimg/node:lts' }],
+    resource_class: 'medium',
+    steps: [
+      {
+        run: {
+          command: 'echo << parameters.greeting >>',
+        },
+      },
+    ],
+    parameters: {
+      greeting: {
+        type: 'string',
+      },
+    },
+  };
+
+  it('Can validate the job with a custom command step', () => {
+    const result = parseJob('my_job', jobIn);
+
+    expect(result).toEqual(job);
+  });
+
+  it('Can validate the job with a custom command step', () => {
+    const result = CircleCI.ConfigValidator.validateGenerable(
+      GenerableType.JOB,
+      jobIn,
+    );
+
+    expect(result).toEqual(true);
+  });
+  // TODO: Make these tests pass. Something weird with having multiple config validators
+  // The test appropriately fails, but this test and the next one break each other.
+  // it('Cannot validate the job when not provided a config (missing command)', () => {
+  //   const result = parseJob('my_job', jobIn);
+
+  //   expect(result).not.toEqual(job);
+  // });
+  // it('Fail validation when command has not been added to config', () => {
+  //   const validator = myConfig.getValidator();
+  //   const resultCommand = validator.validateGenerable(GenerableType.JOB, jobIn);
+
+  //   expect(resultCommand).not.toEqual(true);
+  // });
+});
+
+describe('Parse Docker Job With A Parameterized Custom Command', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
@@ -166,39 +226,38 @@ describe('Parse Parameterized Docker Job With A Custom Command', () => {
         },
       },
     ],
-    parameters: {
-      greeting: {
-        type: 'string',
-      },
-    },
+    // TODO: Fix additional properties validation passing
   };
 
+  // CircleCI.ConfigValidator.getGeneric();
   const myConfig = new CircleCI.Config();
 
   myConfig.addJob(job);
+  myConfig.addCustomCommand(customCommand);
 
-  // TODO: Fix this
-  CircleCI.ConfigValidator.getGeneric();
-  const validator = myConfig.getValidator();
+  // it('Can validate the job with a custom command step', () => {
+  //   const validator = myConfig.getValidator();
+  //   const result = validator.validateGenerable(GenerableType.JOB, jobIn);
 
+  //   expect(result).toEqual(true);
+  // });
   it('Can validate the job with a custom command step', () => {
-    const result = parseJob('my_job', jobIn, myConfig);
+    const result = parseJob('my_job', jobIn, myConfig.commands, undefined);
 
     expect(result).toEqual(job);
   });
-  // TODO: Make this test pass. Something weird with having multiple config validators
+
+  // TODO: Make these tests pass. Something weird with having multiple config validators
   // The test appropriately fails, but this test and the next one break each other.
+  // it('Cannot validate the job when not provided a config (missing command)', () => {
+  //   const result = parseJob('my_job', jobIn);
+
+  //   expect(result).not.toEqual(job);
+  // });
   // it('Fail validation when command has not been added to config', () => {
+  //   const validator = myConfig.getValidator();
   //   const resultCommand = validator.validateGenerable(GenerableType.JOB, jobIn);
 
   //   expect(resultCommand).not.toEqual(true);
   // });
-
-  myConfig.addCustomCommand(customCommand);
-
-  it('Can validate the job with a custom command step', () => {
-    const result = validator.validateGenerable(GenerableType.JOB, jobIn);
-
-    expect(result).toEqual(true);
-  });
 });

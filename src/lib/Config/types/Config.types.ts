@@ -1,6 +1,7 @@
 import { ErrorObject, SchemaObject } from 'ajv';
 
 export enum GenerableType {
+  CONFIG = 'config',
   REUSABLE_COMMAND = 'reusable_command',
   CUSTOM_COMMAND = 'command',
   RESTORE = 'restore',
@@ -18,6 +19,7 @@ export enum GenerableType {
   STEP_LIST = 'steps',
   JOB = 'job',
   WORKFLOW_JOB = 'workflow_job',
+  WORKFLOW = 'workflow',
 
   ANY_EXECUTOR = 'executor',
   DOCKER_EXECUTOR = 'docker_executor',

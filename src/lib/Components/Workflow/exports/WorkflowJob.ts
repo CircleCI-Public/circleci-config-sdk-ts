@@ -1,6 +1,6 @@
 import { GenerableType } from '../../../Config/types/Config.types';
 import { Generable } from '../../index';
-import { Job } from '../../Job';
+import { Job } from '../../Job/exports/Job';
 import {
   WorkflowJobParameters,
   WorkflowJobParametersShape,

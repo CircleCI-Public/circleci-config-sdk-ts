@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const MachineExecutorSchema: SchemaObject = {
-  $id: '/executor/MachineExecutor',
+  $id: '#/executor/MachineExecutor',
   type: 'object',
   required: ['machine', 'resource_class'],
   properties: {

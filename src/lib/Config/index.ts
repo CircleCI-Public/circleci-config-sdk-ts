@@ -1,19 +1,20 @@
 import { Scalar, stringify as Stringify } from 'yaml';
+import { commands, executor, parameters } from '../..';
 import { version as SDKVersion } from '../../package-version.json';
 import { CustomCommand } from '../Components/Commands/exports/Reusable';
 import { CustomCommandShape } from '../Components/Commands/types/Command.types';
 import { ReusableExecutor } from '../Components/Executor';
 import { ReusableExecutorsShape } from '../Components/Executor/types/ReusableExecutor.types';
-import { Job } from '../Components/Job';
-import { ParameterizedJob } from '../Components/Job/exports/ParameterizedJob';
+import { parseJobs } from '../Components/Job';
+import { Job } from '../Components/Job/exports/Job';
 import { JobShape } from '../Components/Job/types/Job.types';
 import { CustomParametersList } from '../Components/Parameters';
 import { Parameterized } from '../Components/Parameters/exports/Parameterized';
 import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
 import { ParameterShape } from '../Components/Parameters/types/Parameters.types';
-import { Workflow } from '../Components/Workflow';
+import { parseWorkflowList, Workflow } from '../Components/Workflow';
 import { WorkflowShape } from '../Components/Workflow/types/Workflow.types';
-import { ConfigValidator, NamedGenerable } from './ConfigValidator';
+import { ConfigValidator } from './ConfigValidator';
 import { Pipeline } from './Pipeline';
 
 /**
@@ -103,8 +104,6 @@ export class Config
       this.commands.push(command);
     }
 
-    this.addGenerableSchemas(command);
-
     return this;
   }
 
@@ -119,8 +118,6 @@ export class Config
       this.executors.push(executor);
     }
 
-    this.addGenerableSchemas(executor);
-
     return this;
   }
 
@@ -131,17 +128,7 @@ export class Config
   addJob(job: Job): this {
     this.jobs.push(job);
 
-    if (job instanceof ParameterizedJob) {
-      this.addGenerableSchemas(job);
-    }
-
     return this;
-  }
-
-  private addGenerableSchemas(generable: NamedGenerable): void {
-    if (this.validator) {
-      this.validator.addGenerableSchema(generable);
-    }
   }
 
   /**
@@ -240,18 +227,6 @@ export class Config
       }),
     );
   }
-
-  /**
-   * Get validation instance for this config.
-   * @returns ajv validation
-   */
-  getValidator(): ConfigValidator {
-    if (!this.validator) {
-      this.validator = new ConfigValidator(this);
-    }
-
-    return this.validator;
-  }
 }
 
 /**
@@ -290,3 +265,32 @@ type CircleCIConfigShape = {
   commands?: CustomCommandShape;
   workflows: WorkflowShape;
 };
+
+export function parseConfig(configIn: unknown): Config {
+  const config = configIn as {
+    setup: boolean;
+    executors?: Record<string, unknown>;
+    jobs: Record<string, unknown>;
+    commands?: Record<string, unknown>;
+    parameters?: Record<string, unknown>;
+    workflows: Record<string, unknown>;
+  };
+
+  const executorList =
+    config.executors && executor.parseReusableExecutors(config.executors);
+  const commandList =
+    config.commands && commands.reusable.parseCustomCommands(config.commands);
+  const parameterList =
+    config.parameters && parameters.parseList(config.parameters);
+  const jobList = parseJobs(config.jobs, commandList, executorList);
+  const workflows = parseWorkflowList(config.workflows, jobList);
+
+  return new Config(
+    config.setup,
+    jobList,
+    workflows,
+    executorList,
+    commandList,
+    parameterList as CustomParametersList<PipelineParameterLiteral>,
+  );
+}

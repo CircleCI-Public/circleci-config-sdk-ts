@@ -1,4 +1,3 @@
-import { Config } from '../../Config';
 import { ConfigValidator } from '../../Config/ConfigValidator';
 import { GenerableType } from '../../Config/types/Config.types';
 import { Command } from './exports/Command';
@@ -23,7 +22,7 @@ import {
 import { Attach, Persist } from './exports/Native/Workspace';
 import { AttachParameters } from './exports/Native/Workspace/Attach';
 import { PersistParameters } from './exports/Native/Workspace/Persist';
-import { ReusableCommand } from './exports/Reusable';
+import { CustomCommand, ReusableCommand } from './exports/Reusable';
 import { CommandParameters, NativeCommandLiteral } from './types/Command.types';
 
 const nativeSubtypes: {
@@ -32,48 +31,28 @@ const nativeSubtypes: {
   restore_cache: (args) => {
     const restoreArgs = args as RestoreCacheParameters;
 
-    if (
-      ConfigValidator.getGeneric().validateGenerable(
-        GenerableType.RESTORE,
-        restoreArgs,
-      )
-    ) {
+    if (ConfigValidator.validateGenerable(GenerableType.RESTORE, restoreArgs)) {
       return new Restore(args as RestoreCacheParameters);
     }
   },
   save_cache: (args) => {
     const saveArgs = args as SaveCacheParameters;
 
-    if (
-      ConfigValidator.getGeneric().validateGenerable(
-        GenerableType.SAVE,
-        saveArgs,
-      )
-    ) {
+    if (ConfigValidator.validateGenerable(GenerableType.SAVE, saveArgs)) {
       return new Save(args as SaveCacheParameters);
     }
   },
   attach_workspace: (args) => {
     const attachArgs = args as AttachParameters;
 
-    if (
-      ConfigValidator.getGeneric().validateGenerable(
-        GenerableType.ATTACH,
-        attachArgs,
-      )
-    ) {
+    if (ConfigValidator.validateGenerable(GenerableType.ATTACH, attachArgs)) {
       return new Attach(args as AttachParameters);
     }
   },
   persist_workspace: (args) => {
     const persistArgs = args as PersistParameters;
 
-    if (
-      ConfigValidator.getGeneric().validateGenerable(
-        GenerableType.PERSIST,
-        persistArgs,
-      )
-    ) {
+    if (ConfigValidator.validateGenerable(GenerableType.PERSIST, persistArgs)) {
       return new Persist(args as PersistParameters);
     }
   },
@@ -81,7 +60,7 @@ const nativeSubtypes: {
     const addSSHKeysArgs = args as AddSSHKeysParameters;
 
     if (
-      ConfigValidator.getGeneric().validateGenerable(
+      ConfigValidator.validateGenerable(
         GenerableType.ADD_SSH_KEYS,
         addSSHKeysArgs,
       )
@@ -93,10 +72,7 @@ const nativeSubtypes: {
     const checkoutArgs = args as CheckoutParameters;
 
     if (
-      ConfigValidator.getGeneric().validateGenerable(
-        GenerableType.CHECKOUT,
-        checkoutArgs,
-      )
+      ConfigValidator.validateGenerable(GenerableType.CHECKOUT, checkoutArgs)
     ) {
       return new Checkout(args as CheckoutParameters);
     }
@@ -104,9 +80,7 @@ const nativeSubtypes: {
   run: (args) => {
     const runArgs = args as RunParameters;
 
-    if (
-      ConfigValidator.getGeneric().validateGenerable(GenerableType.RUN, runArgs)
-    ) {
+    if (ConfigValidator.validateGenerable(GenerableType.RUN, runArgs)) {
       return new Run(args as RunParameters);
     }
   },
@@ -114,7 +88,7 @@ const nativeSubtypes: {
     const setupRemoteDockerArgs = args as SetupRemoteDockerParameters;
 
     if (
-      ConfigValidator.getGeneric().validateGenerable(
+      ConfigValidator.validateGenerable(
         GenerableType.SETUP_REMOTE_DOCKER,
         setupRemoteDockerArgs,
       )
@@ -126,7 +100,7 @@ const nativeSubtypes: {
     const storeArtifactsArgs = args as StoreArtifactsParameters;
 
     if (
-      ConfigValidator.getGeneric().validateGenerable(
+      ConfigValidator.validateGenerable(
         GenerableType.STORE_ARTIFACTS,
         storeArtifactsArgs,
       )
@@ -138,7 +112,7 @@ const nativeSubtypes: {
     const storeTestResultsArgs = args as StoreTestResultsParameters;
 
     if (
-      ConfigValidator.getGeneric().validateGenerable(
+      ConfigValidator.validateGenerable(
         GenerableType.STORE_TEST_RESULTS,
         storeTestResultsArgs,
       )
@@ -150,12 +124,12 @@ const nativeSubtypes: {
 
 function parseSteps(
   commandListIn: { [key: string]: unknown }[],
-  config?: Config,
+  commands?: CustomCommand[],
 ): Command[] {
   return commandListIn.map((subtype) => {
     const commandName = Object.keys(subtype)[0];
 
-    return parseStep(commandName, subtype[commandName], config);
+    return parseStep(commandName, subtype[commandName], commands);
   });
 }
 
@@ -163,16 +137,19 @@ function parseSteps(
  * Parse a native or reusable command.
  * @param name - The name of the command.
  * @param args - The arguments to the command.
- * @param config - Required to parse reusable commands
  * @returns Command or ReusableCommand
  */
-function parseStep(name: string, args?: unknown, config?: Config): Command {
+function parseStep(
+  name: string,
+  args?: unknown,
+  commands?: CustomCommand[],
+): Command {
   let parsedCommand;
 
   if (name in nativeSubtypes) {
     parsedCommand = nativeSubtypes[name as NativeCommandLiteral](args);
-  } else if (config && config.commands) {
-    const command = config.commands.find((c) => c.name === name);
+  } else if (commands) {
+    const command = commands.find((c) => c.name === name);
 
     if (command) {
       parsedCommand = new ReusableCommand(command, args as CommandParameters);

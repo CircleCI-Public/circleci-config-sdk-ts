@@ -1,11 +1,10 @@
-import { Job } from '..';
 import { Command } from '../../Commands/exports/Command';
-import { Executor } from '../../Executor/exports/Executor';
 import { CustomParametersList } from '../../Parameters';
 import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { CustomParametersListShape } from '../../Parameters/types/Parameters.types';
-import { JobContentShape } from '../types/Job.types';
+import { AnyExecutor, JobContentShape } from '../types/Job.types';
+import { Job } from './Job';
 /**
  * Parameterized are a type of Job which defines parameters it can accept.
  * {@label STATIC_2.1}
@@ -18,7 +17,7 @@ class ParameterizedJob
 
   constructor(
     name: string,
-    executor: Executor,
+    executor: AnyExecutor,
     parameters?: CustomParametersList<JobParameterLiteral>,
     steps?: Command[],
   ) {

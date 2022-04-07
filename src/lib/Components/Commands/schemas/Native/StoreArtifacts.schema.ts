@@ -1,7 +1,7 @@
 import { SchemaObject } from 'ajv';
 
 const StoreArtifactsSchema: SchemaObject = {
-  $id: '/commands/native/store_artifacts',
+  $id: '#/commands/native/store_artifacts',
   type: 'object',
   required: ['path'],
   properties: {
