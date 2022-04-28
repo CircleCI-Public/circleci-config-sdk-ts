@@ -1,12 +1,10 @@
-import { Executor } from './Executor';
-import { Config } from '../../../Config';
+import { GenerableType } from '../../../Config/types/Config.types';
+import { ExecutorParameters } from '../types/ExecutorParameters.types';
 import {
   MacOSExecutorShape,
   MacOSResourceClass,
 } from '../types/MacOSExecutor.types';
-import { ValidationResult } from '../../../Config/ConfigValidator';
-import MacOSExecutorSchema from '../schemas/MacosExecutor.schema';
-import { ExecutorParameters } from '../types/ExecutorParameters.types';
+import { Executor } from './Executor';
 
 /**
  * A MacOS Virtual Machine with configurable Xcode version.
@@ -37,7 +35,7 @@ export class MacOSExecutor extends Executor {
     };
   }
 
-  static validate(input: unknown): ValidationResult {
-    return Config.validator.validateData(MacOSExecutorSchema, input);
+  get generableType(): GenerableType {
+    return GenerableType.MACOS_EXECUTOR;
   }
 }

@@ -106,6 +106,8 @@ export interface ParameterShape<
   enum?: ListParameter; // Enum must be set if 'type' is of "enum", otherwise set to null
 }
 
+export type CustomParametersListShape = Record<string, ParameterShape>;
+
 export type CustomParameterShape<ParameterTypeLiteral> = {
   type: ParameterTypeLiteral;
   default: unknown;
@@ -114,5 +116,5 @@ export type CustomParameterShape<ParameterTypeLiteral> = {
 
 export type CustomEnumParameterShape =
   | CustomParameterShape<EnumParameterLiteral> & {
-      enum?: string[];
+      enum: string[];
     };

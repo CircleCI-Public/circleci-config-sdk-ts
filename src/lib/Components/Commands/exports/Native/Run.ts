@@ -1,3 +1,4 @@
+import { GenerableType } from '../../../../Config/types/Config.types';
 import {
   BooleanParameter,
   EnvironmentParameter,
@@ -10,10 +11,9 @@ import { Command } from '../Command';
  * The Run command step is used for invoking all command-line programs.
  * @param parameters - RunParameters
  */
-export class Run extends Command {
+export class Run implements Command {
   parameters: RunParameters;
   constructor(parameters: RunParameters) {
-    super('run');
     this.parameters = parameters;
   }
   /**
@@ -24,6 +24,14 @@ export class Run extends Command {
     const command = { run: {} };
     command.run = { ...command.run, ...this.parameters };
     return command as RunCommandShape;
+  }
+
+  get name(): StringParameter {
+    return 'run';
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.RUN;
   }
 }
 

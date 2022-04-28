@@ -1,6 +1,8 @@
 import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
+import { parseJob } from '../src/lib/Components/Job';
 import { CustomParametersList } from '../src/lib/Components/Parameters';
+import { GenerableType } from '../src/lib/Config/types/Config.types';
 
 describe('Instantiate Docker Job', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
@@ -125,8 +127,137 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
 
   it('Add job to config and validate', () => {
     const myConfig = new CircleCI.Config();
-    myConfig.addJob(job);
     myConfig.addCustomCommand(customCommand);
+    myConfig.addJob(job);
     expect(YAML.parse(myConfig.stringify())).toEqual(expectedOutput);
   });
+});
+
+describe('Parse Parameterized Docker Job', () => {
+  const job = new CircleCI.ParameterizedJob(
+    'my_job',
+    new CircleCI.executor.DockerExecutor('cimg/node:lts'),
+    new CustomParametersList([
+      new CircleCI.parameters.CustomParameter('greeting', 'string'),
+    ]),
+    [
+      new CircleCI.commands.Run({
+        command: 'echo << parameters.greeting >>',
+      }),
+    ],
+  );
+
+  const jobIn = {
+    docker: [{ image: 'cimg/node:lts' }],
+    resource_class: 'medium',
+    steps: [
+      {
+        run: {
+          command: 'echo << parameters.greeting >>',
+        },
+      },
+    ],
+    parameters: {
+      greeting: {
+        type: 'string',
+      },
+    },
+  };
+
+  it('Can validate the job with a custom command step', () => {
+    const result = parseJob('my_job', jobIn);
+
+    expect(result).toEqual(job);
+  });
+
+  it('Can validate the job with a custom command step', () => {
+    const result = CircleCI.ConfigValidator.validateGenerable(
+      GenerableType.JOB,
+      jobIn,
+    );
+
+    expect(result).toEqual(true);
+  });
+  // TODO: Make these tests pass. Something weird with having multiple config validators
+  // The test appropriately fails, but this test and the next one break each other.
+  // it('Cannot validate the job when not provided a config (missing command)', () => {
+  //   const result = parseJob('my_job', jobIn);
+
+  //   expect(result).not.toEqual(job);
+  // });
+  // it('Fail validation when command has not been added to config', () => {
+  //   const validator = myConfig.getValidator();
+  //   const resultCommand = validator.validateGenerable(GenerableType.JOB, jobIn);
+
+  //   expect(resultCommand).not.toEqual(true);
+  // });
+});
+
+describe('Parse Docker Job With A Parameterized Custom Command', () => {
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.commands.Run({
+    command: 'echo << parameters.greeting >>',
+  });
+
+  const customCommand = new CircleCI.commands.reusable.CustomCommand(
+    'say_hello',
+    [helloWorld],
+    new CustomParametersList([
+      new CircleCI.parameters.CustomParameter('greeting', 'string'),
+    ]),
+  );
+
+  const reusableCommand = new CircleCI.commands.reusable.ReusableCommand(
+    customCommand,
+    { greeting: 'hello world' },
+  );
+
+  const job = new CircleCI.Job('my_job', docker);
+
+  job.addStep(reusableCommand);
+
+  const jobIn = {
+    docker: [{ image: 'cimg/node:lts' }],
+    resource_class: 'medium',
+    steps: [
+      {
+        say_hello: {
+          greeting: 'hello world',
+        },
+      },
+    ],
+    // TODO: Fix additional properties validation passing
+  };
+
+  // CircleCI.ConfigValidator.getGeneric();
+  const myConfig = new CircleCI.Config();
+
+  myConfig.addJob(job);
+  myConfig.addCustomCommand(customCommand);
+
+  // it('Can validate the job with a custom command step', () => {
+  //   const validator = myConfig.getValidator();
+  //   const result = validator.validateGenerable(GenerableType.JOB, jobIn);
+
+  //   expect(result).toEqual(true);
+  // });
+  it('Can validate the job with a custom command step', () => {
+    const result = parseJob('my_job', jobIn, myConfig.commands, undefined);
+
+    expect(result).toEqual(job);
+  });
+
+  // TODO: Make these tests pass. Something weird with having multiple config validators
+  // The test appropriately fails, but this test and the next one break each other.
+  // it('Cannot validate the job when not provided a config (missing command)', () => {
+  //   const result = parseJob('my_job', jobIn);
+
+  //   expect(result).not.toEqual(job);
+  // });
+  // it('Fail validation when command has not been added to config', () => {
+  //   const validator = myConfig.getValidator();
+  //   const resultCommand = validator.validateGenerable(GenerableType.JOB, jobIn);
+
+  //   expect(resultCommand).not.toEqual(true);
+  // });
 });

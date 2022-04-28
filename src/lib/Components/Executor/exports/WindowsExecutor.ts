@@ -1,6 +1,4 @@
-import { Config } from '../../../Config';
-import { ValidationResult } from '../../../Config/ConfigValidator';
-import WindowsExecutorSchema from '../schemas/WindowsExecutor.schema';
+import { GenerableType } from '../../../Config/types/Config.types';
 import { ExecutorParameters } from '../types/ExecutorParameters.types';
 import {
   WindowsExecutorShape,
@@ -49,7 +47,7 @@ export class WindowsExecutor extends Executor {
     };
   }
 
-  static validate(input: unknown): ValidationResult {
-    return Config.validator.validateData(WindowsExecutorSchema, input);
+  get generableType(): GenerableType {
+    return GenerableType.WINDOWS_EXECUTOR;
   }
 }

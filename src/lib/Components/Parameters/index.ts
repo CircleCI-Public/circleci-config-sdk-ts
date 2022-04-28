@@ -1,22 +1,20 @@
-import { Component } from '..';
-import { Config } from '../../Config';
-import { ValidationResult } from '../../Config/ConfigValidator';
+import { Generable } from '..';
+import { ConfigValidator } from '../../Config/ConfigValidator';
+import {
+  GenerableType,
+  ParameterizedComponent,
+  ParameterSubtype,
+} from '../../Config/types/Config.types';
 import { CustomParametersList } from './exports/CustomParameterList';
-import CommandParameterSchema from './schemas/CommandParameter.schema';
-import ExecutorParameterSchema from './schemas/ExecutorParameter.schema';
-import JobParameterSchema from './schemas/JobParameter.schema';
-import { EnumParameterSchema } from './schemas/ParameterTypes.schema';
-import PipelineParameterSchema from './schemas/PipelineParameter.schema';
 import {
   AnyParameterLiteral,
   EnumParameterLiteral,
-  ParameterizedComponentLiteral,
 } from './types/CustomParameterLiterals.types';
 import {
   CustomEnumParameterShape,
   CustomParameterShape,
-  ParameterShape,
-  ParameterValues,
+  CustomParametersListShape,
+  ParameterValues as Parameterized,
 } from './types/Parameters.types';
 
 /**
@@ -32,9 +30,9 @@ import {
  *
  * {@label STATIC_2.1}
  */
+
 export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
-  extends Component
-  implements ParameterValues<ParameterTypeLiteral>
+  implements Generable, Parameterized<ParameterTypeLiteral>
 {
   name: string;
   type: ParameterTypeLiteral;
@@ -47,13 +45,11 @@ export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
     defaultValue?: unknown,
     description?: string,
   ) {
-    super();
     this.name = name;
     this.type = type;
     this.defaultValue = defaultValue;
     this.description = description;
   }
-
   /**
    * @returns JSON schema of parameter's contents
    */
@@ -65,25 +61,8 @@ export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
     };
   }
 
-  static validate(
-    input: unknown,
-    type: ParameterizedComponentLiteral,
-  ): ValidationResult {
-    const schemas = {
-      job: JobParameterSchema,
-      command: CommandParameterSchema,
-      executor: ExecutorParameterSchema,
-      pipeline: PipelineParameterSchema,
-    };
-
-    // prevent object sink injection
-    const schema = Object.entries(schemas).find(([key]) => key === type);
-
-    if (schema && schema[1]) {
-      return Config.validator.validateData(schema[1], input);
-    }
-
-    return false;
+  get generableType(): GenerableType {
+    return GenerableType.CUSTOM_PARAMETER;
   }
 }
 
@@ -98,7 +77,7 @@ export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
  * {@label STATIC_2.1}
  */
 export class CustomEnumParameter extends CustomParameter<EnumParameterLiteral> {
-  enumValues?: string[];
+  enumValues: string[];
 
   constructor(
     name: string,
@@ -117,10 +96,107 @@ export class CustomEnumParameter extends CustomParameter<EnumParameterLiteral> {
     };
   }
 
-  static validate(input: unknown): ValidationResult {
-    return Config.validator.validateData(EnumParameterSchema, input);
+  get generableType(): GenerableType {
+    return GenerableType.CUSTOM_ENUM_PARAMETER;
   }
 }
 
-export type CustomParametersShape = Record<string, ParameterShape>;
+/**
+ * Parse a single parameter
+ * @param customParamIn - Unknown parameter object
+ * @param name - Name of the parameter
+ * @param subtype - Subtype of the parameter. Required for all non-enum typed parameters.
+ * @returns A CustomParameter object
+ */
+export function parse(
+  customParamIn: unknown,
+  name: string,
+): CustomParameter<AnyParameterLiteral> {
+  let type = undefined;
+
+  if (customParamIn && typeof customParamIn === 'object') {
+    type = Object.entries(customParamIn).find(([key]) => key === 'type')?.[1];
+  }
+
+  const types: {
+    [key in Exclude<
+      AnyParameterLiteral,
+      EnumParameterLiteral
+    >]: ParameterSubtype;
+  } = {
+    string: ParameterSubtype.STRING,
+    boolean: ParameterSubtype.BOOLEAN,
+    integer: ParameterSubtype.INTEGER,
+    executor: ParameterSubtype.EXECUTOR,
+    steps: ParameterSubtype.STEPS,
+    env_var_name: ParameterSubtype.ENV_VAR_NAME,
+  };
+
+  const isEnum = type === 'enum';
+  const valid = ConfigValidator.validateGenerable(
+    isEnum
+      ? GenerableType.CUSTOM_ENUM_PARAMETER
+      : GenerableType.CUSTOM_PARAMETER,
+    customParamIn,
+    isEnum ? undefined : types[type as keyof typeof types],
+  );
+
+  if (valid !== true) {
+    throw new Error(
+      `Provided parameter could not be parsed: ${
+        typeof valid === 'object' && valid?.map((v) => v.message).join(', ')
+      }`,
+    );
+  }
+
+  if (isEnum) {
+    const customEnumParam = customParamIn as CustomEnumParameterShape;
+
+    return new CustomEnumParameter(
+      name,
+      customEnumParam.enum,
+      customEnumParam.default,
+      customEnumParam.description,
+    );
+  } else {
+    const customParam =
+      customParamIn as CustomParameterShape<AnyParameterLiteral>;
+
+    return new CustomParameter(
+      name,
+      customParam.type,
+      customParam.default,
+      customParam.description,
+    );
+  }
+}
+
+export function parseList(
+  customParamListIn: unknown,
+  subtype?: ParameterizedComponent,
+): CustomParametersList<AnyParameterLiteral> {
+  if (subtype) {
+    const valid = ConfigValidator.validateGenerable(
+      GenerableType.CUSTOM_PARAMETERS_LIST,
+      customParamListIn,
+      subtype,
+    );
+
+    if (valid !== true) {
+      throw new Error(
+        `Could not find valid parameter list in provided object: ${
+          typeof valid === 'object' && valid?.map((v) => v.message).join(', ')
+        }`,
+      );
+    }
+  }
+
+  const customParamList = customParamListIn as CustomParametersListShape;
+  return new CustomParametersList(
+    Object.entries(customParamList).map(([name, properties]) =>
+      parse(properties, name),
+    ),
+  );
+}
+
 export { CustomParametersList };

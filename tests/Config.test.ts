@@ -1,6 +1,15 @@
 import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 import { version as SDKVersion } from '../src/package-version.json';
+import { parseConfig } from '../src/lib/Config';
+import {
+  CustomCommand,
+  ReusableCommand,
+} from '../src/lib/Components/Commands/exports/Reusable';
+import {
+  CustomParameter,
+  CustomParametersList,
+} from '../src/lib/Components/Parameters';
 
 describe('Generate a Setup workflow config', () => {
   const myConfig = new CircleCI.Config(true).stringify();
@@ -50,5 +59,119 @@ describe('Generate a config with parameters', () => {
 # SDK Version: ${SDKVersion}
 `;
     expect(configResult).toContain(comment);
+  });
+});
+
+describe('Parse a fully complete config', () => {
+  const myConfig = new CircleCI.Config();
+
+  myConfig.defineParameter('greeting', 'string', 'hello world!');
+
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const reusableDocker = new CircleCI.executor.ReusableExecutor(
+    'docker',
+    docker,
+  );
+
+  myConfig.addReusableExecutor(reusableDocker);
+
+  const customCommand = new CustomCommand(
+    'say_hello',
+    [
+      new CircleCI.commands.Run({
+        command: 'echo << parameters.greeting >>',
+      }),
+    ],
+    new CustomParametersList([new CustomParameter('greeting', 'string')]),
+  );
+
+  myConfig.addCustomCommand(customCommand);
+
+  const jobA = new CircleCI.Job('my-job-A', reusableDocker, [
+    new ReusableCommand(customCommand, {
+      greeting: '<< pipeline.parameters.greeting >>',
+    }),
+  ]);
+  const jobB = new CircleCI.Job('my-job-B', reusableDocker, [
+    new ReusableCommand(customCommand, {
+      greeting: 'sup world!',
+    }),
+  ]);
+
+  myConfig.addJob(jobA);
+  myConfig.addJob(jobB);
+
+  const myWorkflow = new CircleCI.Workflow('my-workflow');
+
+  myWorkflow.addJob(jobA);
+  myWorkflow.addJob(jobB, { requires: [jobA.name] });
+
+  myConfig.addWorkflow(myWorkflow);
+
+  const configResult = {
+    version: 2.1,
+    setup: false,
+    commands: {
+      say_hello: {
+        parameters: {
+          greeting: {
+            type: 'string',
+          },
+        },
+        steps: [
+          {
+            run: {
+              command: 'echo << parameters.greeting >>',
+            },
+          },
+        ],
+      },
+    },
+    parameters: {
+      greeting: {
+        type: 'string',
+        default: 'hello world!',
+      },
+    },
+    executors: {
+      docker: {
+        docker: [{ image: 'cimg/node:lts' }],
+      },
+    },
+    jobs: {
+      'my-job-A': {
+        executor: 'docker',
+        steps: [
+          {
+            say_hello: {
+              greeting: '<< pipeline.parameters.greeting >>',
+            },
+          },
+        ],
+      },
+      'my-job-B': {
+        executor: 'docker',
+        steps: [
+          {
+            say_hello: {
+              greeting: 'sup world!',
+            },
+          },
+        ],
+      },
+    },
+    workflows: {
+      'my-workflow': {
+        jobs: [{ 'my-job-A': {} }, { 'my-job-B': { requires: ['my-job-A'] } }],
+      },
+    },
+  };
+
+  it('Should produce a blank config with parameters', () => {
+    expect(parseConfig(configResult)).toEqual(myConfig);
+  });
+
+  it('Should be fully circular', () => {
+    expect(parseConfig(YAML.parse(myConfig.stringify()))).toEqual(myConfig);
   });
 });

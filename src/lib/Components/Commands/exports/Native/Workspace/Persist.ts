@@ -1,3 +1,4 @@
+import { GenerableType } from '../../../../../Config/types/Config.types';
 import {
   ListParameter,
   StringParameter,
@@ -7,10 +8,9 @@ import { Command } from '../../Command';
 /**
  * Special step used to Persist the workflow’s workspace to the current container. The full contents of the workspace are downloaded and copied into the directory the workspace is being Persisted at.
  */
-export class Persist extends Command {
+export class Persist implements Command {
   parameters: PersistParameters;
   constructor(parameters: PersistParameters) {
-    super('persist_to_workspace');
     this.parameters = parameters;
   }
   /**
@@ -21,6 +21,14 @@ export class Persist extends Command {
     return {
       persist_to_workspace: { ...this.parameters },
     };
+  }
+
+  get name(): StringParameter {
+    return 'persist_to_workspace';
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.PERSIST;
   }
 }
 

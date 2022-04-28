@@ -1,16 +1,12 @@
-import { Component } from '../../index';
+import { Generable } from '../../index';
 import { StringParameter } from '../../Parameters/types/Parameters.types';
 import { CommandParameters, CommandShape } from '../types/Command.types';
 
 /**
  * Abstract - A generic Command
  */
-export abstract class Command extends Component {
+export interface Command extends Generable {
   name: StringParameter;
-  abstract parameters?: CommandParameters;
-  constructor(name: StringParameter) {
-    super();
-    this.name = name;
-  }
-  abstract generate(): CommandShape;
+  parameters?: CommandParameters;
+  generate(): CommandShape;
 }

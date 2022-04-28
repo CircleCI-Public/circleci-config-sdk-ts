@@ -1,21 +1,8 @@
-import {
-  CustomEnumParameter,
-  CustomParameter,
-  CustomParametersShape,
-} from '..';
-import { Component } from '../..';
-import { Config } from '../../../Config';
-import {
-  AnyParameterLiteral,
-  ParameterizedComponentLiteral,
-} from '../types/CustomParameterLiterals.types';
-import { ValidationResult } from '../../../Config/ConfigValidator';
-import {
-  CommandParameterListSchema,
-  ExecutorParameterListSchema,
-  JobParameterListSchema,
-  PipelineParameterListSchema,
-} from '../schemas/ComponentParameterLists.schema';
+import { CustomEnumParameter, CustomParameter } from '..';
+import { Generable } from '../..';
+import { GenerableType } from '../../../Config/types/Config.types';
+import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
+import { CustomParametersListShape } from '../types/Parameters.types';
 
 /**
  * A list that can be added to a component.
@@ -26,15 +13,15 @@ import {
  */
 export class CustomParametersList<
   ParameterTypeLiteral extends AnyParameterLiteral,
-> extends Component {
+> implements Generable
+{
   parameters: CustomParameter<ParameterTypeLiteral>[];
 
   constructor(parameters?: CustomParameter<ParameterTypeLiteral>[]) {
-    super();
     this.parameters = parameters || [];
   }
 
-  generate(): CustomParametersShape {
+  generate(): CustomParametersListShape {
     const generatedParameters = this.parameters.map((parameter) => ({
       [parameter.name]: {
         ...parameter.generate(),
@@ -44,25 +31,8 @@ export class CustomParametersList<
     return Object.assign({}, ...generatedParameters);
   }
 
-  static validate(
-    input: unknown,
-    type: ParameterizedComponentLiteral,
-  ): ValidationResult {
-    const schemas = {
-      job: JobParameterListSchema,
-      command: CommandParameterListSchema,
-      executor: ExecutorParameterListSchema,
-      pipeline: PipelineParameterListSchema,
-    };
-
-    // prevent object sink injection
-    const schema = Object.entries(schemas).find(([key]) => key === type);
-
-    if (schema && schema[1]) {
-      return Config.validator.validateData(schema[1], input);
-    }
-
-    return false;
+  [Symbol.iterator](): IterableIterator<CustomParameter<ParameterTypeLiteral>> {
+    return this.parameters[Symbol.iterator]();
   }
 
   /**
@@ -103,5 +73,15 @@ export class CustomParametersList<
     this.parameters.push(customParameter);
 
     return customParameter;
+  }
+
+  remove(name: string): void {
+    this.parameters = this.parameters.filter(
+      (parameter) => parameter.name !== name,
+    );
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.CUSTOM_PARAMETERS_LIST;
   }
 }

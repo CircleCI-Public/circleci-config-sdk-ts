@@ -30,3 +30,8 @@ export type AnyResourceClass =
  * The valid executors found on an executor object
  */
 export type ExecutorLiteral = 'docker' | 'machine' | 'macos';
+
+/**
+ * The valid executors found on an object referencing an executor
+ */
+export type ExecutorLiteralUsage = ExecutorLiteral | 'executor';

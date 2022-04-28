@@ -1,12 +1,7 @@
 import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
-import {
-  DockerExecutor,
-  MachineExecutor,
-  MacOSExecutor,
-  ReusableExecutor,
-  WindowsExecutor,
-} from '../src/lib/Components/Executor';
+import { ConfigValidator } from '../src/lib/Config/ConfigValidator';
+import { GenerableType } from '../src/lib/Config/types/Config.types';
 
 describe('Instantiate Docker Executor', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
@@ -16,7 +11,12 @@ describe('Instantiate Docker Executor', () => {
   };
 
   it('Should validate', () => {
-    expect(DockerExecutor.validate(expectedShape)).toEqual(true);
+    expect(
+      ConfigValidator.validateGenerable(
+        GenerableType.DOCKER_EXECUTOR,
+        expectedShape,
+      ),
+    ).toEqual(true);
   });
 
   it('Should parse', () => {
@@ -44,7 +44,12 @@ describe('Instantiate Machine Executor', () => {
   };
 
   it('Should validate', () => {
-    expect(MachineExecutor.validate(expectedShape)).toEqual(true);
+    expect(
+      ConfigValidator.validateGenerable(
+        GenerableType.MACHINE_EXECUTOR,
+        expectedShape,
+      ),
+    ).toEqual(true);
   });
 
   it('Should parse', () => {
@@ -74,7 +79,12 @@ describe('Instantiate MacOS Executor', () => {
   };
 
   it('Should validate', () => {
-    expect(MacOSExecutor.validate(expectedShape)).toEqual(true);
+    expect(
+      ConfigValidator.validateGenerable(
+        GenerableType.MACOS_EXECUTOR,
+        expectedShape,
+      ),
+    ).toEqual(true);
   });
 
   it('Should parse', () => {
@@ -104,7 +114,12 @@ describe('Instantiate Large MacOS Executor', () => {
   };
 
   it('Should validate', () => {
-    expect(MacOSExecutor.validate(expectedShape)).toEqual(true);
+    expect(
+      ConfigValidator.validateGenerable(
+        GenerableType.MACOS_EXECUTOR,
+        expectedShape,
+      ),
+    ).toEqual(true);
   });
 
   it('Should parse', () => {
@@ -142,7 +157,12 @@ describe('Instantiate Windows Executor and remove shell', () => {
   };
 
   it('Should validate', () => {
-    expect(WindowsExecutor.validate(expectedShape)).toEqual(true);
+    expect(
+      ConfigValidator.validateGenerable(
+        GenerableType.WINDOWS_EXECUTOR,
+        expectedShape,
+      ),
+    ).toEqual(true);
   });
 
   it('Should match the expected output', () => {
@@ -161,7 +181,12 @@ describe('Instantiate Windows Executor', () => {
   };
 
   it('Should validate', () => {
-    expect(WindowsExecutor.validate(expectedShape)).toEqual(true);
+    expect(
+      ConfigValidator.validateGenerable(
+        GenerableType.WINDOWS_EXECUTOR,
+        expectedShape,
+      ),
+    ).toEqual(true);
   });
 
   it('Should parse', () => {
@@ -193,7 +218,12 @@ describe('Instantiate a 2xlarge Docker Executor', () => {
   };
 
   it('Should validate', () => {
-    expect(DockerExecutor.validate(expectedShape)).toEqual(true);
+    expect(
+      ConfigValidator.validateGenerable(
+        GenerableType.DOCKER_EXECUTOR,
+        expectedShape,
+      ),
+    ).toEqual(true);
   });
 
   it('Should parse', () => {
@@ -227,7 +257,12 @@ describe('Instantiate Large Machine Executor', () => {
   });
 
   it('Should validate the large machine', () => {
-    expect(MachineExecutor.validate(expectedShapeLarge)).toEqual(true);
+    expect(
+      ConfigValidator.validateGenerable(
+        GenerableType.MACHINE_EXECUTOR,
+        expectedShapeLarge,
+      ),
+    ).toEqual(true);
   });
 
   it('Should parse the large machine', () => {
@@ -247,7 +282,12 @@ describe('Instantiate Large Machine Executor', () => {
   });
 
   it('Should validate the medium machine', () => {
-    expect(MachineExecutor.validate(expectedShapeMedium)).toEqual(true);
+    expect(
+      ConfigValidator.validateGenerable(
+        GenerableType.MACHINE_EXECUTOR,
+        expectedShapeMedium,
+      ),
+    ).toEqual(true);
   });
 
   it('Should parse the medium machine', () => {
@@ -267,51 +307,70 @@ describe('Instantiate Large Machine Executor', () => {
   });
 });
 
-describe('Generate a config with a Reusable Executor without parameters', () => {
+/**
+Some how the AJV instances are getting mixed up. There must be some weird
+resource allocation happening.
+
+*/
+
+describe('Generate a config with a Reusable Executor with parameters', () => {
   const machine = new CircleCI.executor.MachineExecutor('large');
   const reusable = new CircleCI.executor.ReusableExecutor('default', machine);
-  const expectedShape = {
-    executor: {
-      name: 'default',
-    },
-  };
 
   it('Should match the expected output', () => {
+    const expectedShape = {
+      executor: {
+        name: 'default',
+      },
+    };
     expect(reusable.generate()).toEqual(expectedShape);
   });
 
-  it('Should validate', () => {
-    expect(ReusableExecutor.validate(expectedShape)).toEqual(true);
-  });
+  const config = new CircleCI.Config();
+
+  config.addReusableExecutor(reusable);
 
   it('Should validate shapeless', () => {
     const expectedShapeless = {
       executor: 'default',
     };
 
-    expect(ReusableExecutor.validate(expectedShapeless)).toEqual(true);
+    expect(
+      ConfigValidator.validateGenerable(
+        GenerableType.REUSABLE_EXECUTOR,
+        expectedShapeless,
+      ),
+    ).toEqual(true);
   });
 
   const myConfig = new CircleCI.Config();
 
   myConfig.addReusableExecutor(reusable);
 
+  const executorsList = {
+    default: {
+      machine: {
+        image: 'ubuntu-2004:202010-01',
+      },
+      resource_class: 'large',
+    },
+  };
+
   it('Should produce a config with executors', () => {
     const expectedConfigShape = {
       version: 2.1,
       setup: false,
-      executors: {
-        default: {
-          machine: {
-            image: 'ubuntu-2004:202010-01',
-          },
-          resource_class: 'large',
-        },
-      },
+      executors: executorsList,
       jobs: {},
       workflows: {},
     };
     expect(YAML.parse(myConfig.stringify())).toEqual(expectedConfigShape);
+  });
+
+  it('Should produce a config with executors', () => {
+    expect(CircleCI.executor.parseReusableExecutors(executorsList)).toEqual(
+      myConfig.executors,
+    );
   });
 });
 
@@ -319,16 +378,107 @@ describe('Generate a config with a Reusable Executor', () => {
   const myConfig = new CircleCI.Config();
 
   const machine = new CircleCI.executor.MachineExecutor('large');
-  const reusable = new CircleCI.executor.ReusableExecutor('default', machine);
+  const dockerBase = new CircleCI.executor.DockerExecutor(
+    'cimg/base:<< parameters.tag >>',
+  );
+  const reusableMachine = new CircleCI.executor.ReusableExecutor(
+    'default',
+    machine,
+  );
+  const reusableBase = new CircleCI.executor.ReusableExecutor(
+    'base',
+    dockerBase,
+  );
 
-  reusable.defineParameter('version', 'string', '1.0.0', undefined);
-  myConfig.addReusableExecutor(reusable);
+  reusableMachine.defineParameter('version', 'string');
+  myConfig.addReusableExecutor(reusableMachine);
+  reusableBase.defineParameter('tag', 'string', 'latest', undefined);
+  myConfig.addReusableExecutor(reusableBase);
+
+  it('Should validate reusable machine image', () => {
+    expect(
+      ConfigValidator.validateGenerable(GenerableType.REUSABLE_EXECUTOR, {
+        executor: {
+          name: 'default',
+          version: '1.2.1',
+        },
+      }),
+    ).toEqual(true);
+  });
+
+  // it('Should not validate with undefined parameter', () => {
+  //   expect(
+  //     ConfigValidator.validateGenerable(GenerableType.REUSABLE_EXECUTOR, {
+  //       executor: {
+  //         name: 'default',
+  //       },
+  //     }),
+  //   ).not.toEqual(true);
+  // });
+
+  it('Should validate reusable base image shapeless', () => {
+    expect(
+      ConfigValidator.validateGenerable(GenerableType.REUSABLE_EXECUTOR, {
+        executor: 'base',
+      }),
+    ).toEqual(true);
+  });
+
+  it('Should validate reusable base image', () => {
+    expect(
+      ConfigValidator.validateGenerable(GenerableType.REUSABLE_EXECUTOR, {
+        executor: {
+          name: 'base',
+        },
+      }),
+    ).toEqual(true);
+  });
+
+  // TODO: Add strict parsing tests
+  // it('Should not shapeless with required parameter', () => {
+  //   expect(
+  //     ConfigValidator.validateGenerable(GenerableType.REUSABLE_EXECUTOR, {
+  //       executor: 'default',
+  //     }),
+  //   ).not.toEqual(true);
+  // });
+
+  // it('Should not validate with improper parameter', () => {
+  //   expect(
+  //     ConfigValidator.validateGenerable(GenerableType.REUSABLE_EXECUTOR, {
+  //       executor: {
+  //         name: 'default',
+  //         version: 1.0,
+  //       },
+  //     }),
+  //   ).not.toEqual(true);
+  // });
+
+  // it('Should not validate with undefined reusable executor', () => {
+  //   expect(
+  //     ConfigValidator.validateGenerable(GenerableType.REUSABLE_EXECUTOR, {
+  //       executor: {
+  //         name: 'undefined',
+  //       },
+  //     }),
+  //   ).not.toEqual(true);
+  // });
 
   it('Should produce a config with executors', () => {
     const expected = {
       version: 2.1,
       setup: false,
       executors: {
+        base: {
+          docker: [{ image: 'cimg/base:<< parameters.tag >>' }],
+          resource_class: 'medium',
+          parameters: {
+            tag: {
+              type: 'string',
+              default: 'latest',
+            },
+          },
+        },
         default: {
           machine: {
             image: 'ubuntu-2004:202010-01',
@@ -336,7 +486,6 @@ describe('Generate a config with a Reusable Executor', () => {
           parameters: {
             version: {
               type: 'string',
-              default: '1.0.0',
             },
           },
           resource_class: 'large',

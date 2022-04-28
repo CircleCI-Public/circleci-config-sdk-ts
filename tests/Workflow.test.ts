@@ -1,20 +1,29 @@
-import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
+import { parseWorkflowList } from '../src/lib/Components/Workflow';
+import { GenerableType } from '../src/lib/Config/types/Config.types';
 
 describe('Instantiate Workflow', () => {
   const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo hello world',
   });
+
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
-  const myWorkflow = new CircleCI.Workflow('my-workflow');
-  myWorkflow.addJob(job);
+  const myWorkflow = new CircleCI.Workflow('my-workflow', [job]);
+
   const generatedWorkflow = myWorkflow.generate();
-  const expected = `my-workflow:
-  jobs:
-    - my-job: {}`;
+  const expected = { 'my-workflow': { jobs: [{ 'my-job': {} }] } };
   it('Should match the expected output', () => {
-    expect(generatedWorkflow).toEqual(YAML.parse(expected));
+    expect(generatedWorkflow).toEqual(expected);
+  });
+
+  it('Should validate', () => {
+    expect(
+      CircleCI.ConfigValidator.validateGenerable(
+        GenerableType.WORKFLOW,
+        expected['my-workflow'],
+      ),
+    ).toEqual(true);
   });
 });
 
@@ -48,6 +57,22 @@ describe('Instantiate a new Workflow with a job in the constructor', () => {
   };
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
+  });
+});
+
+describe('Parse a workflow', () => {
+  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.commands.Run({
+    command: 'echo hello world',
+  });
+  const job = new CircleCI.Job('my-job', docker, [helloWorld]);
+  const myWorkflow = new CircleCI.Workflow('my-workflow', [job]);
+
+  const workflowListShape = {
+    'my-workflow': { jobs: [{ 'my-job': {} }] },
+  };
+  it('Should match the expected output', () => {
+    expect(parseWorkflowList(workflowListShape, [job])[0]).toEqual(myWorkflow);
   });
 });
 

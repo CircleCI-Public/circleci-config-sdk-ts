@@ -1,6 +1,6 @@
 import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
-describe('Generate a config utilizing.workspaces', () => {
+describe('Generate a config utilizing workspaces', () => {
   // Create a new CircleCI Config
   const myConfig = new CircleCI.Config();
 

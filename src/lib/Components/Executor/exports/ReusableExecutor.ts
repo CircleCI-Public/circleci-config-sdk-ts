@@ -1,10 +1,8 @@
-import { Component } from '../..';
-import { Config } from '../../../Config';
-import { ValidationResult } from '../../../Config/ConfigValidator';
+import { Generable } from '../..';
+import { GenerableType } from '../../../Config/types/Config.types';
 import { CustomParametersList } from '../../Parameters';
-import { ParameterizedComponent } from '../../Parameters/exports/ParameterizedComponent';
+import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
-import ExecutorSchema from '../schemas/ReusableExecutor.schema';
 import { ReusableExecutorShape } from '../types/ReusableExecutor.types';
 import { Executor } from './Executor';
 /**
@@ -13,8 +11,7 @@ import { Executor } from './Executor';
  * {@label STATIC_2.1}
  */
 export class ReusableExecutor
-  extends Component
-  implements ParameterizedComponent<ExecutorParameterLiteral>
+  implements Generable, Parameterized<ExecutorParameterLiteral>
 {
   /**
    * The name of a defined executor to use.
@@ -36,7 +33,6 @@ export class ReusableExecutor
     executor: Executor,
     parameters?: CustomParametersList<ExecutorParameterLiteral>,
   ) {
-    super();
     this.name = name;
     this.executor = executor;
     this.parameters = parameters;
@@ -69,7 +65,7 @@ export class ReusableExecutor
     return this;
   }
 
-  static validate(input: unknown): ValidationResult {
-    return Config.validator.validateData(ExecutorSchema, input);
+  get generableType(): GenerableType {
+    return GenerableType.REUSABLE_EXECUTOR;
   }
 }

@@ -1,83 +1,91 @@
-import { Component } from '../../..';
+import { commands, parameters } from '../../../../..';
+import { ConfigValidator } from '../../../../Config/ConfigValidator';
 import {
-  CustomParametersList,
-  CustomParametersShape,
-} from '../../../Parameters';
-import { ParameterizedComponent } from '../../../Parameters/exports/ParameterizedComponent';
+  GenerableType,
+  ParameterizedComponent,
+} from '../../../../Config/types/Config.types';
+import { CustomParametersList } from '../../../Parameters';
 import { CommandParameterLiteral } from '../../../Parameters/types/CustomParameterLiterals.types';
-import { CommandShape } from '../../types/Command.types';
+import { StringParameter } from '../../../Parameters/types/Parameters.types';
+import {
+  CommandParameters,
+  CommandShape,
+  CustomCommandBodyShape,
+} from '../../types/Command.types';
 import { Command } from '../Command';
-import { ReusableCommand } from './ReusableCommand';
-
-export type CustomCommandShape = {
-  [name: string]: {
-    parameters?: CustomParametersShape;
-    steps: CommandShape[];
-    description?: string;
-  };
-};
+import { CustomCommand } from './CustomCommand';
 
 /**
- * Define a custom Command with custom parameters
+ * Use a reusable command with parameters.
+ *
+ * {@label STATIC_2.1}
  */
-export class CustomCommand
-  extends Component
-  implements ParameterizedComponent<CommandParameterLiteral>
-{
-  name: string;
-  parameters?: CustomParametersList<CommandParameterLiteral>;
-  steps: Command[];
-  /**
-   * A string that describes the purpose of the command.
-   */
-  description?: string;
+export class ReusableCommand implements Command {
+  parameters?: CommandParameters;
+  name: StringParameter;
 
-  constructor(
-    name: string,
-    steps?: Command[],
-    parameters?: CustomParametersList<CommandParameterLiteral>,
-    description?: string,
-  ) {
-    super();
-    this.name = name;
+  /**
+   * Reuse user defined functionality by adding a reusable command to a job.
+   * @param command - A custom command to be reused.
+   * @param parameters - the parameters to be passed to the custom command.
+   */
+  constructor(command: CustomCommand, parameters?: CommandParameters) {
+    this.name = command.name;
     this.parameters = parameters;
-    this.steps = steps || [];
-    this.description = description;
+
+    //TODO: Parse that CommandParameters parameters do exist on CustomCommand
   }
 
-  generate(): CustomCommandShape {
-    const generatedSteps = this.steps.map((step) => step.generate());
-
+  /**
+   * @returns JSON representation of the reusable command being called
+   */
+  generate(): CommandShape {
     return {
-      [this.name]: {
-        parameters: this.parameters?.generate(),
-        steps: generatedSteps,
-        description: this.description,
-      },
+      [this.name]: { ...this.parameters },
     };
   }
 
-  addStep(step: Command): CustomCommand {
-    this.steps.push(step);
-
-    return this;
-  }
-
-  defineParameter(
-    name: string,
-    type: CommandParameterLiteral,
-    defaultValue?: unknown,
-    description?: string,
-    enumValues?: string[],
-  ): CustomCommand {
-    if (!this.parameters) {
-      this.parameters = new CustomParametersList<CommandParameterLiteral>();
-    }
-
-    this.parameters.define(name, type, defaultValue, description, enumValues);
-
-    return this;
+  get generableType(): GenerableType {
+    return GenerableType.REUSABLE_COMMAND;
   }
 }
 
-export { ReusableCommand };
+// TODO: Handle circular references
+export function parseCustomCommands(
+  commandListIn: { [key: string]: unknown },
+  custom_commands?: CustomCommand[],
+): CustomCommand[] {
+  return Object.entries(commandListIn).map(([name, args]) =>
+    parseCustomCommand(name, args, custom_commands),
+  );
+}
+
+export function parseCustomCommand(
+  name: string,
+  args: unknown,
+  custom_commands?: CustomCommand[],
+): CustomCommand {
+  if (ConfigValidator.validateGenerable(GenerableType.CUSTOM_COMMAND, args)) {
+    const command_args = args as CustomCommandBodyShape;
+
+    const parametersList =
+      command_args.parameters &&
+      (parameters.parseList(
+        command_args.parameters,
+        ParameterizedComponent.COMMAND,
+      ) as CustomParametersList<CommandParameterLiteral>);
+
+    const steps = commands.parseSteps(command_args.steps, custom_commands);
+
+    return new CustomCommand(
+      name,
+      steps,
+      parametersList,
+      command_args.description,
+    );
+  }
+
+  throw new Error(`Failed to parse custom command.`);
+}
+
+export { CustomCommand };

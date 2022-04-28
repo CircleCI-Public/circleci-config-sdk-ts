@@ -1,5 +1,6 @@
-import { Component } from '../../index';
-import { Job } from '../../Job';
+import { GenerableType } from '../../../Config/types/Config.types';
+import { Generable } from '../../index';
+import { Job } from '../../Job/exports/Job';
 import {
   WorkflowJobParameters,
   WorkflowJobParametersShape,
@@ -12,11 +13,10 @@ import {
  * Should only be instantiated for specific use cases.
  * @see {@link Workflow.addJob} for general use.
  */
-export class WorkflowJob extends Component {
+export class WorkflowJob implements Generable {
   job: Job;
   parameters: WorkflowJobParameters = {};
   constructor(job: Job, parameters?: WorkflowJobParameters) {
-    super();
     this.job = job;
     if (parameters) {
       this.parameters = parameters;
@@ -35,5 +35,9 @@ export class WorkflowJob extends Component {
     return {
       [this.job.name]: parameters,
     };
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.WORKFLOW_JOB;
   }
 }

@@ -1,23 +1,23 @@
-import { JobContentShape } from '../types/Job.types';
 import { Command } from '../../Commands/exports/Command';
-import { Executor } from '../../Executor/exports/Executor';
-import { CustomParametersList, CustomParametersShape } from '../../Parameters';
-import { ParameterizedComponent } from '../../Parameters/exports/ParameterizedComponent';
+import { CustomParametersList } from '../../Parameters';
+import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
-import { Job } from '..';
+import { CustomParametersListShape } from '../../Parameters/types/Parameters.types';
+import { AnyExecutor, JobContentShape } from '../types/Job.types';
+import { Job } from './Job';
 /**
  * Parameterized are a type of Job which defines parameters it can accept.
  * {@label STATIC_2.1}
  */
 class ParameterizedJob
   extends Job
-  implements ParameterizedComponent<JobParameterLiteral>
+  implements Parameterized<JobParameterLiteral>
 {
   parameters: CustomParametersList<JobParameterLiteral>;
 
   constructor(
     name: string,
-    executor: Executor,
+    executor: AnyExecutor,
     parameters?: CustomParametersList<JobParameterLiteral>,
     steps?: Command[],
   ) {
@@ -46,7 +46,7 @@ class ParameterizedJob
 }
 
 export type ParameterizedJobContents = JobContentShape & {
-  parameters: CustomParametersShape;
+  parameters: CustomParametersListShape;
 };
 
 export { ParameterizedJob };

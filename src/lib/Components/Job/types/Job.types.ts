@@ -1,3 +1,4 @@
+import { Executor, ReusableExecutor } from '../../Executor';
 import { ExecutorShape } from '../../Executor/types/Executor.types';
 
 export interface JobStepsShape {
@@ -9,3 +10,5 @@ export type JobContentShape = JobStepsShape & ExecutorShape;
 export interface JobShape {
   [key: string]: JobContentShape;
 }
+
+export type AnyExecutor = ReusableExecutor | Executor;

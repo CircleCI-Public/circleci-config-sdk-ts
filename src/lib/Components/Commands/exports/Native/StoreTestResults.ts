@@ -1,3 +1,4 @@
+import { GenerableType } from '../../../../Config/types/Config.types';
 import { StringParameter } from '../../../Parameters/types/Parameters.types';
 import { CommandParameters, CommandShape } from '../../types/Command.types';
 import { Command } from '../Command';
@@ -6,10 +7,9 @@ import { Command } from '../Command';
  * Special step used to upload and store test results for a build. Test results are visible on the CircleCI web application, under each build’s “Test Summary” section. Storing test results is useful for timing analysis of your test suites.
  * @param parameters - StoreTestResultsParameters
  */
-export class StoreTestResults extends Command {
+export class StoreTestResults implements Command {
   parameters: StoreTestResultsParameters;
   constructor(parameters: StoreTestResultsParameters) {
-    super('store_test_results');
     this.parameters = parameters;
   }
   /**
@@ -20,6 +20,14 @@ export class StoreTestResults extends Command {
     return {
       store_test_results: { ...this.parameters },
     } as StoreTestResultsCommandShape;
+  }
+
+  get name(): StringParameter {
+    return 'store_test_results';
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.STORE_TEST_RESULTS;
   }
 }
 
