@@ -75,11 +75,10 @@ workflows:
           matrix:
             parameters:
               version:
-                - "current"
                 - "lts"
                 - "16.12"
-                - "15.14"
-                - "12.22"
+                - "12.13.0"
+                - "12.13.1"
           post-steps:
             - codecov/upload:
                 file: coverage/lcov.info
