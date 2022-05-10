@@ -75,8 +75,9 @@ workflows:
           matrix:
             parameters:
               version:
+                - "current"
                 - "lts"
-                - "16.12"
+                - "16.15.0"
                 - "12.13.0"
                 - "12.13.1"
           post-steps:
