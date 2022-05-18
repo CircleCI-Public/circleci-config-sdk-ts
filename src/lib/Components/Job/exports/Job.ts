@@ -1,4 +1,4 @@
-import { GenerableType } from '../../../Config/types/Config.types';
+import { GenerableType } from '../../../Config/exports/Mapping';
 import { Command } from '../../Commands/exports/Command';
 import { ExecutorShape } from '../../Executor/types/Executor.types';
 import { Generable } from '../../index';

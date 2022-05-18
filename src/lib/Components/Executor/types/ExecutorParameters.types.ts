@@ -2,10 +2,7 @@ import {
   ComponentParameter as ComponentParameters,
   ExecutorParameterTypes,
 } from '../../Parameters/types/ComponentParameters.types';
-import {
-  EnvironmentParameter,
-  StringParameter,
-} from '../../Parameters/types/Parameters.types';
+import { EnvironmentParameter, StringParameter } from '../../Parameters/types';
 
 export interface ExecutorParameters
   extends ComponentParameters<ExecutorParameterTypes> {

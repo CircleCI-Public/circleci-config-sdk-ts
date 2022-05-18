@@ -2,7 +2,7 @@ import * as CircleCI from '../src/index';
 // Enforce local testing
 delete process.env.CIRCLECI;
 describe('Check built-in pipeline parameters', () => {
-  const myConfig = new CircleCI.Config();
+  const myConfig = new CircleCI.config.Config();
   it('Should return pipeline id', () => {
     // On a local machine the pipeline id should return local
     expect(myConfig.pipeline.id).toEqual('local');
@@ -39,7 +39,7 @@ describe('Check built-in pipeline parameters', () => {
 
 describe('Check built-in pipeline parameters exceptions', () => {
   process.env.CIRCLECI = 'true';
-  const myConfig = new CircleCI.Config();
+  const myConfig = new CircleCI.config.Config();
   it('Should return pipeline id', () => {
     // On a local machine the pipeline id should return local
     expect(myConfig.pipeline.id).toEqual('NOT YET SUPPORTED');
@@ -54,7 +54,7 @@ describe('Check Pipeline Project Parameters (local)', () => {
   it('Should create a local pipeline project parameter set', () => {
     process.env.CIRCLE_REPOSITORY_URL = '';
     process.env.CIRCLECI = '';
-    const localProject = new CircleCI.Pipeline();
+    const localProject = new CircleCI.pipeline.Pipeline();
     expect(localProject.project().git_url).toEqual('git.local');
     expect(localProject.project().vcs).toEqual('local');
   });
@@ -65,7 +65,7 @@ describe('Check Pipeline Project Parameters (mock GitHub)', () => {
     process.env.CIRCLECI = 'true';
     process.env.CIRCLE_REPOSITORY_URL =
       'https://github.com/CircleCI-Public/circleci-config-sdk-ts';
-    const GHProject = new CircleCI.Pipeline();
+    const GHProject = new CircleCI.pipeline.Pipeline();
     expect(GHProject.project().git_url).toEqual(
       'https://github.com/CircleCI-Public/circleci-config-sdk-ts',
     );
@@ -76,7 +76,7 @@ describe('Check Pipeline Project Parameters (mock BitBucket)', () => {
   it('Should generate pipeline values for GitHub', () => {
     process.env.CIRCLECI = 'true';
     process.env.CIRCLE_REPOSITORY_URL = 'https://bitbucket.com/org/repo';
-    const GHProject = new CircleCI.Pipeline();
+    const GHProject = new CircleCI.pipeline.Pipeline();
     expect(GHProject.project().git_url).toEqual(
       'https://bitbucket.com/org/repo',
     );
@@ -87,7 +87,7 @@ describe('Check Pipeline Project Parameters (mock BitBucket)', () => {
 describe('Check Pipeline Project Parameters (mock Unsupported)', () => {
   it('Should generate pipeline values for GitHub', () => {
     process.env.CIRCLECI = 'true';
-    const GHProject = new CircleCI.Pipeline();
+    const GHProject = new CircleCI.pipeline.Pipeline();
     expect(() => {
       process.env.CIRCLE_REPOSITORY_URL =
         'https://notarealwebsite.com/org/repo';

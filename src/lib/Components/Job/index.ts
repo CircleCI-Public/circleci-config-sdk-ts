@@ -1,15 +1,17 @@
 import { commands, executor, parameters } from '../../..';
-import { ConfigValidator } from '../../Config/ConfigValidator';
 import {
   GenerableType,
   ParameterizedComponent,
-} from '../../Config/types/Config.types';
+} from '../../Config/exports/Mapping';
+import { Validator } from '../../Config/exports/Validator';
 import { CustomCommand } from '../Commands/exports/Reusable';
 import { ReusableExecutor } from '../Executor';
 import { CustomParametersList } from '../Parameters';
 import { JobParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
 import { Job, UnknownJobShape } from './exports/Job';
 import { ParameterizedJob } from './exports/ParameterizedJob';
+
+export { Job, ParameterizedJob };
 
 export function parseJobs(
   jobListIn: { [key: string]: unknown },
@@ -28,7 +30,7 @@ export function parseJob(
   customCommands?: CustomCommand[],
   executors?: ReusableExecutor[],
 ): Job {
-  if (ConfigValidator.validateGenerable(GenerableType.JOB, jobIn)) {
+  if (Validator.validateGenerable(GenerableType.JOB, jobIn)) {
     const jobArgs = jobIn as UnknownJobShape;
 
     const exec = executor.parse(jobArgs, executors);

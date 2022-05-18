@@ -1,5 +1,5 @@
-import { ConfigValidator } from '../../Config/ConfigValidator';
-import { GenerableType } from '../../Config/types/Config.types';
+import { GenerableType } from '../../Config/exports/Mapping';
+import { Validator } from '../../Config/exports/Validator';
 import { Command } from './exports/Command';
 import { AddSSHKeys, AddSSHKeysParameters } from './exports/Native/AddSSHKeys';
 import { Restore, Save } from './exports/Native/Cache';
@@ -31,28 +31,28 @@ const nativeSubtypes: {
   restore_cache: (args) => {
     const restoreArgs = args as RestoreCacheParameters;
 
-    if (ConfigValidator.validateGenerable(GenerableType.RESTORE, restoreArgs)) {
+    if (Validator.validateGenerable(GenerableType.RESTORE, restoreArgs)) {
       return new Restore(args as RestoreCacheParameters);
     }
   },
   save_cache: (args) => {
     const saveArgs = args as SaveCacheParameters;
 
-    if (ConfigValidator.validateGenerable(GenerableType.SAVE, saveArgs)) {
+    if (Validator.validateGenerable(GenerableType.SAVE, saveArgs)) {
       return new Save(args as SaveCacheParameters);
     }
   },
   attach_workspace: (args) => {
     const attachArgs = args as AttachParameters;
 
-    if (ConfigValidator.validateGenerable(GenerableType.ATTACH, attachArgs)) {
+    if (Validator.validateGenerable(GenerableType.ATTACH, attachArgs)) {
       return new Attach(args as AttachParameters);
     }
   },
   persist_workspace: (args) => {
     const persistArgs = args as PersistParameters;
 
-    if (ConfigValidator.validateGenerable(GenerableType.PERSIST, persistArgs)) {
+    if (Validator.validateGenerable(GenerableType.PERSIST, persistArgs)) {
       return new Persist(args as PersistParameters);
     }
   },
@@ -60,10 +60,7 @@ const nativeSubtypes: {
     const addSSHKeysArgs = args as AddSSHKeysParameters;
 
     if (
-      ConfigValidator.validateGenerable(
-        GenerableType.ADD_SSH_KEYS,
-        addSSHKeysArgs,
-      )
+      Validator.validateGenerable(GenerableType.ADD_SSH_KEYS, addSSHKeysArgs)
     ) {
       return new AddSSHKeys(args as AddSSHKeysParameters);
     }
@@ -71,16 +68,14 @@ const nativeSubtypes: {
   checkout: (args) => {
     const checkoutArgs = args as CheckoutParameters;
 
-    if (
-      ConfigValidator.validateGenerable(GenerableType.CHECKOUT, checkoutArgs)
-    ) {
+    if (Validator.validateGenerable(GenerableType.CHECKOUT, checkoutArgs)) {
       return new Checkout(args as CheckoutParameters);
     }
   },
   run: (args) => {
     const runArgs = args as RunParameters;
 
-    if (ConfigValidator.validateGenerable(GenerableType.RUN, runArgs)) {
+    if (Validator.validateGenerable(GenerableType.RUN, runArgs)) {
       return new Run(args as RunParameters);
     }
   },
@@ -88,7 +83,7 @@ const nativeSubtypes: {
     const setupRemoteDockerArgs = args as SetupRemoteDockerParameters;
 
     if (
-      ConfigValidator.validateGenerable(
+      Validator.validateGenerable(
         GenerableType.SETUP_REMOTE_DOCKER,
         setupRemoteDockerArgs,
       )
@@ -100,7 +95,7 @@ const nativeSubtypes: {
     const storeArtifactsArgs = args as StoreArtifactsParameters;
 
     if (
-      ConfigValidator.validateGenerable(
+      Validator.validateGenerable(
         GenerableType.STORE_ARTIFACTS,
         storeArtifactsArgs,
       )
@@ -112,7 +107,7 @@ const nativeSubtypes: {
     const storeTestResultsArgs = args as StoreTestResultsParameters;
 
     if (
-      ConfigValidator.validateGenerable(
+      Validator.validateGenerable(
         GenerableType.STORE_TEST_RESULTS,
         storeTestResultsArgs,
       )

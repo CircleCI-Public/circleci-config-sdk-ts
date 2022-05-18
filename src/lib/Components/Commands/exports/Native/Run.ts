@@ -1,9 +1,9 @@
-import { GenerableType } from '../../../../Config/types/Config.types';
+import { GenerableType } from '../../../../Config/exports/Mapping';
 import {
   BooleanParameter,
   EnvironmentParameter,
   StringParameter,
-} from '../../../Parameters/types/Parameters.types';
+} from '../../../Parameters/types';
 import { CommandParameters, CommandShape } from '../../types/Command.types';
 import { Command } from '../Command';
 

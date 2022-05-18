@@ -4,6 +4,8 @@ import {
   AnyParameterLiteral,
   EnumParameterLiteral,
 } from './CustomParameterLiterals.types';
+import * as literals from './CustomParameterLiterals.types';
+import * as components from './ComponentParameters.types';
 // CircleCI Parameter Types
 
 /**
@@ -118,3 +120,5 @@ export type CustomEnumParameterShape =
   | CustomParameterShape<EnumParameterLiteral> & {
       enum: string[];
     };
+
+export { components, literals };

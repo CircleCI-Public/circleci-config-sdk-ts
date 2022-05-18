@@ -7,7 +7,7 @@ import {
   ListParameter,
   MatrixParameter,
   StringParameter,
-} from '../../Parameters/types/Parameters.types';
+} from '../../Parameters/types';
 
 /**
  * CircleCI provided parameters for all workflow jobs

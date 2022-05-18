@@ -2,11 +2,11 @@
  * Instantiate a CircleCI Executor, the build environment for a job. Select a type of executor and supply the required parameters.
  */
 import { parameters } from '../../..';
-import { ConfigValidator } from '../../Config/ConfigValidator';
 import {
   GenerableType,
   ParameterizedComponent,
-} from '../../Config/types/Config.types';
+} from '../../Config/exports/Mapping';
+import { Validator } from '../../Config/exports/Validator';
 import { CustomParametersList } from '../Parameters';
 import { ExecutorParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
 import { DockerExecutor } from './exports/DockerExecutor';
@@ -15,6 +15,7 @@ import { MachineExecutor } from './exports/MachineExecutor';
 import { MacOSExecutor } from './exports/MacOSExecutor';
 import { ReusableExecutor } from './exports/ReusableExecutor';
 import { WindowsExecutor } from './exports/WindowsExecutor';
+import types from './types';
 import { DockerResourceClass } from './types/DockerExecutor.types';
 import { ExecutorLiteral, ExecutorLiteralUsage } from './types/Executor.types';
 import { MachineResourceClass } from './types/MachineExecutor.types';
@@ -45,10 +46,7 @@ export function parse(
       const dockerArgs = args as [{ image: string }];
 
       if (
-        ConfigValidator.validateGenerable(
-          GenerableType.DOCKER_EXECUTOR,
-          dockerArgs,
-        )
+        Validator.validateGenerable(GenerableType.DOCKER_EXECUTOR, dockerArgs)
       ) {
         return new DockerExecutor(
           dockerArgs[0].image || 'cimg/base:stable',
@@ -67,7 +65,7 @@ export function parse(
         const windowsArgs = args as Partial<WindowsExecutor>;
 
         if (
-          ConfigValidator.validateGenerable(
+          Validator.validateGenerable(
             GenerableType.WINDOWS_EXECUTOR,
             windowsArgs,
           )
@@ -79,10 +77,7 @@ export function parse(
       const machineArgs = args as Partial<MachineExecutor>;
 
       if (
-        ConfigValidator.validateGenerable(
-          GenerableType.MACHINE_EXECUTOR,
-          machineArgs,
-        )
+        Validator.validateGenerable(GenerableType.MACHINE_EXECUTOR, machineArgs)
       ) {
         return new MachineExecutor(
           executorArgs.resource_class as MachineResourceClass,
@@ -94,10 +89,7 @@ export function parse(
       const macOSArgs = args as Partial<MacOSExecutor>;
 
       if (
-        ConfigValidator.validateGenerable(
-          GenerableType.MACOS_EXECUTOR,
-          macOSArgs,
-        )
+        Validator.validateGenerable(GenerableType.MACOS_EXECUTOR, macOSArgs)
       ) {
         return new MacOSExecutor(
           macOSArgs.xcode || '13.1',
@@ -176,4 +168,5 @@ export {
   WindowsExecutor,
   ReusableExecutor,
   Executor,
+  types,
 };

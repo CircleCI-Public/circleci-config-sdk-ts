@@ -2,7 +2,7 @@ import {
   CommandParameterTypes,
   ComponentParameter,
 } from '../../Parameters/types/ComponentParameters.types';
-import { CustomParametersListShape } from '../../Parameters/types/Parameters.types';
+import { CustomParametersListShape } from '../../Parameters/types';
 
 export type CommandType<T> = Extract<string | number, T>;
 

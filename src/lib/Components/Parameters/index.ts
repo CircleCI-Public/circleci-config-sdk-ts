@@ -1,21 +1,16 @@
 import { Generable } from '..';
-import { ConfigValidator } from '../../Config/ConfigValidator';
 import {
   GenerableType,
   ParameterizedComponent,
   ParameterSubtype,
-} from '../../Config/types/Config.types';
+} from '../../Config/exports/Mapping';
+import { Validator } from '../../Config/exports/Validator';
 import { CustomParametersList } from './exports/CustomParameterList';
+import * as types from './types';
 import {
   AnyParameterLiteral,
   EnumParameterLiteral,
 } from './types/CustomParameterLiterals.types';
-import {
-  CustomEnumParameterShape,
-  CustomParameterShape,
-  CustomParametersListShape,
-  ParameterValues as Parameterized,
-} from './types/Parameters.types';
 
 /**
  * Accepted parameters can be assigned to a component.
@@ -32,7 +27,7 @@ import {
  */
 
 export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
-  implements Generable, Parameterized<ParameterTypeLiteral>
+  implements Generable
 {
   name: string;
   type: ParameterTypeLiteral;
@@ -53,7 +48,7 @@ export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
   /**
    * @returns JSON schema of parameter's contents
    */
-  generate(): CustomParameterShape<ParameterTypeLiteral> {
+  generate(): types.CustomParameterShape<ParameterTypeLiteral> {
     return {
       type: this.type,
       default: this.defaultValue,
@@ -89,7 +84,7 @@ export class CustomEnumParameter extends CustomParameter<EnumParameterLiteral> {
     this.enumValues = enumValues;
   }
 
-  generate(): CustomEnumParameterShape {
+  generate(): types.CustomEnumParameterShape {
     return {
       ...super.generate(),
       enum: this.enumValues,
@@ -133,7 +128,7 @@ export function parse(
   };
 
   const isEnum = type === 'enum';
-  const valid = ConfigValidator.validateGenerable(
+  const valid = Validator.validateGenerable(
     isEnum
       ? GenerableType.CUSTOM_ENUM_PARAMETER
       : GenerableType.CUSTOM_PARAMETER,
@@ -150,7 +145,7 @@ export function parse(
   }
 
   if (isEnum) {
-    const customEnumParam = customParamIn as CustomEnumParameterShape;
+    const customEnumParam = customParamIn as types.CustomEnumParameterShape;
 
     return new CustomEnumParameter(
       name,
@@ -160,7 +155,7 @@ export function parse(
     );
   } else {
     const customParam =
-      customParamIn as CustomParameterShape<AnyParameterLiteral>;
+      customParamIn as types.CustomParameterShape<AnyParameterLiteral>;
 
     return new CustomParameter(
       name,
@@ -176,7 +171,7 @@ export function parseList(
   subtype?: ParameterizedComponent,
 ): CustomParametersList<AnyParameterLiteral> {
   if (subtype) {
-    const valid = ConfigValidator.validateGenerable(
+    const valid = Validator.validateGenerable(
       GenerableType.CUSTOM_PARAMETERS_LIST,
       customParamListIn,
       subtype,
@@ -191,7 +186,7 @@ export function parseList(
     }
   }
 
-  const customParamList = customParamListIn as CustomParametersListShape;
+  const customParamList = customParamListIn as types.CustomParametersListShape;
   return new CustomParametersList(
     Object.entries(customParamList).map(([name, properties]) =>
       parse(properties, name),
@@ -199,4 +194,4 @@ export function parseList(
   );
 }
 
-export { CustomParametersList };
+export { CustomParametersList, types };

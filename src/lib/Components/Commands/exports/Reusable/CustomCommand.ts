@@ -1,5 +1,5 @@
 import { Generable } from '../../..';
-import { GenerableType } from '../../../../Config/types/Config.types';
+import { GenerableType } from '../../../../Config/exports/Mapping';
 import { CustomParametersList } from '../../../Parameters';
 import { Parameterized } from '../../../Parameters/exports/Parameterized';
 import { CommandParameterLiteral } from '../../../Parameters/types/CustomParameterLiterals.types';

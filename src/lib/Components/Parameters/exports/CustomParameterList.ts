@@ -1,8 +1,8 @@
 import { CustomEnumParameter, CustomParameter } from '..';
 import { Generable } from '../..';
-import { GenerableType } from '../../../Config/types/Config.types';
+import { GenerableType } from '../../../Config/exports/Mapping';
 import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
-import { CustomParametersListShape } from '../types/Parameters.types';
+import { CustomParametersListShape } from '../types';
 
 /**
  * A list that can be added to a component.

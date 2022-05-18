@@ -9,9 +9,6 @@ import {
   ToStringOptions,
 } from 'yaml';
 import * as CircleCI from '../src/index';
-import { Run } from '../src/lib/Components/Commands';
-import { CustomParametersList } from '../src/lib/Components/Parameters';
-import { GenerableType } from '../src/lib/Config/types/Config.types';
 
 describe('Instantiate a Run step', () => {
   const run = new CircleCI.commands.Run({
@@ -202,7 +199,7 @@ describe('Add SSH Keys', () => {
 describe('Instantiate a Blank Custom Command', () => {
   const customCommand = new CircleCI.commands.reusable.CustomCommand(
     'say_hello',
-    [new Run({ command: 'echo "Hello, World!"' })],
+    [new CircleCI.commands.Run({ command: 'echo "Hello, World!"' })],
   );
 
   const example = {
@@ -257,7 +254,7 @@ describe('Instantiate a Reusable Command', () => {
   const customCommand = new CircleCI.commands.reusable.CustomCommand(
     'say_hello',
     [helloWorld],
-    new CustomParametersList([
+    new CircleCI.parameters.CustomParametersList([
       new CircleCI.parameters.CustomParameter('greeting', 'string'),
     ]),
   );
@@ -340,7 +337,7 @@ describe('Instantiate reusable commands', () => {
     expect(secondCustomCommand.generate()).toEqual(parse(secondExpectedOutput));
   });
 
-  const myConfig = new CircleCI.Config();
+  const myConfig = new CircleCI.config.Config();
   myConfig.addCustomCommand(firstCustomCommand);
 
   // Testing that the validator will update the schema with new command
@@ -351,8 +348,8 @@ describe('Instantiate reusable commands', () => {
   });
 
   it('Should validate with the proper parameters', () => {
-    const result = CircleCI.ConfigValidator.validateGenerable(
-      GenerableType.STEP_LIST,
+    const result = CircleCI.config.Validator.validateGenerable(
+      CircleCI.config.mapping.GenerableType.STEP_LIST,
       [
         {
           search_year: {

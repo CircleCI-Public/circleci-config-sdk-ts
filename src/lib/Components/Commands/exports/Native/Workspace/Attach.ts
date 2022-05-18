@@ -1,5 +1,5 @@
-import { GenerableType } from '../../../../../Config/types/Config.types';
-import { StringParameter } from '../../../../Parameters/types/Parameters.types';
+import { GenerableType } from '../../../../../Config/exports/Mapping';
+import { StringParameter } from '../../../../Parameters/types';
 import { CommandParameters, CommandShape } from '../../../types/Command.types';
 import { Command } from '../../Command';
 /**

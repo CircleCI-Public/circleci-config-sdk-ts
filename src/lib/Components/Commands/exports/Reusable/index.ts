@@ -1,12 +1,12 @@
 import { commands, parameters } from '../../../../..';
-import { ConfigValidator } from '../../../../Config/ConfigValidator';
 import {
   GenerableType,
   ParameterizedComponent,
-} from '../../../../Config/types/Config.types';
+} from '../../../../Config/exports/Mapping';
+import { Validator } from '../../../../Config/exports/Validator';
 import { CustomParametersList } from '../../../Parameters';
 import { CommandParameterLiteral } from '../../../Parameters/types/CustomParameterLiterals.types';
-import { StringParameter } from '../../../Parameters/types/Parameters.types';
+import { StringParameter } from '../../../Parameters/types';
 import {
   CommandParameters,
   CommandShape,
@@ -65,7 +65,7 @@ export function parseCustomCommand(
   args: unknown,
   custom_commands?: CustomCommand[],
 ): CustomCommand {
-  if (ConfigValidator.validateGenerable(GenerableType.CUSTOM_COMMAND, args)) {
+  if (Validator.validateGenerable(GenerableType.CUSTOM_COMMAND, args)) {
     const command_args = args as CustomCommandBodyShape;
 
     const parametersList =

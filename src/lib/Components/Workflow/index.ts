@@ -1,63 +1,8 @@
-import { ConfigValidator } from '../../Config/ConfigValidator';
-import { GenerableType } from '../../Config/types/Config.types';
+import { GenerableType } from '../../Config/exports/Mapping';
+import { Validator } from '../../Config/exports/Validator';
 import { Job } from '../Job/exports/Job';
+import { Workflow } from './exports/Workflow';
 import { WorkflowJob } from './exports/WorkflowJob';
-import { WorkflowShape } from './types/Workflow.types';
-import {
-  WorkflowJobParameters,
-  WorkflowJobShape,
-} from './types/WorkflowJob.types';
-
-/**
- * A workflow is a set of rules for defining a collection of jobs and their run order.
- */
-export class Workflow {
-  /**
-   * The name of the Workflow.
-   */
-  name: string;
-  /**
-   * The jobs to execute when this Workflow is triggered.
-   */
-  jobs: WorkflowJob[] = [];
-  /**
-   * Instantiate a Workflow
-   * @param name - Name your workflow. Must be unique.
-   * @param jobs - A list of jobs to be executed as part of your Workflow.
-   */
-  constructor(name: string, jobs?: Array<Job | WorkflowJob>) {
-    this.name = name;
-
-    if (jobs) {
-      this.jobs = jobs.map((job) =>
-        job instanceof Job ? new WorkflowJob(job) : job,
-      );
-    }
-  }
-  /**
-   * Generate Workflow Shape.
-   * @returns The generated JSON for the Workflow.
-   */
-  generate(): unknown {
-    const generatedWorkflowJobs: WorkflowJobShape[] = [];
-    this.jobs.forEach((job) => {
-      generatedWorkflowJobs.push(job.generate() as WorkflowJobShape); //Double check this
-    });
-    return {
-      [this.name]: {
-        jobs: generatedWorkflowJobs,
-      },
-    } as WorkflowShape;
-  }
-
-  /**
-   * Add a Job to the current Workflow. Chainable
-   */
-  addJob(job: Job, parameters?: WorkflowJobParameters): this {
-    this.jobs.push(new WorkflowJob(job, parameters));
-    return this;
-  }
-}
 
 export function parseWorkflowJob(
   name: string,
@@ -93,7 +38,7 @@ export function parseWorkflow(
   workflowIn: unknown,
   jobs: Job[],
 ): Workflow {
-  if (ConfigValidator.validateGenerable(GenerableType.WORKFLOW, workflowIn)) {
+  if (Validator.validateGenerable(GenerableType.WORKFLOW, workflowIn)) {
     const workflowArgs = workflowIn as WorkflowInShape;
 
     const jobList = workflowArgs.jobs.map((job) => {
@@ -116,3 +61,5 @@ export function parseWorkflowList(
     ([name, workflow]) => parseWorkflow(name, workflow, jobs),
   );
 }
+
+export { Workflow, WorkflowJob };

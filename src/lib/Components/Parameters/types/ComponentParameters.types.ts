@@ -11,7 +11,7 @@ import {
   ListParameter,
   FilterParameter,
   MatrixParameter,
-} from './Parameters.types';
+} from '.';
 
 /**
  * Available parameter types for Jobs

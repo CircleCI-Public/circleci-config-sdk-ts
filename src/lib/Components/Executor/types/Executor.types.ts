@@ -28,6 +28,7 @@ export type AnyResourceClass =
 
 /**
  * The valid executors found on an executor object
+ * Windows is covered by the machine literal
  */
 export type ExecutorLiteral = 'docker' | 'machine' | 'macos';
 
