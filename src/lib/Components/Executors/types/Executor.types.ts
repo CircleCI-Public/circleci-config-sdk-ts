@@ -4,6 +4,11 @@ import { MacOSExecutorShape } from './MacOSExecutor.types';
 import { ReusableExecutorShape } from './ReusableExecutor.types';
 import { WindowsExecutorShape } from './WindowsExecutor.types';
 
+export type UnknownExecutorShape = {
+  resource_class: string;
+  [key: string]: unknown;
+};
+
 /**
  * The executor output shapes for YAML string
  */

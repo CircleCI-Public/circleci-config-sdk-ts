@@ -9,6 +9,7 @@ import {
   ToStringOptions,
 } from 'yaml';
 import * as CircleCI from '../src/index';
+import { parseCustomCommand, parseStep } from '../src/index';
 
 describe('Instantiate a Run step', () => {
   const run = new CircleCI.commands.Run({
@@ -22,9 +23,7 @@ describe('Instantiate a Run step', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(CircleCI.commands.parseCommand('run', expectedResult.run)).toEqual(
-      run,
-    );
+    expect(parseStep('run', expectedResult.run)).toEqual(run);
   });
 });
 
@@ -37,7 +36,7 @@ describe('Instantiate a Checkout step', () => {
   });
 
   it('Should parse and match raw example', () => {
-    expect(CircleCI.commands.parseCommand('checkout')).toEqual(checkout);
+    expect(parseStep('checkout')).toEqual(checkout);
   });
 
   const checkoutWithPathResult = {
@@ -50,9 +49,7 @@ describe('Instantiate a Checkout step', () => {
   });
 
   it('Should parse and match example with provided path', () => {
-    expect(
-      CircleCI.commands.parseCommand('checkout', { path: './src' }),
-    ).toEqual(checkoutWithPath);
+    expect(parseStep('checkout', { path: './src' })).toEqual(checkoutWithPath);
   });
 });
 
@@ -69,17 +66,12 @@ describe('Instantiate a Setup_Remote_Docker step', () => {
   });
 
   it('Should parse and match example with default version', () => {
-    expect(CircleCI.commands.parseCommand('setup_remote_docker')).toEqual(
-      srdExample,
-    );
+    expect(parseStep('setup_remote_docker')).toEqual(srdExample);
   });
 
   it('Should parse and match example with passed version', () => {
     expect(
-      CircleCI.commands.parseCommand(
-        'setup_remote_docker',
-        srdResult.setup_remote_docker,
-      ),
+      parseStep('setup_remote_docker', srdResult.setup_remote_docker),
     ).toEqual(srdExample);
   });
 });
@@ -101,9 +93,7 @@ describe('Save and load cache', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(
-      CircleCI.commands.parseCommand('save_cache', saveExample.save_cache),
-    ).toEqual(save_cache);
+    expect(parseStep('save_cache', saveExample.save_cache)).toEqual(save_cache);
   });
 
   const restoreExample = {
@@ -120,12 +110,9 @@ describe('Save and load cache', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(
-      CircleCI.commands.parseCommand(
-        'restore_cache',
-        restoreExample.restore_cache,
-      ),
-    ).toEqual(restore_cache);
+    expect(parseStep('restore_cache', restoreExample.restore_cache)).toEqual(
+      restore_cache,
+    );
   });
 });
 
@@ -146,12 +133,9 @@ describe('Store artifacts', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(
-      CircleCI.commands.parseCommand(
-        'store_artifacts',
-        storeResult.store_artifacts,
-      ),
-    ).toEqual(storeExample);
+    expect(parseStep('store_artifacts', storeResult.store_artifacts)).toEqual(
+      storeExample,
+    );
   });
 });
 
@@ -166,12 +150,9 @@ describe('Store test results', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(
-      CircleCI.commands.parseCommand(
-        'store_artifacts',
-        example.store_test_results,
-      ),
-    ).toEqual(storeTestResults);
+    expect(parseStep('store_artifacts', example.store_test_results)).toEqual(
+      storeTestResults,
+    );
   });
 });
 
@@ -190,9 +171,7 @@ describe('Add SSH Keys', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(
-      CircleCI.commands.parseCommand('add_ssh_keys', example.add_ssh_keys),
-    ).toEqual(addSSHKeys);
+    expect(parseStep('add_ssh_keys', example.add_ssh_keys)).toEqual(addSSHKeys);
   });
 });
 
@@ -211,12 +190,9 @@ describe('Instantiate a Blank Custom Command', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(
-      CircleCI.commands.reusable.parseCustomCommand(
-        'say_hello',
-        example.say_hello,
-      ),
-    ).toEqual(customCommand);
+    expect(parseCustomCommand('say_hello', example.say_hello)).toEqual(
+      customCommand,
+    );
   });
 });
 
@@ -337,7 +313,7 @@ describe('Instantiate reusable commands', () => {
     expect(secondCustomCommand.generate()).toEqual(parse(secondExpectedOutput));
   });
 
-  const myConfig = new CircleCI.config.Config();
+  const myConfig = new CircleCI.Config();
   myConfig.addCustomCommand(firstCustomCommand);
 
   // Testing that the validator will update the schema with new command
@@ -348,8 +324,8 @@ describe('Instantiate reusable commands', () => {
   });
 
   it('Should validate with the proper parameters', () => {
-    const result = CircleCI.config.Validator.validateGenerable(
-      CircleCI.config.mapping.GenerableType.STEP_LIST,
+    const result = CircleCI.Validator.validateGenerable(
+      CircleCI.mapping.GenerableType.STEP_LIST,
       [
         {
           search_year: {

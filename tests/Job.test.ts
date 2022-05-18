@@ -2,11 +2,11 @@ import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
 
 describe('Instantiate Docker Job', () => {
-  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo hello world',
   });
-  const job = new CircleCI.job.Job('my-job', docker, [helloWorld]);
+  const job = new CircleCI.Job('my-job', docker, [helloWorld]);
   const expectedOutput = `my-job:
   docker:
     - image: cimg/node:lts
@@ -19,19 +19,19 @@ describe('Instantiate Docker Job', () => {
     expect(job.generate()).toEqual(YAML.parse(expectedOutput));
   });
   it('Add job to config and validate', () => {
-    const myConfig = new CircleCI.config.Config();
+    const myConfig = new CircleCI.Config();
     myConfig.addJob(job);
     expect(myConfig.jobs.length).toBeGreaterThan(0);
   });
 });
 
 describe('Instantiate Parameterized Docker Job With Custom Parameters', () => {
-  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
   });
 
-  const job = new CircleCI.job.ParameterizedJob('my-job', docker);
+  const job = new CircleCI.reusable.ParameterizedJob('my-job', docker);
 
   job.addStep(helloWorld).defineParameter('greeting', 'string', 'hello world');
 
@@ -58,14 +58,14 @@ describe('Instantiate Parameterized Docker Job With Custom Parameters', () => {
   });
 
   it('Add job to config and validate', () => {
-    const myConfig = new CircleCI.config.Config();
+    const myConfig = new CircleCI.Config();
     myConfig.addJob(job);
     expect(myConfig.jobs.length).toBeGreaterThan(0);
   });
 });
 
 describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
-  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
   });
@@ -83,7 +83,7 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
     { greeting: 'hello world' },
   );
 
-  const job = new CircleCI.job.Job('my_job', docker);
+  const job = new CircleCI.Job('my_job', docker);
 
   job.addStep(reusableCommand);
 
@@ -123,7 +123,7 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
   };
 
   it('Add job to config and validate', () => {
-    const myConfig = new CircleCI.config.Config();
+    const myConfig = new CircleCI.Config();
     myConfig.addCustomCommand(customCommand);
     myConfig.addJob(job);
     expect(YAML.parse(myConfig.stringify())).toEqual(expectedOutput);
@@ -131,9 +131,9 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
 });
 
 describe('Parse Parameterized Docker Job', () => {
-  const job = new CircleCI.job.ParameterizedJob(
+  const job = new CircleCI.reusable.ParameterizedJob(
     'my_job',
-    new CircleCI.executor.DockerExecutor('cimg/node:lts'),
+    new CircleCI.executors.DockerExecutor('cimg/node:lts'),
     new CircleCI.parameters.CustomParametersList([
       new CircleCI.parameters.CustomParameter('greeting', 'string'),
     ]),
@@ -162,14 +162,14 @@ describe('Parse Parameterized Docker Job', () => {
   };
 
   it('Can validate the job with a custom command step', () => {
-    const result = CircleCI.job.parseJob('my_job', jobIn);
+    const result = CircleCI.parseJob('my_job', jobIn);
 
     expect(result).toEqual(job);
   });
 
   it('Can validate the job with a custom command step', () => {
-    const result = CircleCI.config.Validator.validateGenerable(
-      CircleCI.config.mapping.GenerableType.JOB,
+    const result = CircleCI.Validator.validateGenerable(
+      CircleCI.mapping.GenerableType.JOB,
       jobIn,
     );
 
@@ -184,14 +184,14 @@ describe('Parse Parameterized Docker Job', () => {
   // });
   // it('Fail validation when command has not been added to config', () => {
   //   const validator = myConfig.getValidator();
-  //   const resultCommand = validator.validateGenerable(CircleCI.config.mapping.GenerableType.JOB, jobIn);
+  //   const resultCommand = validator.validateGenerable(CircleCI.mapping.GenerableType.JOB, jobIn);
 
   //   expect(resultCommand).not.toEqual(true);
   // });
 });
 
 describe('Parse Docker Job With A Parameterized Custom Command', () => {
-  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
   });
@@ -209,7 +209,7 @@ describe('Parse Docker Job With A Parameterized Custom Command', () => {
     { greeting: 'hello world' },
   );
 
-  const job = new CircleCI.job.Job('my_job', docker);
+  const job = new CircleCI.Job('my_job', docker);
 
   job.addStep(reusableCommand);
 
@@ -227,19 +227,19 @@ describe('Parse Docker Job With A Parameterized Custom Command', () => {
   };
 
   // CircleCI.config.ConfigValidator.getGeneric();
-  const myConfig = new CircleCI.config.Config();
+  const myConfig = new CircleCI.Config();
 
   myConfig.addJob(job);
   myConfig.addCustomCommand(customCommand);
 
   // it('Can validate the job with a custom command step', () => {
   //   const validator = myConfig.getValidator();
-  //   const result = validator.validateGenerable(CircleCI.config.mapping.GenerableType.JOB, jobIn);
+  //   const result = validator.validateGenerable(CircleCI.mapping.GenerableType.JOB, jobIn);
 
   //   expect(result).toEqual(true);
   // });
   it('Can validate the job with a custom command step', () => {
-    const result = CircleCI.job.parseJob(
+    const result = CircleCI.parseJob(
       'my_job',
       jobIn,
       myConfig.commands,
@@ -258,7 +258,7 @@ describe('Parse Docker Job With A Parameterized Custom Command', () => {
   // });
   // it('Fail validation when command has not been added to config', () => {
   //   const validator = myConfig.getValidator();
-  //   const resultCommand = validator.validateGenerable(CircleCI.config.mapping.GenerableType.JOB, jobIn);
+  //   const resultCommand = validator.validateGenerable(CircleCI.mapping.GenerableType.JOB, jobIn);
 
   //   expect(resultCommand).not.toEqual(true);
   // });

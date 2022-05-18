@@ -3,7 +3,7 @@ import * as YAML from 'yaml';
 import { version as SDKVersion } from '../src/package-version.json';
 
 describe('Generate a Setup workflow config', () => {
-  const myConfig = new CircleCI.config.Config(true).stringify();
+  const myConfig = new CircleCI.Config(true).stringify();
   it('Should produce a blank config with Setup set to true', () => {
     const expected = {
       version: 2.1,
@@ -23,7 +23,7 @@ describe('Generate a Setup workflow config', () => {
 });
 
 describe('Generate a config with parameters', () => {
-  const myConfig = new CircleCI.config.Config(true);
+  const myConfig = new CircleCI.Config(true);
 
   myConfig.defineParameter('greeting', 'string', 'hello world');
 
@@ -54,12 +54,12 @@ describe('Generate a config with parameters', () => {
 });
 
 describe('Parse a fully complete config', () => {
-  const myConfig = new CircleCI.config.Config();
+  const myConfig = new CircleCI.Config();
 
   myConfig.defineParameter('greeting', 'string', 'hello world!');
 
-  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
-  const reusableDocker = new CircleCI.executor.ReusableExecutor(
+  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
+  const reusableDocker = new CircleCI.executors.ReusableExecutor(
     'docker',
     docker,
   );
@@ -80,12 +80,12 @@ describe('Parse a fully complete config', () => {
 
   myConfig.addCustomCommand(customCommand);
 
-  const jobA = new CircleCI.job.Job('my-job-A', reusableDocker, [
+  const jobA = new CircleCI.Job('my-job-A', reusableDocker, [
     new CircleCI.commands.reusable.ReusableCommand(customCommand, {
       greeting: '<< pipeline.parameters.greeting >>',
     }),
   ]);
-  const jobB = new CircleCI.job.Job('my-job-B', reusableDocker, [
+  const jobB = new CircleCI.Job('my-job-B', reusableDocker, [
     new CircleCI.commands.reusable.ReusableCommand(customCommand, {
       greeting: 'sup world!',
     }),
@@ -94,7 +94,7 @@ describe('Parse a fully complete config', () => {
   myConfig.addJob(jobA);
   myConfig.addJob(jobB);
 
-  const myWorkflow = new CircleCI.workflow.Workflow('my-workflow');
+  const myWorkflow = new CircleCI.Workflow('my-workflow');
 
   myWorkflow.addJob(jobA);
   myWorkflow.addJob(jobB, { requires: [jobA.name] });
@@ -161,12 +161,12 @@ describe('Parse a fully complete config', () => {
   };
 
   it('Should produce a blank config with parameters', () => {
-    expect(CircleCI.config.parseConfig(configResult)).toEqual(myConfig);
+    expect(CircleCI.parseConfig(configResult)).toEqual(myConfig);
   });
 
   it('Should be fully circular', () => {
-    expect(
-      CircleCI.config.parseConfig(YAML.parse(myConfig.stringify())),
-    ).toEqual(myConfig);
+    expect(CircleCI.parseConfig(YAML.parse(myConfig.stringify()))).toEqual(
+      myConfig,
+    );
   });
 });

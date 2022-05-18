@@ -2,16 +2,16 @@ import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 describe('Generate a Hello World config', () => {
   // Instantiate new Config
-  const myConfig = new CircleCI.config.Config();
+  const myConfig = new CircleCI.Config();
   // Create new Workflow
-  const myWorkflow = new CircleCI.workflow.Workflow('myWorkflow');
+  const myWorkflow = new CircleCI.Workflow('myWorkflow');
   myConfig.addWorkflow(myWorkflow);
 
   // Create an executor. Reusable.
-  const nodeExecutor = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const nodeExecutor = new CircleCI.executors.DockerExecutor('cimg/node:lts');
 
   // Create Job
-  const nodeTestJob = new CircleCI.job.Job('node-test', nodeExecutor);
+  const nodeTestJob = new CircleCI.Job('node-test', nodeExecutor);
   myConfig.addJob(nodeTestJob);
 
   // Add steps to job

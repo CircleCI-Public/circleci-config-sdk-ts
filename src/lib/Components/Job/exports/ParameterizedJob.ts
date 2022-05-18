@@ -4,10 +4,9 @@ import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { CustomParametersListShape } from '../../Parameters/types';
 import { AnyExecutor, JobContentShape } from '../types/Job.types';
-import { Job } from './Job';
+import { Job } from '..';
 /**
- * Parameterized are a type of Job which defines parameters it can accept.
- * {@label STATIC_2.1}
+ * Parameterized jobs are a type of Job which defines the parameters it can accept.
  */
 class ParameterizedJob
   extends Job

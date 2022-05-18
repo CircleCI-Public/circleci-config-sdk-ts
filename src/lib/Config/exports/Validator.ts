@@ -17,15 +17,15 @@ import {
   StepSchema,
   StepsSchema,
 } from '../../Components/Commands/schemas/Steps.schema';
-import DockerExecutorSchema from '../../Components/Executor/schemas/DockerExecutor.schema';
-import ExecutorSchema from '../../Components/Executor/schemas/Executor.schema';
-import MachineExecutorSchema from '../../Components/Executor/schemas/MachineExecutor.schema';
-import MacOSExecutorSchema from '../../Components/Executor/schemas/MacosExecutor.schema';
+import DockerExecutorSchema from '../../Components/Executors/schemas/DockerExecutor.schema';
+import ExecutorSchema from '../../Components/Executors/schemas/Executor.schema';
+import MachineExecutorSchema from '../../Components/Executors/schemas/MachineExecutor.schema';
+import MacOSExecutorSchema from '../../Components/Executors/schemas/MacosExecutor.schema';
 import {
   ReusableExecutorSchema,
   ReusableExecutorsListSchema,
-} from '../../Components/Executor/schemas/ReusableExecutor.schema';
-import WindowsExecutorSchema from '../../Components/Executor/schemas/WindowsExecutor.schema';
+} from '../../Components/Executors/schemas/ReusableExecutor.schema';
+import WindowsExecutorSchema from '../../Components/Executors/schemas/WindowsExecutor.schema';
 import JobSchema from '../../Components/Job/schemas/Job.schema';
 import { Parameterized } from '../../Components/Parameters/exports/Parameterized';
 import CommandParametersSchema from '../../Components/Parameters/schemas/CommandParameters.schema';

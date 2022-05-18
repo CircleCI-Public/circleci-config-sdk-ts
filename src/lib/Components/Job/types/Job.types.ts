@@ -1,5 +1,5 @@
-import { Executor, ReusableExecutor } from '../../Executor';
-import { ExecutorShape } from '../../Executor/types/Executor.types';
+import { Executor, ReusableExecutor } from '../../Executors';
+import { ExecutorShape } from '../../Executors/types/Executor.types';
 
 export interface JobStepsShape {
   steps: unknown[]; // CommandSchemas for any command.

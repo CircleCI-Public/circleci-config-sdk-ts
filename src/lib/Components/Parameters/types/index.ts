@@ -1,5 +1,5 @@
 import { Command } from '../../Commands/exports/Command';
-import { Executor } from '../../Executor/exports/Executor';
+import { Executor } from '../../Executors/exports/Executor';
 import {
   AnyParameterLiteral,
   EnumParameterLiteral,

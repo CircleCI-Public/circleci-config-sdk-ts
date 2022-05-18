@@ -1,13 +1,14 @@
-import { CustomCommand } from '../../Components/Commands/exports/Reusable';
 import { CustomCommandShape } from '../../Components/Commands/types/Command.types';
-import { ReusableExecutorsShape } from '../../Components/Executor/types/ReusableExecutor.types';
-import { Job } from '../../Components/Job/exports/Job';
+import { ReusableExecutorsShape } from '../../Components/Executors/types/ReusableExecutor.types';
+import { Job } from '../../Components/Job';
 import { JobShape } from '../../Components/Job/types/Job.types';
 import { ParameterShape } from '../../Components/Parameters/types';
 import { WorkflowShape } from '../../Components/Workflow/types/Workflow.types';
 import { Workflow } from '../../Components/Workflow';
 import * as validator from './Validator.types';
 import * as mapping from './Mapping.types';
+import { CustomCommand } from '../../Components/Reusable';
+import { ReusableExecutor } from '../../Components/Executors';
 
 /**
  * Selected config version
@@ -28,6 +29,7 @@ export type ConfigOrbImport = {
 export type CircleCIConfigObject = {
   version: ConfigVersion;
   jobs?: Job[];
+  executors?: ReusableExecutor[];
   commands?: CustomCommand[];
   workflows?: Workflow[];
 };
