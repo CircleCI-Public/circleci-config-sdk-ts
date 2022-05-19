@@ -70,7 +70,7 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
     command: 'echo << parameters.greeting >>',
   });
 
-  const customCommand = new CircleCI.commands.reusable.CustomCommand(
+  const customCommand = new CircleCI.reusable.CustomCommand(
     'say_hello',
     [helloWorld],
     new CircleCI.parameters.CustomParametersList([
@@ -78,10 +78,9 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
     ]),
   );
 
-  const reusableCommand = new CircleCI.commands.reusable.ReusableCommand(
-    customCommand,
-    { greeting: 'hello world' },
-  );
+  const reusableCommand = new CircleCI.reusable.ReusableCommand(customCommand, {
+    greeting: 'hello world',
+  });
 
   const job = new CircleCI.Job('my_job', docker);
 
@@ -196,7 +195,7 @@ describe('Parse Docker Job With A Parameterized Custom Command', () => {
     command: 'echo << parameters.greeting >>',
   });
 
-  const customCommand = new CircleCI.commands.reusable.CustomCommand(
+  const customCommand = new CircleCI.reusable.CustomCommand(
     'say_hello',
     [helloWorld],
     new CircleCI.parameters.CustomParametersList([
@@ -204,10 +203,9 @@ describe('Parse Docker Job With A Parameterized Custom Command', () => {
     ]),
   );
 
-  const reusableCommand = new CircleCI.commands.reusable.ReusableCommand(
-    customCommand,
-    { greeting: 'hello world' },
-  );
+  const reusableCommand = new CircleCI.reusable.ReusableCommand(customCommand, {
+    greeting: 'hello world',
+  });
 
   const job = new CircleCI.Job('my_job', docker);
 
