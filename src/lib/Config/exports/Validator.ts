@@ -118,6 +118,8 @@ export type NamedGenerable = Generable &
 export class Validator extends Ajv {
   private static instance: Validator;
 
+  public static validateOnParse: boolean;
+
   private constructor() {
     super();
 

@@ -1,5 +1,3 @@
-// The literal representation of a custom parameter's type. This value is
-
 /**
  * All potential parameter type literals that can be supplied to custom reusable components.
  * @see {@link  https://circleci.com/docs/2.0/reusing-config/#parameter-syntax}

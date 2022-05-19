@@ -48,4 +48,13 @@ export type CircleCIConfigShape = {
   workflows: WorkflowShape;
 };
 
+export type UnknownConfigShape = {
+  setup: boolean;
+  executors?: Record<string, unknown>;
+  jobs: Record<string, unknown>;
+  commands?: Record<string, unknown>;
+  parameters?: Record<string, unknown>;
+  workflows: Record<string, unknown>;
+};
+
 export { validator, mapping };

@@ -127,11 +127,17 @@ const nativeSubtypes: {
   },
 };
 
+/**
+ * Takes a list of steps, and parses them into a Command list.
+ * @param stepsListIn - The steps from a job or custom command.
+ * @param commands - The custom command list to refer to when a step is a reusable command.
+ * @returns A list of parsed commands.
+ */
 export function parseSteps(
-  commandListIn: { [key: string]: unknown }[],
+  stepsListIn: { [key: string]: unknown }[],
   commands?: CustomCommand[],
 ): Command[] {
-  return commandListIn.map((subtype) => {
+  return stepsListIn.map((subtype) => {
     const commandName = Object.keys(subtype)[0];
 
     return parseStep(commandName, subtype[commandName], commands);
@@ -139,9 +145,11 @@ export function parseSteps(
 }
 
 /**
- * Parse a native or reusable command.
+ * Parse an unknown step into a native or reusable command.
+ * If the step name is a not a native command, the
  * @param name - The name of the command.
  * @param args - The arguments to the command.
+ * @param commands - Only required when parsing reusable commands
  * @returns Command or ReusableCommand
  */
 export function parseStep(
@@ -156,22 +164,29 @@ export function parseStep(
   } else if (commands) {
     const command = commands.find((c) => c.name === name);
 
-    if (command) {
-      parsedCommand = new ReusableCommand(command, args as CommandParameters);
-    } else {
+    if (!command) {
       throw new Error(
         `Failed to parse - Custom command ${name} not found in provided config.`,
       );
     }
+
+    parsedCommand = new ReusableCommand(command, args as CommandParameters);
   }
 
   if (parsedCommand) {
     return parsedCommand;
   }
 
-  throw new Error(`Failed to parse - Unknown native command: ${name}.`);
+  throw new Error(`Failed to parse - Unknown native command: ${name}.
+  `);
 }
 
+/**
+ * Parse a config's list of custom commands, to later be referenced by ReusableCommands.
+ * @param commandListIn - The list of custom commands to parse.
+ * @param custom_commands - The custom commands to parse.
+ * @returns A list of custom commands.
+ */
 export function parseCustomCommands(
   commandListIn: { [key: string]: unknown },
   custom_commands?: CustomCommand[],
@@ -181,30 +196,38 @@ export function parseCustomCommands(
   );
 }
 
+/**
+ * Parse a single custom command.
+ * @param name - The name of the command.
+ * @param args - The arguments of the command.
+ * @param custom_commands - A reference list of custom commands to use for nested custom commands.
+ * @returns A custom command.
+ * @throws Error if the custom command is not valid.
+ */
 export function parseCustomCommand(
   name: string,
   args: unknown,
   custom_commands?: CustomCommand[],
 ): CustomCommand {
-  if (Validator.validateGenerable(GenerableType.CUSTOM_COMMAND, args)) {
-    const command_args = args as CustomCommandBodyShape;
-
-    const parametersList =
-      command_args.parameters &&
-      (parseParameterList(
-        command_args.parameters,
-        ParameterizedComponent.COMMAND,
-      ) as CustomParametersList<CommandParameterLiteral>);
-
-    const steps = parseSteps(command_args.steps, custom_commands);
-
-    return new CustomCommand(
-      name,
-      steps,
-      parametersList,
-      command_args.description,
-    );
+  if (!Validator.validateGenerable(GenerableType.CUSTOM_COMMAND, args)) {
+    throw new Error(`Failed to validate custom command before parsing.`);
   }
 
-  throw new Error(`Failed to parse custom command.`);
+  const command_args = args as CustomCommandBodyShape;
+
+  const parametersList =
+    command_args.parameters &&
+    (parseParameterList(
+      command_args.parameters,
+      ParameterizedComponent.COMMAND,
+    ) as CustomParametersList<CommandParameterLiteral>);
+
+  const steps = parseSteps(command_args.steps, custom_commands);
+
+  return new CustomCommand(
+    name,
+    steps,
+    parametersList,
+    command_args.description,
+  );
 }
