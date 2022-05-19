@@ -1,7 +1,3 @@
-/**
- * DFG
- */
-
 import { SchemaObject } from 'ajv';
 import {
   GenerableType,
