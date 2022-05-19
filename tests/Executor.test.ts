@@ -28,7 +28,7 @@ describe('Instantiate Docker Executor', () => {
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(
-      new CircleCI.executors.ReusableExecutor('default', docker),
+      new CircleCI.reusable.ReusableExecutor('default', docker),
     );
     expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
@@ -61,7 +61,7 @@ describe('Instantiate Machine Executor', () => {
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(
-      new CircleCI.executors.ReusableExecutor('default', machine),
+      new CircleCI.reusable.ReusableExecutor('default', machine),
     );
     expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
@@ -96,7 +96,7 @@ describe('Instantiate MacOS Executor', () => {
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(
-      new CircleCI.executors.ReusableExecutor('default', macos),
+      new CircleCI.reusable.ReusableExecutor('default', macos),
     );
     expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
@@ -131,7 +131,7 @@ describe('Instantiate Large MacOS Executor', () => {
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(
-      new CircleCI.executors.ReusableExecutor('default', macos),
+      new CircleCI.reusable.ReusableExecutor('default', macos),
     );
     expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
@@ -198,7 +198,7 @@ describe('Instantiate Windows Executor', () => {
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(
-      new CircleCI.executors.ReusableExecutor('default', windows),
+      new CircleCI.reusable.ReusableExecutor('default', windows),
     );
     expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
@@ -235,7 +235,7 @@ describe('Instantiate a 2xlarge Docker Executor', () => {
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(
-      new CircleCI.executors.ReusableExecutor('default', xxlDocker),
+      new CircleCI.reusable.ReusableExecutor('default', xxlDocker),
     );
     expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
@@ -296,13 +296,10 @@ describe('Instantiate Large Machine Executor', () => {
     const myConfig = new CircleCI.Config();
     myConfig
       .addReusableExecutor(
-        new CircleCI.executors.ReusableExecutor('machine_large', machineLarge),
+        new CircleCI.reusable.ReusableExecutor('machine_large', machineLarge),
       )
       .addReusableExecutor(
-        new CircleCI.executors.ReusableExecutor(
-          'machine_medium',
-          machineMedium,
-        ),
+        new CircleCI.reusable.ReusableExecutor('machine_medium', machineMedium),
       );
     expect(myConfig.executors?.length).toBe(2);
   });
@@ -316,7 +313,7 @@ resource allocation happening.
 
 describe('Generate a config with a Reusable Executor with parameters', () => {
   const machine = new CircleCI.executors.MachineExecutor('large');
-  const reusable = new CircleCI.executors.ReusableExecutor('default', machine);
+  const reusable = new CircleCI.reusable.ReusableExecutor('default', machine);
 
   it('Should match the expected output', () => {
     const expectedShape = {
@@ -382,11 +379,11 @@ describe('Generate a config with a Reusable Executor', () => {
   const dockerBase = new CircleCI.executors.DockerExecutor(
     'cimg/base:<< parameters.tag >>',
   );
-  const reusableMachine = new CircleCI.executors.ReusableExecutor(
+  const reusableMachine = new CircleCI.reusable.ReusableExecutor(
     'default',
     machine,
   );
-  const reusableBase = new CircleCI.executors.ReusableExecutor(
+  const reusableBase = new CircleCI.reusable.ReusableExecutor(
     'base',
     dockerBase,
   );

@@ -6,11 +6,11 @@ import {
 import { Validator } from '../../../Config/exports/Validator';
 import { CustomCommand } from '../../Commands/exports/Reusable/CustomCommand';
 import { parseSteps } from '../../Commands/parsers';
-import { ReusableExecutor } from '../../Executors';
 import { parseExecutor } from '../../Executors/parsers';
 import { CustomParametersList } from '../../Parameters';
 import { parseParameterList } from '../../Parameters/parsers';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
+import { ReusableExecutor } from '../../Reusable';
 import { ParameterizedJob } from '../exports/ParameterizedJob';
 
 export function parseJobList(

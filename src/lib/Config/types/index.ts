@@ -8,7 +8,7 @@ import { Workflow } from '../../Components/Workflow';
 import * as validator from './Validator.types';
 import * as mapping from './Mapping.types';
 import { CustomCommand } from '../../Components/Reusable';
-import { ReusableExecutor } from '../../Components/Executors';
+import { ReusableExecutor } from '../../Components/Executors/exports/ReusableExecutor';
 
 /**
  * Selected config version
