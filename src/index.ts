@@ -16,27 +16,27 @@ export * from './lib/Config/parsers';
 export * as reusable from './lib/Components/Reusable';
 
 /**
- * Native command components
+ * Native command components.
  */
 export * as commands from './lib/Components/Commands';
 
 /**
- * Parameter Types for reusable components
+ * Parameter Types for reusable components.
  */
 export * as parameters from './lib/Components/Parameters';
 
 /**
- * Native executor components
+ * Native executor components.
  */
 export * as executors from './lib/Components/Executors';
 
 /**
- * Symbols used during validation to lookup the correct schema
+ * Symbols used during validation to lookup the correct schema.
  */
 export * as mapping from './lib/Config/exports/Mapping';
 
 /**
- * All types used in the components
+ * All types used in the components.
  */
 export * as types from './lib/Types';
 

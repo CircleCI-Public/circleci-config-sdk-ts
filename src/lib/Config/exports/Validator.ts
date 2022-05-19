@@ -175,7 +175,7 @@ export class Validator extends Ajv {
     }
   }
 
-  // TODO: Give this a better name. All this does is return the error if there are any
+  // TODO: Give this a better name. Return errors if there are any.
   validateComponent(schema: SchemaObject, data: unknown): ValidationResult {
     return super.validate(schema, data) || this.errors;
   }
