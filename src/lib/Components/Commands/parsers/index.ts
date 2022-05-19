@@ -128,7 +128,7 @@ const nativeSubtypes: {
 };
 
 /**
- * Takes a list of steps, and parses them into a Command list.
+ * Parses a list of steps into a list of commands.
  * @param stepsListIn - The steps from a job or custom command.
  * @param commands - The custom command list to refer to when a step is a reusable command.
  * @returns A list of parsed commands.
