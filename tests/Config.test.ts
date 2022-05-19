@@ -59,14 +59,14 @@ describe('Parse a fully complete config', () => {
   myConfig.defineParameter('greeting', 'string', 'hello world!');
 
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
-  const reusableDocker = new CircleCI.executors.ReusableExecutor(
+  const reusableDocker = new CircleCI.reusable.ReusableExecutor(
     'docker',
     docker,
   );
 
   myConfig.addReusableExecutor(reusableDocker);
 
-  const customCommand = new CircleCI.commands.reusable.CustomCommand(
+  const customCommand = new CircleCI.reusable.CustomCommand(
     'say_hello',
     [
       new CircleCI.commands.Run({
@@ -81,12 +81,12 @@ describe('Parse a fully complete config', () => {
   myConfig.addCustomCommand(customCommand);
 
   const jobA = new CircleCI.Job('my-job-A', reusableDocker, [
-    new CircleCI.commands.reusable.ReusableCommand(customCommand, {
+    new CircleCI.reusable.ReusableCommand(customCommand, {
       greeting: '<< pipeline.parameters.greeting >>',
     }),
   ]);
   const jobB = new CircleCI.Job('my-job-B', reusableDocker, [
-    new CircleCI.commands.reusable.ReusableCommand(customCommand, {
+    new CircleCI.reusable.ReusableCommand(customCommand, {
       greeting: 'sup world!',
     }),
   ]);

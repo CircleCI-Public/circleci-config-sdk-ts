@@ -176,10 +176,9 @@ describe('Add SSH Keys', () => {
 });
 
 describe('Instantiate a Blank Custom Command', () => {
-  const customCommand = new CircleCI.commands.reusable.CustomCommand(
-    'say_hello',
-    [new CircleCI.commands.Run({ command: 'echo "Hello, World!"' })],
-  );
+  const customCommand = new CircleCI.reusable.CustomCommand('say_hello', [
+    new CircleCI.commands.Run({ command: 'echo "Hello, World!"' }),
+  ]);
 
   const example = {
     say_hello: { steps: [{ run: { command: 'echo "Hello, World!"' } }] },
@@ -200,9 +199,7 @@ describe('Instantiate a Custom Command', () => {
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
   });
-  const customCommand = new CircleCI.commands.reusable.CustomCommand(
-    'say_hello',
-  );
+  const customCommand = new CircleCI.reusable.CustomCommand('say_hello');
 
   customCommand
     .addStep(helloWorld)
@@ -227,7 +224,7 @@ describe('Instantiate a Reusable Command', () => {
     command: 'echo << parameters.greeting >>',
   });
 
-  const customCommand = new CircleCI.commands.reusable.CustomCommand(
+  const customCommand = new CircleCI.reusable.CustomCommand(
     'say_hello',
     [helloWorld],
     new CircleCI.parameters.CustomParametersList([
@@ -235,10 +232,9 @@ describe('Instantiate a Reusable Command', () => {
     ]),
   );
 
-  const reusableCommand = new CircleCI.commands.reusable.ReusableCommand(
-    customCommand,
-    { greeting: 'hello world' },
-  );
+  const reusableCommand = new CircleCI.reusable.ReusableCommand(customCommand, {
+    greeting: 'hello world',
+  });
 
   const expected = {
     say_hello: {
@@ -255,7 +251,7 @@ describe('Instantiate a Reusable Command', () => {
  * instantiate a parameter with an enum value of x y z
  */
 describe('Instantiate reusable commands', () => {
-  const firstCustomCommand = new CircleCI.commands.reusable.CustomCommand(
+  const firstCustomCommand = new CircleCI.reusable.CustomCommand(
     'point_direction',
   );
 
@@ -285,7 +281,7 @@ describe('Instantiate reusable commands', () => {
     expect(firstCustomCommand.generate()).toEqual(parse(firstExpectedOutput));
   });
 
-  const secondCustomCommand = new CircleCI.commands.reusable.CustomCommand(
+  const secondCustomCommand = new CircleCI.reusable.CustomCommand(
     'search_year',
   );
 

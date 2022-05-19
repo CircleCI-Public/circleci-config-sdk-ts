@@ -1,7 +1,7 @@
 import { Scalar, stringify as Stringify } from 'yaml';
 import { version as SDKVersion } from '../../package-version.json';
 import { CustomCommandShape } from '../Components/Commands/types/Command.types';
-import { ReusableExecutor } from '../Components/Executors';
+import { ReusableExecutor } from '../Components/Executors/exports/ReusableExecutor';
 import { ReusableExecutorsShape } from '../Components/Executors/types/ReusableExecutor.types';
 import { Job } from '../Components/Job';
 import { JobShape } from '../Components/Job/types/Job.types';

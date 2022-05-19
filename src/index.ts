@@ -7,6 +7,12 @@ export * from './lib/Components/Workflow/parsers';
 export * from './lib/Config/parsers';
 
 // Categorized exports
+
+/**
+ * Reusable components are an extension of base components
+ * which implement functionality to make them configurable
+ * when used in tandem with other components.
+ */
 export * as reusable from './lib/Components/Reusable';
 export * as commands from './lib/Components/Commands';
 export * as parameters from './lib/Components/Parameters';

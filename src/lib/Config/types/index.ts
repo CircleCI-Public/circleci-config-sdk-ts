@@ -8,7 +8,7 @@ import { Workflow } from '../../Components/Workflow';
 import * as validator from './Validator.types';
 import * as mapping from './Mapping.types';
 import { CustomCommand } from '../../Components/Reusable';
-import { ReusableExecutor } from '../../Components/Executors';
+import { ReusableExecutor } from '../../Components/Executors/exports/ReusableExecutor';
 
 /**
  * Selected config version
@@ -46,6 +46,15 @@ export type CircleCIConfigShape = {
   jobs: JobShape;
   commands?: CustomCommandShape;
   workflows: WorkflowShape;
+};
+
+export type UnknownConfigShape = {
+  setup: boolean;
+  executors?: Record<string, unknown>;
+  jobs: Record<string, unknown>;
+  commands?: Record<string, unknown>;
+  parameters?: Record<string, unknown>;
+  workflows: Record<string, unknown>;
 };
 
 export { validator, mapping };

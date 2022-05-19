@@ -5,3 +5,7 @@ export interface WorkflowShape {
     jobs: WorkflowJobParameters[];
   };
 }
+
+export type UnknownWorkflowShape = {
+  jobs: { [key: string]: unknown }[];
+};

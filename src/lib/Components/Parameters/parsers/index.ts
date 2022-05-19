@@ -18,11 +18,12 @@ import {
 } from '../types/CustomParameterLiterals.types';
 
 /**
- * Parse a single parameter
- * @param customParamIn - Unknown parameter object
- * @param name - Name of the parameter
+ * Parse a single parameter.
+ * @param customParamIn - Unknown parameter object.
+ * @param name - Name of the parameter.
  * @param subtype - Subtype of the parameter. Required for all non-enum typed parameters.
- * @returns A CustomParameter object
+ * @returns A custom parameter.
+ * @throws Error if a valid executor type is not found on the object.
  */
 export function parseParameter(
   customParamIn: unknown,
@@ -87,6 +88,14 @@ export function parseParameter(
   }
 }
 
+/**
+ * Parse a list of parameters.
+ * @param customParamIn - Unknown parameter object.
+ * @param name - Name of the parameter.
+ * @param subtype - Subtype of the parameter. Required for all but enum typed parameters.
+ * @returns A custom parameter.
+ * @throws Error if parameter list, or at least one parameter is not valid.
+ */
 export function parseParameterList(
   customParamListIn: unknown,
   subtype?: ParameterizedComponent,
