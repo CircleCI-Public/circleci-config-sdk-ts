@@ -1,6 +1,5 @@
 import Ajv, { SchemaObject } from 'ajv';
 import ajvMergePatch from 'ajv-merge-patch';
-import { Generable } from '../../Components';
 import AddSSHKeysSchema from '../../Components/Commands/schemas/Native/AddSSHKeys.schema';
 import RestoreSchema from '../../Components/Commands/schemas/Native/Cache/Restore.schema';
 import SaveSchema from '../../Components/Commands/schemas/Native/Cache/Save.schema';
@@ -27,7 +26,6 @@ import {
 } from '../../Components/Executors/schemas/ReusableExecutor.schema';
 import WindowsExecutorSchema from '../../Components/Executors/schemas/WindowsExecutor.schema';
 import JobSchema from '../../Components/Job/schemas/Job.schema';
-import { Parameterized } from '../../Components/Parameters/exports/Parameterized';
 import CommandParametersSchema from '../../Components/Parameters/schemas/CommandParameters.schema';
 import {
   CommandParameterListSchema,
@@ -47,7 +45,6 @@ import {
   StringParameterSchema,
 } from '../../Components/Parameters/schemas/ParameterTypes.schema';
 import PipelineParametersSchema from '../../Components/Parameters/schemas/PipelineParameters.schema';
-import { AnyParameterLiteral } from '../../Components/Parameters/types/CustomParameterLiterals.types';
 import WorkflowSchema from '../../Components/Workflow/schemas/Workflow.schema';
 import WorkflowJobSchema from '../../Components/Workflow/schemas/WorkflowJob.schema';
 import ConfigSchema from '../schemas/Config.schema';
@@ -111,10 +108,10 @@ const schemaRegistry: ValidationMap = {
   },
 };
 
-// TODO: Potentially make name an interface so that we can have a type guard without this type
-export type NamedGenerable = Generable &
-  Partial<Parameterized<AnyParameterLiteral>> & { name: string };
-
+/**
+ * An Ajv object that can validate a config and it's components
+ * Does not handle validation of parameter usage.
+ */
 export class Validator extends Ajv {
   private static instance: Validator;
 

@@ -1,6 +1,3 @@
-/**
- *  test
- */
 export * as parameter from '../Components/Parameters/types';
 export * as executor from '../Components/Executors/types';
 export * as command from '../Components/Commands/types/Command.types';
