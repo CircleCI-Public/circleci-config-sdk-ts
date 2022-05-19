@@ -1,15 +1,6 @@
 import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 import { version as SDKVersion } from '../src/package-version.json';
-import { parseConfig } from '../src/lib/Config';
-import {
-  CustomCommand,
-  ReusableCommand,
-} from '../src/lib/Components/Commands/exports/Reusable';
-import {
-  CustomParameter,
-  CustomParametersList,
-} from '../src/lib/Components/Parameters';
 
 describe('Generate a Setup workflow config', () => {
   const myConfig = new CircleCI.Config(true).stringify();
@@ -67,33 +58,35 @@ describe('Parse a fully complete config', () => {
 
   myConfig.defineParameter('greeting', 'string', 'hello world!');
 
-  const docker = new CircleCI.executor.DockerExecutor('cimg/node:lts');
-  const reusableDocker = new CircleCI.executor.ReusableExecutor(
+  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
+  const reusableDocker = new CircleCI.executors.ReusableExecutor(
     'docker',
     docker,
   );
 
   myConfig.addReusableExecutor(reusableDocker);
 
-  const customCommand = new CustomCommand(
+  const customCommand = new CircleCI.commands.reusable.CustomCommand(
     'say_hello',
     [
       new CircleCI.commands.Run({
         command: 'echo << parameters.greeting >>',
       }),
     ],
-    new CustomParametersList([new CustomParameter('greeting', 'string')]),
+    new CircleCI.parameters.CustomParametersList([
+      new CircleCI.parameters.CustomParameter('greeting', 'string'),
+    ]),
   );
 
   myConfig.addCustomCommand(customCommand);
 
   const jobA = new CircleCI.Job('my-job-A', reusableDocker, [
-    new ReusableCommand(customCommand, {
+    new CircleCI.commands.reusable.ReusableCommand(customCommand, {
       greeting: '<< pipeline.parameters.greeting >>',
     }),
   ]);
   const jobB = new CircleCI.Job('my-job-B', reusableDocker, [
-    new ReusableCommand(customCommand, {
+    new CircleCI.commands.reusable.ReusableCommand(customCommand, {
       greeting: 'sup world!',
     }),
   ]);
@@ -168,10 +161,12 @@ describe('Parse a fully complete config', () => {
   };
 
   it('Should produce a blank config with parameters', () => {
-    expect(parseConfig(configResult)).toEqual(myConfig);
+    expect(CircleCI.parseConfig(configResult)).toEqual(myConfig);
   });
 
   it('Should be fully circular', () => {
-    expect(parseConfig(YAML.parse(myConfig.stringify()))).toEqual(myConfig);
+    expect(CircleCI.parseConfig(YAML.parse(myConfig.stringify()))).toEqual(
+      myConfig,
+    );
   });
 });

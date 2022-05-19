@@ -1,4 +1,4 @@
-import { StringParameter } from '../../Parameters/types/Parameters.types';
+import { StringParameter } from '../../Parameters/types';
 import { AnyResourceClass } from './Executor.types';
 
 /**

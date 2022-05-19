@@ -1,5 +1,5 @@
 import { Generable } from '../../index';
-import { StringParameter } from '../../Parameters/types/Parameters.types';
+import { StringParameter } from '../../Parameters/types';
 import { CommandParameters, CommandShape } from '../types/Command.types';
 
 /**

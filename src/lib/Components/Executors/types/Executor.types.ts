@@ -4,6 +4,11 @@ import { MacOSExecutorShape } from './MacOSExecutor.types';
 import { ReusableExecutorShape } from './ReusableExecutor.types';
 import { WindowsExecutorShape } from './WindowsExecutor.types';
 
+export type UnknownExecutorShape = {
+  resource_class: string;
+  [key: string]: unknown;
+};
+
 /**
  * The executor output shapes for YAML string
  */
@@ -28,6 +33,7 @@ export type AnyResourceClass =
 
 /**
  * The valid executors found on an executor object
+ * Windows is covered by the machine literal
  */
 export type ExecutorLiteral = 'docker' | 'machine' | 'macos';
 

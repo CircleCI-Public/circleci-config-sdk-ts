@@ -1,4 +1,4 @@
-import { GenerableType } from '../../../Config/types/Config.types';
+import { GenerableType } from '../../../Config/exports/Mapping';
 import {
   DockerExecutorShape,
   DockerImageMap,

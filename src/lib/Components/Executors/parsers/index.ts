@@ -1,36 +1,32 @@
-/**
- * Instantiate a CircleCI Executor, the build environment for a job. Select a type of executor and supply the required parameters.
- */
-import { parameters } from '../../..';
-import { ConfigValidator } from '../../Config/ConfigValidator';
+import { Validator } from '../../../Config';
 import {
   GenerableType,
   ParameterizedComponent,
-} from '../../Config/types/Config.types';
-import { CustomParametersList } from '../Parameters';
-import { ExecutorParameterLiteral } from '../Parameters/types/CustomParameterLiterals.types';
-import { DockerExecutor } from './exports/DockerExecutor';
-import { Executor } from './exports/Executor';
-import { MachineExecutor } from './exports/MachineExecutor';
-import { MacOSExecutor } from './exports/MacOSExecutor';
-import { ReusableExecutor } from './exports/ReusableExecutor';
-import { WindowsExecutor } from './exports/WindowsExecutor';
-import { DockerResourceClass } from './types/DockerExecutor.types';
-import { ExecutorLiteral, ExecutorLiteralUsage } from './types/Executor.types';
-import { MachineResourceClass } from './types/MachineExecutor.types';
-import { MacOSResourceClass } from './types/MacOSExecutor.types';
-import { WindowsResourceClass } from './types/WindowsExecutor.types';
-
-export type UnknownExecutorShape = {
-  resource_class: string;
-  [key: string]: unknown;
-};
+} from '../../../Config/exports/Mapping';
+import { CustomParametersList } from '../../Parameters';
+import { parseParameterList } from '../../Parameters/parsers';
+import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
+import { DockerExecutor } from '../exports/DockerExecutor';
+import { Executor } from '../exports/Executor';
+import { MachineExecutor } from '../exports/MachineExecutor';
+import { MacOSExecutor } from '../exports/MacOSExecutor';
+import { ReusableExecutor } from '../exports/ReusableExecutor';
+import { WindowsExecutor } from '../exports/WindowsExecutor';
+import { DockerResourceClass } from '../types/DockerExecutor.types';
+import {
+  ExecutorLiteral,
+  ExecutorLiteralUsage,
+  UnknownExecutorShape,
+} from '../types/Executor.types';
+import { MachineResourceClass } from '../types/MachineExecutor.types';
+import { MacOSResourceClass } from '../types/MacOSExecutor.types';
+import { WindowsResourceClass } from '../types/WindowsExecutor.types';
 
 /**
  * Parse executor type from an object with an executor.
  * @returns Executor of the corresponding type
  */
-export function parse(
+export function parseExecutor(
   executorIn: unknown,
   executors?: ReusableExecutor[],
 ): Executor | ReusableExecutor | undefined {
@@ -45,10 +41,7 @@ export function parse(
       const dockerArgs = args as [{ image: string }];
 
       if (
-        ConfigValidator.validateGenerable(
-          GenerableType.DOCKER_EXECUTOR,
-          dockerArgs,
-        )
+        Validator.validateGenerable(GenerableType.DOCKER_EXECUTOR, dockerArgs)
       ) {
         return new DockerExecutor(
           dockerArgs[0].image || 'cimg/base:stable',
@@ -67,7 +60,7 @@ export function parse(
         const windowsArgs = args as Partial<WindowsExecutor>;
 
         if (
-          ConfigValidator.validateGenerable(
+          Validator.validateGenerable(
             GenerableType.WINDOWS_EXECUTOR,
             windowsArgs,
           )
@@ -79,10 +72,7 @@ export function parse(
       const machineArgs = args as Partial<MachineExecutor>;
 
       if (
-        ConfigValidator.validateGenerable(
-          GenerableType.MACHINE_EXECUTOR,
-          machineArgs,
-        )
+        Validator.validateGenerable(GenerableType.MACHINE_EXECUTOR, machineArgs)
       ) {
         return new MachineExecutor(
           executorArgs.resource_class as MachineResourceClass,
@@ -94,10 +84,7 @@ export function parse(
       const macOSArgs = args as Partial<MacOSExecutor>;
 
       if (
-        ConfigValidator.validateGenerable(
-          GenerableType.MACOS_EXECUTOR,
-          macOSArgs,
-        )
+        Validator.validateGenerable(GenerableType.MACOS_EXECUTOR, macOSArgs)
       ) {
         return new MacOSExecutor(
           macOSArgs.xcode || '13.1',
@@ -149,13 +136,13 @@ export function parseReusableExecutors(
 
   const parametersList =
     executorListArgs.parameters &&
-    (parameters.parseList(
+    (parseParameterList(
       executorListArgs.parameters,
       ParameterizedComponent.EXECUTOR,
     ) as CustomParametersList<ExecutorParameterLiteral> | undefined);
 
   return Object.entries(executorListArgs).map(([name, executor]) => {
-    const parsedExecutor = parse(executor, undefined);
+    const parsedExecutor = parseExecutor(executor, undefined);
 
     if (parsedExecutor) {
       return new ReusableExecutor(
@@ -168,12 +155,3 @@ export function parseReusableExecutors(
     throw new Error('Invalid executor has been passed');
   });
 }
-
-export {
-  DockerExecutor,
-  MachineExecutor,
-  MacOSExecutor,
-  WindowsExecutor,
-  ReusableExecutor,
-  Executor,
-};

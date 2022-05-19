@@ -8,7 +8,7 @@ describe('Generate a Hello World config', () => {
   myConfig.addWorkflow(myWorkflow);
 
   // Create an executor. Reusable.
-  const nodeExecutor = new CircleCI.executor.DockerExecutor('cimg/node:lts');
+  const nodeExecutor = new CircleCI.executors.DockerExecutor('cimg/node:lts');
 
   // Create Job
   const nodeTestJob = new CircleCI.Job('node-test', nodeExecutor);

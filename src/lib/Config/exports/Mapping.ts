@@ -1,5 +1,3 @@
-import { ErrorObject, SchemaObject } from 'ajv';
-
 export enum GenerableType {
   CONFIG = 'config',
   REUSABLE_COMMAND = 'reusable_command',
@@ -49,20 +47,3 @@ export enum ParameterizedComponent {
   EXECUTOR = '/parameters/components/executor',
   PIPELINE = '/parameters/components/pipeline',
 }
-
-export type GenerableSubtypes = ParameterSubtype | ParameterizedComponent;
-
-export type ValidationResult = boolean | ErrorObject[] | null | undefined;
-
-export type GenerableSubTypesMap = {
-  [GenerableType.CUSTOM_PARAMETER]: {
-    [key in GenerableSubtypes]: SchemaObject;
-  };
-  [GenerableType.CUSTOM_PARAMETERS_LIST]: {
-    [key in ParameterizedComponent]: SchemaObject;
-  };
-};
-
-export type ValidationMap = GenerableSubTypesMap & {
-  [key in GenerableType]: SchemaObject;
-};

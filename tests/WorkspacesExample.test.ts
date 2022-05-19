@@ -1,11 +1,12 @@
 import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
+
 describe('Generate a config utilizing workspaces', () => {
   // Create a new CircleCI Config
   const myConfig = new CircleCI.Config();
 
   // Create a Docker-based Executor
-  const myExecutor = new CircleCI.executor.DockerExecutor('cimg/base:stable');
+  const myExecutor = new CircleCI.executors.DockerExecutor('cimg/base:stable');
 
   // Create Jobs
   const jobFlow = new CircleCI.Job('flow', myExecutor, [
