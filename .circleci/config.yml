@@ -59,8 +59,17 @@ jobs:
           command: |
             # Set NPM Auth
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            # Get alpha or beta tag and set if available
+            if [ -n "$CIRCLE_TAG" ]; then
+              PATTERN='[0-9]*\.[0-9]*\.[0-9]*-(beta|alpha)'
+              [[ $CIRCLE_TAG =~ $PATTERN ]]
+              echo "${BASH_REMATCH[1]}"
+              if [ -n "${BASH_REMATCH[1]}" ]; then
+                set -- "$@" --tag "${BASH_REMATCH[1]}"
+              fi
+            fi
             # Publish
-            npm publish --access restricted
+            npm publish --access public "$@"
 workflows:
   test:
     jobs:
@@ -104,4 +113,4 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^\d+\.\d+\.\d+$/
+              only: /^\d+\.\d+\.\d+(-(beta|alpha))?$/

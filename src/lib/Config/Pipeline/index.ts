@@ -1,7 +1,5 @@
 import { Project } from './Project';
 import { Git } from './Git';
-import { PipelineParameter } from './Parameters';
-import { ParameterTypes } from '../Parameters';
 /**
  * Access Pipeline variables from within CircleCI Cloud.
  */
@@ -13,7 +11,6 @@ export class Pipeline {
   /**
    * Array of user defined parameters
    */
-  parameters: PipelineParameter<ParameterTypes>[] = [];
   constructor() {
     if (process.env.CIRCLECI == 'true') {
       this._isLocal = false;
@@ -56,4 +53,3 @@ export class Pipeline {
     return new Git(this._isLocal);
   }
 }
-export { PipelineParameter };

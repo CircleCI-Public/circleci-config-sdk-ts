@@ -1,10 +1,10 @@
 import { Job } from '../Job';
+import { WorkflowJob } from './exports/WorkflowJob';
+import { WorkflowShape } from './types/Workflow.types';
 import {
   WorkflowJobParameters,
-  WorkflowJobSchema,
-  WorkflowSchema,
-} from './Workflow';
-import { WorkflowJob } from './WorkflowJob';
+  WorkflowJobShape,
+} from './types/WorkflowJob.types';
 
 /**
  * A workflow is a set of rules for defining a collection of jobs and their run order.
@@ -23,26 +23,29 @@ export class Workflow {
    * @param name - Name your workflow. Must be unique.
    * @param jobs - A list of jobs to be executed as part of your Workflow.
    */
-  constructor(name: string, jobs?: Job[]) {
+  constructor(name: string, jobs?: Array<Job | WorkflowJob>) {
     this.name = name;
-    jobs?.forEach((job) => {
-      this.jobs.push(new WorkflowJob(job));
-    });
+
+    if (jobs) {
+      this.jobs = jobs.map((job) =>
+        job instanceof Job ? new WorkflowJob(job) : job,
+      );
+    }
   }
   /**
-   * Generate Workflow schema.
+   * Generate Workflow Shape.
    * @returns The generated JSON for the Workflow.
    */
   generate(): unknown {
-    const generatedWorkflowJobs: WorkflowJobSchema[] = [];
+    const generatedWorkflowJobs: WorkflowJobShape[] = [];
     this.jobs.forEach((job) => {
-      generatedWorkflowJobs.push(job.generate() as WorkflowJobSchema); //Double check this
+      generatedWorkflowJobs.push(job.generate() as WorkflowJobShape); //Double check this
     });
     return {
       [this.name]: {
         jobs: generatedWorkflowJobs,
       },
-    } as WorkflowSchema;
+    } as WorkflowShape;
   }
 
   /**
@@ -53,3 +56,5 @@ export class Workflow {
     return this;
   }
 }
+
+export { WorkflowJob };

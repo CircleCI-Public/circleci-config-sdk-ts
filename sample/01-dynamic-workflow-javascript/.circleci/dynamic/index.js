@@ -31,7 +31,7 @@ const MyNewConfigYAML = myConfig.stringify();
 // Write the config to file
 fs.writeFile('./dynamicConfig.yml', MyNewConfigYAML, (err) => {
   if (err) {
-    console.log(err);
+    console.error(err);
     return
   }
 })

@@ -1,9 +1,17 @@
+import { GenerableType } from '../Config/exports/Mapping';
+
 /**
  * @internal
  */
-export abstract class Component {
+export interface Generable {
+  // TODO: Add generateContents for mapped types
   /**
    * Generate the CircleCI YAML equivalent JSON for config compilation
    */
-  abstract generate(): unknown;
+  generate(): unknown;
+
+  /**
+   * Type of generable object
+   */
+  get generableType(): GenerableType;
 }

@@ -1,20 +1,38 @@
-import { Command, CommandSchema } from '../Components/Commands/Command';
-import { Job } from '../Components/Job';
-import { JobSchema } from '../Components/Job/index';
-import { Workflow } from '../Components/Workflow';
-import { WorkflowSchema } from '../Components/Workflow/Workflow';
-import { Pipeline } from './Pipeline';
-import { stringify as Stringify } from 'yaml';
+import { Scalar, stringify as Stringify } from 'yaml';
 import { version as SDKVersion } from '../../package-version.json';
+import { CustomCommandShape } from '../Components/Commands/types/Command.types';
+import { ReusableExecutor } from '../Components/Executors/exports/ReusableExecutor';
+import { ReusableExecutorsShape } from '../Components/Executors/types/ReusableExecutor.types';
+import { Job } from '../Components/Job';
+import { JobShape } from '../Components/Job/types/Job.types';
+import { CustomParametersList } from '../Components/Parameters';
+import { Parameterized } from '../Components/Parameters/exports/Parameterized';
+import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
+import { CustomCommand } from '../Components/Reusable';
+import { Workflow } from '../Components/Workflow';
+import { WorkflowShape } from '../Components/Workflow/types/Workflow.types';
+import { Validator } from './exports/Validator';
+import { Pipeline } from './Pipeline';
+import {
+  CircleCIConfigObject,
+  CircleCIConfigShape,
+  ConfigVersion,
+} from './types';
 
 /**
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
  */
-export class Config implements CircleCIConfigObject {
+export class Config
+  implements CircleCIConfigObject, Parameterized<PipelineParameterLiteral>
+{
   /**
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
    */
   version: ConfigVersion = 2.1;
+  /**
+   * Reusable executors to be referenced from jobs.
+   */
+  executors?: ReusableExecutor[];
   /**
    * Jobs are collections of steps. All of the steps in the job are executed in a single unit, either within a fresh container or VM.
    */
@@ -22,11 +40,15 @@ export class Config implements CircleCIConfigObject {
   /**
    * A command definition defines a sequence of steps as a map to be executed in a job, enabling you to reuse a single command definition across multiple jobs.
    */
-  commands: Command[] = [];
+  commands?: CustomCommand[];
   /**
    * A Workflow is comprised of one or more uniquely named jobs.
    */
   workflows: Workflow[] = [];
+  /**
+   * A parameter allows custom data to be passed to a pipeline.
+   */
+  parameters?: CustomParametersList<PipelineParameterLiteral>;
   /**
    * Access information about the current pipeline.
    */
@@ -35,6 +57,7 @@ export class Config implements CircleCIConfigObject {
    * Designates the config.yaml for use of CircleCI’s dynamic configuration feature.
    */
   setup: boolean;
+
   /**
    * Instantiate a new CircleCI config. Build up your config by adding components.
    * @param jobs - Instantiate with pre-defined Jobs.
@@ -45,12 +68,16 @@ export class Config implements CircleCIConfigObject {
     setup = false,
     jobs?: Job[],
     workflows?: Workflow[],
-    commands?: Command[],
+    executors?: ReusableExecutor[],
+    commands?: CustomCommand[],
+    parameters?: CustomParametersList<PipelineParameterLiteral>,
   ) {
     this.setup = setup;
-    this.jobs.concat(jobs || []);
-    this.workflows.concat(workflows || []);
-    this.commands = commands || [];
+    this.jobs = jobs || [];
+    this.workflows = workflows || [];
+    this.executors = executors;
+    this.commands = commands;
+    this.parameters = parameters;
   }
 
   /**
@@ -61,13 +88,67 @@ export class Config implements CircleCIConfigObject {
     this.workflows.push(workflow);
     return this;
   }
+
+  /**
+   * Add a Custom Command to the current Config. Chainable
+   * @param command - Injectable command
+   */
+  addCustomCommand(command: CustomCommand): this {
+    if (!this.commands) {
+      this.commands = [command];
+    } else {
+      this.commands.push(command);
+    }
+
+    return this;
+  }
+
+  /**
+   * Add a Workflow to the current Config. Chainable
+   * @param workflow - Injectable Workflow
+   */
+  addReusableExecutor(executor: ReusableExecutor): this {
+    if (!this.executors) {
+      this.executors = [executor];
+    } else {
+      this.executors.push(executor);
+    }
+
+    return this;
+  }
+
   /**
    * Add a Job to the current Config. Chainable
    * @param job - Injectable Job
    */
   addJob(job: Job): this {
-    // Abstract rules later
     this.jobs.push(job);
+
+    return this;
+  }
+
+  /**
+   * Define a pipeline parameter for the current Config. Chainable
+   *
+   * @param name - The name of the parameter
+   * @param type - The type of parameter
+   * @param defaultValue - The default value of the parameter
+   * @param description - A description of the parameter
+   * @param enumValues - An array of possible values for parameters of enum type
+   */
+  defineParameter(
+    name: string,
+    type: PipelineParameterLiteral,
+    defaultValue?: unknown,
+    description?: string,
+    enumValues?: string[],
+  ): Config {
+    if (!this.parameters) {
+      this.parameters = new CustomParametersList<PipelineParameterLiteral>();
+    }
+
+    this.parameters.define(name, type, defaultValue, description, enumValues);
+
     return this;
   }
 
@@ -83,57 +164,65 @@ export class Config implements CircleCIConfigObject {
    * Export the CircleCI configuration as a YAML string.
    */
   stringify(): string {
-    const generatedJobConfig: JobSchema = {};
+    const generatedJobConfig: JobShape = {};
     this.jobs.forEach((job) => {
       Object.assign(generatedJobConfig, job.generate());
     });
 
-    const generatedWorkflowConfig: WorkflowSchema = {};
+    let generatedExecutorConfig: ReusableExecutorsShape | undefined = undefined;
+
+    if (this.executors) {
+      generatedExecutorConfig = Object.assign(
+        {},
+        ...this.executors.map((reusableExecutor) => {
+          return {
+            [reusableExecutor.name]: {
+              parameters: reusableExecutor.parameters?.generate(),
+              ...reusableExecutor.executor.generate(),
+            },
+          };
+        }),
+      );
+    }
+
+    let generatedCommands: CustomCommandShape | undefined = undefined;
+
+    if (this.commands) {
+      generatedCommands = {};
+      this.commands.forEach((command) => {
+        Object.assign(generatedCommands, command.generate());
+      });
+    }
+
+    const generatedWorkflowConfig: WorkflowShape = {};
     this.workflows.forEach((workflow) => {
       Object.assign(generatedWorkflowConfig, workflow.generate());
     });
 
-    const generatedConfig: CircleCIConfigSchema = {
+    const generatedParameters = this.parameters?.generate();
+
+    const generatedConfig: CircleCIConfigShape = {
       version: this.version,
       setup: this.setup,
+      parameters: generatedParameters,
+      commands: generatedCommands,
+      executors: generatedExecutorConfig,
       jobs: generatedJobConfig,
       workflows: generatedWorkflowConfig,
     };
-    return this.prependVersionComment(Stringify(generatedConfig));
+
+    // Removes all of the "undefined" keys so they do not appear as null on the final config
+    const cleanedConfig = JSON.parse(JSON.stringify(generatedConfig));
+
+    return this.prependVersionComment(
+      Stringify(cleanedConfig, {
+        defaultStringType: Scalar.PLAIN,
+        lineWidth: 0,
+        minContentWidth: 0,
+        doubleQuotedMinMultiLineLength: 999,
+      }),
+    );
   }
 }
 
-/**
- * Selected config version
- */
-type ConfigVersion = 2 | 2.1;
-
-/**
- * Orb import object
- */
-interface ConfigOrbImport {
-  orbAlias: string;
-  orbImport: string;
-}
-
-/**
- * CircleCI configuration object
- */
-interface CircleCIConfigObject {
-  version: ConfigVersion;
-  jobs?: Job[];
-  commands?: Command[];
-  workflows?: Workflow[];
-}
-
-/**
- * JSON Schema for the CircleCI config.
- */
-interface CircleCIConfigSchema {
-  version: ConfigVersion;
-  setup: boolean;
-  orbs?: ConfigOrbImport[];
-  jobs: JobSchema;
-  commands?: CommandSchema;
-  workflows: WorkflowSchema;
-}
+export { Validator };

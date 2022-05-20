@@ -1,12 +1,14 @@
-import { Command } from '../Commands/Command';
-import { AbstractExecutor } from '../Executor/Executor';
-import { ExecutorSchema } from '../Executor/Executor.types';
-import { Component } from '../index';
+import { ParameterizedJob } from './exports/ParameterizedJob';
+import { GenerableType } from '../../Config/exports/Mapping';
+import { Command } from '../Commands/exports/Command';
+import { ExecutorShape } from '../Executors/types/Executor.types';
+import { Generable } from '../index';
+import { AnyExecutor, JobContentShape, JobShape } from './types/Job.types';
 
 /**
  * Jobs define a collection of steps to be run within a given executor, and are orchestrated using Workflows.
  */
-export class Job extends Component {
+export class Job implements Generable {
   /**
    * The name of the current Job.
    */
@@ -14,7 +16,7 @@ export class Job extends Component {
   /**
    * The reusable executor to use for this job. The Executor must have already been instantiated and added to the config.
    */
-  executor: AbstractExecutor;
+  executor: AnyExecutor;
   /**
    * A list of Commands to execute within the job in the order which they were added.
    */
@@ -26,27 +28,31 @@ export class Job extends Component {
    * @param steps - A list of Commands to execute within the job in the order which they were added.
    * @see {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#jobs}
    */
-  constructor(name: string, executor: AbstractExecutor, steps?: Command[]) {
-    super();
+  constructor(name: string, executor: AnyExecutor, steps?: Command[]) {
     this.name = name;
     this.executor = executor;
     this.steps = steps || [];
+  }
+
+  /**
+   * Generates the contents of the Job.
+   * @returns The generated JSON for the Job's contents.
+   */
+  generateJobContents(): JobContentShape {
+    const generatedSteps = this.steps.map((step) => {
+      return step.generate();
+    });
+    const generatedExecutor = this.executor.generate() as ExecutorShape;
+
+    return { steps: generatedSteps, ...generatedExecutor };
   }
   /**
    * Generate Job schema
    * @returns The generated JSON for the Job.
    */
-  generate(): unknown {
-    const generatedSteps = this.steps.map((step) => {
-      return step.generate();
-    });
-    const generatedExecutor = this.executor.generate() as ExecutorSchema;
-    const jobContents: JobContentSchema = {
-      steps: generatedSteps,
-      ...generatedExecutor,
-    };
+  generate(): JobShape {
     return {
-      [this.name]: jobContents,
+      [this.name]: this.generateJobContents(),
     };
   }
 
@@ -58,13 +64,17 @@ export class Job extends Component {
     this.steps.push(command);
     return this;
   }
+
+  get generableType(): GenerableType {
+    return GenerableType.JOB;
+  }
 }
 
-export interface JobStepsSchema {
-  steps: unknown[]; // CommandSchemas for any command.
-}
+export type UnknownJobShape = {
+  [key: string]: unknown;
+  steps: { [key: string]: unknown }[];
+  resource_class: string;
+  parameters?: { [key: string]: unknown };
+};
 
-export type JobContentSchema = JobStepsSchema & ExecutorSchema;
-export interface JobSchema {
-  [key: string]: JobContentSchema;
-}
+export { ParameterizedJob };

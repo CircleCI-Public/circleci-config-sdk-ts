@@ -1,3 +1,5 @@
+export type VCSLiteral = 'bitbucket' | 'github' | 'local';
+
 /**
  * Pipeline Project level information
  */
@@ -16,42 +18,23 @@ export class Project {
       return process.env.CIRCLE_REPOSITORY_URL as string;
     }
   }
+
   /**
    * The lower-case name of the VCS provider, E.g. “github”, “bitbucket”
    */
-  get vcs(): 'bitbucket' | 'github' | 'local' {
+  get vcs(): VCSLiteral {
     if (this._isLocal) {
       return 'local';
     } else {
       const regexp1 = /https:\/\/(?:www\.)?(github|bitbucket)\.(?:com|org)/;
-      const match = (process.env.CIRCLE_REPOSITORY_URL as string).match(
-        regexp1,
+      const repo_url = process.env.CIRCLE_REPOSITORY_URL as string;
+      const match = repo_url.match(regexp1);
+      if (match && match[1]) {
+        return match[1] as VCSLiteral;
+      }
+      throw new Error(
+        `Unrecognized VCS provider while obtaining Pipeline.Project.VCS from URL ${repo_url}.`,
       );
-      let host: string;
-      if (match) {
-        if (match[1]) {
-          host = match[1];
-        } else {
-          console.log(`DEBUG: match: ${match}`);
-          host = 'ERROR NO MATCH';
-        }
-      } else {
-        console.log(`DEBUG: match: ${match}`);
-        console.log(`DEBUG: Input: ${process.env.CIRCLE_REPOSITORY_URL}`);
-        host = 'ERROR NO MATCH';
-      }
-      switch (host) {
-        case 'github':
-          return host;
-          break;
-        case 'bitbucket':
-          return host;
-          break;
-        default:
-          throw new Error(
-            'Unrecognized VCS provider while obtaining Pipeline.Project.VCS via CIRCLE_REPOSITORY_URL.',
-          );
-      }
     }
   }
 }
