@@ -1,6 +1,6 @@
 import { Generable } from '../..';
 import { GenerableType } from '../../../Config/exports/Mapping';
-import { CustomParameterShape } from '../types';
+import { CustomParameterShape, CustomParameterContentsShape } from '../types';
 import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
 
 /**
@@ -34,10 +34,14 @@ export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
     this.defaultValue = defaultValue;
     this.description = description;
   }
-  /**
-   * @returns JSON schema of parameter's contents
-   */
+
   generate(): CustomParameterShape<ParameterTypeLiteral> {
+    return {
+      [this.name]: this.generateContents(),
+    };
+  }
+
+  generateContents(): CustomParameterContentsShape<ParameterTypeLiteral> {
     return {
       type: this.type,
       default: this.defaultValue,

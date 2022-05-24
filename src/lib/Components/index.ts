@@ -4,11 +4,16 @@ import { GenerableType } from '../Config/exports/Mapping';
  * @internal
  */
 export interface Generable {
-  // TODO: Add generateContents for mapped types
   /**
    * Generate the CircleCI YAML equivalent JSON for config compilation
+   * Generable's name is the key in the output.
    */
   generate(): unknown;
+
+  /**
+   * Generate the CircleCI YAML equivalent JSON contents for config compilation
+   */
+  generateContents?(): unknown;
 
   /**
    * Type of generable object

@@ -8,8 +8,8 @@ import { CustomEnumParameter } from '../exports/CustomEnumParameter';
 import { CustomParameter } from '../exports/CustomParameter';
 import { CustomParametersList } from '../exports/CustomParameterList';
 import {
-  CustomEnumParameterShape,
-  CustomParameterShape,
+  CustomEnumParameterContentsShape,
+  CustomParameterContentsShape,
   CustomParametersListShape,
 } from '../types';
 import {
@@ -67,7 +67,7 @@ export function parseParameter(
   }
 
   if (isEnum) {
-    const customEnumParam = customParamIn as CustomEnumParameterShape;
+    const customEnumParam = customParamIn as CustomEnumParameterContentsShape;
 
     return new CustomEnumParameter(
       name,
@@ -77,7 +77,7 @@ export function parseParameter(
     );
   } else {
     const customParam =
-      customParamIn as CustomParameterShape<AnyParameterLiteral>;
+      customParamIn as CustomParameterContentsShape<AnyParameterLiteral>;
 
     return new CustomParameter(
       name,

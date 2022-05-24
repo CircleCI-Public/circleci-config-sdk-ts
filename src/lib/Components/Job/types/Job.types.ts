@@ -7,14 +7,14 @@ export interface JobStepsShape {
   steps: unknown[]; // CommandSchemas for any command.
 }
 
-export type JobContentShape = JobStepsShape & ExecutorShape;
+export type JobContentsShape = JobStepsShape & ExecutorShape;
 
 export interface JobShape {
-  [key: string]: JobContentShape;
+  [key: string]: JobContentsShape;
 }
 
 export type AnyExecutor = ReusableExecutor | Executor;
 
-export type ParameterizedJobContents = JobContentShape & {
+export type ParameterizedJobContents = JobContentsShape & {
   parameters: CustomParametersListShape;
 };
