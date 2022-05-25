@@ -2,7 +2,7 @@ import { Generable } from '..';
 import { GenerableType } from '../../Config/exports/Mapping';
 import { Job } from '../Job';
 import { WorkflowJob } from './exports/WorkflowJob';
-import { WorkflowShape } from './types/Workflow.types';
+import { WorkflowsShape } from './types/Workflow.types';
 import {
   WorkflowJobParameters,
   WorkflowJobShape,
@@ -47,7 +47,7 @@ export class Workflow implements Generable {
       [this.name]: {
         jobs: generatedWorkflowJobs,
       },
-    } as WorkflowShape;
+    } as WorkflowsShape;
   }
 
   /**

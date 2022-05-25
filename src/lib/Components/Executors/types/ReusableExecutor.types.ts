@@ -15,7 +15,7 @@ export type ReusableExecutorJobRefShape = {
   };
 };
 
-export type ReusableExecutorShape = {
+export type ReusableExecutorsShape = {
   [key: string]: ExecutorShape & {
     parameters?: CustomParametersListShape;
   };

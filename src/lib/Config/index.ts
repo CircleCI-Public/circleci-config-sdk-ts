@@ -3,7 +3,7 @@ import { version as SDKVersion } from '../../package-version.json';
 import { Generable } from '../Components';
 import { CustomCommandShape } from '../Components/Commands/types/Command.types';
 import { ReusableExecutor } from '../Components/Executors/exports/ReusableExecutor';
-import { ReusableExecutorShape } from '../Components/Executors/types/ReusableExecutor.types';
+import { ReusableExecutorsShape } from '../Components/Executors/types/ReusableExecutor.types';
 import { Job } from '../Components/Job';
 import { JobsShape } from '../Components/Job/types/Job.types';
 import { CustomParametersList } from '../Components/Parameters';
@@ -11,7 +11,7 @@ import { Parameterized } from '../Components/Parameters/exports/Parameterized';
 import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
 import { CustomCommand } from '../Components/Reusable';
 import { Workflow } from '../Components/Workflow';
-import { WorkflowShape } from '../Components/Workflow/types/Workflow.types';
+import { WorkflowsShape } from '../Components/Workflow/types/Workflow.types';
 import { Validator } from './exports/Validator';
 import { Pipeline } from './Pipeline';
 import {
@@ -165,9 +165,9 @@ export class Config
    * Export the CircleCI configuration as a YAML string.
    */
   stringify(): string {
-    const generatedWorkflows = generateList(this.workflows, {});
-    const generatedJobs = generateList(this.jobs, {});
-    const generatedExecutors = generateList<ReusableExecutorShape>(
+    const generatedWorkflows = generateList<WorkflowsShape>(this.workflows, {});
+    const generatedJobs = generateList<JobsShape>(this.jobs, {});
+    const generatedExecutors = generateList<ReusableExecutorsShape>(
       this.executors,
     );
     const generatedCommands = generateList<CustomCommandShape>(this.commands);
@@ -179,8 +179,8 @@ export class Config
       parameters: generatedParameters,
       commands: generatedCommands,
       executors: generatedExecutors,
-      jobs: generatedJobs as JobsShape,
-      workflows: generatedWorkflows as WorkflowShape,
+      jobs: generatedJobs,
+      workflows: generatedWorkflows,
     };
 
     // remove undefined values
@@ -201,12 +201,9 @@ export class Config
   }
 }
 
-function generateList<Shape>(
-  listIn?: Generable[],
-  failSafe?: Shape,
-): Shape | undefined {
+function generateList<Shape>(listIn?: Generable[], failSafe?: Shape): Shape {
   if (!listIn) {
-    return failSafe;
+    return failSafe as Shape;
   }
 
   return Object.assign(

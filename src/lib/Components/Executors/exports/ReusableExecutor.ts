@@ -5,7 +5,7 @@ import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import {
   ReusableExecutorJobRefShape,
-  ReusableExecutorShape,
+  ReusableExecutorsShape,
 } from '../types/ReusableExecutor.types';
 import { Executor } from './Executor';
 /**
@@ -46,7 +46,7 @@ export class ReusableExecutor
    */
   generate(
     ctx?: GenerableType,
-  ): ReusableExecutorShape | ReusableExecutorJobRefShape {
+  ): ReusableExecutorsShape | ReusableExecutorJobRefShape {
     if (ctx == GenerableType.JOB) {
       // TODO: Enable for 'minification'
       // if (!this.parameters) {
