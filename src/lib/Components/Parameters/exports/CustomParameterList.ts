@@ -22,11 +22,9 @@ export class CustomParametersList<
   }
 
   generate(): CustomParametersListShape {
-    const generatedParameters = this.parameters.map((parameter) => ({
-      [parameter.name]: {
-        ...parameter.generate(),
-      },
-    }));
+    const generatedParameters = this.parameters.map((parameter) => {
+      return parameter.generate();
+    });
 
     return Object.assign({}, ...generatedParameters);
   }

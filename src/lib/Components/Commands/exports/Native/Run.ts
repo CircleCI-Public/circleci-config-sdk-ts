@@ -21,9 +21,7 @@ export class Run implements Command {
    * @returns The generated JSON for the Run Commands.
    */
   generate(): RunCommandShape {
-    const command = { run: {} };
-    command.run = { ...command.run, ...this.parameters };
-    return command as RunCommandShape;
+    return { run: this.parameters } as RunCommandShape;
   }
 
   get name(): StringParameter {

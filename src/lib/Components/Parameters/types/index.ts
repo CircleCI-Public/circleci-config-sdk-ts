@@ -111,14 +111,22 @@ export interface ParameterShape<
 export type CustomParametersListShape = Record<string, ParameterShape>;
 
 export type CustomParameterShape<ParameterTypeLiteral> = {
+  [key: string]: CustomParameterContentsShape<ParameterTypeLiteral>;
+};
+
+export type CustomParameterContentsShape<ParameterTypeLiteral> = {
   type: ParameterTypeLiteral;
   default: unknown;
   description?: string;
 };
 
-export type CustomEnumParameterShape =
-  | CustomParameterShape<EnumParameterLiteral> & {
+export type CustomEnumParameterContentsShape =
+  | CustomParameterContentsShape<EnumParameterLiteral> & {
       enum: string[];
     };
+
+export type CustomEnumParameterShape = {
+  [key: string]: CustomEnumParameterContentsShape;
+};
 
 export { components, literals };

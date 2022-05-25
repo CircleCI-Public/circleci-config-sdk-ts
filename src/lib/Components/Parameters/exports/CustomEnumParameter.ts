@@ -1,5 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
-import { CustomEnumParameterShape } from '../types';
+import { CustomEnumParameterContentsShape } from '../types';
 import { EnumParameterLiteral } from '../types/CustomParameterLiterals.types';
 import { CustomParameter } from './CustomParameter';
 
@@ -25,9 +25,9 @@ export class CustomEnumParameter extends CustomParameter<EnumParameterLiteral> {
     this.enumValues = enumValues;
   }
 
-  generate(): CustomEnumParameterShape {
+  generateContents(): CustomEnumParameterContentsShape {
     return {
-      ...super.generate(),
+      ...super.generateContents(),
       enum: this.enumValues,
     };
   }
