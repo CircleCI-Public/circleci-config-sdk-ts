@@ -1,14 +1,14 @@
 import { CustomCommandShape } from '../../Components/Commands/types/Command.types';
-import { ReusableExecutorsShape } from '../../Components/Executors/types/ReusableExecutor.types';
-import { Job } from '../../Components/Job';
-import { JobShape } from '../../Components/Job/types/Job.types';
-import { ParameterShape } from '../../Components/Parameters/types';
-import { WorkflowShape } from '../../Components/Workflow/types/Workflow.types';
-import { Workflow } from '../../Components/Workflow';
-import * as validator from './Validator.types';
-import * as mapping from './Mapping.types';
-import { CustomCommand } from '../../Components/Reusable';
 import { ReusableExecutor } from '../../Components/Executors/exports/ReusableExecutor';
+import { ReusableExecutorShape } from '../../Components/Executors/types/ReusableExecutor.types';
+import { Job } from '../../Components/Job';
+import { JobsShape } from '../../Components/Job/types/Job.types';
+import { ParameterShape } from '../../Components/Parameters/types';
+import { CustomCommand } from '../../Components/Reusable';
+import { Workflow } from '../../Components/Workflow';
+import { WorkflowShape } from '../../Components/Workflow/types/Workflow.types';
+import * as mapping from './Mapping.types';
+import * as validator from './Validator.types';
 
 /**
  * Selected config version
@@ -41,9 +41,9 @@ export type CircleCIConfigShape = {
   version: ConfigVersion;
   setup: boolean;
   parameters?: Record<string, ParameterShape>;
-  executors?: ReusableExecutorsShape;
+  executors?: ReusableExecutorShape;
   orbs?: ConfigOrbImport[];
-  jobs: JobShape;
+  jobs: JobsShape;
   commands?: CustomCommandShape;
   workflows: WorkflowShape;
 };

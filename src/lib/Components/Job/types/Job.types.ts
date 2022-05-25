@@ -9,7 +9,7 @@ export interface JobStepsShape {
 
 export type JobContentsShape = JobStepsShape & ExecutorShape;
 
-export interface JobShape {
+export interface JobsShape {
   [key: string]: JobContentsShape;
 }
 

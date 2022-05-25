@@ -1,10 +1,11 @@
 import { Scalar, stringify as Stringify } from 'yaml';
 import { version as SDKVersion } from '../../package-version.json';
+import { Generable } from '../Components';
 import { CustomCommandShape } from '../Components/Commands/types/Command.types';
 import { ReusableExecutor } from '../Components/Executors/exports/ReusableExecutor';
-import { ReusableExecutorsShape } from '../Components/Executors/types/ReusableExecutor.types';
+import { ReusableExecutorShape } from '../Components/Executors/types/ReusableExecutor.types';
 import { Job } from '../Components/Job';
-import { JobShape } from '../Components/Job/types/Job.types';
+import { JobsShape } from '../Components/Job/types/Job.types';
 import { CustomParametersList } from '../Components/Parameters';
 import { Parameterized } from '../Components/Parameters/exports/Parameterized';
 import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
@@ -164,41 +165,12 @@ export class Config
    * Export the CircleCI configuration as a YAML string.
    */
   stringify(): string {
-    const generatedJobConfig: JobShape = {};
-    this.jobs.forEach((job) => {
-      Object.assign(generatedJobConfig, job.generate());
-    });
-
-    let generatedExecutorConfig: ReusableExecutorsShape | undefined = undefined;
-
-    if (this.executors) {
-      generatedExecutorConfig = Object.assign(
-        {},
-        ...this.executors.map((reusableExecutor) => {
-          return {
-            [reusableExecutor.name]: {
-              parameters: reusableExecutor.parameters?.generate(),
-              ...reusableExecutor.executor.generate(),
-            },
-          };
-        }),
-      );
-    }
-
-    let generatedCommands: CustomCommandShape | undefined = undefined;
-
-    if (this.commands) {
-      generatedCommands = {};
-      this.commands.forEach((command) => {
-        Object.assign(generatedCommands, command.generate());
-      });
-    }
-
-    const generatedWorkflowConfig: WorkflowShape = {};
-    this.workflows.forEach((workflow) => {
-      Object.assign(generatedWorkflowConfig, workflow.generate());
-    });
-
+    const generatedWorkflows = generateList(this.workflows, {});
+    const generatedJobs = generateList(this.jobs, {});
+    const generatedExecutors = generateList<ReusableExecutorShape>(
+      this.executors,
+    );
+    const generatedCommands = generateList<CustomCommandShape>(this.commands);
     const generatedParameters = this.parameters?.generate();
 
     const generatedConfig: CircleCIConfigShape = {
@@ -206,16 +178,20 @@ export class Config
       setup: this.setup,
       parameters: generatedParameters,
       commands: generatedCommands,
-      executors: generatedExecutorConfig,
-      jobs: generatedJobConfig,
-      workflows: generatedWorkflowConfig,
+      executors: generatedExecutors,
+      jobs: generatedJobs as JobsShape,
+      workflows: generatedWorkflows as WorkflowShape,
     };
 
-    // Removes all of the "undefined" keys so they do not appear as null on the final config
-    const cleanedConfig = JSON.parse(JSON.stringify(generatedConfig));
+    // remove undefined values
+    Object.entries(generatedConfig).forEach(([key, value]) => {
+      if (value === undefined) {
+        delete generatedConfig[key as keyof CircleCIConfigShape];
+      }
+    });
 
     return this.prependVersionComment(
-      Stringify(cleanedConfig, {
+      Stringify(generatedConfig as CircleCIConfigShape, {
         defaultStringType: Scalar.PLAIN,
         lineWidth: 0,
         minContentWidth: 0,
@@ -223,6 +199,22 @@ export class Config
       }),
     );
   }
+}
+
+function generateList<Shape>(
+  listIn?: Generable[],
+  failSafe?: Shape,
+): Shape | undefined {
+  if (!listIn) {
+    return failSafe;
+  }
+
+  return Object.assign(
+    {},
+    ...listIn.map((generable) => {
+      return generable.generate();
+    }),
+  );
 }
 
 export { Validator };

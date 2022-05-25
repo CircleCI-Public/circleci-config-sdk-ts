@@ -3,7 +3,10 @@ import { GenerableType } from '../../../Config/exports/Mapping';
 import { CustomParametersList } from '../../Parameters';
 import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
-import { ReusableExecutorShape } from '../types/ReusableExecutor.types';
+import {
+  ReusableExecutorJobRefShape,
+  ReusableExecutorShape,
+} from '../types/ReusableExecutor.types';
 import { Executor } from './Executor';
 /**
  * A 2.1 wrapper for reusing CircleCI executor.
@@ -41,10 +44,28 @@ export class ReusableExecutor
    * Generate Reusable Executor schema.
    * @returns The generated JSON for the Reusable Executor.
    */
-  generate(): ReusableExecutorShape {
+  generate(
+    ctx?: GenerableType,
+  ): ReusableExecutorShape | ReusableExecutorJobRefShape {
+    if (ctx == GenerableType.JOB) {
+      // TODO: Enable for 'minification'
+      // if (!this.parameters) {
+      //   return {
+      //     executor: this.name;
+      //   }
+      // }
+
+      return {
+        executor: {
+          name: this.name,
+        },
+      };
+    }
+
     return {
-      executor: {
-        name: this.name,
+      [this.name]: {
+        ...this.executor.generate(),
+        parameters: this.parameters?.generate(),
       },
     };
   }

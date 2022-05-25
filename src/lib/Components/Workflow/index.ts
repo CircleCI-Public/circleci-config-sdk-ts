@@ -1,3 +1,5 @@
+import { Generable } from '..';
+import { GenerableType } from '../../Config/exports/Mapping';
 import { Job } from '../Job';
 import { WorkflowJob } from './exports/WorkflowJob';
 import { WorkflowShape } from './types/Workflow.types';
@@ -9,7 +11,7 @@ import {
 /**
  * A workflow is a set of rules for defining a collection of jobs and their run order.
  */
-export class Workflow {
+export class Workflow implements Generable {
   /**
    * The name of the Workflow.
    */
@@ -54,6 +56,10 @@ export class Workflow {
   addJob(job: Job, parameters?: WorkflowJobParameters): this {
     this.jobs.push(new WorkflowJob(job, parameters));
     return this;
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.WORKFLOW;
   }
 }
 
