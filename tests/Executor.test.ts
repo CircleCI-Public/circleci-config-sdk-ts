@@ -1,5 +1,6 @@
 import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
+import { GenerableType } from '../src/lib/Config/exports/Mapping';
 
 describe('Instantiate Docker Executor', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
@@ -315,10 +316,22 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
   const machine = new CircleCI.executors.MachineExecutor('large');
   const reusable = new CircleCI.reusable.ReusableExecutor('default', machine);
 
-  it('Should match the expected output', () => {
+  it('Should match the expected output in job context', () => {
     const expectedShape = {
       executor: {
         name: 'default',
+      },
+    };
+    expect(reusable.generate(GenerableType.JOB)).toEqual(expectedShape);
+  });
+
+  it('Should match the expected output with no context', () => {
+    const expectedShape = {
+      default: {
+        machine: {
+          image: 'ubuntu-2004:202010-01',
+        },
+        resource_class: 'large',
       },
     };
     expect(reusable.generate()).toEqual(expectedShape);

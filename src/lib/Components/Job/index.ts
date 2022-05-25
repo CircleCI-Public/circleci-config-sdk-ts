@@ -1,9 +1,9 @@
-import { ParameterizedJob } from './exports/ParameterizedJob';
 import { GenerableType } from '../../Config/exports/Mapping';
 import { Command } from '../Commands/exports/Command';
 import { ExecutorShape } from '../Executors/types/Executor.types';
 import { Generable } from '../index';
-import { AnyExecutor, JobContentsShape, JobShape } from './types/Job.types';
+import { ParameterizedJob } from './exports/ParameterizedJob';
+import { AnyExecutor, JobContentsShape, JobsShape } from './types/Job.types';
 
 /**
  * Jobs define a collection of steps to be run within a given executor, and are orchestrated using Workflows.
@@ -42,7 +42,9 @@ export class Job implements Generable {
     const generatedSteps = this.steps.map((step) => {
       return step.generate();
     });
-    const generatedExecutor = this.executor.generate() as ExecutorShape;
+    const generatedExecutor = this.executor.generate(
+      GenerableType.JOB,
+    ) as ExecutorShape;
 
     return { steps: generatedSteps, ...generatedExecutor };
   }
@@ -50,7 +52,7 @@ export class Job implements Generable {
    * Generate Job schema
    * @returns The generated JSON for the Job.
    */
-  generate(): JobShape {
+  generate(): JobsShape {
     return {
       [this.name]: this.generateContents(),
     };

@@ -18,6 +18,6 @@ export abstract class Executor implements Generable {
     this.resource_class = resource_class;
     this.parameters = parameters;
   }
-  abstract generate(): ExecutorShape;
+  abstract generate(ctx?: GenerableType): ExecutorShape;
   abstract get generableType(): GenerableType;
 }

@@ -1,13 +1,22 @@
-import { AnyParameterType, StringParameter } from '../../Parameters/types';
+import {
+  AnyParameterType,
+  CustomParametersListShape,
+  StringParameter,
+} from '../../Parameters/types';
 import { ExecutorShape } from './Executor.types';
 
-export interface ReusableExecutorShape {
+/**
+ * The shape output when a reusable executor is generated for a job
+ */
+export type ReusableExecutorJobRefShape = {
   executor: {
     name: StringParameter;
     [key: string]: AnyParameterType;
   };
-}
+};
 
-export interface ReusableExecutorsShape {
-  [key: string]: ExecutorShape;
-}
+export type ReusableExecutorsShape = {
+  [key: string]: ExecutorShape & {
+    parameters?: CustomParametersListShape;
+  };
+};

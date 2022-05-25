@@ -3,15 +3,15 @@ import { ExecutorShape } from '../../Executors/types/Executor.types';
 import { CustomParametersListShape } from '../../Parameters/types';
 import { ReusableExecutor } from '../../Reusable';
 
-export interface JobStepsShape {
+export type JobStepsShape = {
   steps: unknown[]; // CommandSchemas for any command.
-}
+};
 
 export type JobContentsShape = JobStepsShape & ExecutorShape;
 
-export interface JobShape {
+export type JobsShape = {
   [key: string]: JobContentsShape;
-}
+};
 
 export type AnyExecutor = ReusableExecutor | Executor;
 
