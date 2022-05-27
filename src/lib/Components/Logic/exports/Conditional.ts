@@ -1,4 +1,3 @@
-import { Evaluable } from './Evaluable';
 import { When } from './When';
 
 /**
@@ -6,6 +5,6 @@ import { When } from './When';
   
   https://circleci.com/docs/2.0/configuration-reference/#logic-statements
 */
-export interface Conditional extends Evaluable<boolean> {
-  when: When;
+export interface Conditional {
+  when?: When;
 }
