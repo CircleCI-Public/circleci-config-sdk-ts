@@ -43,7 +43,7 @@ export class Job implements Generable {
       return step.generate();
     });
     const generatedExecutor = this.executor.generate(
-      GenerableType.JOB,
+      this.generableType,
     ) as ExecutorShape;
 
     return { steps: generatedSteps, ...generatedExecutor };

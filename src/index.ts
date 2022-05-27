@@ -31,6 +31,11 @@ export * as parameters from './lib/Components/Parameters';
 export * as executors from './lib/Components/Executors';
 
 /**
+ * Logical conditions for conditional components.
+ */
+export * as logic from './lib/Components/Logic';
+
+/**
  * Symbols used during validation to lookup the correct schema.
  */
 export * as mapping from './lib/Config/exports/Mapping';
