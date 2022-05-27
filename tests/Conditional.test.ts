@@ -43,4 +43,8 @@ describe('Generate conditionals', () => {
   it('False notted should be true', () => {
     expect(not(false).evaluate()).toBeTruthy();
   });
+
+  it('Complex combination of conditions', () => {
+    expect(and(not(false), or(false, true)).evaluate()).toBeTruthy();
+  });
 });

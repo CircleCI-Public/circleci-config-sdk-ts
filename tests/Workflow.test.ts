@@ -94,6 +94,53 @@ describe('Instantiate a new Workflow with a workflow job added manually', () => 
   });
 });
 
+describe('Instantiate a new Workflow with a workflow job added manually', () => {
+  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.commands.Run({
+    command: 'echo hello world',
+  });
+  const job = new CircleCI.Job('my-job', docker, [helloWorld]);
+  const workflowJob = new CircleCI.WorkflowJob(job);
+  const { and, equal, not, or } = CircleCI.logic;
+  const myWorkflow = new CircleCI.Workflow(
+    'my-workflow',
+    [workflowJob],
+    new CircleCI.logic.When(
+      or(
+        and(
+          '<< parameters.should_retry >>',
+          equal('<< parameters.attempt >>', 3),
+        ),
+        not(equal('<< parameters.user >>', 'bob')),
+      ),
+    ),
+  );
+
+  const generatedWorkflow = myWorkflow.generate();
+  const expected = {
+    'my-workflow': {
+      when: {
+        or: [
+          {
+            and: [
+              '<< parameters.should_retry >>',
+              { equal: ['<< parameters.attempt >>', 3] },
+            ],
+          },
+          {
+            not: { equal: ['<< parameters.user >>', 'bob'] },
+          },
+        ],
+      },
+      jobs: [{ 'my-job': {} }],
+    },
+  };
+
+  it('Should match the expected output', () => {
+    expect(generatedWorkflow).toEqual(expected);
+  });
+});
+
 describe('Utilize workflow job filters', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({

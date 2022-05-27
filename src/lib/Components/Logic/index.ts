@@ -24,3 +24,5 @@ export function not(condition: ConditionOrValue): Not {
  * Conditional classes and utility functions
  */
 export * as conditional from './exports/conditions';
+
+export { When } from './exports/When';
