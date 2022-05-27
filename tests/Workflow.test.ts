@@ -94,14 +94,14 @@ describe('Instantiate a new Workflow with a workflow job added manually', () => 
   });
 });
 
-describe('Instantiate a new Workflow with a workflow job added manually', () => {
+describe('Instantiate a new Workflow with a when condition', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo hello world',
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
   const workflowJob = new CircleCI.WorkflowJob(job);
-  const { and, equal, not, or } = CircleCI.logic;
+  const { and, or, equal, not } = CircleCI.logic;
   const myWorkflow = new CircleCI.Workflow(
     'my-workflow',
     [workflowJob],
