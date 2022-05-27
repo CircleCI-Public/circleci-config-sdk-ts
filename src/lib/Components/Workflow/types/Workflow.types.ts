@@ -1,8 +1,10 @@
-import { WorkflowJobParameters } from './WorkflowJob.types';
+import { AnyConditionShape } from '../../Logic/types';
+import { WorkflowJobShape } from './WorkflowJob.types';
 
 export type WorkflowsShape = {
   [workflowName: string]: {
-    jobs: WorkflowJobParameters[];
+    when: AnyConditionShape;
+    jobs: WorkflowJobShape[];
   };
 };
 
