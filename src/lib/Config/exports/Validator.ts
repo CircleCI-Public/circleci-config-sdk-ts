@@ -106,6 +106,14 @@ const schemaRegistry: ValidationMap = {
     [ParameterizedComponent.EXECUTOR]: ExecutorParameterListSchema,
     [ParameterizedComponent.PIPELINE]: PipelineParameterListSchema,
   },
+
+  [GenerableType.WHEN]: {},
+  [GenerableType.AND]: {},
+  [GenerableType.NOT]: {},
+  [GenerableType.OR]: {},
+  [GenerableType.EQUAL]: {},
+  [GenerableType.PARAMETER_REFERENCE]: {},
+  [GenerableType.TRUTHY]: {},
 };
 
 /**

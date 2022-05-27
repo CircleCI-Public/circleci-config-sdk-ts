@@ -1,6 +1,7 @@
 import { Generable } from '..';
 import { GenerableType } from '../../Config/exports/Mapping';
 import { Job } from '../Job';
+import { When } from '../Logic/exports/When';
 import { WorkflowJob } from './exports/WorkflowJob';
 import { WorkflowsShape } from './types/Workflow.types';
 import {
@@ -16,17 +17,25 @@ export class Workflow implements Generable {
    * The name of the Workflow.
    */
   name: string;
+
   /**
    * The jobs to execute when this Workflow is triggered.
    */
   jobs: WorkflowJob[] = [];
+
+  /**
+   * The conditional statement that will be evaluated to determine whether to trigger this workflow.
+   */
+  when?: When;
+
   /**
    * Instantiate a Workflow
    * @param name - Name your workflow. Must be unique.
    * @param jobs - A list of jobs to be executed as part of your Workflow.
    */
-  constructor(name: string, jobs?: Array<Job | WorkflowJob>) {
+  constructor(name: string, jobs?: Array<Job | WorkflowJob>, when?: When) {
     this.name = name;
+    this.when = when;
 
     if (jobs) {
       this.jobs = jobs.map((job) =>
