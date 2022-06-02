@@ -37,6 +37,9 @@ export * as mapping from './lib/Config/exports/Mapping';
  */
 export * as types from './lib/Types';
 
+/**
+ * All parsers to generate components from config objects.
+ */
 export * as parsers from './lib/Config/parsers';
 
 // Top-level exports
