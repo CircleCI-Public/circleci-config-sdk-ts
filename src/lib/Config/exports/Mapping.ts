@@ -3,11 +3,11 @@ export enum GenerableType {
 
   // Commands
   REUSABLE_COMMAND = 'reusable_command',
-  CUSTOM_COMMAND = 'command',
-  RESTORE = 'restore',
-  SAVE = 'save',
-  ATTACH = 'attach',
-  PERSIST = 'persist',
+  CUSTOM_COMMAND = 'custom_command',
+  RESTORE = 'restore_cache',
+  SAVE = 'save_cache',
+  ATTACH = 'attach_workspace',
+  PERSIST = 'persist_to_workspace',
   ADD_SSH_KEYS = 'add_ssh_keys',
   CHECKOUT = 'checkout',
   RUN = 'run',

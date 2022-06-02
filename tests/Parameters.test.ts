@@ -1,6 +1,5 @@
 import { parse as yamlParse } from 'yaml';
 import * as CircleCI from '../src/index';
-import { parseParameter, parseParameterList } from '../src/index';
 
 describe('Parse yaml pipeline parameters and validate', () => {
   const parametersIn = yamlParse(`
@@ -39,7 +38,9 @@ describe('Parse yaml pipeline parameters and validate', () => {
   });
 
   it('Should parse parameters', () => {
-    expect(parseParameterList(parametersIn)).toEqual(expectedParameters);
+    expect(CircleCI.parsers.parseParameterList(parametersIn)).toEqual(
+      expectedParameters,
+    );
   });
 
   it('Should validate integer parameters', () => {
@@ -103,7 +104,7 @@ describe('Parse yaml integer parameters and validate', () => {
   );
 
   it('Should parse integer parameter', () => {
-    expect(parseParameter(parameterIn, parameterName)).toEqual(
+    expect(CircleCI.parsers.parseParameter(parameterIn, parameterName)).toEqual(
       expectedParameter,
     );
   });
@@ -140,9 +141,9 @@ describe('Parse yaml string parameter and validate', () => {
     CircleCI.mapping.ParameterizedComponent.EXECUTOR,
   ].map((subtype) =>
     it(`Should parse integer parameter with subtype ${subtype}`, () => {
-      expect(parseParameter(parameterIn, parameterName)).toEqual(
-        expectedParameter,
-      );
+      expect(
+        CircleCI.parsers.parseParameter(parameterIn, parameterName),
+      ).toEqual(expectedParameter);
     }),
   );
 });
@@ -178,7 +179,7 @@ describe('Parse yaml boolean parameter and validate', () => {
   );
 
   it(`Should parse boolean parameter`, () => {
-    expect(parseParameter(parameterIn, parameterName)).toEqual(
+    expect(CircleCI.parsers.parseParameter(parameterIn, parameterName)).toEqual(
       expectedParameter,
     );
   });
@@ -223,7 +224,7 @@ describe('Parse yaml enum parameter and validate', () => {
   );
 
   it(`Should parse enum parameter`, () => {
-    expect(parseParameter(parameterIn, parameterName)).toEqual(
+    expect(CircleCI.parsers.parseParameter(parameterIn, parameterName)).toEqual(
       expectedParameter,
     );
   });
@@ -259,7 +260,7 @@ describe('Parse yaml env_var_name parameter and validate', () => {
   );
 
   it(`Should parse env_var_name parameter`, () => {
-    expect(parseParameter(parameterIn, parameterName)).toEqual(
+    expect(CircleCI.parsers.parseParameter(parameterIn, parameterName)).toEqual(
       expectedParameter,
     );
   });

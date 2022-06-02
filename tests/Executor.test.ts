@@ -19,7 +19,7 @@ describe('Instantiate Docker Executor', () => {
   });
 
   it('Should parse', () => {
-    expect(CircleCI.parseExecutor(expectedShape)).toEqual(docker);
+    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(docker);
   });
 
   it('Should match the expected output', () => {
@@ -52,7 +52,7 @@ describe('Instantiate Machine Executor', () => {
   });
 
   it('Should parse', () => {
-    expect(CircleCI.parseExecutor(expectedShape)).toEqual(machine);
+    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(machine);
   });
 
   it('Should match the expected output', () => {
@@ -87,7 +87,7 @@ describe('Instantiate MacOS Executor', () => {
   });
 
   it('Should parse', () => {
-    expect(CircleCI.parseExecutor(expectedShape)).toEqual(macos);
+    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(macos);
   });
 
   it('Should match the expected output', () => {
@@ -122,7 +122,7 @@ describe('Instantiate Large MacOS Executor', () => {
   });
 
   it('Should parse', () => {
-    expect(CircleCI.parseExecutor(expectedShape)).toEqual(macos);
+    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(macos);
   });
 
   it('Should match the expected output', () => {
@@ -189,7 +189,7 @@ describe('Instantiate Windows Executor', () => {
   });
 
   it('Should parse', () => {
-    expect(CircleCI.parseExecutor(expectedShape)).toEqual(windows);
+    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(windows);
   });
 
   it('Should match the expected output', () => {
@@ -226,7 +226,7 @@ describe('Instantiate a 2xlarge Docker Executor', () => {
   });
 
   it('Should parse', () => {
-    expect(CircleCI.parseExecutor(expectedShape)).toEqual(xxlDocker);
+    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(xxlDocker);
   });
 
   it('Should match the expected output', () => {
@@ -265,7 +265,9 @@ describe('Instantiate Large Machine Executor', () => {
   });
 
   it('Should parse the large machine', () => {
-    expect(CircleCI.parseExecutor(expectedShapeLarge)).toEqual(machineLarge);
+    expect(CircleCI.parsers.parseExecutor(expectedShapeLarge)).toEqual(
+      machineLarge,
+    );
   });
 
   const machineMedium = new CircleCI.executors.MachineExecutor('medium');
@@ -290,7 +292,9 @@ describe('Instantiate Large Machine Executor', () => {
   });
 
   it('Should parse the medium machine', () => {
-    expect(CircleCI.parseExecutor(expectedShapeMedium)).toEqual(machineMedium);
+    expect(CircleCI.parsers.parseExecutor(expectedShapeMedium)).toEqual(
+      machineMedium,
+    );
   });
 
   it('Add executors to config and validate', () => {
@@ -379,7 +383,7 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
   });
 
   it('Should produce a config with executors', () => {
-    expect(CircleCI.parseReusableExecutors(executorsList)).toEqual(
+    expect(CircleCI.parsers.parseReusableExecutors(executorsList)).toEqual(
       myConfig.executors,
     );
   });

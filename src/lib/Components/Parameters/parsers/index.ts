@@ -4,6 +4,7 @@ import {
   ParameterizedComponent,
   ParameterSubtype,
 } from '../../../Config/exports/Mapping';
+import { beginParsing, endParsing } from '../../../Config/exports/Parsing';
 import { CustomEnumParameter } from '../exports/CustomEnumParameter';
 import { CustomParameter } from '../exports/CustomParameter';
 import { CustomParametersList } from '../exports/CustomParameterList';
@@ -29,6 +30,7 @@ export function parseParameter(
   customParamIn: unknown,
   name: string,
 ): CustomParameter<AnyParameterLiteral> {
+  beginParsing(GenerableType.CUSTOM_PARAMETER, name);
   let type = undefined;
 
   if (customParamIn && typeof customParamIn === 'object') {
@@ -66,10 +68,12 @@ export function parseParameter(
     );
   }
 
+  let parsedParameter;
+
   if (isEnum) {
     const customEnumParam = customParamIn as CustomEnumParameterContentsShape;
 
-    return new CustomEnumParameter(
+    parsedParameter = new CustomEnumParameter(
       name,
       customEnumParam.enum,
       customEnumParam.default,
@@ -79,13 +83,17 @@ export function parseParameter(
     const customParam =
       customParamIn as CustomParameterContentsShape<AnyParameterLiteral>;
 
-    return new CustomParameter(
+    parsedParameter = new CustomParameter(
       name,
       customParam.type,
       customParam.default,
       customParam.description,
     );
   }
+
+  endParsing();
+
+  return parsedParameter;
 }
 
 /**

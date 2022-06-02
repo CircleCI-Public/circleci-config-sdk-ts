@@ -3,6 +3,7 @@ import {
   GenerableType,
   ParameterizedComponent,
 } from '../../../Config/exports/Mapping';
+import { beginParsing, endParsing } from '../../../Config/exports/Parsing';
 import { Validator } from '../../../Config/exports/Validator';
 import { CustomCommand } from '../../Commands/exports/Reusable/CustomCommand';
 import { parseSteps } from '../../Commands/parsers';
@@ -49,6 +50,8 @@ export function parseJob(
   customCommands?: CustomCommand[],
   reusableExecutors?: ReusableExecutor[],
 ): Job {
+  beginParsing(GenerableType.JOB, name);
+
   if (Validator.validateGenerable(GenerableType.JOB, jobIn)) {
     const jobArgs = jobIn as UnknownJobShape;
 
@@ -59,16 +62,22 @@ export function parseJob(
       throw new Error('Could not parse job - could not parse executor');
     }
 
-    if (!jobArgs.parameters) {
-      return new Job(name, exec, steps);
+    let jobResult: Job;
+
+    if (jobArgs.parameters) {
+      const parametersList = parseParameterList(
+        jobArgs.parameters,
+        ParameterizedComponent.JOB,
+      ) as CustomParametersList<JobParameterLiteral>;
+
+      jobResult = new ParameterizedJob(name, exec, parametersList, steps);
+    } else {
+      jobResult = new Job(name, exec, steps);
     }
 
-    const parametersList = parseParameterList(
-      jobArgs.parameters,
-      ParameterizedComponent.JOB,
-    ) as CustomParametersList<JobParameterLiteral>;
+    endParsing();
 
-    return new ParameterizedJob(name, exec, parametersList, steps);
+    return jobResult;
   }
 
   throw new Error('Could not parse job - provided input was invalid');

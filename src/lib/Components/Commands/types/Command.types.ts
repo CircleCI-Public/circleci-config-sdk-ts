@@ -30,7 +30,7 @@ export type NativeCommandLiteral =
   | 'restore_cache'
   | 'save_cache'
   | 'attach_workspace'
-  | 'persist_workspace'
+  | 'persist_to_workspace'
   | 'add_ssh_keys'
   | 'checkout'
   | 'run'

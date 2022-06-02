@@ -3,6 +3,11 @@ import {
   GenerableType,
   ParameterizedComponent,
 } from '../../../Config/exports/Mapping';
+import {
+  beginParsing,
+  endParsing,
+  errorParsing,
+} from '../../../Config/exports/Parsing';
 import { CustomParametersList } from '../../Parameters';
 import { parseParameterList } from '../../Parameters/parsers';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
@@ -30,6 +35,7 @@ const subtypeParsers: {
   ) => Executor | ReusableExecutor | undefined;
 } = {
   docker: (args, resourceClass) => {
+    beginParsing(GenerableType.DOCKER_EXECUTOR);
     const dockerArgs = args as [{ image: string }];
 
     if (
@@ -42,6 +48,7 @@ const subtypeParsers: {
     }
   },
   machine: (args, resourceClass) => {
+    beginParsing(GenerableType.MACHINE_EXECUTOR);
     const winPrefix = 'windows.';
 
     if (resourceClass?.startsWith(winPrefix)) {
@@ -70,6 +77,7 @@ const subtypeParsers: {
     }
   },
   macos: (args, resourceClass) => {
+    beginParsing(GenerableType.MACOS_EXECUTOR);
     const macOSArgs = args as Partial<MacOSExecutor>;
 
     if (Validator.validateGenerable(GenerableType.MACOS_EXECUTOR, macOSArgs)) {
@@ -81,6 +89,7 @@ const subtypeParsers: {
   },
   // Parses a reusable executor by it's name
   executor: (args, resourceClass, reusableExecutors) => {
+    beginParsing(GenerableType.ANY_EXECUTOR);
     const executorArgs = args as
       | { name: string; [key: string]: unknown }
       | string;
@@ -96,7 +105,7 @@ const subtypeParsers: {
       return executor;
     }
 
-    throw new Error('Reusable executor not found on config');
+    throw errorParsing(`Reusable executor ${name} not found in config`);
   },
 };
 
@@ -118,17 +127,22 @@ export function parseExecutor(
   ) as ExecutorLiteral | undefined;
 
   if (!executorType) {
-    throw new Error(`Invalid executor type has been passed`);
+    throw errorParsing();
   }
 
   const subtypeParser = subtypeParsers[executorType];
   const executorArgs = executableArgs[executorType];
   // eslint-disable-next-line security/detect-object-injection
-  return subtypeParser(
+  const parsedExecutor = subtypeParser(
     executorArgs,
     executableArgs.resource_class,
     reusableExecutors,
   );
+
+  // parsing start is handled by subtypes
+  endParsing();
+
+  return parsedExecutor;
 }
 
 /**
@@ -140,6 +154,8 @@ export function parseExecutor(
 export function parseReusableExecutors(
   executorListIn: unknown,
 ): ReusableExecutor[] {
+  beginParsing(GenerableType.REUSABLE_EXECUTOR_LIST);
+
   const executorListArgs = executorListIn as {
     [key: string]: (UnknownExecutableShape & {
       parameters?: { [key: string]: unknown };
@@ -153,17 +169,29 @@ export function parseReusableExecutors(
       ParameterizedComponent.EXECUTOR,
     ) as CustomParametersList<ExecutorParameterLiteral> | undefined);
 
-  return Object.entries(executorListArgs).map(([name, executor]) => {
-    const parsedExecutor = parseExecutor(executor, undefined);
+  const parsedList = Object.entries(executorListArgs).map(
+    ([name, executor]) => {
+      beginParsing(GenerableType.REUSABLE_EXECUTOR, name);
 
-    if (parsedExecutor) {
-      return new ReusableExecutor(
-        name,
-        parsedExecutor as Executor,
-        parametersList,
-      );
-    }
+      const parsedExecutor = parseExecutor(executor, undefined);
 
-    throw new Error('Was unable to parse a reusable executor');
-  });
+      if (parsedExecutor) {
+        const parsedItem = new ReusableExecutor(
+          name,
+          parsedExecutor as Executor,
+          parametersList,
+        );
+
+        endParsing();
+
+        return parsedItem;
+      }
+
+      throw errorParsing();
+    },
+  );
+
+  endParsing();
+
+  return parsedList;
 }

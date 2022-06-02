@@ -1,6 +1,11 @@
 import { Workflow } from '..';
 import { Validator } from '../../../Config';
 import { GenerableType } from '../../../Config/exports/Mapping';
+import {
+  beginParsing,
+  endParsing,
+  errorParsing,
+} from '../../../Config/exports/Parsing';
 import { Job } from '../../Job';
 import { WorkflowJob } from '../exports/WorkflowJob';
 import { UnknownWorkflowShape } from '../types';
@@ -19,6 +24,8 @@ export function parseWorkflowJob(
   workflowJobIn: unknown,
   jobs: Job[],
 ): WorkflowJob {
+  beginParsing(GenerableType.WORKFLOW_JOB, name);
+
   const workflowJobArgs = workflowJobIn as {
     requires?: string[];
     parameters?: { [key: string]: unknown };
@@ -31,12 +38,14 @@ export function parseWorkflowJob(
   const job = jobs.find((c) => c.name === name);
 
   if (job) {
-    return new WorkflowJob(job, workflowJobArgs);
+    const workflowJob = new WorkflowJob(job, workflowJobArgs);
+
+    endParsing();
+
+    return workflowJob;
   }
 
-  throw new Error(
-    `Could not parse workflow job - Job ${name} not found in config`,
-  );
+  throw errorParsing(`Job ${name} not found in config`);
 }
 
 /**
@@ -52,6 +61,7 @@ export function parseWorkflow(
   workflowIn: unknown,
   jobs: Job[],
 ): Workflow {
+  beginParsing(GenerableType.WORKFLOW, name);
   if (Validator.validateGenerable(GenerableType.WORKFLOW, workflowIn)) {
     const workflowArgs = workflowIn as UnknownWorkflowShape;
 
@@ -61,10 +71,14 @@ export function parseWorkflow(
       return parseWorkflowJob(name, args, jobs);
     });
 
-    return new Workflow(name, jobList);
+    const parsedWorkflow = new Workflow(name, jobList);
+
+    endParsing();
+
+    return parsedWorkflow;
   }
 
-  throw new Error(`Could not validate or parse workflow: ${name}`);
+  throw errorParsing();
 }
 
 /**
@@ -78,7 +92,9 @@ export function parseWorkflowList(
   workflowsIn: unknown,
   jobs: Job[],
 ): Workflow[] {
-  return Object.entries(
+  const workflowList = Object.entries(
     workflowsIn as { [name: string]: UnknownWorkflowShape },
   ).map(([name, workflow]) => parseWorkflow(name, workflow, jobs));
+
+  return workflowList;
 }

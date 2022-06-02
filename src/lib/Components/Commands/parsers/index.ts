@@ -3,6 +3,11 @@ import {
   GenerableType,
   ParameterizedComponent,
 } from '../../../Config/exports/Mapping';
+import {
+  beginParsing,
+  endParsing,
+  errorParsing,
+} from '../../../Config/exports/Parsing';
 import { CustomParametersList } from '../../Parameters';
 import { parseParameterList } from '../../Parameters/parsers';
 import { CommandParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
@@ -39,6 +44,8 @@ const nativeSubtypes: {
   [key in NativeCommandLiteral]: (args: unknown) => Command | undefined;
 } = {
   restore_cache: (args) => {
+    beginParsing(GenerableType.RESTORE);
+
     const restoreArgs = args as RestoreCacheParameters;
 
     if (Validator.validateGenerable(GenerableType.RESTORE, restoreArgs)) {
@@ -46,6 +53,8 @@ const nativeSubtypes: {
     }
   },
   save_cache: (args) => {
+    beginParsing(GenerableType.SAVE);
+
     const saveArgs = args as SaveCacheParameters;
 
     if (Validator.validateGenerable(GenerableType.SAVE, saveArgs)) {
@@ -53,13 +62,17 @@ const nativeSubtypes: {
     }
   },
   attach_workspace: (args) => {
+    beginParsing(GenerableType.ATTACH);
+
     const attachArgs = args as AttachParameters;
 
     if (Validator.validateGenerable(GenerableType.ATTACH, attachArgs)) {
       return new Attach(args as AttachParameters);
     }
   },
-  persist_workspace: (args) => {
+  persist_to_workspace: (args) => {
+    beginParsing(GenerableType.PERSIST);
+
     const persistArgs = args as PersistParameters;
 
     if (Validator.validateGenerable(GenerableType.PERSIST, persistArgs)) {
@@ -67,6 +80,8 @@ const nativeSubtypes: {
     }
   },
   add_ssh_keys: (args) => {
+    beginParsing(GenerableType.ADD_SSH_KEYS);
+
     const addSSHKeysArgs = args as AddSSHKeysParameters;
 
     if (
@@ -76,6 +91,8 @@ const nativeSubtypes: {
     }
   },
   checkout: (args) => {
+    beginParsing(GenerableType.CHECKOUT);
+
     const checkoutArgs = args as CheckoutParameters;
 
     if (Validator.validateGenerable(GenerableType.CHECKOUT, checkoutArgs)) {
@@ -83,6 +100,8 @@ const nativeSubtypes: {
     }
   },
   run: (args) => {
+    beginParsing(GenerableType.RUN);
+
     const runArgs = args as RunParameters;
 
     if (Validator.validateGenerable(GenerableType.RUN, runArgs)) {
@@ -90,6 +109,8 @@ const nativeSubtypes: {
     }
   },
   setup_remote_docker: (args) => {
+    beginParsing(GenerableType.SETUP_REMOTE_DOCKER);
+
     const setupRemoteDockerArgs = args as SetupRemoteDockerParameters;
 
     if (
@@ -102,6 +123,8 @@ const nativeSubtypes: {
     }
   },
   store_artifacts: (args) => {
+    beginParsing(GenerableType.STORE_ARTIFACTS);
+
     const storeArtifactsArgs = args as StoreArtifactsParameters;
 
     if (
@@ -114,6 +137,8 @@ const nativeSubtypes: {
     }
   },
   store_test_results: (args) => {
+    beginParsing(GenerableType.STORE_TEST_RESULTS);
+
     const storeTestResultsArgs = args as StoreTestResultsParameters;
 
     if (
@@ -137,11 +162,17 @@ export function parseSteps(
   stepsListIn: { [key: string]: unknown }[],
   commands?: CustomCommand[],
 ): Command[] {
-  return stepsListIn.map((subtype) => {
+  beginParsing(GenerableType.STEP_LIST);
+
+  const stepsList = stepsListIn.map((subtype) => {
     const commandName = Object.keys(subtype)[0];
 
     return parseStep(commandName, subtype[commandName], commands);
   });
+
+  endParsing();
+
+  return stepsList;
 }
 
 /**
@@ -161,24 +192,26 @@ export function parseStep(
 
   if (name in nativeSubtypes) {
     parsedCommand = nativeSubtypes[name as NativeCommandLiteral](args);
+
+    // parsing start handled by subtype
+    endParsing();
   } else if (commands) {
+    beginParsing(GenerableType.REUSABLE_COMMAND, name);
     const command = commands.find((c) => c.name === name);
 
     if (!command) {
-      throw new Error(
-        `Failed to parse - Custom command ${name} not found in provided config.`,
-      );
+      throw new Error(`Custom Command ${name} not found in config.`);
     }
 
     parsedCommand = new ReusableCommand(command, args as CommandParameters);
+    endParsing();
   }
 
   if (parsedCommand) {
     return parsedCommand;
   }
 
-  throw new Error(`Failed to parse - Unknown native command: ${name}.
-  `);
+  throw errorParsing(`Unknown native command: ${name}`);
 }
 
 /**

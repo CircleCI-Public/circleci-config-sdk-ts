@@ -1,6 +1,7 @@
 import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 import { version as SDKVersion } from '../src/package-version.json';
+import { setLogParsing } from '../src/lib/Config/exports/Parsing';
 
 describe('Generate a Setup workflow config', () => {
   const myConfig = new CircleCI.Config(true).stringify();
@@ -161,12 +162,14 @@ describe('Parse a fully complete config', () => {
   };
 
   it('Should produce a blank config with parameters', () => {
-    expect(CircleCI.parseConfig(configResult)).toEqual(myConfig);
+    expect(CircleCI.parsers.parseConfig(configResult)).toEqual(myConfig);
   });
 
   it('Should be fully circular', () => {
-    expect(CircleCI.parseConfig(YAML.parse(myConfig.stringify()))).toEqual(
-      myConfig,
-    );
+    setLogParsing(true);
+    expect(
+      CircleCI.parsers.parseConfig(YAML.parse(myConfig.stringify())),
+    ).toEqual(myConfig);
+    setLogParsing(false);
   });
 });

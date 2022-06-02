@@ -1,12 +1,14 @@
 import { parse } from 'yaml';
 import { Config } from '..';
-import { parseCustomCommands } from '../../..';
+import { parseCustomCommands } from '../../Components/Commands/parsers';
 import { parseReusableExecutors } from '../../Components/Executors/parsers';
 import { parseJobList } from '../../Components/Job/parsers';
 import { CustomParametersList } from '../../Components/Parameters';
 import { parseParameterList } from '../../Components/Parameters/parsers';
 import { PipelineParameterLiteral } from '../../Components/Parameters/types/CustomParameterLiterals.types';
 import { parseWorkflowList } from '../../Components/Workflow/parsers';
+import { GenerableType } from '../exports/Mapping';
+import { beginParsing, endParsing } from '../exports/Parsing';
 import { UnknownConfigShape } from '../types';
 
 /**
@@ -17,6 +19,8 @@ import { UnknownConfigShape } from '../types';
  * @throws Error if any config component not valid
  */
 export function parseConfig(configIn: unknown): Config {
+  beginParsing(GenerableType.CONFIG);
+
   const config = (
     typeof configIn == 'string' ? parse(configIn) : configIn
   ) as UnknownConfigShape;
@@ -29,7 +33,7 @@ export function parseConfig(configIn: unknown): Config {
   const jobList = parseJobList(config.jobs, commandList, executorList);
   const workflows = parseWorkflowList(config.workflows, jobList);
 
-  return new Config(
+  const parsedConfig = new Config(
     config.setup,
     jobList,
     workflows,
@@ -37,4 +41,15 @@ export function parseConfig(configIn: unknown): Config {
     commandList,
     parameterList as CustomParametersList<PipelineParameterLiteral>,
   );
+
+  endParsing();
+
+  return parsedConfig;
 }
+
+// Parser exports
+export * from '../../Components/Executors/parsers';
+export * from '../../Components/Commands/parsers';
+export * from '../../Components/Job/parsers';
+export * from '../../Components/Parameters/parsers';
+export * from '../../Components/Workflow/parsers';
