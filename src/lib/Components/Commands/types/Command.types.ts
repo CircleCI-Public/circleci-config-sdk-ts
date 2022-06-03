@@ -13,9 +13,13 @@ export type CommandParameters = ComponentParameter<CommandParameterTypes>;
 
 export type CommandShape = Record<string, CommandParameters>;
 
+export type CommandShorthandShape = Record<string, string>;
+
+export type AnyCommandShape = CommandShape | CommandShorthandShape;
+
 export type CustomCommandBodyShape = {
   parameters?: CustomParametersListShape;
-  steps: CommandShape[];
+  steps: AnyCommandShape[];
   description?: string;
 };
 

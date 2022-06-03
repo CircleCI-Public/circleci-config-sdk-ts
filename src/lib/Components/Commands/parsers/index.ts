@@ -105,6 +105,10 @@ const nativeSubtypes: {
     const runArgs = args as RunParameters;
 
     if (Validator.validateGenerable(GenerableType.RUN, runArgs)) {
+      if (typeof args === 'string') {
+        return new Run({ command: args });
+      }
+
       return new Run(args as RunParameters);
     }
   },

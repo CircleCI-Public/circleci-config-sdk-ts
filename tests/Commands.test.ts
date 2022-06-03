@@ -15,8 +15,7 @@ describe('Instantiate a Run step', () => {
     command: 'echo hello world',
   });
   const runStep = run.generate();
-  // TODO: Add support for: { run: 'echo hello world' };
-  const expectedResult = { run: { command: 'echo hello world' } };
+  const expectedResult = { run: 'echo hello world' };
   it('Should generate checkout yaml', () => {
     expect(runStep).toEqual(expectedResult);
   });
@@ -190,11 +189,16 @@ describe('Add SSH Keys', () => {
 
 describe('Instantiate a Blank Custom Command', () => {
   const customCommand = new CircleCI.reusable.CustomCommand('say_hello', [
-    new CircleCI.commands.Run({ command: 'echo "Hello, World!"' }),
+    new CircleCI.commands.Run({
+      command: 'echo "Hello, World!"',
+      name: 'Say hello!',
+    }),
   ]);
 
   const example = {
-    say_hello: { steps: [{ run: { command: 'echo "Hello, World!"' } }] },
+    say_hello: {
+      steps: [{ run: { command: 'echo "Hello, World!"', name: 'Say hello!' } }],
+    },
   };
 
   it('Should generate checkout yaml', () => {
@@ -224,8 +228,7 @@ describe('Instantiate a Custom Command', () => {
       type: string
       default: hello world
   steps:
-    - run:
-        command: echo << parameters.greeting >>`;
+    - run: echo << parameters.greeting >>`;
 
   it('Should generate checkout yaml', () => {
     expect(customCommand.generate()).toEqual(parse(expectedOutput));
@@ -288,8 +291,7 @@ describe('Instantiate reusable commands', () => {
         type: integer
         default: 90
     steps:
-      - run:
-          command: echo << parameters.axis >>`;
+      - run: echo << parameters.axis >>`;
 
     expect(firstCustomCommand.generate()).toEqual(parse(firstExpectedOutput));
   });
@@ -316,8 +318,7 @@ describe('Instantiate reusable commands', () => {
       year:
         type: integer
     steps:
-      - run:
-          command: echo << parameters.year >>`;
+      - run: echo << parameters.year >>`;
 
     expect(secondCustomCommand.generate()).toEqual(parse(secondExpectedOutput));
   });
@@ -474,12 +475,11 @@ echo "hello world 2"
 echo "hello world 3"
 echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line`,
   });
-  const expectedOutput = `run:
-  command: |-
-    echo "hello world 1"
-    echo "hello world 2"
-    echo "hello world 3"
-    echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
+  const expectedOutput = `run: |-
+  echo "hello world 1"
+  echo "hello world 2"
+  echo "hello world 3"
+  echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
 `;
   it('Should match expectedOutput', () => {
     expect(stringify(multiLineCommand.generate(), stringifyOptions)).toEqual(
@@ -493,8 +493,7 @@ describe('Instantiate a Run command with 70 characters in the command string and
   const longCommand = new CircleCI.commands.Run({
     command: `echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line`,
   });
-  const expectedOutput = `run:
-  command: echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
+  const expectedOutput = `run: echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
 `;
   it('Should match expectedOutput', () => {
     expect(stringify(longCommand.generate(), stringifyOptions)).toEqual(
