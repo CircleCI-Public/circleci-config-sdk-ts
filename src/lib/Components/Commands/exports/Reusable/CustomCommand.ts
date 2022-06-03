@@ -3,7 +3,7 @@ import { GenerableType } from '../../../../Config/exports/Mapping';
 import { CustomParametersList } from '../../../Parameters';
 import { Parameterized } from '../../../Parameters/exports/Parameterized';
 import { CommandParameterLiteral } from '../../../Parameters/types/CustomParameterLiterals.types';
-import { CommandShape, CustomCommandShape } from '../../types/Command.types';
+import { AnyCommandShape, CustomCommandShape } from '../../types/Command.types';
 import { Command } from '../Command';
 
 /**
@@ -44,7 +44,7 @@ export class CustomCommand
   }
 
   generate(): CustomCommandShape {
-    const generatedSteps: CommandShape[] = this.steps.map((step) =>
+    const generatedSteps: AnyCommandShape[] = this.steps.map((step) =>
       step.generate(),
     );
 
