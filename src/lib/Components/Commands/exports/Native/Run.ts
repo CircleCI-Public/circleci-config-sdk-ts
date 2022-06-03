@@ -4,7 +4,11 @@ import {
   EnvironmentParameter,
   StringParameter,
 } from '../../../Parameters/types';
-import { CommandParameters, CommandShape } from '../../types/Command.types';
+import {
+  CommandParameters,
+  CommandShape,
+  CommandShorthandShape,
+} from '../../types/Command.types';
 import { Command } from '../Command';
 
 /**
@@ -20,7 +24,13 @@ export class Run implements Command {
    * Generate Run Command shape.
    * @returns The generated JSON for the Run Commands.
    */
-  generate(): RunCommandShape {
+  generate(): RunCommandShape | RunCommandShorthandShape {
+    const { command, ...parameters } = this.parameters;
+
+    if (Object.keys(parameters).length === 0) {
+      return { run: command } as RunCommandShorthandShape;
+    }
+
     return { run: this.parameters } as RunCommandShape;
   }
 
@@ -72,4 +82,8 @@ export interface RunParameters extends CommandParameters {
  */
 export interface RunCommandShape extends CommandShape {
   run: RunParameters;
+}
+
+export interface RunCommandShorthandShape extends CommandShorthandShape {
+  run: string;
 }

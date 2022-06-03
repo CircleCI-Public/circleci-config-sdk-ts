@@ -11,7 +11,7 @@ describe('Instantiate Docker Job', () => {
   const jobContents = {
     docker: [{ image: 'cimg/node:lts' }],
     resource_class: 'medium',
-    steps: [{ run: { command: 'echo hello world' } }],
+    steps: [{ run: 'echo hello world' }],
   };
 
   it('Should match the expected output', () => {
@@ -48,8 +48,7 @@ describe('Instantiate Parameterized Docker Job With Custom Parameters', () => {
     - image: cimg/node:lts
   resource_class: medium
   steps:
-    - run:
-        command: echo << parameters.greeting >>`;
+    - run: echo << parameters.greeting >>`;
 
   it('Should match the expected output', () => {
     expect(job.generate()).toEqual(YAML.parse(expectedOutput));
@@ -103,9 +102,7 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
         },
         steps: [
           {
-            run: {
-              command: 'echo << parameters.greeting >>',
-            },
+            run: 'echo << parameters.greeting >>',
           },
         ],
       },
