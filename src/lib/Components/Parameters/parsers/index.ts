@@ -4,7 +4,11 @@ import {
   ParameterizedComponent,
   ParameterSubtype,
 } from '../../../Config/exports/Mapping';
-import { beginParsing, endParsing } from '../../../Config/exports/Parsing';
+import {
+  beginParsing,
+  endParsing,
+  errorParsing,
+} from '../../../Config/exports/Parsing';
 import { CustomEnumParameter } from '../exports/CustomEnumParameter';
 import { CustomParameter } from '../exports/CustomParameter';
 import { CustomParametersList } from '../exports/CustomParameterList';
@@ -61,11 +65,7 @@ export function parseParameter(
   );
 
   if (valid !== true) {
-    throw new Error(
-      `Provided parameter could not be parsed: ${
-        typeof valid === 'object' && valid?.map((v) => v.message).join(', ')
-      }`,
-    );
+    throw errorParsing();
   }
 
   let parsedParameter;
@@ -116,10 +116,8 @@ export function parseParameterList(
     );
 
     if (valid !== true) {
-      throw new Error(
-        `Could not find valid parameter list in provided object: ${
-          typeof valid === 'object' && valid?.map((v) => v.message).join(', ')
-        }`,
+      throw errorParsing(
+        'Could not find valid parameter list in provided object',
       );
     }
   }

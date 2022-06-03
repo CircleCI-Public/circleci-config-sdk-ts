@@ -200,7 +200,7 @@ export function parseStep(
     const command = commands.find((c) => c.name === name);
 
     if (!command) {
-      throw new Error(`Custom Command ${name} not found in config.`);
+      throw errorParsing(`Custom Command ${name} not found in config.`);
     }
 
     parsedCommand = new ReusableCommand(command, args as CommandParameters);
@@ -242,8 +242,10 @@ export function parseCustomCommand(
   args: unknown,
   custom_commands?: CustomCommand[],
 ): CustomCommand {
+  beginParsing(GenerableType.CUSTOM_COMMAND, name);
+
   if (!Validator.validateGenerable(GenerableType.CUSTOM_COMMAND, args)) {
-    throw new Error(`Failed to validate custom command before parsing.`);
+    throw errorParsing(`Failed to validate custom command before parsing.`);
   }
 
   const command_args = args as CustomCommandBodyShape;
@@ -257,10 +259,14 @@ export function parseCustomCommand(
 
   const steps = parseSteps(command_args.steps, custom_commands);
 
-  return new CustomCommand(
+  const parsedCommand = new CustomCommand(
     name,
     steps,
     parametersList,
     command_args.description,
   );
+
+  endParsing();
+
+  return parsedCommand;
 }

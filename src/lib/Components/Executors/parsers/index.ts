@@ -119,7 +119,7 @@ const subtypeParsers: {
 export function parseExecutor(
   executableIn: unknown,
   reusableExecutors?: ReusableExecutor[],
-): Executor | ReusableExecutor | undefined {
+): Executor | ReusableExecutor {
   const executableArgs = executableIn as UnknownExecutableShape;
 
   const executorType = Object.keys(executableArgs).find(
@@ -138,6 +138,10 @@ export function parseExecutor(
     executableArgs.resource_class,
     reusableExecutors,
   );
+
+  if (!parsedExecutor) {
+    throw errorParsing();
+  }
 
   // parsing start is handled by subtypes
   endParsing();

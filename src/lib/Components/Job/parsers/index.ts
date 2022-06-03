@@ -3,7 +3,11 @@ import {
   GenerableType,
   ParameterizedComponent,
 } from '../../../Config/exports/Mapping';
-import { beginParsing, endParsing } from '../../../Config/exports/Parsing';
+import {
+  beginParsing,
+  endParsing,
+  errorParsing,
+} from '../../../Config/exports/Parsing';
 import { Validator } from '../../../Config/exports/Validator';
 import { CustomCommand } from '../../Commands/exports/Reusable/CustomCommand';
 import { parseSteps } from '../../Commands/parsers';
@@ -58,10 +62,6 @@ export function parseJob(
     const exec = parseExecutor(jobArgs, reusableExecutors);
     const steps = parseSteps(jobArgs.steps, customCommands);
 
-    if (!exec) {
-      throw new Error('Could not parse job - could not parse executor');
-    }
-
     let jobResult: Job;
 
     if (jobArgs.parameters) {
@@ -80,5 +80,5 @@ export function parseJob(
     return jobResult;
   }
 
-  throw new Error('Could not parse job - provided input was invalid');
+  throw errorParsing();
 }
