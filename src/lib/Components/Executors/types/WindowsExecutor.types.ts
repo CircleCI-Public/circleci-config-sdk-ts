@@ -1,17 +1,18 @@
 import { StringParameter } from '../../Parameters/types';
 import { AnyResourceClass } from './Executor.types';
+import { ExecutableProperties } from './ExecutorParameters.types';
 
 /**
  * A JSON representation of the Windows Executor Schema
  * To be converted to YAML
  */
-export interface WindowsExecutorShape {
+export type WindowsExecutorShape = {
   machine: {
     image: StringParameter;
   };
   resource_class: WindowsResourceClassGenerated;
-  shell: StringParameter;
-}
+} & ExecutableProperties;
+
 /**
  * The available Windows Resource Classes.
  * @see {@link https://circleci.com/docs/2.0/configuration-reference/#windows-executor} for specifications of each class.

@@ -1,9 +1,8 @@
 import { SchemaObject } from 'ajv';
 
-const DockerExecutorSchema: SchemaObject = {
+const DockerExecutableSchema: SchemaObject = {
   $id: '#/executor/DockerExecutor',
   type: 'object',
-  required: ['docker', 'resource_class'],
   properties: {
     resource_class: {
       enum: [
@@ -114,4 +113,4 @@ const DockerExecutorSchema: SchemaObject = {
   },
 };
 
-export default DockerExecutorSchema;
+export default DockerExecutableSchema;

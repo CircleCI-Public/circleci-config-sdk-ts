@@ -47,6 +47,6 @@ export type NativeCommandLiteral =
 export type CommandSubtypeMap = {
   [key in NativeCommandLiteral]: {
     generableType: GenerableType;
-    parse: (args: CommandParameters) => Command;
+    parse: (args?: CommandParameters) => Command;
   };
 };

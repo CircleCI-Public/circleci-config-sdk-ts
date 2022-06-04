@@ -2,11 +2,12 @@ import { GenerableType } from '../../../Config/exports/Mapping';
 import { Executor } from '../exports/Executor';
 import { ReusableExecutor } from '../exports/ReusableExecutor';
 import { DockerExecutorShape } from './DockerExecutor.types';
+import { ExecutableProperties } from './ExecutorParameters.types';
 import { MachineExecutorShape } from './MachineExecutor.types';
 import { MacOSExecutorShape } from './MacOSExecutor.types';
 import { WindowsExecutorShape } from './WindowsExecutor.types';
 
-export type UnknownExecutorShape = {
+export type UnknownExecutableShape = {
   resource_class: AnyResourceClass;
   [key: string]: unknown;
 };
@@ -48,7 +49,7 @@ export type UnknownParameterized = {
 };
 
 export type ReusableExecutorDefinition = {
-  [key: string]: UnknownExecutorShape & UnknownParameterized;
+  [key: string]: UnknownExecutableShape & UnknownParameterized;
 };
 
 export type ExecutorSubtypeMap = {
@@ -57,6 +58,7 @@ export type ExecutorSubtypeMap = {
     parse: (
       args: unknown,
       resourceClass: AnyResourceClass,
+      properties?: ExecutableProperties,
       reusableExecutors?: ReusableExecutor[],
     ) => Executor | ReusableExecutor;
   };

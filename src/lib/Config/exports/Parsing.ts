@@ -4,7 +4,7 @@ import { GenerableType } from './Mapping';
 import { Validator } from './Validator';
 
 let logParsing = false;
-const parseStack: string[] = [];
+let parseStack: string[] = [];
 
 export function parseGenerable<
   InputShape,
@@ -22,7 +22,7 @@ export function parseGenerable<
     console.log(`${parseStack.join('/')}`);
   }
 
-  const valid = Validator.validateGenerable(component, input, subtype);
+  const valid = Validator.validateGenerable(component, input || null, subtype);
 
   if (valid !== true) {
     throw errorParsing(`Failed to validate: ${valid}`);
@@ -41,6 +41,8 @@ export function parseGenerable<
 
 export function errorParsing(message?: string): Error {
   const stack = parseStack.join('/');
+
+  parseStack = [];
 
   return new Error(`Error while parsing - ${stack}\n${message}`);
 }

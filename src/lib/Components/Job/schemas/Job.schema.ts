@@ -24,12 +24,12 @@ const JobSchema: SchemaObject = {
       },
     },
     with: {
-      oneOf: [
+      anyOf: [
         {
-          $ref: '#/executor/Executor',
+          $ref: '#/executor/ReusableExecutorUsage',
         },
         {
-          $ref: '#/executor/ReusableExecutor',
+          $ref: '#/executor/Executor',
         },
       ],
     },

@@ -10,8 +10,7 @@ const CustomCommandSchema: SchemaObject = {
       $ref: '#/parameters/CommandParameterList',
     },
     steps: {
-      type: 'array',
-      $ref: '#/definitions/Step',
+      $ref: '#/definitions/Steps',
     },
     when: {
       enum: ['always', 'on_success', 'on_fail'],

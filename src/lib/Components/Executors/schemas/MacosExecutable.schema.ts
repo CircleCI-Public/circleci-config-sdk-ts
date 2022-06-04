@@ -1,9 +1,8 @@
 import { SchemaObject } from 'ajv';
 
-const MacOSExecutorSchema: SchemaObject = {
+const MacOSExecutableSchema: SchemaObject = {
   $id: '#/executor/MacOSExecutor',
   type: 'object',
-  required: ['macos', 'resource_class'],
   properties: {
     resource_class: {
       enum: ['medium', 'large'],
@@ -26,4 +25,4 @@ const MacOSExecutorSchema: SchemaObject = {
   },
 };
 
-export default MacOSExecutorSchema;
+export default MacOSExecutableSchema;

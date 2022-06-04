@@ -2,7 +2,7 @@ import { SchemaObject } from 'ajv';
 
 const CheckoutSchema: SchemaObject = {
   $id: '#/commands/native/checkout',
-  type: 'object',
+  type: ['object', 'null'],
   properties: {
     path: {
       type: 'string',

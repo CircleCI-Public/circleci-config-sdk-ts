@@ -145,7 +145,7 @@ describe('Instantiate Large MacOS Executor', () => {
 describe('Instantiate Windows Executor and remove shell', () => {
   const windows = new CircleCI.executors.WindowsExecutor();
 
-  windows.parameters.shell = undefined;
+  delete windows.parameters?.shell;
 
   const expectedShape = {
     machine: {
@@ -352,7 +352,7 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
 
     expect(
       CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR,
+        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR_USAGE,
         expectedShapeless,
       ),
     ).toEqual(true);
@@ -413,7 +413,7 @@ describe('Generate a config with a Reusable Executor', () => {
   it('Should validate reusable machine image', () => {
     expect(
       CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR,
+        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR_USAGE,
         {
           executor: {
             name: 'default',
@@ -437,7 +437,7 @@ describe('Generate a config with a Reusable Executor', () => {
   it('Should validate reusable base image shapeless', () => {
     expect(
       CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR,
+        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR_USAGE,
         {
           executor: 'base',
         },
@@ -448,7 +448,7 @@ describe('Generate a config with a Reusable Executor', () => {
   it('Should validate reusable base image', () => {
     expect(
       CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR,
+        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR_USAGE,
         {
           executor: {
             name: 'base',
@@ -518,6 +518,6 @@ describe('Generate a config with a Reusable Executor', () => {
       jobs: {},
       workflows: {},
     };
-    expect(YAML.parse(myConfig.stringify())).toEqual(expected);
+    expect(YAML.parse(myConfig.generate())).toEqual(expected);
   });
 });

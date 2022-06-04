@@ -1,19 +1,25 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { Generable } from '../../index';
-import { DockerResourceClass } from '../types/DockerExecutor.types';
-import { ExecutorShape } from '../types/Executor.types';
-import { ExecutorParameters } from '../types/ExecutorParameters.types';
+import { AnyResourceClass, ExecutorShape } from '../types/Executor.types';
+import { ExecutableParameters } from '../types/ExecutorParameters.types';
 
 /**
  * A generic reusable Executor
  */
-export abstract class Executor implements Generable {
-  resource_class: string;
-  parameters?: ExecutorParameters;
+export abstract class Executor<
+  ResourceClass extends AnyResourceClass = AnyResourceClass,
+> implements Generable
+{
+  resource_class: ResourceClass;
+  parameters?: ExecutableParameters;
 
+  /**
+   * @param resource_class - The resource class of the environment
+   * @param parameters - Optional parameters to describe the executable environment
+   */
   constructor(
-    resource_class: DockerResourceClass,
-    parameters?: ExecutorParameters,
+    resource_class: ResourceClass,
+    parameters?: Exclude<ExecutableParameters, 'resource_class'>,
   ) {
     this.resource_class = resource_class;
     this.parameters = parameters;

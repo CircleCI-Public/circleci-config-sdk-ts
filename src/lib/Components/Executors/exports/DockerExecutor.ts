@@ -4,7 +4,7 @@ import {
   DockerImageMap,
   DockerResourceClass,
 } from '../types/DockerExecutor.types';
-import { ExecutorParameters } from '../types/ExecutorParameters.types';
+import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import { DockerImage } from './DockerImage';
 import { Executor } from './Executor';
 
@@ -32,7 +32,7 @@ export class DockerExecutor extends Executor {
   constructor(
     image: string,
     resource_class: DockerResourceClass = 'medium',
-    parameters?: ExecutorParameters,
+    parameters?: ExecutableParameters,
   ) {
     super(resource_class, parameters);
     const newImage = new DockerImage(image);

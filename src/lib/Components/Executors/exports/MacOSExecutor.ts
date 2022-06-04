@@ -1,5 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
-import { ExecutorParameters } from '../types/ExecutorParameters.types';
+import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import {
   MacOSExecutorShape,
   MacOSResourceClass,
@@ -10,8 +10,7 @@ import { Executor } from './Executor';
  * A MacOS Virtual Machine with configurable Xcode version.
  * @see {@link https://circleci.com/docs/2.0/executor-types/#using-macos}
  */
-export class MacOSExecutor extends Executor {
-  resource_class: MacOSResourceClass;
+export class MacOSExecutor extends Executor<MacOSResourceClass> {
   /**
    * Select an xcode version
    * @see {@link https://circleci.com/developer/machine/image/macos}
@@ -20,7 +19,7 @@ export class MacOSExecutor extends Executor {
   constructor(
     xcode: string,
     resource_class: MacOSResourceClass = 'medium',
-    parameters?: ExecutorParameters,
+    parameters?: ExecutableParameters,
   ) {
     super(resource_class, parameters);
     this.xcode = xcode;
