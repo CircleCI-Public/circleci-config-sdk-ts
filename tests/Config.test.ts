@@ -4,7 +4,7 @@ import { version as SDKVersion } from '../src/package-version.json';
 import { setLogParsing } from '../src/lib/Config/exports/Parsing';
 
 describe('Generate a Setup workflow config', () => {
-  const myConfig = new CircleCI.Config(true).stringify();
+  const myConfig = new CircleCI.Config(true).generate();
   it('Should produce a blank config with Setup set to true', () => {
     const expected = {
       version: 2.1,
@@ -28,7 +28,7 @@ describe('Generate a config with parameters', () => {
 
   myConfig.defineParameter('greeting', 'string', 'hello world');
 
-  const configResult = myConfig.stringify();
+  const configResult = myConfig.generate();
 
   it('Should produce a blank config with parameters', () => {
     const expected = {
@@ -168,7 +168,7 @@ describe('Parse a fully complete config', () => {
   it('Should be fully circular', () => {
     setLogParsing(true);
     expect(
-      CircleCI.parsers.parseConfig(YAML.parse(myConfig.stringify())),
+      CircleCI.parsers.parseConfig(YAML.parse(myConfig.generate())),
     ).toEqual(myConfig);
     setLogParsing(false);
   });

@@ -126,7 +126,7 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addCustomCommand(customCommand);
     myConfig.addJob(job);
-    expect(YAML.parse(myConfig.stringify())).toEqual(expectedOutput);
+    expect(YAML.parse(myConfig.generate())).toEqual(expectedOutput);
   });
 });
 

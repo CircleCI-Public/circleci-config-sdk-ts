@@ -1,4 +1,4 @@
-import Ajv, { SchemaObject } from 'ajv';
+import Ajv, { ErrorObject, SchemaObject } from 'ajv';
 import ajvMergePatch from 'ajv-merge-patch';
 import AddSSHKeysSchema from '../../Components/Commands/schemas/Native/AddSSHKeys.schema';
 import RestoreSchema from '../../Components/Commands/schemas/Native/Cache/Restore.schema';
@@ -55,6 +55,7 @@ import {
   ParameterizedComponent,
   ParameterSubtype,
 } from './Mapping';
+import validationError from 'better-ajv-errors';
 
 const schemaRegistry: ValidationMap = {
   [GenerableType.CONFIG]: ConfigSchema,
@@ -183,8 +184,10 @@ export class Validator extends Ajv {
     }
   }
 
-  // TODO: Give this a better name. Return errors if there are any.
   validateComponent(schema: SchemaObject, data: unknown): ValidationResult {
-    return super.validate(schema, data) || this.errors;
+    return (
+      super.validate(schema, data) ||
+      validationError(schema, data, this.errors as ErrorObject[])
+    );
   }
 }

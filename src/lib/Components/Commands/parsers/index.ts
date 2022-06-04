@@ -1,13 +1,8 @@
-import { Validator } from '../../../Config';
 import {
   GenerableType,
   ParameterizedComponent,
 } from '../../../Config/exports/Mapping';
-import {
-  beginParsing,
-  endParsing,
-  errorParsing,
-} from '../../../Config/exports/Parsing';
+import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
 import { CustomParametersList } from '../../Parameters';
 import { parseParameterList } from '../../Parameters/parsers';
 import { CommandParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
@@ -36,123 +31,51 @@ import { AttachParameters } from '../exports/Native/Workspace/Attach';
 import { PersistParameters } from '../exports/Native/Workspace/Persist';
 import {
   CommandParameters,
+  CommandSubtypeMap,
   CustomCommandBodyShape,
   NativeCommandLiteral,
 } from '../types/Command.types';
 
-const nativeSubtypes: {
-  [key in NativeCommandLiteral]: (args: unknown) => Command | undefined;
-} = {
-  restore_cache: (args) => {
-    beginParsing(GenerableType.RESTORE);
-
-    const restoreArgs = args as RestoreCacheParameters;
-
-    if (Validator.validateGenerable(GenerableType.RESTORE, restoreArgs)) {
-      return new Restore(args as RestoreCacheParameters);
-    }
+const nativeSubtypes: CommandSubtypeMap = {
+  restore_cache: {
+    generableType: GenerableType.RESTORE,
+    parse: (args) => new Restore(args as RestoreCacheParameters),
   },
-  save_cache: (args) => {
-    beginParsing(GenerableType.SAVE);
-
-    const saveArgs = args as SaveCacheParameters;
-
-    if (Validator.validateGenerable(GenerableType.SAVE, saveArgs)) {
-      return new Save(args as SaveCacheParameters);
-    }
+  save_cache: {
+    generableType: GenerableType.SAVE,
+    parse: (args) => new Save(args as SaveCacheParameters),
   },
-  attach_workspace: (args) => {
-    beginParsing(GenerableType.ATTACH);
-
-    const attachArgs = args as AttachParameters;
-
-    if (Validator.validateGenerable(GenerableType.ATTACH, attachArgs)) {
-      return new Attach(args as AttachParameters);
-    }
+  attach_workspace: {
+    generableType: GenerableType.ATTACH,
+    parse: (args) => new Attach(args as AttachParameters),
   },
-  persist_to_workspace: (args) => {
-    beginParsing(GenerableType.PERSIST);
-
-    const persistArgs = args as PersistParameters;
-
-    if (Validator.validateGenerable(GenerableType.PERSIST, persistArgs)) {
-      return new Persist(args as PersistParameters);
-    }
+  persist_to_workspace: {
+    generableType: GenerableType.PERSIST,
+    parse: (args) => new Persist(args as PersistParameters),
   },
-  add_ssh_keys: (args) => {
-    beginParsing(GenerableType.ADD_SSH_KEYS);
-
-    const addSSHKeysArgs = args as AddSSHKeysParameters;
-
-    if (
-      Validator.validateGenerable(GenerableType.ADD_SSH_KEYS, addSSHKeysArgs)
-    ) {
-      return new AddSSHKeys(args as AddSSHKeysParameters);
-    }
+  add_ssh_keys: {
+    generableType: GenerableType.ADD_SSH_KEYS,
+    parse: (args) => new AddSSHKeys(args as AddSSHKeysParameters),
   },
-  checkout: (args) => {
-    beginParsing(GenerableType.CHECKOUT);
-
-    const checkoutArgs = args as CheckoutParameters;
-
-    if (Validator.validateGenerable(GenerableType.CHECKOUT, checkoutArgs)) {
-      return new Checkout(args as CheckoutParameters);
-    }
+  checkout: {
+    generableType: GenerableType.CHECKOUT,
+    parse: (args) => new Checkout(args as CheckoutParameters),
   },
-  run: (args) => {
-    beginParsing(GenerableType.RUN);
-
-    const runArgs = args as RunParameters;
-
-    if (Validator.validateGenerable(GenerableType.RUN, runArgs)) {
-      if (typeof args === 'string') {
-        return new Run({ command: args });
-      }
-
-      return new Run(args as RunParameters);
-    }
+  run: {
+    generableType: GenerableType.RUN,
+    parse: (args) => new Run(args as RunParameters),
   },
-  setup_remote_docker: (args) => {
-    beginParsing(GenerableType.SETUP_REMOTE_DOCKER);
-
-    const setupRemoteDockerArgs = args as SetupRemoteDockerParameters;
-
-    if (
-      Validator.validateGenerable(
-        GenerableType.SETUP_REMOTE_DOCKER,
-        setupRemoteDockerArgs,
-      )
-    ) {
-      return new SetupRemoteDocker(args as SetupRemoteDockerParameters);
-    }
+  setup_remote_docker: {
+    generableType: GenerableType.SETUP_REMOTE_DOCKER,
+    parse: (args) => new SetupRemoteDocker(args as SetupRemoteDockerParameters),
   },
-  store_artifacts: (args) => {
-    beginParsing(GenerableType.STORE_ARTIFACTS);
-
-    const storeArtifactsArgs = args as StoreArtifactsParameters;
-
-    if (
-      Validator.validateGenerable(
-        GenerableType.STORE_ARTIFACTS,
-        storeArtifactsArgs,
-      )
-    ) {
-      return new StoreArtifacts(args as StoreArtifactsParameters);
-    }
+  store_artifacts: {
+    generableType: GenerableType.STORE_ARTIFACTS,
+    parse: (args) => new StoreArtifacts(args as StoreArtifactsParameters),
   },
-  store_test_results: (args) => {
-    beginParsing(GenerableType.STORE_TEST_RESULTS);
-
-    const storeTestResultsArgs = args as StoreTestResultsParameters;
-
-    if (
-      Validator.validateGenerable(
-        GenerableType.STORE_TEST_RESULTS,
-        storeTestResultsArgs,
-      )
-    ) {
-      return new StoreTestResults(args as StoreTestResultsParameters);
-    }
+  store_test_results: {
+    generableType: GenerableType.STORE_TEST_RESULTS,
+    parse: (args) => new StoreTestResults(args as StoreTestResultsParameters),
   },
 };
 
@@ -163,20 +86,20 @@ const nativeSubtypes: {
  * @returns A list of parsed commands.
  */
 export function parseSteps(
-  stepsListIn: { [key: string]: unknown }[],
+  stepsListIn: unknown,
   commands?: CustomCommand[],
 ): Command[] {
-  beginParsing(GenerableType.STEP_LIST);
+  return parseGenerable<Record<string, unknown>[], Command[]>(
+    GenerableType.STEP_LIST,
+    stepsListIn,
+    (stepsListIn) => {
+      return stepsListIn.map((subtype) => {
+        const commandName = Object.keys(subtype)[0];
 
-  const stepsList = stepsListIn.map((subtype) => {
-    const commandName = Object.keys(subtype)[0];
-
-    return parseStep(commandName, subtype[commandName], commands);
-  });
-
-  endParsing();
-
-  return stepsList;
+        return parseStep(commandName, subtype[commandName], commands);
+      });
+    },
+  );
 }
 
 /**
@@ -192,27 +115,29 @@ export function parseStep(
   args?: unknown,
   commands?: CustomCommand[],
 ): Command {
-  let parsedCommand;
-
   if (name in nativeSubtypes) {
-    parsedCommand = nativeSubtypes[name as NativeCommandLiteral](args);
+    const commandMapping = nativeSubtypes[name as NativeCommandLiteral];
 
-    // parsing start handled by subtype
-    endParsing();
+    return parseGenerable<CommandParameters, Command>(
+      commandMapping.generableType,
+      args,
+      commandMapping.parse,
+    );
   } else if (commands) {
-    beginParsing(GenerableType.REUSABLE_COMMAND, name);
-    const command = commands.find((c) => c.name === name);
+    parseGenerable<CommandParameters, ReusableCommand>(
+      GenerableType.REUSABLE_COMMAND,
+      args,
+      (parameterArgs) => {
+        const command = commands.find((c) => c.name === name);
 
-    if (!command) {
-      throw errorParsing(`Custom Command ${name} not found in config.`);
-    }
+        if (!command) {
+          throw errorParsing(`Custom Command ${name} not found in config.`);
+        }
 
-    parsedCommand = new ReusableCommand(command, args as CommandParameters);
-    endParsing();
-  }
-
-  if (parsedCommand) {
-    return parsedCommand;
+        return new ReusableCommand(command, parameterArgs);
+      },
+      name,
+    );
   }
 
   throw errorParsing(`Unknown native command: ${name}`);
@@ -246,31 +171,26 @@ export function parseCustomCommand(
   args: unknown,
   custom_commands?: CustomCommand[],
 ): CustomCommand {
-  beginParsing(GenerableType.CUSTOM_COMMAND, name);
+  return parseGenerable<CustomCommandBodyShape, CustomCommand>(
+    GenerableType.CUSTOM_COMMAND,
+    args,
+    (commandArgs) => {
+      const parametersList =
+        commandArgs.parameters &&
+        (parseParameterList(
+          commandArgs.parameters,
+          ParameterizedComponent.COMMAND,
+        ) as CustomParametersList<CommandParameterLiteral>);
 
-  if (!Validator.validateGenerable(GenerableType.CUSTOM_COMMAND, args)) {
-    throw errorParsing(`Failed to validate custom command before parsing.`);
-  }
+      const steps = parseSteps(commandArgs.steps, custom_commands);
 
-  const command_args = args as CustomCommandBodyShape;
-
-  const parametersList =
-    command_args.parameters &&
-    (parseParameterList(
-      command_args.parameters,
-      ParameterizedComponent.COMMAND,
-    ) as CustomParametersList<CommandParameterLiteral>);
-
-  const steps = parseSteps(command_args.steps, custom_commands);
-
-  const parsedCommand = new CustomCommand(
+      return new CustomCommand(
+        name,
+        steps,
+        parametersList,
+        commandArgs.description,
+      );
+    },
     name,
-    steps,
-    parametersList,
-    command_args.description,
   );
-
-  endParsing();
-
-  return parsedCommand;
 }

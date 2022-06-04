@@ -11,3 +11,12 @@ export type WorkflowsShape = {
 export type UnknownWorkflowShape = {
   jobs: { [key: string]: unknown }[];
 };
+
+export type UnknownWorkflowJobShape = {
+  requires?: string[];
+  parameters?: { [key: string]: unknown };
+  name?: string;
+  type?: 'approval';
+  // 'pre-steps'?: { [key: string]: unknown }[];
+  // 'post-steps'?: { [key: string]: unknown }[];
+};

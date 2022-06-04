@@ -8,7 +8,7 @@ import { parseParameterList } from '../../Components/Parameters/parsers';
 import { PipelineParameterLiteral } from '../../Components/Parameters/types/CustomParameterLiterals.types';
 import { parseWorkflowList } from '../../Components/Workflow/parsers';
 import { GenerableType } from '../exports/Mapping';
-import { beginParsing, endParsing } from '../exports/Parsing';
+import { parseGenerable } from '../exports/Parsing';
 import { UnknownConfigShape } from '../types';
 
 /**
@@ -19,32 +19,33 @@ import { UnknownConfigShape } from '../types';
  * @throws Error if any config component not valid
  */
 export function parseConfig(configIn: unknown): Config {
-  beginParsing(GenerableType.CONFIG);
-
-  const config = (
+  const configProps = (
     typeof configIn == 'string' ? parse(configIn) : configIn
   ) as UnknownConfigShape;
 
-  const executorList =
-    config.executors && parseReusableExecutors(config.executors);
-  const commandList = config.commands && parseCustomCommands(config.commands);
-  const parameterList =
-    config.parameters && parseParameterList(config.parameters);
-  const jobList = parseJobList(config.jobs, commandList, executorList);
-  const workflows = parseWorkflowList(config.workflows, jobList);
+  return parseGenerable<UnknownConfigShape, Config>(
+    GenerableType.CONFIG,
+    configProps,
+    (config) => {
+      const executorList =
+        config.executors && parseReusableExecutors(config.executors);
+      const commandList =
+        config.commands && parseCustomCommands(config.commands);
+      const parameterList =
+        config.parameters && parseParameterList(config.parameters);
+      const jobList = parseJobList(config.jobs, commandList, executorList);
+      const workflows = parseWorkflowList(config.workflows, jobList);
 
-  const parsedConfig = new Config(
-    config.setup,
-    jobList,
-    workflows,
-    executorList,
-    commandList,
-    parameterList as CustomParametersList<PipelineParameterLiteral>,
+      return new Config(
+        config.setup,
+        jobList,
+        workflows,
+        executorList,
+        commandList,
+        parameterList as CustomParametersList<PipelineParameterLiteral>,
+      );
+    },
   );
-
-  endParsing();
-
-  return parsedConfig;
 }
 
 // Parser exports

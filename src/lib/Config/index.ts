@@ -1,4 +1,4 @@
-import { Scalar, stringify as Stringify } from 'yaml';
+import { Scalar, stringify } from 'yaml';
 import { version as SDKVersion } from '../../package-version.json';
 import { Generable } from '../Components';
 import { CustomCommandShape } from '../Components/Commands/types/Command.types';
@@ -12,6 +12,7 @@ import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomP
 import { CustomCommand } from '../Components/Reusable';
 import { Workflow } from '../Components/Workflow';
 import { WorkflowsShape } from '../Components/Workflow/types/Workflow.types';
+import { GenerableType } from './exports/Mapping';
 import { Validator } from './exports/Validator';
 import { Pipeline } from './Pipeline';
 import {
@@ -24,7 +25,10 @@ import {
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
  */
 export class Config
-  implements CircleCIConfigObject, Parameterized<PipelineParameterLiteral>
+  implements
+    CircleCIConfigObject,
+    Parameterized<PipelineParameterLiteral>,
+    Generable
 {
   /**
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
@@ -164,7 +168,7 @@ export class Config
   /**
    * Export the CircleCI configuration as a YAML string.
    */
-  stringify(): string {
+  generate(): string {
     const generatedWorkflows = generateList<WorkflowsShape>(this.workflows, {});
     const generatedJobs = generateList<JobsShape>(this.jobs, {});
     const generatedExecutors = generateList<ReusableExecutorsShape>(
@@ -191,13 +195,17 @@ export class Config
     });
 
     return this.prependVersionComment(
-      Stringify(generatedConfig as CircleCIConfigShape, {
+      stringify(generatedConfig as CircleCIConfigShape, {
         defaultStringType: Scalar.PLAIN,
         lineWidth: 0,
         minContentWidth: 0,
         doubleQuotedMinMultiLineLength: 999,
       }),
     );
+  }
+
+  get generableType(): GenerableType {
+    return GenerableType.CONFIG;
   }
 }
 

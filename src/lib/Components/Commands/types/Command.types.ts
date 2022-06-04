@@ -3,6 +3,8 @@ import {
   ComponentParameter,
 } from '../../Parameters/types/ComponentParameters.types';
 import { CustomParametersListShape } from '../../Parameters/types';
+import { GenerableType } from '../../../Config/exports/Mapping';
+import { Command } from '../exports/Command';
 
 export type CommandType<T> = Extract<string | number, T>;
 
@@ -41,3 +43,10 @@ export type NativeCommandLiteral =
   | 'setup_remote_docker'
   | 'store_artifacts'
   | 'store_test_results';
+
+export type CommandSubtypeMap = {
+  [key in NativeCommandLiteral]: {
+    generableType: GenerableType;
+    parse: (args: CommandParameters) => Command;
+  };
+};

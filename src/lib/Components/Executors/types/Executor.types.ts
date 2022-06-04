@@ -1,10 +1,13 @@
+import { GenerableType } from '../../../Config/exports/Mapping';
+import { Executor } from '../exports/Executor';
+import { ReusableExecutor } from '../exports/ReusableExecutor';
 import { DockerExecutorShape } from './DockerExecutor.types';
 import { MachineExecutorShape } from './MachineExecutor.types';
 import { MacOSExecutorShape } from './MacOSExecutor.types';
 import { WindowsExecutorShape } from './WindowsExecutor.types';
 
 export type UnknownExecutorShape = {
-  resource_class: string;
+  resource_class: AnyResourceClass;
   [key: string]: unknown;
 };
 
@@ -38,4 +41,23 @@ export type ExecutorLiteral = 'docker' | 'machine' | 'macos';
 /**
  * The valid executors found on an object referencing an executor
  */
-export type ExecutorLiteralUsage = ExecutorLiteral | 'executor';
+export type ExecutorUsageLiteral = ExecutorLiteral | 'executor';
+
+export type UnknownParameterized = {
+  parameters?: { [key: string]: unknown };
+};
+
+export type ReusableExecutorDefinition = {
+  [key: string]: UnknownExecutorShape & UnknownParameterized;
+};
+
+export type ExecutorSubtypeMap = {
+  [key in ExecutorUsageLiteral | 'windows']: {
+    generableType: GenerableType;
+    parse: (
+      args: unknown,
+      resourceClass: AnyResourceClass,
+      reusableExecutors?: ReusableExecutor[],
+    ) => Executor | ReusableExecutor;
+  };
+};

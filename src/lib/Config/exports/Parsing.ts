@@ -1,18 +1,42 @@
+import { Generable } from '../../Components';
+import { GenerableSubtypes } from '../types/Mapping.types';
 import { GenerableType } from './Mapping';
+import { Validator } from './Validator';
 
 let logParsing = false;
 const parseStack: string[] = [];
 
-export function beginParsing(component: GenerableType, name?: string): void {
+export function parseGenerable<
+  InputShape,
+  OutputGenerable extends Generable | Generable[],
+>(
+  component: GenerableType,
+  input: unknown,
+  parse: (args: InputShape) => OutputGenerable | undefined,
+  name?: string,
+  subtype?: GenerableSubtypes,
+): OutputGenerable {
   parseStack.push(`${component}${name ? `:${name}` : ''}`);
 
   if (logParsing) {
     console.log(`${parseStack.join('/')}`);
   }
-}
 
-export function endParsing(): void {
+  const valid = Validator.validateGenerable(component, input, subtype);
+
+  if (valid !== true) {
+    throw errorParsing(`Failed to validate: ${valid}`);
+  }
+
+  const result = parse(input as InputShape);
+
+  if (!result) {
+    throw errorParsing();
+  }
+
   parseStack.pop();
+
+  return result;
 }
 
 export function errorParsing(message?: string): Error {

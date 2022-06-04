@@ -379,7 +379,7 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
       jobs: {},
       workflows: {},
     };
-    expect(YAML.parse(myConfig.stringify())).toEqual(expectedConfigShape);
+    expect(YAML.parse(myConfig.generate())).toEqual(expectedConfigShape);
   });
 
   it('Should produce a config with executors', () => {
