@@ -1,4 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
+import { ExecutorLiteral } from '../types/Executor.types';
 import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import {
   WindowsExecutorShape,
@@ -37,18 +38,22 @@ export class WindowsExecutor extends Executor<WindowsResourceClass> {
       ...parameters,
     };
   }
-  generate(): WindowsExecutorShape {
+
+  generateContents(): WindowsExecutorShape {
     return {
-      machine: {
-        image: this.image,
-      },
-      resource_class:
-        `windows.${this.resource_class}` as WindowsResourceClassGenerated,
-      shell: this.parameters?.shell || WindowsExecutor.defaultShell,
+      image: this.image,
     };
   }
 
   get generableType(): GenerableType {
     return GenerableType.WINDOWS_EXECUTOR;
+  }
+
+  get executorLiteral(): ExecutorLiteral {
+    return 'machine';
+  }
+
+  get generateResourceClass(): WindowsResourceClassGenerated {
+    return `windows.${this.resource_class}`;
   }
 }

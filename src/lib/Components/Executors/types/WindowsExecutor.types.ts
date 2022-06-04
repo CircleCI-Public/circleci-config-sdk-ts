@@ -1,17 +1,13 @@
 import { StringParameter } from '../../Parameters/types';
 import { AnyResourceClass } from './Executor.types';
-import { ExecutableProperties } from './ExecutorParameters.types';
 
 /**
  * A JSON representation of the Windows Executor Schema
  * To be converted to YAML
  */
 export type WindowsExecutorShape = {
-  machine: {
-    image: StringParameter;
-  };
-  resource_class: WindowsResourceClassGenerated;
-} & ExecutableProperties;
+  image: StringParameter;
+};
 
 /**
  * The available Windows Resource Classes.

@@ -1,4 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
+import { ExecutorLiteral } from '../types/Executor.types';
 import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import {
   MachineExecutorShape,
@@ -23,18 +24,18 @@ export class MachineExecutor extends Executor<MachineResourceClass> {
   ) {
     super(resource_class, parameters);
     this.image = image || this.image;
-    this.resource_class = resource_class;
   }
-  generate(): MachineExecutorShape {
+  generateContents(): MachineExecutorShape {
     return {
-      machine: {
-        image: this.image,
-      },
-      resource_class: this.resource_class,
+      image: this.image,
     };
   }
 
   get generableType(): GenerableType {
     return GenerableType.MACHINE_EXECUTOR;
+  }
+
+  get executorLiteral(): ExecutorLiteral {
+    return 'machine';
   }
 }

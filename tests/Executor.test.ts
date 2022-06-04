@@ -152,7 +152,6 @@ describe('Instantiate Windows Executor and remove shell', () => {
       image: 'windows-server-2019-vs2019:stable',
     },
     resource_class: 'windows.medium',
-    shell: 'powershell.exe -ExecutionPolicy Bypass',
   };
 
   it('Should validate', () => {

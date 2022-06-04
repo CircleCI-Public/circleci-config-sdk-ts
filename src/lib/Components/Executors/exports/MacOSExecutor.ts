@@ -1,4 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
+import { ExecutorLiteral } from '../types/Executor.types';
 import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import {
   MacOSExecutorShape,
@@ -23,18 +24,18 @@ export class MacOSExecutor extends Executor<MacOSResourceClass> {
   ) {
     super(resource_class, parameters);
     this.xcode = xcode;
-    this.resource_class = resource_class;
   }
-  generate(): MacOSExecutorShape {
+  generateContents(): MacOSExecutorShape {
     return {
-      macos: {
-        xcode: this.xcode,
-      },
-      resource_class: this.resource_class,
+      xcode: this.xcode,
     };
   }
 
   get generableType(): GenerableType {
     return GenerableType.MACOS_EXECUTOR;
+  }
+
+  get executorLiteral(): ExecutorLiteral {
+    return 'macos';
   }
 }

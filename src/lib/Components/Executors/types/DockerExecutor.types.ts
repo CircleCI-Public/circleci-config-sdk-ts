@@ -1,15 +1,11 @@
 import { StringParameter } from '../../Parameters/types';
 import { DockerImageShape } from '../exports/DockerImage';
 import { AnyResourceClass } from './Executor.types';
-import { ExecutableProperties } from './ExecutorParameters.types';
 /**
  * A JSON representation of the Docker Executor Schema
  * To be converted to YAML
  */
-export type DockerExecutorShape = {
-  docker: DockerImageShape[];
-  resource_class: DockerResourceClass;
-} & ExecutableProperties;
+export type DockerExecutorContentsShape = DockerImageShape[];
 
 export type DockerImageMap = {
   image: StringParameter;

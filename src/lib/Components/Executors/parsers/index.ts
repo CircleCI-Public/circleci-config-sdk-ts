@@ -30,10 +30,12 @@ const subtypeParsers: ExecutorSubtypeMap = {
     generableType: GenerableType.DOCKER_EXECUTOR,
     parse: (args, resourceClass, properties) => {
       const dockerArgs = args as [{ image: string }];
+      const [mainImage, ...serviceImages] = dockerArgs;
 
       return new DockerExecutor(
-        dockerArgs[0].image || 'cimg/base:stable',
+        mainImage.image || 'cimg/base:stable',
         resourceClass as DockerResourceClass,
+        serviceImages,
         properties,
       );
     },

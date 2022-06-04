@@ -1,6 +1,10 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { Generable } from '../../index';
-import { AnyResourceClass, ExecutorShape } from '../types/Executor.types';
+import {
+  AnyResourceClass,
+  ExecutorLiteral,
+  ExecutorShape,
+} from '../types/Executor.types';
 import { ExecutableParameters } from '../types/ExecutorParameters.types';
 
 /**
@@ -24,6 +28,18 @@ export abstract class Executor<
     this.resource_class = resource_class;
     this.parameters = parameters;
   }
-  abstract generate(ctx?: GenerableType): ExecutorShape;
   abstract get generableType(): GenerableType;
+  abstract get executorLiteral(): ExecutorLiteral;
+  abstract generateContents(): unknown;
+  get generateResourceClass(): ResourceClass | string {
+    return this.resource_class;
+  }
+
+  generate(): ExecutorShape {
+    return {
+      [this.executorLiteral]: this.generateContents(),
+      resource_class: this.generateResourceClass,
+      ...this.parameters,
+    };
+  }
 }

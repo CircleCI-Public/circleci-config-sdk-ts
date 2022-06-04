@@ -1,11 +1,7 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { Executor } from '../exports/Executor';
 import { ReusableExecutor } from '../exports/ReusableExecutor';
-import { DockerExecutorShape } from './DockerExecutor.types';
 import { ExecutableProperties } from './ExecutorParameters.types';
-import { MachineExecutorShape } from './MachineExecutor.types';
-import { MacOSExecutorShape } from './MacOSExecutor.types';
-import { WindowsExecutorShape } from './WindowsExecutor.types';
 
 export type UnknownExecutableShape = {
   resource_class: AnyResourceClass;
@@ -15,11 +11,10 @@ export type UnknownExecutableShape = {
 /**
  * The executor output shapes for YAML string
  */
-export type ExecutorShape =
-  | DockerExecutorShape
-  | MachineExecutorShape
-  | MacOSExecutorShape
-  | WindowsExecutorShape;
+export type ExecutorShape = {
+  resource_class: string;
+} & Partial<Record<ExecutorLiteral, unknown>> &
+  ExecutableProperties;
 
 /**
  * The valid resource classes found for an executor object
