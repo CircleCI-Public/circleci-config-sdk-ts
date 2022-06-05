@@ -192,20 +192,21 @@ export function parseReusableExecutors(
 
 export function parseReusableExecutor(
   name: string,
-  executorIn: unknown,
+  executableIn: unknown,
 ): ReusableExecutor {
   return parseGenerable<ReusableExecutorDefinition, ReusableExecutor>(
     GenerableType.REUSABLE_EXECUTOR,
-    executorIn,
-    (executorArgs) => {
+    executableIn,
+    ({ parameters, ...executorArgs }) => {
       const parametersList =
-        executorArgs.parameters &&
-        (parseParameterList(
-          executorArgs.parameters,
-          ParameterizedComponent.EXECUTOR,
-        ) as CustomParametersList<ExecutorParameterLiteral> | undefined);
+        parameters &&
+        (parseParameterList(parameters, ParameterizedComponent.EXECUTOR) as
+          | CustomParametersList<ExecutorParameterLiteral>
+          | undefined);
 
-      const parsedExecutor = parseExecutor(executorIn, undefined);
+      console.log(executorArgs);
+
+      const parsedExecutor = parseExecutor(executorArgs, undefined);
 
       return new ReusableExecutor(
         name,

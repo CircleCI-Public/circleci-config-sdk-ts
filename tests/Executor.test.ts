@@ -1,5 +1,6 @@
 import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
+import { CustomParametersList } from '../src/lib/Components/Parameters';
 import { GenerableType } from '../src/lib/Config/exports/Mapping';
 
 describe('Instantiate Docker Executor', () => {
@@ -317,7 +318,11 @@ resource allocation happening.
 
 describe('Generate a config with a Reusable Executor with parameters', () => {
   const machine = new CircleCI.executors.MachineExecutor('large');
-  const reusable = new CircleCI.reusable.ReusableExecutor('default', machine);
+  const reusable = new CircleCI.reusable.ReusableExecutor(
+    'default',
+    machine,
+    new CustomParametersList(),
+  );
 
   it('Should match the expected output in job context', () => {
     const expectedShape = {
@@ -335,6 +340,7 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
           image: 'ubuntu-2004:202010-01',
         },
         resource_class: 'large',
+        parameters: {},
       },
     };
     expect(reusable.generate()).toEqual(expectedShape);
@@ -367,6 +373,7 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
         image: 'ubuntu-2004:202010-01',
       },
       resource_class: 'large',
+      parameters: {},
     },
   };
 
