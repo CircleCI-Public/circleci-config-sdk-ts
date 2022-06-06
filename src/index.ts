@@ -1,11 +1,3 @@
-// Parser exports
-export * from './lib/Components/Executors/parsers';
-export * from './lib/Components/Commands/parsers';
-export * from './lib/Components/Job/parsers';
-export * from './lib/Components/Parameters/parsers';
-export * from './lib/Components/Workflow/parsers';
-export * from './lib/Config/parsers';
-
 // Namespace exports
 
 /**
@@ -44,6 +36,11 @@ export * as mapping from './lib/Config/exports/Mapping';
  * All types used in the components.
  */
 export * as types from './lib/Types';
+
+/**
+ * All parsers to generate components from config objects.
+ */
+export * as parsers from './lib/Config/parsers';
 
 // Top-level exports
 export { Job } from './lib/Components/Job';

@@ -1,16 +1,12 @@
 import { StringParameter } from '../../Parameters/types';
 import { AnyResourceClass } from './Executor.types';
-
 /**
  * A JSON representation of the MacOS Executor Schema
  * To be converted to YAML
  */
-export interface MacOSExecutorShape {
-  macos: {
-    xcode: StringParameter;
-  };
-  resource_class: MacOSResourceClass;
-}
+export type MacOSExecutorShape = {
+  xcode: StringParameter;
+};
 
 /**
  * The available MacOS Resource Classes.

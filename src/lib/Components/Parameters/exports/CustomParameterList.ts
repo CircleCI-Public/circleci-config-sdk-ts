@@ -3,6 +3,7 @@ import { Generable } from '../..';
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
 import { CustomParametersListShape } from '../types';
+import { errorParsing } from '../../../Config/exports/Parsing';
 
 /**
  * A list that can be added to a component.
@@ -60,7 +61,7 @@ export class CustomParametersList<
           description,
         );
       } else {
-        throw new Error(`Enum type requires enum values to be defined`);
+        throw errorParsing(`Enum type requires enum values to be defined`);
       }
     } else {
       parameter = new CustomParameter(name, type, defaultValue, description);

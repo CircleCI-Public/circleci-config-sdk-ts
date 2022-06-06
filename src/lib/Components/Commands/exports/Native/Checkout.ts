@@ -9,11 +9,9 @@ import { Command } from '../Command';
  * @param parameters - CheckoutParameters
  */
 export class Checkout implements Command {
-  parameters?: CheckoutParameters = {};
+  parameters?: CheckoutParameters;
   constructor(parameters?: CheckoutParameters) {
-    if (parameters) {
-      this.parameters = parameters;
-    }
+    this.parameters = parameters;
   }
   /**
    * Generate Checkout Command shape.

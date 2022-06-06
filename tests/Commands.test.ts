@@ -9,7 +9,6 @@ import {
   ToStringOptions,
 } from 'yaml';
 import * as CircleCI from '../src/index';
-import { parseCustomCommand, parseStep } from '../src/index';
 
 describe('Instantiate a Run step', () => {
   const run = new CircleCI.commands.Run({
@@ -22,7 +21,7 @@ describe('Instantiate a Run step', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(parseStep('run', expectedResult.run)).toEqual(run);
+    expect(CircleCI.parsers.parseStep('run', expectedResult.run)).toEqual(run);
   });
 });
 
@@ -35,7 +34,7 @@ describe('Instantiate a Checkout step', () => {
   });
 
   it('Should parse and match raw example', () => {
-    expect(parseStep('checkout')).toEqual(checkout);
+    expect(CircleCI.parsers.parseStep('checkout')).toEqual(checkout);
   });
 
   const checkoutWithPathResult = {
@@ -48,7 +47,9 @@ describe('Instantiate a Checkout step', () => {
   });
 
   it('Should parse and match example with provided path', () => {
-    expect(parseStep('checkout', { path: './src' })).toEqual(checkoutWithPath);
+    expect(CircleCI.parsers.parseStep('checkout', { path: './src' })).toEqual(
+      checkoutWithPath,
+    );
   });
 });
 
@@ -65,12 +66,17 @@ describe('Instantiate a Setup_Remote_Docker step', () => {
   });
 
   it('Should parse and match example with default version', () => {
-    expect(parseStep('setup_remote_docker')).toEqual(srdExample);
+    expect(CircleCI.parsers.parseStep('setup_remote_docker')).toEqual(
+      srdExample,
+    );
   });
 
   it('Should parse and match example with passed version', () => {
     expect(
-      parseStep('setup_remote_docker', srdResult.setup_remote_docker),
+      CircleCI.parsers.parseStep(
+        'setup_remote_docker',
+        srdResult.setup_remote_docker,
+      ),
     ).toEqual(srdExample);
   });
 });
@@ -92,7 +98,9 @@ describe('Save and load cache', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(parseStep('save_cache', saveExample.save_cache)).toEqual(save_cache);
+    expect(
+      CircleCI.parsers.parseStep('save_cache', saveExample.save_cache),
+    ).toEqual(save_cache);
   });
 
   const restoreExample = {
@@ -109,9 +117,9 @@ describe('Save and load cache', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(parseStep('restore_cache', restoreExample.restore_cache)).toEqual(
-      restore_cache,
-    );
+    expect(
+      CircleCI.parsers.parseStep('restore_cache', restoreExample.restore_cache),
+    ).toEqual(restore_cache);
   });
 });
 
@@ -132,9 +140,12 @@ describe('Store artifacts', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(parseStep('store_artifacts', storeResult.store_artifacts)).toEqual(
-      storeExample,
-    );
+    expect(
+      CircleCI.parsers.parseStep(
+        'store_artifacts',
+        storeResult.store_artifacts,
+      ),
+    ).toEqual(storeExample);
   });
 });
 
@@ -149,9 +160,9 @@ describe('Store test results', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(parseStep('store_artifacts', example.store_test_results)).toEqual(
-      storeTestResults,
-    );
+    expect(
+      CircleCI.parsers.parseStep('store_artifacts', example.store_test_results),
+    ).toEqual(storeTestResults);
   });
 });
 
@@ -170,7 +181,9 @@ describe('Add SSH Keys', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(parseStep('add_ssh_keys', example.add_ssh_keys)).toEqual(addSSHKeys);
+    expect(
+      CircleCI.parsers.parseStep('add_ssh_keys', example.add_ssh_keys),
+    ).toEqual(addSSHKeys);
   });
 });
 
@@ -193,9 +206,9 @@ describe('Instantiate a Blank Custom Command', () => {
   });
 
   it('Should parse and match example', () => {
-    expect(parseCustomCommand('say_hello', example.say_hello)).toEqual(
-      customCommand,
-    );
+    expect(
+      CircleCI.parsers.parseCustomCommand('say_hello', example.say_hello),
+    ).toEqual(customCommand);
   });
 });
 

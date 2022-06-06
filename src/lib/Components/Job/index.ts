@@ -20,7 +20,7 @@ export class Job implements Generable {
   /**
    * A list of Commands to execute within the job in the order which they were added.
    */
-  steps: Command[] = [];
+  steps: Command[];
   /**
    * Instantiate a CircleCI Job
    * @param name - Name your job with a unique identifier
@@ -28,10 +28,10 @@ export class Job implements Generable {
    * @param steps - A list of Commands to execute within the job in the order which they were added.
    * @see {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#jobs}
    */
-  constructor(name: string, executor: AnyExecutor, steps?: Command[]) {
+  constructor(name: string, executor: AnyExecutor, steps: Command[] = []) {
     this.name = name;
     this.executor = executor;
-    this.steps = steps || [];
+    this.steps = steps;
   }
 
   /**

@@ -58,7 +58,7 @@ describe('Generate a config utilizing workspaces', () => {
         },
       },
     };
-    const generatedConfig = YAML.parse(myConfig.stringify());
+    const generatedConfig = YAML.parse(myConfig.generate());
     expect(expectedConfig).toEqual(generatedConfig);
   });
 });

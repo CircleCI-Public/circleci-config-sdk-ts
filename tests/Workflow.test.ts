@@ -70,9 +70,9 @@ describe('Parse a workflow', () => {
     'my-workflow': { jobs: [{ 'my-job': {} }] },
   };
   it('Should match the expected output', () => {
-    expect(CircleCI.parseWorkflowList(workflowListShape, [job])[0]).toEqual(
-      myWorkflow,
-    );
+    expect(
+      CircleCI.parsers.parseWorkflowList(workflowListShape, [job])[0],
+    ).toEqual(myWorkflow);
   });
 });
 

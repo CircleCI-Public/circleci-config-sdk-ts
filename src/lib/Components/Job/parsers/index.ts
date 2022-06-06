@@ -3,7 +3,7 @@ import {
   GenerableType,
   ParameterizedComponent,
 } from '../../../Config/exports/Mapping';
-import { Validator } from '../../../Config/exports/Validator';
+import { parseGenerable } from '../../../Config/exports/Parsing';
 import { CustomCommand } from '../../Commands/exports/Reusable/CustomCommand';
 import { parseSteps } from '../../Commands/parsers';
 import { parseExecutor } from '../../Executors/parsers';
@@ -12,6 +12,7 @@ import { parseParameterList } from '../../Parameters/parsers';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { ReusableExecutor } from '../../Reusable';
 import { ParameterizedJob } from '../exports/ParameterizedJob';
+import { JobDependencies } from '../types/Job.types';
 
 /**
  * Parse a config's list of jobs into a list of Job instances.
@@ -49,27 +50,31 @@ export function parseJob(
   customCommands?: CustomCommand[],
   reusableExecutors?: ReusableExecutor[],
 ): Job {
-  if (Validator.validateGenerable(GenerableType.JOB, jobIn)) {
-    const jobArgs = jobIn as UnknownJobShape;
+  return parseGenerable<UnknownJobShape, Job, JobDependencies>(
+    GenerableType.JOB,
+    jobIn,
+    (_, { executor, steps, parametersList }) => {
+      if (parametersList) {
+        return new ParameterizedJob(name, executor, parametersList, steps);
+      }
 
-    const exec = parseExecutor(jobArgs, reusableExecutors);
-    const steps = parseSteps(jobArgs.steps, customCommands);
+      return new Job(name, executor, steps);
+    },
+    (jobArgs) => {
+      let parametersList;
 
-    if (!exec) {
-      throw new Error('Could not parse job - could not parse executor');
-    }
+      const executor = parseExecutor(jobArgs, reusableExecutors);
+      const steps = parseSteps(jobArgs.steps, customCommands);
 
-    if (!jobArgs.parameters) {
-      return new Job(name, exec, steps);
-    }
+      if (jobArgs.parameters) {
+        parametersList = parseParameterList(
+          jobArgs.parameters,
+          ParameterizedComponent.JOB,
+        ) as CustomParametersList<JobParameterLiteral>;
+      }
 
-    const parametersList = parseParameterList(
-      jobArgs.parameters,
-      ParameterizedComponent.JOB,
-    ) as CustomParametersList<JobParameterLiteral>;
-
-    return new ParameterizedJob(name, exec, parametersList, steps);
-  }
-
-  throw new Error('Could not parse job - provided input was invalid');
+      return { executor, steps, parametersList };
+    },
+    name,
+  );
 }

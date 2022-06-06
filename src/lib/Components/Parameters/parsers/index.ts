@@ -4,6 +4,7 @@ import {
   ParameterizedComponent,
   ParameterSubtype,
 } from '../../../Config/exports/Mapping';
+import { parseGenerable, errorParsing } from '../../../Config/exports/Parsing';
 import { CustomEnumParameter } from '../exports/CustomEnumParameter';
 import { CustomParameter } from '../exports/CustomParameter';
 import { CustomParametersList } from '../exports/CustomParameterList';
@@ -16,6 +17,17 @@ import {
   AnyParameterLiteral,
   EnumParameterLiteral,
 } from '../types/CustomParameterLiterals.types';
+
+const parameterMappings: {
+  [key in Exclude<AnyParameterLiteral, EnumParameterLiteral>]: ParameterSubtype;
+} = {
+  string: ParameterSubtype.STRING,
+  boolean: ParameterSubtype.BOOLEAN,
+  integer: ParameterSubtype.INTEGER,
+  executor: ParameterSubtype.EXECUTOR,
+  steps: ParameterSubtype.STEPS,
+  env_var_name: ParameterSubtype.ENV_VAR_NAME,
+};
 
 /**
  * Parse a single parameter.
@@ -35,57 +47,44 @@ export function parseParameter(
     type = Object.entries(customParamIn).find(([key]) => key === 'type')?.[1];
   }
 
-  const types: {
-    [key in Exclude<
-      AnyParameterLiteral,
-      EnumParameterLiteral
-    >]: ParameterSubtype;
-  } = {
-    string: ParameterSubtype.STRING,
-    boolean: ParameterSubtype.BOOLEAN,
-    integer: ParameterSubtype.INTEGER,
-    executor: ParameterSubtype.EXECUTOR,
-    steps: ParameterSubtype.STEPS,
-    env_var_name: ParameterSubtype.ENV_VAR_NAME,
-  };
+  if (type === 'enum') {
+    return parseGenerable<
+      CustomEnumParameterContentsShape,
+      CustomEnumParameter
+    >(
+      GenerableType.CUSTOM_ENUM_PARAMETER,
+      customParamIn,
+      (customEnumParam) => {
+        return new CustomEnumParameter(
+          name,
+          customEnumParam.enum,
+          customEnumParam.default,
+          customEnumParam.description,
+        );
+      },
+      undefined,
+      name,
+    );
+  }
 
-  const isEnum = type === 'enum';
-  const valid = Validator.validateGenerable(
-    isEnum
-      ? GenerableType.CUSTOM_ENUM_PARAMETER
-      : GenerableType.CUSTOM_PARAMETER,
+  return parseGenerable<
+    CustomParameterContentsShape<AnyParameterLiteral>,
+    CustomParameter<AnyParameterLiteral>
+  >(
+    GenerableType.CUSTOM_PARAMETER,
     customParamIn,
-    isEnum ? undefined : types[type as keyof typeof types],
+    (customParam) => {
+      return new CustomParameter(
+        name,
+        customParam.type,
+        customParam.default,
+        customParam.description,
+      );
+    },
+    undefined,
+    name,
+    parameterMappings[type as keyof typeof parameterMappings],
   );
-
-  if (valid !== true) {
-    throw new Error(
-      `Provided parameter could not be parsed: ${
-        typeof valid === 'object' && valid?.map((v) => v.message).join(', ')
-      }`,
-    );
-  }
-
-  if (isEnum) {
-    const customEnumParam = customParamIn as CustomEnumParameterContentsShape;
-
-    return new CustomEnumParameter(
-      name,
-      customEnumParam.enum,
-      customEnumParam.default,
-      customEnumParam.description,
-    );
-  } else {
-    const customParam =
-      customParamIn as CustomParameterContentsShape<AnyParameterLiteral>;
-
-    return new CustomParameter(
-      name,
-      customParam.type,
-      customParam.default,
-      customParam.description,
-    );
-  }
 }
 
 /**
@@ -108,10 +107,8 @@ export function parseParameterList(
     );
 
     if (valid !== true) {
-      throw new Error(
-        `Could not find valid parameter list in provided object: ${
-          typeof valid === 'object' && valid?.map((v) => v.message).join(', ')
-        }`,
+      throw errorParsing(
+        'Could not find valid parameter list in provided object',
       );
     }
   }

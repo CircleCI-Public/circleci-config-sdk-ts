@@ -2,7 +2,12 @@ import { SchemaObject } from 'ajv';
 
 const ReusableCommandSchema: SchemaObject = {
   $id: '#/command/ReusableCommand',
-  $ref: '#/custom/command',
+  type: 'object',
+  properties: {
+    steps: {
+      $ref: '#/definitions/Steps',
+    },
+  },
 };
 
 export default ReusableCommandSchema;

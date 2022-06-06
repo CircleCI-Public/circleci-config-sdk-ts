@@ -1,9 +1,17 @@
 import { Workflow } from '..';
 import { Validator } from '../../../Config';
 import { GenerableType } from '../../../Config/exports/Mapping';
+import {
+  parseGenerable as parseGenerable,
+  errorParsing,
+} from '../../../Config/exports/Parsing';
 import { Job } from '../../Job';
 import { WorkflowJob } from '../exports/WorkflowJob';
-import { UnknownWorkflowShape } from '../types';
+import {
+  UnknownWorkflowJobShape,
+  UnknownWorkflowShape,
+  WorkflowDependencies,
+} from '../types';
 
 /**
  * Parse a workflow's job reference.
@@ -19,23 +27,20 @@ export function parseWorkflowJob(
   workflowJobIn: unknown,
   jobs: Job[],
 ): WorkflowJob {
-  const workflowJobArgs = workflowJobIn as {
-    requires?: string[];
-    parameters?: { [key: string]: unknown };
-    name?: string;
-    type?: 'approval';
-    // 'pre-steps'?: { [key: string]: unknown }[];
-    // 'post-steps'?: { [key: string]: unknown }[];
-  };
+  return parseGenerable<UnknownWorkflowJobShape, WorkflowJob>(
+    GenerableType.WORKFLOW_JOB,
+    workflowJobIn,
+    (workflowJobArgs) => {
+      const job = jobs.find((c) => c.name === name);
 
-  const job = jobs.find((c) => c.name === name);
+      if (job) {
+        return new WorkflowJob(job, workflowJobArgs);
+      }
 
-  if (job) {
-    return new WorkflowJob(job, workflowJobArgs);
-  }
-
-  throw new Error(
-    `Could not parse workflow job - Job ${name} not found in config`,
+      throw errorParsing(`Job ${name} not found in config`);
+    },
+    undefined,
+    name,
   );
 }
 
@@ -52,19 +57,25 @@ export function parseWorkflow(
   workflowIn: unknown,
   jobs: Job[],
 ): Workflow {
-  if (Validator.validateGenerable(GenerableType.WORKFLOW, workflowIn)) {
-    const workflowArgs = workflowIn as UnknownWorkflowShape;
+  return parseGenerable<UnknownWorkflowShape, Workflow, WorkflowDependencies>(
+    GenerableType.WORKFLOW,
+    workflowIn,
+    (workflowArgs, { jobList }) => {
+      if (Validator.validateGenerable(GenerableType.WORKFLOW, workflowIn)) {
+        return new Workflow(name, jobList);
+      }
+    },
+    (workflowArgs) => {
+      const jobList = workflowArgs.jobs.map((job) => {
+        const [name, args] = Object.entries(job)[0];
 
-    const jobList = workflowArgs.jobs.map((job) => {
-      const [name, args] = Object.entries(job)[0];
+        return parseWorkflowJob(name, args, jobs);
+      });
 
-      return parseWorkflowJob(name, args, jobs);
-    });
-
-    return new Workflow(name, jobList);
-  }
-
-  throw new Error(`Could not validate or parse workflow: ${name}`);
+      return { jobList };
+    },
+    name,
+  );
 }
 
 /**
@@ -78,7 +89,9 @@ export function parseWorkflowList(
   workflowsIn: unknown,
   jobs: Job[],
 ): Workflow[] {
-  return Object.entries(
+  const workflowList = Object.entries(
     workflowsIn as { [name: string]: UnknownWorkflowShape },
   ).map(([name, workflow]) => parseWorkflow(name, workflow, jobs));
+
+  return workflowList;
 }

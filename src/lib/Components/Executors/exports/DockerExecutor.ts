@@ -1,10 +1,10 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import {
-  DockerExecutorShape,
-  DockerImageMap,
+  DockerExecutorContentsShape,
   DockerResourceClass,
 } from '../types/DockerExecutor.types';
-import { ExecutorParameters } from '../types/ExecutorParameters.types';
+import { ExecutorLiteral } from '../types/Executor.types';
+import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import { DockerImage } from './DockerImage';
 import { Executor } from './Executor';
 
@@ -23,42 +23,36 @@ export class DockerExecutor extends Executor {
    * This is typically used for adding a database as a service container.
    */
   serviceImages: DockerImage[] = [];
-  /**
-   * Instantiate a Docker executor.
-   * @param name - The name of this reusable executor.
-   * @param image - The primary docker container image.
-   */
-  resource_class: DockerResourceClass;
+
   constructor(
     image: string,
     resource_class: DockerResourceClass = 'medium',
-    parameters?: ExecutorParameters,
+    serviceImages: DockerImage[] = [],
+    parameters?: ExecutableParameters,
   ) {
     super(resource_class, parameters);
     const newImage = new DockerImage(image);
     this.image = newImage;
-    this.resource_class = resource_class;
+    this.serviceImages = serviceImages;
   }
   /**
    * Generate Docker Executor schema.
    * @returns The generated JSON for the Docker Executor.
    */
-  generate(): DockerExecutorShape {
+  generateContents(): DockerExecutorContentsShape {
     const imagesArray: DockerImage[] = [this.image];
     imagesArray.concat(this.serviceImages);
-    const dockerImageMap: DockerImageMap[] = [];
-    imagesArray.forEach((img) => {
-      dockerImageMap.push({
-        image: img.image,
-      });
-    });
-    return {
-      docker: dockerImageMap,
-      resource_class: this.resource_class,
-    };
+
+    return imagesArray.map((img) => ({
+      image: img.image,
+    }));
   }
 
   get generableType(): GenerableType {
     return GenerableType.DOCKER_EXECUTOR;
+  }
+
+  get executorLiteral(): ExecutorLiteral {
+    return 'docker';
   }
 }

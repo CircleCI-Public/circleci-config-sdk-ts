@@ -5,13 +5,10 @@ import { AnyResourceClass } from './Executor.types';
  * A JSON representation of the Windows Executor Schema
  * To be converted to YAML
  */
-export interface WindowsExecutorShape {
-  machine: {
-    image: StringParameter;
-  };
-  resource_class: WindowsResourceClassGenerated;
-  shell: StringParameter;
-}
+export type WindowsExecutorShape = {
+  image: StringParameter;
+};
+
 /**
  * The available Windows Resource Classes.
  * @see {@link https://circleci.com/docs/2.0/configuration-reference/#windows-executor} for specifications of each class.

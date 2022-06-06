@@ -54,7 +54,7 @@ describe('Generate a Hello World config', () => {
       },
       workflows: { myWorkflow: { jobs: [{ 'node-test': {} }] } },
     };
-    const configYAML = myConfig.stringify();
+    const configYAML = myConfig.generate();
     expect(YAML.parse(configYAML)).toEqual(expectedResult);
   });
 });

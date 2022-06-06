@@ -5,14 +5,11 @@ import { AnyResourceClass } from './Executor.types';
  * A JSON representation of the Docker Executor Schema
  * To be converted to YAML
  */
-export interface DockerExecutorShape {
-  docker: DockerImageShape[];
-  resource_class: DockerResourceClass;
-}
+export type DockerExecutorContentsShape = DockerImageShape[];
 
-export interface DockerImageMap {
+export type DockerImageMap = {
   image: StringParameter;
-}
+};
 
 /**
  * The available Docker Resource Classes.

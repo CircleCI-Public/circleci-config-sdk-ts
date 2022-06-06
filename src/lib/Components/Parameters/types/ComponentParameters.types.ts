@@ -63,6 +63,6 @@ export type PipelineParametersType = Extract<
 /**
  * Interface for components parameters
  */
-export interface ComponentParameter<ParameterType extends AnyParameterType> {
+export type ComponentParameter<ParameterType extends AnyParameterType> = {
   [key: string]: ParameterType | undefined;
-}
+};
