@@ -7,7 +7,11 @@ import {
 } from '../../../Config/exports/Parsing';
 import { Job } from '../../Job';
 import { WorkflowJob } from '../exports/WorkflowJob';
-import { UnknownWorkflowJobShape, UnknownWorkflowShape } from '../types';
+import {
+  UnknownWorkflowJobShape,
+  UnknownWorkflowShape,
+  WorkflowDependencies,
+} from '../types';
 
 /**
  * Parse a workflow's job reference.
@@ -35,6 +39,7 @@ export function parseWorkflowJob(
 
       throw errorParsing(`Job ${name} not found in config`);
     },
+    undefined,
     name,
   );
 }
@@ -52,19 +57,22 @@ export function parseWorkflow(
   workflowIn: unknown,
   jobs: Job[],
 ): Workflow {
-  return parseGenerable<UnknownWorkflowShape, Workflow>(
+  return parseGenerable<UnknownWorkflowShape, Workflow, WorkflowDependencies>(
     GenerableType.WORKFLOW,
     workflowIn,
-    (workflowArgs) => {
+    (workflowArgs, { jobList }) => {
       if (Validator.validateGenerable(GenerableType.WORKFLOW, workflowIn)) {
-        const jobList = workflowArgs.jobs.map((job) => {
-          const [name, args] = Object.entries(job)[0];
-
-          return parseWorkflowJob(name, args, jobs);
-        });
-
         return new Workflow(name, jobList);
       }
+    },
+    (workflowArgs) => {
+      const jobList = workflowArgs.jobs.map((job) => {
+        const [name, args] = Object.entries(job)[0];
+
+        return parseWorkflowJob(name, args, jobs);
+      });
+
+      return { jobList };
     },
     name,
   );

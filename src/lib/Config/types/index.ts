@@ -3,7 +3,9 @@ import { ReusableExecutor } from '../../Components/Executors/exports/ReusableExe
 import { ReusableExecutorsShape } from '../../Components/Executors/types/ReusableExecutor.types';
 import { Job } from '../../Components/Job';
 import { JobsShape } from '../../Components/Job/types/Job.types';
+import { CustomParametersList } from '../../Components/Parameters';
 import { ParameterShape } from '../../Components/Parameters/types';
+import { AnyParameterLiteral } from '../../Components/Parameters/types/CustomParameterLiterals.types';
 import { CustomCommand } from '../../Components/Reusable';
 import { Workflow } from '../../Components/Workflow';
 import { WorkflowsShape } from '../../Components/Workflow/types/Workflow.types';
@@ -55,6 +57,14 @@ export type UnknownConfigShape = {
   commands?: Record<string, unknown>;
   parameters?: Record<string, unknown>;
   workflows: Record<string, unknown>;
+};
+
+export type ConfigDependencies = {
+  jobList: Job[];
+  workflows: Workflow[];
+  executorList?: ReusableExecutor[];
+  commandList?: CustomCommand[];
+  parameterList?: CustomParametersList<AnyParameterLiteral>;
 };
 
 export { validator, mapping };

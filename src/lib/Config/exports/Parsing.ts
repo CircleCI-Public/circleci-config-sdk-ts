@@ -1,5 +1,4 @@
-import { Generable } from '../../Components';
-import { GenerableSubtypes } from '../types/Mapping.types';
+import { GenerableSubtypes, OneOrMoreGenerable } from '../types/Mapping.types';
 import { GenerableType } from './Mapping';
 import { Validator } from './Validator';
 
@@ -8,11 +7,16 @@ let parseStack: string[] = [];
 
 export function parseGenerable<
   InputShape,
-  OutputGenerable extends Generable | Generable[],
+  OutputGenerable extends OneOrMoreGenerable,
+  GenerableDependencies extends Record<string, OneOrMoreGenerable> = never,
 >(
   component: GenerableType,
   input: unknown,
-  parse: (args: InputShape) => OutputGenerable | undefined,
+  parse: (
+    args: InputShape,
+    children: GenerableDependencies,
+  ) => OutputGenerable | undefined,
+  parseDependencies?: (args: InputShape) => GenerableDependencies,
   name?: string,
   subtype?: GenerableSubtypes,
 ): OutputGenerable {
@@ -22,13 +26,18 @@ export function parseGenerable<
     console.log(`${parseStack.join('/')}`);
   }
 
+  const inputShape = input as InputShape;
+  const children = parseDependencies
+    ? parseDependencies(inputShape)
+    : ({} as GenerableDependencies);
+
   const valid = Validator.validateGenerable(component, input || null, subtype);
 
   if (valid !== true) {
     throw errorParsing(`Failed to validate: ${valid}`);
   }
 
-  const result = parse(input as InputShape);
+  const result = parse(inputShape, children);
 
   if (!result) {
     throw errorParsing();
