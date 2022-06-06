@@ -27,7 +27,7 @@ export class StoreArtifacts implements Command {
   }
 
   get generableType(): GenerableType {
-    return GenerableType.STORE_TEST_RESULTS;
+    return GenerableType.STORE_ARTIFACTS;
   }
 }
 /**

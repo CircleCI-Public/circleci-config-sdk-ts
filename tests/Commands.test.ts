@@ -61,7 +61,7 @@ describe('Instantiate a Checkout step', () => {
     expect(checkout.generableType).toBe(
       CircleCI.mapping.GenerableType.CHECKOUT,
     );
-    expect(checkout.name).toBe(CircleCI.mapping.GenerableType.RUN);
+    expect(checkout.name).toBe('checkout');
   });
 });
 
@@ -96,7 +96,7 @@ describe('Instantiate a Setup_Remote_Docker step', () => {
     expect(srdExample.generableType).toBe(
       CircleCI.mapping.GenerableType.SETUP_REMOTE_DOCKER,
     );
-    expect(srdExample.name).toBe(CircleCI.mapping.GenerableType.RUN);
+    expect(srdExample.name).toBe('setup_remote_docker');
   });
 });
 
@@ -141,9 +141,16 @@ describe('Save and load cache', () => {
     ).toEqual(restore_cache);
   });
 
-  it('Should have the correct static properties', () => {
+  it('Should have the correct static properties for save_cache', () => {
     expect(save_cache.generableType).toBe(CircleCI.mapping.GenerableType.SAVE);
-    expect(save_cache.name).toBe(CircleCI.mapping.GenerableType.RUN);
+    expect(save_cache.name).toBe('save_cache');
+  });
+
+  it('Should have the correct static properties for restore_cache', () => {
+    expect(restore_cache.generableType).toBe(
+      CircleCI.mapping.GenerableType.RESTORE,
+    );
+    expect(restore_cache.name).toBe('restore_cache');
   });
 });
 
@@ -176,7 +183,7 @@ describe('Store artifacts', () => {
     expect(storeExample.generableType).toBe(
       CircleCI.mapping.GenerableType.STORE_ARTIFACTS,
     );
-    expect(storeExample.name).toBe(CircleCI.mapping.GenerableType.RUN);
+    expect(storeExample.name).toBe('store_artifacts');
   });
 });
 
@@ -199,7 +206,7 @@ describe('Store test results', () => {
     expect(storeTestResults.generableType).toBe(
       CircleCI.mapping.GenerableType.STORE_TEST_RESULTS,
     );
-    expect(storeTestResults.name).toBe(CircleCI.mapping.GenerableType.RUN);
+    expect(storeTestResults.name).toBe('store_test_results');
   });
 });
 
@@ -252,7 +259,6 @@ describe('Instantiate a Blank Custom Command', () => {
     expect(customCommand.generableType).toBe(
       CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
     );
-    expect(customCommand.name).toBe('');
   });
 });
 
@@ -276,11 +282,6 @@ describe('Instantiate a Custom Command', () => {
 
   it('Should generate checkout yaml', () => {
     expect(customCommand.generate()).toEqual(parse(expectedOutput));
-  });
-
-  it('Should have the correct static properties', () => {
-    expect(helloWorld.generableType).toBe(CircleCI.mapping.GenerableType.RUN);
-    expect(helloWorld.name).toBe('');
   });
 });
 
@@ -312,10 +313,9 @@ describe('Instantiate a Reusable Command', () => {
   });
 
   it('Should have the correct static properties', () => {
-    expect(helloWorld.generableType).toBe(
-      CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
+    expect(reusableCommand.generableType).toBe(
+      CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
     );
-    expect(helloWorld.name).toBe('');
   });
 });
 /**
@@ -411,13 +411,12 @@ describe('Instantiate reusable commands', () => {
       ],
     );
     expect(result).toEqual(true);
+  });
 
-    it('Should have the correct static properties', () => {
-      expect(firstCustomCommand.generableType).toBe(
-        CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
-      );
-      expect(firstCustomCommand.name).toBe('');
-    });
+  it('Should have the correct static properties', () => {
+    expect(firstCustomCommand.generableType).toBe(
+      CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
+    );
   });
 
   // TODO: Implement strict validation for the following tests to pass
@@ -548,13 +547,6 @@ echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single
       expectedOutput,
     );
   });
-
-  it('Should have the correct static properties', () => {
-    expect(multiLineCommand.generableType).toBe(
-      CircleCI.mapping.GenerableType.RUN,
-    );
-    expect(multiLineCommand.name).toBe('');
-  });
 });
 
 // Test a Run command with 70 characters in the command string and ensure it remains a single string
@@ -568,10 +560,5 @@ describe('Instantiate a Run command with 70 characters in the command string and
     expect(stringify(longCommand.generate(), stringifyOptions)).toEqual(
       expectedOutput,
     );
-  });
-
-  it('Should have the correct static properties', () => {
-    expect(longCommand.generableType).toBe(CircleCI.mapping.GenerableType.RUN);
-    expect(longCommand.name).toBe('');
   });
 });
