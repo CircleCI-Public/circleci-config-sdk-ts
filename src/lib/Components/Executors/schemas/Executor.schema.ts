@@ -2,9 +2,10 @@ import { SchemaObject } from 'ajv';
 
 const ExecutorSchema: SchemaObject = {
   $id: '#/executor/Executor',
+  type: 'object',
   $merge: {
     source: {
-      oneOf: [
+      anyOf: [
         { $ref: '#/executor/DockerExecutor' },
         { $ref: '#/executor/MachineExecutor' },
         { $ref: '#/executor/WindowsExecutor' },

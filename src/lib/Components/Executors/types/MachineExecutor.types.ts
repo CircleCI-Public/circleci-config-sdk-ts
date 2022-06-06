@@ -1,12 +1,9 @@
 import { StringParameter } from '../../Parameters/types';
 import { AnyResourceClass } from './Executor.types';
 
-export interface MachineExecutorShape {
-  machine: {
-    image: StringParameter;
-  };
-  resource_class: MachineResourceClass;
-}
+export type MachineExecutorShape = {
+  image: StringParameter;
+};
 
 /**
  * The available Machine(Linux) Resource Classes.

@@ -2,7 +2,7 @@ import { SchemaObject } from 'ajv';
 
 const AddSSHKeysSchema: SchemaObject = {
   $id: '#/commands/native/add_ssh_keys',
-  type: 'object',
+  type: ['object', 'null'],
   properties: {
     fingerprints: {
       type: 'array',

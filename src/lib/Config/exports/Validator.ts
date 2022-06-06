@@ -16,15 +16,16 @@ import {
   StepSchema,
   StepsSchema,
 } from '../../Components/Commands/schemas/Steps.schema';
-import DockerExecutorSchema from '../../Components/Executors/schemas/DockerExecutor.schema';
+import DockerExecutableSchema from '../../Components/Executors/schemas/DockerExecutable.schema';
 import ExecutorSchema from '../../Components/Executors/schemas/Executor.schema';
-import MachineExecutorSchema from '../../Components/Executors/schemas/MachineExecutor.schema';
-import MacOSExecutorSchema from '../../Components/Executors/schemas/MacosExecutor.schema';
+import MachineExecutableSchema from '../../Components/Executors/schemas/MachineExecutable.schema';
+import MacOSExecutableSchema from '../../Components/Executors/schemas/MacosExecutable.schema';
 import {
-  ReusableExecutorSchema,
+  ReusableExecutorUsageSchema,
   ReusableExecutorsListSchema,
-} from '../../Components/Executors/schemas/ReusableExecutor.schema';
-import WindowsExecutorSchema from '../../Components/Executors/schemas/WindowsExecutor.schema';
+  ReusableExecutorSchema,
+} from '../../Components/Executors/schemas/ReusableExecutable.schema';
+import WindowsExecutableSchema from '../../Components/Executors/schemas/WindowsExecutable.schema';
 import JobSchema from '../../Components/Job/schemas/Job.schema';
 import CommandParametersSchema from '../../Components/Parameters/schemas/CommandParameters.schema';
 import {
@@ -73,12 +74,13 @@ const schemaRegistry: ValidationMap = {
   [GenerableType.STORE_TEST_RESULTS]: StoreTestResultsSchema,
 
   [GenerableType.ANY_EXECUTOR]: ExecutorSchema,
-  [GenerableType.DOCKER_EXECUTOR]: DockerExecutorSchema,
-  [GenerableType.MACHINE_EXECUTOR]: MachineExecutorSchema,
-  [GenerableType.MACOS_EXECUTOR]: MacOSExecutorSchema,
-  [GenerableType.WINDOWS_EXECUTOR]: WindowsExecutorSchema,
+  [GenerableType.DOCKER_EXECUTOR]: DockerExecutableSchema,
+  [GenerableType.MACHINE_EXECUTOR]: MachineExecutableSchema,
+  [GenerableType.MACOS_EXECUTOR]: MacOSExecutableSchema,
+  [GenerableType.WINDOWS_EXECUTOR]: WindowsExecutableSchema,
   [GenerableType.REUSABLE_EXECUTOR]: ReusableExecutorSchema,
   [GenerableType.REUSABLE_EXECUTOR_LIST]: ReusableExecutorsListSchema,
+  [GenerableType.REUSABLE_EXECUTOR_USAGE]: ReusableExecutorUsageSchema,
 
   [GenerableType.STEP]: StepSchema,
   [GenerableType.STEP_LIST]: StepsSchema,
@@ -127,7 +129,7 @@ export class Validator extends Ajv {
   public static validateOnParse: boolean;
 
   private constructor() {
-    super();
+    super({ allowUnionTypes: true });
 
     ajvMergePatch(this);
 
@@ -185,9 +187,16 @@ export class Validator extends Ajv {
   }
 
   validateComponent(schema: SchemaObject, data: unknown): ValidationResult {
-    return (
-      super.validate(schema, data) ||
-      validationError(schema, data, this.errors as ErrorObject[])
-    );
+    const valid = super.validate(schema, data);
+
+    if (!valid && this.errors) {
+      if (Array.isArray(this.errors) && data) {
+        return validationError(schema, data, this.errors as ErrorObject[]);
+      }
+
+      return this.errors.map((error) => error.message).join('\n');
+    }
+
+    return valid;
   }
 }

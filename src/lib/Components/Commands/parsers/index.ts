@@ -63,7 +63,13 @@ const nativeSubtypes: CommandSubtypeMap = {
   },
   run: {
     generableType: GenerableType.RUN,
-    parse: (args) => new Run(args as RunParameters),
+    parse: (args) => {
+      if (typeof args === 'string') {
+        return new Run({ command: args as string });
+      }
+
+      return new Run(args as RunParameters);
+    },
   },
   setup_remote_docker: {
     generableType: GenerableType.SETUP_REMOTE_DOCKER,
@@ -118,13 +124,15 @@ export function parseStep(
   if (name in nativeSubtypes) {
     const commandMapping = nativeSubtypes[name as NativeCommandLiteral];
 
-    return parseGenerable<CommandParameters, Command>(
+    return parseGenerable<CommandParameters | undefined, Command>(
       commandMapping.generableType,
       args,
       commandMapping.parse,
     );
-  } else if (commands) {
-    parseGenerable<CommandParameters, ReusableCommand>(
+  }
+
+  if (commands) {
+    return parseGenerable<CommandParameters, ReusableCommand>(
       GenerableType.REUSABLE_COMMAND,
       args,
       (parameterArgs) => {
