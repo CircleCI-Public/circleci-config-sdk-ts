@@ -23,6 +23,11 @@ describe('Instantiate a Run step', () => {
   it('Should parse and match example', () => {
     expect(CircleCI.parsers.parseStep('run', expectedResult.run)).toEqual(run);
   });
+
+  it('Should have the correct static properties', () => {
+    expect(run.generableType).toBe(CircleCI.mapping.GenerableType.RUN);
+    expect(run.name).toBe('run');
+  });
 });
 
 describe('Instantiate a Checkout step', () => {
@@ -51,6 +56,13 @@ describe('Instantiate a Checkout step', () => {
       checkoutWithPath,
     );
   });
+
+  it('Should have the correct static properties', () => {
+    expect(checkout.generableType).toBe(
+      CircleCI.mapping.GenerableType.CHECKOUT,
+    );
+    expect(checkout.name).toBe('checkout');
+  });
 });
 
 describe('Instantiate a Setup_Remote_Docker step', () => {
@@ -78,6 +90,13 @@ describe('Instantiate a Setup_Remote_Docker step', () => {
         srdResult.setup_remote_docker,
       ),
     ).toEqual(srdExample);
+  });
+
+  it('Should have the correct static properties', () => {
+    expect(srdExample.generableType).toBe(
+      CircleCI.mapping.GenerableType.SETUP_REMOTE_DOCKER,
+    );
+    expect(srdExample.name).toBe('setup_remote_docker');
   });
 });
 
@@ -121,6 +140,18 @@ describe('Save and load cache', () => {
       CircleCI.parsers.parseStep('restore_cache', restoreExample.restore_cache),
     ).toEqual(restore_cache);
   });
+
+  it('Should have the correct static properties for save_cache', () => {
+    expect(save_cache.generableType).toBe(CircleCI.mapping.GenerableType.SAVE);
+    expect(save_cache.name).toBe('save_cache');
+  });
+
+  it('Should have the correct static properties for restore_cache', () => {
+    expect(restore_cache.generableType).toBe(
+      CircleCI.mapping.GenerableType.RESTORE,
+    );
+    expect(restore_cache.name).toBe('restore_cache');
+  });
 });
 
 describe('Store artifacts', () => {
@@ -147,6 +178,13 @@ describe('Store artifacts', () => {
       ),
     ).toEqual(storeExample);
   });
+
+  it('Should have the correct static properties', () => {
+    expect(storeExample.generableType).toBe(
+      CircleCI.mapping.GenerableType.STORE_ARTIFACTS,
+    );
+    expect(storeExample.name).toBe('store_artifacts');
+  });
 });
 
 describe('Store test results', () => {
@@ -163,6 +201,12 @@ describe('Store test results', () => {
     expect(
       CircleCI.parsers.parseStep('store_artifacts', example.store_test_results),
     ).toEqual(storeTestResults);
+  });
+  it('Should have the correct static properties', () => {
+    expect(storeTestResults.generableType).toBe(
+      CircleCI.mapping.GenerableType.STORE_TEST_RESULTS,
+    );
+    expect(storeTestResults.name).toBe('store_test_results');
   });
 });
 
@@ -209,6 +253,12 @@ describe('Instantiate a Blank Custom Command', () => {
     expect(
       CircleCI.parsers.parseCustomCommand('say_hello', example.say_hello),
     ).toEqual(customCommand);
+  });
+
+  it('Should have the correct static properties', () => {
+    expect(customCommand.generableType).toBe(
+      CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
+    );
   });
 });
 
@@ -261,8 +311,13 @@ describe('Instantiate a Reusable Command', () => {
   it('Should generate checkout yaml', () => {
     expect(reusableCommand.generate()).toEqual(expected);
   });
-});
 
+  it('Should have the correct static properties', () => {
+    expect(reusableCommand.generableType).toBe(
+      CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
+    );
+  });
+});
 /**
  * instantiate a parameter with an enum value of x y z
  */
@@ -358,11 +413,17 @@ describe('Instantiate reusable commands', () => {
     expect(result).toEqual(true);
   });
 
+  it('Should have the correct static properties', () => {
+    expect(firstCustomCommand.generableType).toBe(
+      CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
+    );
+  });
+
   // TODO: Implement strict validation for the following tests to pass
 
   // it('Should not validate with malformed list', () => {
   //   const result = CircleCI.ConfigValidator.validateGenerable(
-  //     GenerableType.STEP_LIST,
+  //     CircleCI.mapping.GenerableType.STEP_LIST,
   //     [
   //       {
   //         search_year: {
@@ -380,7 +441,7 @@ describe('Instantiate reusable commands', () => {
 
   // it('Should not validate with an incorrect enum value', () => {
   //   const result = CircleCI.ConfigValidator.validateGenerable(
-  //     GenerableType.STEP_LIST,
+  //     CircleCI.mapping.GenerableType.STEP_LIST,
   //     [
   //       {
   //         search_year: {
@@ -398,7 +459,7 @@ describe('Instantiate reusable commands', () => {
 
   // it('Should not validate without the required parameter', () => {
   //   const result = CircleCI.ConfigValidator.validateGenerable(
-  //     GenerableType.STEP_LIST,
+  //     CircleCI.mapping.GenerableType.STEP_LIST,
   //     [
   //       {
   //         search_year: {
@@ -412,7 +473,7 @@ describe('Instantiate reusable commands', () => {
 
   // it('Should not validate with an improper command', () => {
   //   const result = CircleCI.ConfigValidator.validateGenerable(
-  //     GenerableType.STEP_LIST,
+  //     CircleCI.mapping.GenerableType.STEP_LIST,
   //     [
   //       {
   //         search_yaer: {
@@ -426,7 +487,7 @@ describe('Instantiate reusable commands', () => {
 
   // it('Should not validate with an improper parameter type', () => {
   //   const result = CircleCI.ConfigValidator.validateGenerable(
-  //     GenerableType.STEP_LIST,
+  //     CircleCI.mapping.GenerableType.STEP_LIST,
   //     [
   //       {
   //         search_year: {
@@ -440,7 +501,7 @@ describe('Instantiate reusable commands', () => {
 
   // it('Should not validate with an improper parameter', () => {
   //   const result = CircleCI.ConfigValidator.validateGenerable(
-  //     GenerableType.STEP_LIST,
+  //     CircleCI.mapping.GenerableType.STEP_LIST,
   //     [
   //       {
   //         search_year: {
