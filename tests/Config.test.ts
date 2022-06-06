@@ -172,4 +172,7 @@ describe('Parse a fully complete config', () => {
     ).toEqual(myConfig);
     setLogParsing(false);
   });
+  it('Should have the correct static properties', () => {
+    expect(myConfig.generableType).toBe(CircleCI.mapping.GenerableType.CONFIG);
+  });
 });

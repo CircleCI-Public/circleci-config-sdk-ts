@@ -34,6 +34,12 @@ describe('Instantiate Docker Executor', () => {
     );
     expect(myConfig.executors?.length).toBeGreaterThan(0);
   });
+
+  it('Should have the correct static properties for persist', () => {
+    expect(docker.generableType).toBe(
+      CircleCI.mapping.GenerableType.DOCKER_EXECUTOR,
+    );
+  });
 });
 
 describe('Instantiate Machine Executor', () => {
@@ -66,6 +72,12 @@ describe('Instantiate Machine Executor', () => {
       new CircleCI.reusable.ReusableExecutor('default', machine),
     );
     expect(myConfig.executors?.length).toBeGreaterThan(0);
+  });
+
+  it('Should have the correct static properties for persist', () => {
+    expect(machine.generableType).toBe(
+      CircleCI.mapping.GenerableType.MACHINE_EXECUTOR,
+    );
   });
 });
 
@@ -101,6 +113,12 @@ describe('Instantiate MacOS Executor', () => {
       new CircleCI.reusable.ReusableExecutor('default', macos),
     );
     expect(myConfig.executors?.length).toBeGreaterThan(0);
+  });
+
+  it('Should have the correct static properties for persist', () => {
+    expect(macos.generableType).toBe(
+      CircleCI.mapping.GenerableType.MACOS_EXECUTOR,
+    );
   });
 });
 
@@ -166,6 +184,12 @@ describe('Instantiate Windows Executor and remove shell', () => {
 
   it('Should match the expected output', () => {
     expect(windows.generate()).toEqual(expectedShape);
+  });
+
+  it('Should have the correct static properties for persist', () => {
+    expect(windows.generableType).toBe(
+      CircleCI.mapping.GenerableType.WINDOWS_EXECUTOR,
+    );
   });
 });
 
@@ -391,6 +415,12 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
   it('Should produce a config with executors', () => {
     expect(CircleCI.parsers.parseReusableExecutors(executorsList)).toEqual(
       myConfig.executors,
+    );
+  });
+
+  it('Should have the correct static properties for persist', () => {
+    expect(reusable.generableType).toBe(
+      CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR,
     );
   });
 });

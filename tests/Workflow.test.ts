@@ -139,6 +139,11 @@ describe('Instantiate a new Workflow with a when condition', () => {
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
   });
+  it('Should have the correct static properties', () => {
+    expect(workflowJob.generableType).toBe(
+      CircleCI.mapping.GenerableType.WORKFLOW_JOB,
+    );
+  });
 });
 
 describe('Utilize workflow job filters', () => {
@@ -265,6 +270,12 @@ describe('Instantiate a Workflow with 2 jobs', () => {
     };
     const generatedWorkflow = myWorkflow.generate();
     expect(generatedWorkflow).toEqual(expected);
+  });
+
+  it('Should have the correct static properties', () => {
+    expect(myWorkflow.generableType).toBe(
+      CircleCI.mapping.GenerableType.WORKFLOW,
+    );
   });
 });
 
