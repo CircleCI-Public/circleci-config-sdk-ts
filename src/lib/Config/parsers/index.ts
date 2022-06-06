@@ -9,7 +9,7 @@ import { PipelineParameterLiteral } from '../../Components/Parameters/types/Cust
 import { parseWorkflowList } from '../../Components/Workflow/parsers';
 import { GenerableType } from '../exports/Mapping';
 import { parseGenerable } from '../exports/Parsing';
-import { UnknownConfigShape } from '../types';
+import { ConfigDependencies, UnknownConfigShape } from '../types';
 
 /**
  * Parse a whole CircleCI config into a Config instance.
@@ -23,9 +23,22 @@ export function parseConfig(configIn: unknown): Config {
     typeof configIn == 'string' ? parse(configIn) : configIn
   ) as UnknownConfigShape;
 
-  return parseGenerable<UnknownConfigShape, Config>(
+  return parseGenerable<UnknownConfigShape, Config, ConfigDependencies>(
     GenerableType.CONFIG,
     configProps,
+    (
+      config,
+      { jobList, workflows, executorList, commandList, parameterList },
+    ) => {
+      return new Config(
+        config.setup,
+        jobList,
+        workflows,
+        executorList,
+        commandList,
+        parameterList as CustomParametersList<PipelineParameterLiteral>,
+      );
+    },
     (config) => {
       const executorList =
         config.executors && parseReusableExecutors(config.executors);
@@ -36,21 +49,20 @@ export function parseConfig(configIn: unknown): Config {
       const jobList = parseJobList(config.jobs, commandList, executorList);
       const workflows = parseWorkflowList(config.workflows, jobList);
 
-      return new Config(
-        config.setup,
+      return {
         jobList,
         workflows,
         executorList,
         commandList,
-        parameterList as CustomParametersList<PipelineParameterLiteral>,
-      );
+        parameterList,
+      };
     },
   );
 }
 
 // Parser exports
-export * from '../../Components/Executors/parsers';
 export * from '../../Components/Commands/parsers';
+export * from '../../Components/Executors/parsers';
 export * from '../../Components/Job/parsers';
 export * from '../../Components/Parameters/parsers';
 export * from '../../Components/Workflow/parsers';

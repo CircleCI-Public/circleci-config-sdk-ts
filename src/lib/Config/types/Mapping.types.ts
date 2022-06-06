@@ -1,4 +1,5 @@
 import { SchemaObject } from 'ajv';
+import { Generable } from '../../Components';
 import {
   GenerableType,
   ParameterizedComponent,
@@ -15,3 +16,5 @@ export type GenerableSubTypesMap = {
     [key in ParameterizedComponent]: SchemaObject;
   };
 };
+
+export type OneOrMoreGenerable = Generable | Generable[];

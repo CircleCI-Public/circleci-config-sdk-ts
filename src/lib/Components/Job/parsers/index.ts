@@ -12,6 +12,7 @@ import { parseParameterList } from '../../Parameters/parsers';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { ReusableExecutor } from '../../Reusable';
 import { ParameterizedJob } from '../exports/ParameterizedJob';
+import { JobDependencies } from '../types/Job.types';
 
 /**
  * Parse a config's list of jobs into a list of Job instances.
@@ -49,23 +50,30 @@ export function parseJob(
   customCommands?: CustomCommand[],
   reusableExecutors?: ReusableExecutor[],
 ): Job {
-  return parseGenerable<UnknownJobShape, Job>(
+  return parseGenerable<UnknownJobShape, Job, JobDependencies>(
     GenerableType.JOB,
     jobIn,
+    (_, { executor, steps, parametersList }) => {
+      if (parametersList) {
+        return new ParameterizedJob(name, executor, parametersList, steps);
+      }
+
+      return new Job(name, executor, steps);
+    },
     (jobArgs) => {
-      const exec = parseExecutor(jobArgs, reusableExecutors);
+      let parametersList;
+
+      const executor = parseExecutor(jobArgs, reusableExecutors);
       const steps = parseSteps(jobArgs.steps, customCommands);
 
       if (jobArgs.parameters) {
-        const parametersList = parseParameterList(
+        parametersList = parseParameterList(
           jobArgs.parameters,
           ParameterizedComponent.JOB,
         ) as CustomParametersList<JobParameterLiteral>;
-
-        return new ParameterizedJob(name, exec, parametersList, steps);
       }
 
-      return new Job(name, exec, steps);
+      return { executor, steps, parametersList };
     },
     name,
   );

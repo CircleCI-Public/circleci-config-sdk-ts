@@ -62,6 +62,7 @@ export function parseParameter(
           customEnumParam.description,
         );
       },
+      undefined,
       name,
     );
   }
@@ -80,6 +81,7 @@ export function parseParameter(
         customParam.description,
       );
     },
+    undefined,
     name,
     parameterMappings[type as keyof typeof parameterMappings],
   );

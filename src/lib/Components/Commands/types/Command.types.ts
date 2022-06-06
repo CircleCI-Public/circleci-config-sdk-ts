@@ -5,6 +5,8 @@ import {
 import { CustomParametersListShape } from '../../Parameters/types';
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { Command } from '../exports/Command';
+import { CustomParametersList } from '../../Parameters';
+import { CommandParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 
 export type CommandType<T> = Extract<string | number, T>;
 
@@ -49,4 +51,9 @@ export type CommandSubtypeMap = {
     generableType: GenerableType;
     parse: (args?: CommandParameters) => Command;
   };
+};
+
+export type CustomCommandDependencies = {
+  parametersList?: CustomParametersList<CommandParameterLiteral>;
+  steps: Command[];
 };

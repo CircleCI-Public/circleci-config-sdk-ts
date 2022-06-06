@@ -18,6 +18,7 @@ import {
   ExecutorSubtypeMap,
   ExecutorUsageLiteral,
   ReusableExecutorDefinition,
+  ReusableExecutorDependencies,
   UnknownExecutableShape,
 } from '../types/Executor.types';
 import { ExecutableProperties } from '../types/ExecutorParameters.types';
@@ -194,9 +195,16 @@ export function parseReusableExecutor(
   name: string,
   executableIn: unknown,
 ): ReusableExecutor {
-  return parseGenerable<ReusableExecutorDefinition, ReusableExecutor>(
+  return parseGenerable<
+    ReusableExecutorDefinition,
+    ReusableExecutor,
+    ReusableExecutorDependencies
+  >(
     GenerableType.REUSABLE_EXECUTOR,
     executableIn,
+    (_, { parametersList, executor }) => {
+      return new ReusableExecutor(name, executor, parametersList);
+    },
     ({ parameters, ...executorArgs }) => {
       const parametersList =
         parameters &&
@@ -204,15 +212,13 @@ export function parseReusableExecutor(
           | CustomParametersList<ExecutorParameterLiteral>
           | undefined);
 
-      console.log(executorArgs);
+      const executor = parseExecutor(executorArgs, undefined) as Executor;
 
-      const parsedExecutor = parseExecutor(executorArgs, undefined);
-
-      return new ReusableExecutor(
-        name,
-        parsedExecutor as Executor,
+      return {
         parametersList,
-      );
+        executor,
+      };
     },
+    name,
   );
 }

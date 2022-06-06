@@ -1,4 +1,6 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
+import { CustomParametersList } from '../../Parameters';
+import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { Executor } from '../exports/Executor';
 import { ReusableExecutor } from '../exports/ReusableExecutor';
 import { ExecutableProperties } from './ExecutorParameters.types';
@@ -45,6 +47,11 @@ export type UnknownParameterized = {
 
 export type ReusableExecutorDefinition = {
   [key: string]: UnknownExecutableShape & UnknownParameterized;
+};
+
+export type ReusableExecutorDependencies = {
+  parametersList?: CustomParametersList<ExecutorParameterLiteral>;
+  executor: Executor;
 };
 
 export type ExecutorSubtypeMap = {

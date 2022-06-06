@@ -33,6 +33,7 @@ import {
   CommandParameters,
   CommandSubtypeMap,
   CustomCommandBodyShape,
+  CustomCommandDependencies,
   NativeCommandLiteral,
 } from '../types/Command.types';
 
@@ -95,15 +96,22 @@ export function parseSteps(
   stepsListIn: unknown,
   commands?: CustomCommand[],
 ): Command[] {
-  return parseGenerable<Record<string, unknown>[], Command[]>(
+  return parseGenerable<
+    Record<string, unknown>[],
+    Command[],
+    { steps: Command[] }
+  >(
     GenerableType.STEP_LIST,
     stepsListIn,
+    (_, { steps }) => steps,
     (stepsListIn) => {
-      return stepsListIn.map((subtype) => {
-        const commandName = Object.keys(subtype)[0];
+      return {
+        steps: stepsListIn.map((subtype) => {
+          const commandName = Object.keys(subtype)[0];
 
-        return parseStep(commandName, subtype[commandName], commands);
-      });
+          return parseStep(commandName, subtype[commandName], commands);
+        }),
+      };
     },
   );
 }
@@ -144,6 +152,7 @@ export function parseStep(
 
         return new ReusableCommand(command, parameterArgs);
       },
+      undefined,
       name,
     );
   }
@@ -179,9 +188,21 @@ export function parseCustomCommand(
   args: unknown,
   custom_commands?: CustomCommand[],
 ): CustomCommand {
-  return parseGenerable<CustomCommandBodyShape, CustomCommand>(
+  return parseGenerable<
+    CustomCommandBodyShape,
+    CustomCommand,
+    CustomCommandDependencies
+  >(
     GenerableType.CUSTOM_COMMAND,
     args,
+    (commandArgs, { parametersList, steps }) => {
+      return new CustomCommand(
+        name,
+        steps,
+        parametersList,
+        commandArgs.description,
+      );
+    },
     (commandArgs) => {
       const parametersList =
         commandArgs.parameters &&
@@ -192,12 +213,7 @@ export function parseCustomCommand(
 
       const steps = parseSteps(commandArgs.steps, custom_commands);
 
-      return new CustomCommand(
-        name,
-        steps,
-        parametersList,
-        commandArgs.description,
-      );
+      return { parametersList, steps };
     },
     name,
   );
