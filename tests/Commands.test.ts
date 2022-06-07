@@ -229,6 +229,13 @@ describe('Add SSH Keys', () => {
       CircleCI.parsers.parseStep('add_ssh_keys', example.add_ssh_keys),
     ).toEqual(addSSHKeys);
   });
+
+  it('Shoould have correct properties', () => {
+    expect(addSSHKeys.generableType).toBe(
+      CircleCI.mapping.GenerableType.ADD_SSH_KEYS,
+    );
+    expect(addSSHKeys.name).toBe('add_ssh_keys');
+  });
 });
 
 describe('Instantiate a Blank Custom Command', () => {
@@ -560,5 +567,71 @@ describe('Instantiate a Run command with 70 characters in the command string and
     expect(stringify(longCommand.generate(), stringifyOptions)).toEqual(
       expectedOutput,
     );
+  });
+});
+
+// Test using Workspaces to Share Data Between Jobs and attatch workflows workspace to current conatiner.
+describe('Instantiate a Run command with 70 characters in the command string and ensure it remains a single string', () => {
+  const myExecutor = new CircleCI.executors.DockerExecutor('cimg/base:stable');
+  const attachExample = {
+    attatch_workspace: {
+      at: '/tmp/workspace',
+    },
+  };
+
+  const persistExample = {
+    persist_to_workspace: {
+      root: 'workspace',
+      paths: ['echo-output'],
+    },
+  };
+
+  const attatchWorkspace = new CircleCI.Job(
+    'attatch to workspace',
+    myExecutor,
+    [new CircleCI.commands.workspace.Attach({ at: '/tmp/workspace' })],
+  );
+
+  const persistWorkspace = new CircleCI.Job(
+    'persist to workspace',
+    myExecutor,
+    [
+      new CircleCI.commands.workspace.Persist({
+        root: 'workspace',
+        paths: ['echo-output'],
+      }),
+    ],
+  );
+
+  it('Should parse and match attatchWorkspace Example', () => {
+    expect(
+      CircleCI.parsers.parseStep(
+        'attach_workspace',
+        attachExample.attatch_workspace,
+      ),
+    ).toEqual(attatchWorkspace.steps[0]);
+  });
+
+  it('Should parse and match persistWorkspace Example', () => {
+    expect(
+      CircleCI.parsers.parseStep(
+        'persist_to_workspace',
+        persistExample.persist_to_workspace,
+      ),
+    ).toEqual(persistWorkspace.steps[0]);
+  });
+
+  it('Should have the correct static properties for attatch workspace', () => {
+    expect(attatchWorkspace.steps[0].generableType).toBe(
+      CircleCI.mapping.GenerableType.ATTACH,
+    );
+    expect(attatchWorkspace.steps[0].name).toBe('attach_workspace');
+  });
+
+  it('Should have the correct static properties for persist', () => {
+    expect(persistWorkspace.steps[0].generableType).toBe(
+      CircleCI.mapping.GenerableType.PERSIST,
+    );
+    expect(persistWorkspace.steps[0].name).toBe('persist_to_workspace');
   });
 });

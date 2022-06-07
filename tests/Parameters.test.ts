@@ -27,6 +27,23 @@ describe('Parse yaml pipeline parameters and validate', () => {
       ],
     );
 
+  it('Should have the correct static properties for Custom Enumerable Paramater', () => {
+    expect(expectedParameters.parameters[0].generableType).toBe(
+      CircleCI.mapping.GenerableType.CUSTOM_ENUM_PARAMETER,
+    );
+  });
+
+  it('Should have the correct static properties for Cust Paramter List', () => {
+    expect(expectedParameters.generableType).toBe(
+      CircleCI.mapping.GenerableType.CUSTOM_PARAMETERS_LIST,
+    );
+  });
+
+  it('Should have the correct static properties for Cust Paramter ', () => {
+    expect(expectedParameters.parameters[1].generableType).toBe(
+      CircleCI.mapping.GenerableType.CUSTOM_PARAMETER,
+    );
+  });
   it('Should validate parameters', () => {
     const result = CircleCI.Validator.validateGenerable(
       CircleCI.mapping.GenerableType.CUSTOM_PARAMETERS_LIST,

@@ -4,6 +4,8 @@ import { GenerableType } from '../src/lib/Config/exports/Mapping';
 const { and, or, not, equal, conditional } = CircleCI.logic;
 
 describe('Generate Truthy Condition', () => {
+  const condition = new conditional.Truthy(true);
+
   it('true should be truthy', () => {
     expect(new conditional.Truthy(true).evaluate()).toBeTruthy();
   });
@@ -22,6 +24,10 @@ describe('Generate Truthy Condition', () => {
 
   it('0 should be falsy', () => {
     expect(new conditional.Truthy(0).evaluate()).toBeFalsy();
+  });
+
+  it('Should have the correct static properties ', () => {
+    expect(condition.generableType).toBe(CircleCI.mapping.GenerableType.TRUTHY);
   });
 });
 

@@ -21,7 +21,6 @@ describe('Generate a config utilizing workspaces', () => {
     new CircleCI.commands.workspace.Attach({ at: '/tmp/workspace' }),
   ]);
   myConfig.addJob(jobDownstream);
-
   // Create a Workflow
   const myWorkflow = new CircleCI.Workflow('btd');
   myWorkflow.addJob(jobFlow).addJob(jobDownstream, {
@@ -60,5 +59,19 @@ describe('Generate a config utilizing workspaces', () => {
     };
     const generatedConfig = YAML.parse(myConfig.generate());
     expect(expectedConfig).toEqual(generatedConfig);
+  });
+
+  it('Should have the correct static properties for attatch workspace', () => {
+    expect(jobDownstream.steps[0].generableType).toBe(
+      CircleCI.mapping.GenerableType.ATTACH,
+    );
+    expect(jobDownstream.steps[0].name).toBe('attach_workspace');
+  });
+
+  it('Should have the correct static properties for persist', () => {
+    expect(jobFlow.steps[0].generableType).toBe(
+      CircleCI.mapping.GenerableType.PERSIST,
+    );
+    expect(jobFlow.steps[0].name).toBe('persist_to_workspace');
   });
 });
