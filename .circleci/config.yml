@@ -61,12 +61,13 @@ jobs:
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             # Get alpha or beta tag and set if available
             if [ -n "$CIRCLE_TAG" ]; then
-              PATTERN='[0-9]*\.[0-9]*\.[0-9]*-(beta|alpha)'
-              [[ $CIRCLE_TAG =~ $PATTERN ]]
-              echo "${BASH_REMATCH[1]}"
-              if [ -n "${BASH_REMATCH[1]}" ]; then
-                set -- "$@" --tag "${BASH_REMATCH[1]}"
-              fi
+                PATTERN="[0-9]*\.[0-9]*\.[0-9]*(-(alpha|beta))"
+                [[ $CIRCLE_TAG =~ $PATTERN ]]
+                
+                if [ -n "${BASH_REMATCH[2]}" ]; then
+                    echo "Publishing with ${BASH_REMATCH[2]} tag"
+                    set -- "$@" --tag "${BASH_REMATCH[2]}"
+                fi
             fi
             # Publish
             npm publish --access public "$@"
