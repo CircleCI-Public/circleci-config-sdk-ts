@@ -1,4 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
+import { JobOrbUsage } from '../../../Orb/exports/Components';
 import { Generable } from '../../index';
 import { Job } from '../../Job';
 import {
@@ -14,7 +15,7 @@ import {
  * @see {@link Workflow.addJob} for general use.
  */
 export class WorkflowJob implements Generable {
-  job: Job;
+  job: Job | JobOrbUsage;
   parameters: WorkflowJobParameters = {};
   constructor(job: Job, parameters?: WorkflowJobParameters) {
     this.job = job;

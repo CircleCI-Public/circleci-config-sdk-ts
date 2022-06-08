@@ -3,7 +3,7 @@ import { version as SDKVersion } from '../../package-version.json';
 import { Generable } from '../Components';
 import { CustomCommandShape } from '../Components/Commands/types/Command.types';
 import { ReusableExecutor } from '../Components/Executors/exports/ReusableExecutor';
-import { ReusableExecutorsShape } from '../Components/Executors/types/ReusableExecutor.types';
+import { ReusableExecutorShape } from '../Components/Executors/types/ReusableExecutor.types';
 import { Job } from '../Components/Job';
 import { JobsShape } from '../Components/Job/types/Job.types';
 import { CustomParametersList } from '../Components/Parameters';
@@ -12,6 +12,8 @@ import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomP
 import { CustomCommand } from '../Components/Reusable';
 import { Workflow } from '../Components/Workflow';
 import { WorkflowsShape } from '../Components/Workflow/types/Workflow.types';
+import { OrbImportsShape } from '../Orb/types/Orb.types';
+import { CommonConfig } from './exports/CommonConfig';
 import { GenerableType } from './exports/Mapping';
 import { Validator } from './exports/Validator';
 import { Pipeline } from './Pipeline';
@@ -25,27 +27,13 @@ import {
  * A CircleCI configuration. Instantiate a new config and add CircleCI config elements.
  */
 export class Config
-  implements
-    CircleCIConfigObject,
-    Parameterized<PipelineParameterLiteral>,
-    Generable
+  extends CommonConfig
+  implements CircleCIConfigObject, Parameterized<PipelineParameterLiteral>
 {
   /**
    * The version field is intended to be used in order to issue warnings for deprecation or breaking changes.
    */
   version: ConfigVersion = 2.1;
-  /**
-   * Reusable executors to be referenced from jobs.
-   */
-  executors?: ReusableExecutor[];
-  /**
-   * Jobs are collections of steps. All of the steps in the job are executed in a single unit, either within a fresh container or VM.
-   */
-  jobs: Job[] = [];
-  /**
-   * A command definition defines a sequence of steps as a map to be executed in a job, enabling you to reuse a single command definition across multiple jobs.
-   */
-  commands?: CustomCommand[];
   /**
    * A Workflow is comprised of one or more uniquely named jobs.
    */
@@ -71,17 +59,15 @@ export class Config
    */
   constructor(
     setup = false,
-    jobs?: Job[],
+    jobs: Job[] = [],
     workflows?: Workflow[],
     executors?: ReusableExecutor[],
     commands?: CustomCommand[],
     parameters?: CustomParametersList<PipelineParameterLiteral>,
   ) {
+    super(jobs, executors, commands);
     this.setup = setup;
-    this.jobs = jobs || [];
     this.workflows = workflows || [];
-    this.executors = executors;
-    this.commands = commands;
     this.parameters = parameters;
   }
 
@@ -91,44 +77,6 @@ export class Config
    */
   addWorkflow(workflow: Workflow): this {
     this.workflows.push(workflow);
-    return this;
-  }
-
-  /**
-   * Add a Custom Command to the current Config. Chainable
-   * @param command - Injectable command
-   */
-  addCustomCommand(command: CustomCommand): this {
-    if (!this.commands) {
-      this.commands = [command];
-    } else {
-      this.commands.push(command);
-    }
-
-    return this;
-  }
-
-  /**
-   * Add a Workflow to the current Config. Chainable
-   * @param workflow - Injectable Workflow
-   */
-  addReusableExecutor(executor: ReusableExecutor): this {
-    if (!this.executors) {
-      this.executors = [executor];
-    } else {
-      this.executors.push(executor);
-    }
-
-    return this;
-  }
-
-  /**
-   * Add a Job to the current Config. Chainable
-   * @param job - Injectable Job
-   */
-  addJob(job: Job): this {
-    this.jobs.push(job);
-
     return this;
   }
 
@@ -171,10 +119,11 @@ export class Config
   generate(): string {
     const generatedWorkflows = generateList<WorkflowsShape>(this.workflows, {});
     const generatedJobs = generateList<JobsShape>(this.jobs, {});
-    const generatedExecutors = generateList<ReusableExecutorsShape>(
+    const generatedExecutors = generateList<ReusableExecutorShape>(
       this.executors,
     );
     const generatedCommands = generateList<CustomCommandShape>(this.commands);
+    const generatedOrbs = generateList<OrbImportsShape>(this.orbs);
     const generatedParameters = this.parameters?.generate();
 
     const generatedConfig: CircleCIConfigShape = {
@@ -185,6 +134,7 @@ export class Config
       executors: generatedExecutors,
       jobs: generatedJobs,
       workflows: generatedWorkflows,
+      orbs: generatedOrbs,
     };
 
     // remove undefined values

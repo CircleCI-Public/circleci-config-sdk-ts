@@ -1,16 +1,16 @@
 import { Command } from '../../Commands/exports/Command';
 import { Executor } from '../../Executors';
-import { ExecutorShape } from '../../Executors/types/Executor.types';
+import { ExecutableContentsShape } from '../../Executors/types/Executor.types';
 import { CustomParametersList } from '../../Parameters';
 import { CustomParametersListShape } from '../../Parameters/types';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { ReusableExecutor } from '../../Reusable';
 
 export type JobStepsShape = {
-  steps: unknown[]; // CommandSchemas for any command.
+  steps?: unknown[]; // CommandSchemas for any command.
 };
 
-export type JobContentsShape = JobStepsShape & ExecutorShape;
+export type JobContentsShape = JobStepsShape & ExecutableContentsShape;
 
 export type JobsShape = {
   [key: string]: JobContentsShape;

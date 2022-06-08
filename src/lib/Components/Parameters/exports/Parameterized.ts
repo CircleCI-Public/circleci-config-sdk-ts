@@ -10,6 +10,7 @@ import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
 export interface Parameterized<
   ParameterTypeLiteral extends AnyParameterLiteral,
 > {
+  name?: string;
   parameters?: CustomParametersList<ParameterTypeLiteral>;
 
   defineParameter(

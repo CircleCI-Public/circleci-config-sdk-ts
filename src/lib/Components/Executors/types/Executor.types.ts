@@ -11,12 +11,18 @@ export type UnknownExecutableShape = {
 };
 
 /**
+ * The executable output shapes for YAML string
+ */
+export type ExecutableContentsShape = {
+  resource_class: string;
+} & Partial<Record<ExecutorLiteral, unknown>>;
+
+/**
  * The executor output shapes for YAML string
  */
-export type ExecutorShape = {
-  resource_class: string;
-} & Partial<Record<ExecutorLiteral, unknown>> &
-  ExecutableProperties;
+export type ExecutableShape<
+  T extends ExecutableContentsShape = ExecutableContentsShape,
+> = Record<string, T>;
 
 /**
  * The valid resource classes found for an executor object

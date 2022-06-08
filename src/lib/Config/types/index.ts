@@ -1,6 +1,6 @@
 import { CustomCommandShape } from '../../Components/Commands/types/Command.types';
 import { ReusableExecutor } from '../../Components/Executors/exports/ReusableExecutor';
-import { ReusableExecutorsShape } from '../../Components/Executors/types/ReusableExecutor.types';
+import { ReusableExecutorShape } from '../../Components/Executors/types/ReusableExecutor.types';
 import { Job } from '../../Components/Job';
 import { JobsShape } from '../../Components/Job/types/Job.types';
 import { CustomParametersList } from '../../Components/Parameters';
@@ -9,6 +9,8 @@ import { AnyParameterLiteral } from '../../Components/Parameters/types/CustomPar
 import { CustomCommand } from '../../Components/Reusable';
 import { Workflow } from '../../Components/Workflow';
 import { WorkflowsShape } from '../../Components/Workflow/types/Workflow.types';
+import { OrbImport } from '../../Orb/exports/OrbImport';
+import { OrbImportsShape } from '../../Orb/types/Orb.types';
 import * as mapping from './Mapping.types';
 import * as validator from './Validator.types';
 
@@ -34,6 +36,7 @@ export type CircleCIConfigObject = {
   executors?: ReusableExecutor[];
   commands?: CustomCommand[];
   workflows?: Workflow[];
+  orbs?: OrbImport[];
 };
 
 /**
@@ -43,8 +46,8 @@ export type CircleCIConfigShape = {
   version: ConfigVersion;
   setup: boolean;
   parameters?: Record<string, ParameterShape>;
-  executors?: ReusableExecutorsShape;
-  orbs?: ConfigOrbImport[];
+  executors?: ReusableExecutorShape;
+  orbs?: OrbImportsShape;
   jobs: JobsShape;
   commands?: CustomCommandShape;
   workflows: WorkflowsShape;

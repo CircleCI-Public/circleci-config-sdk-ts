@@ -23,6 +23,11 @@ export * as parameters from './lib/Components/Parameters';
 export * as executors from './lib/Components/Executors';
 
 /**
+ * Orb components and helper functions.
+ */
+export * as orb from './lib/Orb';
+
+/**
  * Logical conditions for conditional components.
  */
 export * as logic from './lib/Components/Logic';

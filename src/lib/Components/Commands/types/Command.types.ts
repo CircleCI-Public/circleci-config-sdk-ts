@@ -1,12 +1,13 @@
+import { GenerableType } from '../../../Config/exports/Mapping';
+import { CommandOrbUsage } from '../../../Orb/exports/Components';
+import { CustomParametersList } from '../../Parameters';
+import { CustomParametersListShape } from '../../Parameters/types';
 import {
   CommandParameterTypes,
   ComponentParameter,
 } from '../../Parameters/types/ComponentParameters.types';
-import { CustomParametersListShape } from '../../Parameters/types';
-import { GenerableType } from '../../../Config/exports/Mapping';
-import { Command } from '../exports/Command';
-import { CustomParametersList } from '../../Parameters';
 import { CommandParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
+import { Command } from '../exports/Command';
 
 export type CommandType<T> = Extract<string | number, T>;
 
@@ -57,3 +58,5 @@ export type CustomCommandDependencies = {
   parametersList?: CustomParametersList<CommandParameterLiteral>;
   steps: Command[];
 };
+
+export type AnyCommand = Command | CommandOrbUsage;

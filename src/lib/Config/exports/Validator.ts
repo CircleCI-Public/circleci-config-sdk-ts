@@ -60,6 +60,9 @@ import validationError from 'better-ajv-errors';
 
 const schemaRegistry: ValidationMap = {
   [GenerableType.CONFIG]: ConfigSchema,
+  [GenerableType.ORB]: {},
+  [GenerableType.ORB_IMPORT]: {},
+  [GenerableType.ORB_REF]: {},
   [GenerableType.REUSABLE_COMMAND]: ReusableCommandSchema,
   [GenerableType.CUSTOM_COMMAND]: CustomCommandSchema,
   [GenerableType.RESTORE]: RestoreSchema,

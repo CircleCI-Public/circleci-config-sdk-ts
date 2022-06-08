@@ -3,7 +3,7 @@ import {
   CustomParametersListShape,
   StringParameter,
 } from '../../Parameters/types';
-import { ExecutorShape } from './Executor.types';
+import { ExecutableContentsShape, ExecutableShape } from './Executor.types';
 
 /**
  * The shape output when a reusable executor is generated for a job
@@ -15,8 +15,8 @@ export type ReusableExecutorJobRefShape = {
   };
 };
 
-export type ReusableExecutorsShape = {
-  [key: string]: ExecutorShape & {
-    parameters?: CustomParametersListShape;
-  };
-};
+export type ReusableExecutorContents = {
+  parameters?: CustomParametersListShape;
+} & ExecutableContentsShape;
+
+export type ReusableExecutorShape = ExecutableShape<ReusableExecutorContents>;

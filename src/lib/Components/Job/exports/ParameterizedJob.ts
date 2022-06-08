@@ -1,5 +1,5 @@
 import { Job } from '..';
-import { Command } from '../../Commands/exports/Command';
+import { AnyCommand } from '../../Commands/types/Command.types';
 import { CustomParametersList } from '../../Parameters';
 import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
@@ -23,7 +23,7 @@ class ParameterizedJob
     name: string,
     executor: AnyExecutor,
     parameters?: CustomParametersList<JobParameterLiteral>,
-    steps?: Command[],
+    steps?: AnyCommand[],
   ) {
     super(name, executor, steps);
     this.parameters = parameters || new CustomParametersList();

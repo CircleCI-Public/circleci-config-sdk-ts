@@ -3,7 +3,7 @@ import { Generable } from '../../index';
 import {
   AnyResourceClass,
   ExecutorLiteral,
-  ExecutorShape,
+  ExecutableContentsShape,
 } from '../types/Executor.types';
 import { ExecutableParameters } from '../types/ExecutorParameters.types';
 
@@ -35,7 +35,7 @@ export abstract class Executor<
     return this.resource_class;
   }
 
-  generate(): ExecutorShape {
+  generate(): ExecutableContentsShape {
     return {
       [this.executorLiteral]: this.generateContents(),
       resource_class: this.generateResourceClass,

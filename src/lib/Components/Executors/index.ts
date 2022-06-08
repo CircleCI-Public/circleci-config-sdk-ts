@@ -6,6 +6,7 @@ import { Executor } from './exports/Executor';
 import { MachineExecutor } from './exports/MachineExecutor';
 import { MacOSExecutor } from './exports/MacOSExecutor';
 import { WindowsExecutor } from './exports/WindowsExecutor';
+import { Executable } from './exports/Executable';
 
 export {
   DockerExecutor,
@@ -13,4 +14,5 @@ export {
   MacOSExecutor,
   WindowsExecutor,
   Executor,
+  Executable,
 };

@@ -1,12 +1,14 @@
-import { Generable } from '../..';
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { CustomParametersList } from '../../Parameters';
 import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
+import { ExecutableShape } from '../types/Executor.types';
 import {
+  ReusableExecutorContents,
   ReusableExecutorJobRefShape,
-  ReusableExecutorsShape,
+  ReusableExecutorShape,
 } from '../types/ReusableExecutor.types';
+import { Executable } from './Executable';
 import { Executor } from './Executor';
 /**
  * A 2.1 wrapper for reusing CircleCI executor.
@@ -14,18 +16,9 @@ import { Executor } from './Executor';
  * {@label STATIC_2.1}
  */
 export class ReusableExecutor
-  implements Generable, Parameterized<ExecutorParameterLiteral>
+  extends Executable
+  implements Parameterized<ExecutorParameterLiteral>
 {
-  /**
-   * The name of a defined executor to use.
-   */
-  name: string;
-
-  /**
-   * The referenced executor to use.
-   */
-  executor: Executor;
-
   /**
    * Parameters to assign to the executor
    */
@@ -36,25 +29,24 @@ export class ReusableExecutor
     executor: Executor,
     parameters?: CustomParametersList<ExecutorParameterLiteral>,
   ) {
-    this.name = name;
-    this.executor = executor;
+    super(name, executor);
     this.parameters = parameters;
   }
   /**
    * Generate Reusable Executor schema.
    * @returns The generated JSON for the Reusable Executor.
    */
+  generateContents(): ReusableExecutorContents {
+    return {
+      ...super.generateContents(),
+      parameters: this.parameters?.generate(),
+    };
+  }
+
   generate(
     ctx?: GenerableType,
-  ): ReusableExecutorsShape | ReusableExecutorJobRefShape {
+  ): ReusableExecutorJobRefShape | ReusableExecutorShape {
     if (ctx == GenerableType.JOB) {
-      // TODO: Enable for 'minification'
-      // if (!this.parameters) {
-      //   return {
-      //     executor: this.name;
-      //   }
-      // }
-
       return {
         executor: {
           name: this.name,
@@ -62,12 +54,8 @@ export class ReusableExecutor
       };
     }
 
-    return {
-      [this.name]: {
-        ...this.executor.generate(),
-        parameters: this.parameters?.generate(),
-      },
-    };
+    // We know this type since this.generateContents determines the generic type of the super.generate function
+    return super.generate() as ExecutableShape<ReusableExecutorContents>;
   }
 
   defineParameter(
