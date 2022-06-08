@@ -62,7 +62,7 @@ jobs:
             set -x
             # Get alpha or beta tag and set if available
             if [ -n "$CIRCLE_TAG" ]; then
-                PATTERN="[0-9]*\.[0-9]*\.[0-9]*(-(alpha|beta))"
+                PATTERN="[0-9]*\.[0-9]*\.[0-9]*(-(alpha|beta)(\.[0-9]*))?"
                 [[ $CIRCLE_TAG =~ $PATTERN ]]
                 
                 if [ -n "${BASH_REMATCH[2]}" ]; then
@@ -115,4 +115,4 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^\d+\.\d+\.\d+(-(beta|alpha))?$/
+              only: /^\d+\.\d+\.\d+(-(beta|alpha)(\.\d)?)?$/
