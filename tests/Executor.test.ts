@@ -220,6 +220,12 @@ describe('Instantiate Windows Executor', () => {
     expect(windows.generate()).toEqual(expectedShape);
   });
 
+  it('Should throw error if fails validation', () => {
+    expect(
+      CircleCI.parsers.parseExecutor({ not_an_executor: {} }),
+    ).toThrowError(/No executor found/);
+  });
+
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(

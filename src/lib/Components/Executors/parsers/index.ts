@@ -155,7 +155,7 @@ export function parseExecutor(
   }
 
   if (!executorKey) {
-    throw errorParsing('No executor found.');
+    throw errorParsing(`No executor found on object.`);
   }
 
   const { generableType, parse } = subtypeParsers[executorType || executorKey];

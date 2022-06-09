@@ -199,7 +199,10 @@ describe('Store test results', () => {
 
   it('Should parse and match example', () => {
     expect(
-      CircleCI.parsers.parseStep('store_artifacts', example.store_test_results),
+      CircleCI.parsers.parseStep(
+        'store_test_results',
+        example.store_test_results,
+      ),
     ).toEqual(storeTestResults);
   });
   it('Should have the correct static properties', () => {
@@ -323,6 +326,18 @@ describe('Instantiate a Reusable Command', () => {
     expect(reusableCommand.generableType).toBe(
       CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
     );
+  });
+
+  it('Should throw error when parsing without a command being declared', () => {
+    expect(() => {
+      CircleCI.parsers.parseStep('say_hello', { greeting: 'hello world' });
+    }).toThrowError(`Unknown native command: say_hello`);
+  });
+
+  it('Should throw error when parsing without a command being declared', () => {
+    expect(() => {
+      CircleCI.parsers.parseStep('say_hello', { greeting: 'hello world' }, []);
+    }).toThrowError(`Custom Command say_hello not found in command list.`);
   });
 });
 /**

@@ -57,11 +57,13 @@ export type ReusableExecutorDependencies = {
 export type ExecutorSubtypeMap = {
   [key in ExecutorUsageLiteral | 'windows']: {
     generableType: GenerableType;
-    parse: (
-      args: unknown,
-      resourceClass: AnyResourceClass,
-      properties?: ExecutableProperties,
-      reusableExecutors?: ReusableExecutor[],
-    ) => Executor | ReusableExecutor;
+    parse: ExecutorSubtypeParser;
   };
 };
+
+export type ExecutorSubtypeParser = (
+  args: unknown,
+  resourceClass: AnyResourceClass,
+  properties?: ExecutableProperties,
+  reusableExecutors?: ReusableExecutor[],
+) => Executor | ReusableExecutor;
