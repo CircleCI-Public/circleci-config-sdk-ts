@@ -328,6 +328,17 @@ describe('Instantiate a Reusable Command', () => {
     );
   });
 
+  it('Should be able to generate with string name', () => {
+    const reusableCommandByName = new CircleCI.reusable.ReusableCommand(
+      customCommand.name,
+      {
+        greeting: 'hello world',
+      },
+    );
+
+    expect(reusableCommandByName.generate()).toEqual(expected);
+  });
+
   it('Should throw error when parsing without a command being declared', () => {
     expect(() => {
       CircleCI.parsers.parseStep('say_hello', { greeting: 'hello world' });

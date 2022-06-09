@@ -221,9 +221,9 @@ describe('Instantiate Windows Executor', () => {
   });
 
   it('Should throw error if fails validation', () => {
-    expect(
-      CircleCI.parsers.parseExecutor({ not_an_executor: {} }),
-    ).toThrowError(/No executor found/);
+    expect(() => {
+      CircleCI.parsers.parseExecutor({ not_an_executor: {} });
+    }).toThrowError('No executor found.');
   });
 
   it('Add executor to config and validate', () => {

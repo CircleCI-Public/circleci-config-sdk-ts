@@ -1,7 +1,4 @@
-import { And } from './exports/conditions/And';
-import { Equal } from './exports/conditions/Equal';
-import { Not } from './exports/conditions/Not';
-import { Or } from './exports/conditions/Or';
+import { And, Equal, Not, Or } from './exports/conditions/';
 import { ConditionOrValue, ConditionValue } from './types';
 
 export function and(...conditions: ConditionOrValue[]): And {
