@@ -259,6 +259,12 @@ describe('Instantiate a 2xlarge Docker Executor', () => {
     expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(xxlDocker);
   });
 
+  it('Should parse', () => {
+    expect(() => {
+      CircleCI.parsers.parseExecutor({ docker: {} });
+    }).toThrowError(`Failed to validate: `);
+  });
+
   it('Should match the expected output', () => {
     expect(xxlDocker.generate()).toEqual(expectedShape);
   });

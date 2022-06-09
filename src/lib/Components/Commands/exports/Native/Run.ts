@@ -21,8 +21,7 @@ export class Run implements Command {
     this.parameters = parameters;
   }
   /**
-   * Generate Run Command shape.
-   * @returns The generated JSON for the Run Commands.
+   * Generate Run Command shape.* @returns The generated JSON for the Run Commands.
    */
   generate(): RunCommandShape | RunCommandShorthandShape {
     const { command, ...parameters } = this.parameters;
