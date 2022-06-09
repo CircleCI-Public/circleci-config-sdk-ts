@@ -27,6 +27,10 @@ describe('Instantiate Docker Executor', () => {
     expect(docker.generate()).toEqual(expectedShape);
   });
 
+  it('Docker executor should be instance of an Executor', () => {
+    expect(docker instanceof CircleCI.executors.Executor).toBeTruthy();
+  });
+
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(
@@ -220,6 +224,12 @@ describe('Instantiate Windows Executor', () => {
     expect(windows.generate()).toEqual(expectedShape);
   });
 
+  it('Should throw error if fails validation', () => {
+    expect(() => {
+      CircleCI.parsers.parseExecutor({ not_an_executor: {} });
+    }).toThrowError('No executor found.');
+  });
+
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addReusableExecutor(
@@ -251,6 +261,12 @@ describe('Instantiate a 2xlarge Docker Executor', () => {
 
   it('Should parse', () => {
     expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(xxlDocker);
+  });
+
+  it('Should parse', () => {
+    expect(() => {
+      CircleCI.parsers.parseExecutor({ docker: {} });
+    }).toThrowError(`Failed to validate: `);
   });
 
   it('Should match the expected output', () => {
@@ -334,12 +350,6 @@ describe('Instantiate Large Machine Executor', () => {
   });
 });
 
-/**
-Some how the AJV instances are getting mixed up. There must be some weird
-resource allocation happening.
-
-*/
-
 describe('Generate a config with a Reusable Executor with parameters', () => {
   const machine = new CircleCI.executors.MachineExecutor('large');
   const reusable = new CircleCI.reusable.ReusableExecutor(
@@ -347,14 +357,20 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
     machine,
     new CustomParametersList(),
   );
+  const expectedUsageShape = {
+    executor: {
+      name: 'default',
+    },
+  };
 
   it('Should match the expected output in job context', () => {
-    const expectedShape = {
-      executor: {
-        name: 'default',
-      },
-    };
-    expect(reusable.generate(GenerableType.JOB)).toEqual(expectedShape);
+    expect(reusable.generate(GenerableType.JOB)).toEqual(expectedUsageShape);
+  });
+
+  it('Should throw error during parsing', () => {
+    expect(() => {
+      CircleCI.parsers.parseExecutor(expectedUsageShape);
+    }).toThrowError('Reusable executor default not found in config');
   });
 
   it('Should match the expected output with no context', () => {

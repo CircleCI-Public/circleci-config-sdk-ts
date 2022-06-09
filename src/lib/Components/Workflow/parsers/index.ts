@@ -1,5 +1,4 @@
 import { Workflow } from '..';
-import { Validator } from '../../../Config';
 import { GenerableType } from '../../../Config/exports/Mapping';
 import {
   parseGenerable as parseGenerable,
@@ -60,11 +59,7 @@ export function parseWorkflow(
   return parseGenerable<UnknownWorkflowShape, Workflow, WorkflowDependencies>(
     GenerableType.WORKFLOW,
     workflowIn,
-    (workflowArgs, { jobList }) => {
-      if (Validator.validateGenerable(GenerableType.WORKFLOW, workflowIn)) {
-        return new Workflow(name, jobList);
-      }
-    },
+    (workflowArgs, { jobList }) => new Workflow(name, jobList),
     (workflowArgs) => {
       const jobList = workflowArgs.jobs.map((job) => {
         const [name, args] = Object.entries(job)[0];

@@ -1,5 +1,6 @@
 import { parse as yamlParse } from 'yaml';
 import * as CircleCI from '../src/index';
+import { ParameterizedComponent } from '../src/lib/Config/exports/Mapping';
 
 describe('Parse yaml pipeline parameters and validate', () => {
   const parametersIn = yamlParse(`
@@ -58,6 +59,15 @@ describe('Parse yaml pipeline parameters and validate', () => {
     expect(CircleCI.parsers.parseParameterList(parametersIn)).toEqual(
       expectedParameters,
     );
+  });
+
+  it('Should throw error if no parameter list is found', () => {
+    expect(() => {
+      CircleCI.parsers.parseParameterList(
+        { invalid_parameter: {} },
+        ParameterizedComponent.JOB,
+      );
+    }).toThrowError('Could not find valid parameter list in provided object');
   });
 
   it('Should validate integer parameters', () => {
@@ -124,6 +134,20 @@ describe('Parse yaml integer parameters and validate', () => {
     expect(CircleCI.parsers.parseParameter(parameterIn, parameterName)).toEqual(
       expectedParameter,
     );
+  });
+
+  it('Should parse integer parameter', () => {
+    expect(() => {
+      CircleCI.parsers.parseParameter({ type: 'not_a_type' }, parameterName);
+    }).toThrowError('No validator found');
+  });
+});
+
+describe('Parse parameter with an invalid type', () => {
+  it('Should parse integer parameter', () => {
+    expect(() => {
+      CircleCI.parsers.parseParameter({}, 'invalid_parameter');
+    }).toThrowError('Missing type property on parameter: invalid_parameter');
   });
 });
 

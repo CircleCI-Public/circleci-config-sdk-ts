@@ -74,12 +74,6 @@ export class CustomParametersList<
     return customParameter;
   }
 
-  remove(name: string): void {
-    this.parameters = this.parameters.filter(
-      (parameter) => parameter.name !== name,
-    );
-  }
-
   get generableType(): GenerableType {
     return GenerableType.CUSTOM_PARAMETERS_LIST;
   }

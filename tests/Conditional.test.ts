@@ -6,6 +6,12 @@ const { and, or, not, equal, conditional } = CircleCI.logic;
 describe('Generate Truthy Condition', () => {
   const condition = new conditional.Truthy(true);
 
+  it('truthy should be a condition', () => {
+    expect(
+      new conditional.Truthy(true) instanceof conditional.Condition,
+    ).toBeTruthy();
+  });
+
   it('true should be truthy', () => {
     expect(new conditional.Truthy(true).evaluate()).toBeTruthy();
   });
@@ -37,6 +43,13 @@ describe('Generate basic conditionals', () => {
 
     expect(condition.generableType).toBe(GenerableType.OR);
     expect(condition.evaluate()).toBeTruthy();
+  });
+
+  it('false or 0 should be false', () => {
+    const condition = or(false, 0);
+
+    expect(condition.generableType).toBe(GenerableType.OR);
+    expect(condition.evaluate()).toBeFalsy();
   });
 
   it('A number should be equal to itself as a string', () => {

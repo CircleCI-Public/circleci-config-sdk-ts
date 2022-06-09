@@ -147,7 +147,9 @@ export function parseStep(
         const command = commands.find((c) => c.name === name);
 
         if (!command) {
-          throw errorParsing(`Custom Command ${name} not found in config.`);
+          throw errorParsing(
+            `Custom Command ${name} not found in command list.`,
+          );
         }
 
         return new ReusableCommand(command, parameterArgs);

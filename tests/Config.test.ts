@@ -1,7 +1,11 @@
 import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
 import { version as SDKVersion } from '../src/package-version.json';
-import { setLogParsing } from '../src/lib/Config/exports/Parsing';
+import {
+  parseGenerable,
+  setLogParsing,
+} from '../src/lib/Config/exports/Parsing';
+import { GenerableType } from '../src/lib/Config/exports/Mapping';
 
 describe('Generate a Setup workflow config', () => {
   const myConfig = new CircleCI.Config(true).generate();
@@ -172,7 +176,18 @@ describe('Parse a fully complete config', () => {
     ).toEqual(myConfig);
     setLogParsing(false);
   });
+
+  it('Should be fully circular and parsable as string', () => {
+    expect(CircleCI.parsers.parseConfig(myConfig.generate())).toEqual(myConfig);
+  });
+
   it('Should have the correct static properties', () => {
     expect(myConfig.generableType).toBe(CircleCI.mapping.GenerableType.CONFIG);
+  });
+
+  it('Should throw error when parsing returns undefined', () => {
+    expect(() => {
+      parseGenerable(GenerableType.CONFIG, configResult, () => undefined);
+    }).toThrowError();
   });
 });

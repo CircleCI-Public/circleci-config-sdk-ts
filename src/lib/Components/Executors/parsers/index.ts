@@ -34,7 +34,7 @@ const subtypeParsers: ExecutorSubtypeMap = {
       const [mainImage, ...serviceImages] = dockerArgs;
 
       return new DockerExecutor(
-        mainImage.image || 'cimg/base:stable',
+        mainImage.image,
         resourceClass as DockerResourceClass,
         serviceImages,
         properties,
@@ -68,10 +68,10 @@ const subtypeParsers: ExecutorSubtypeMap = {
   macos: {
     generableType: GenerableType.MACOS_EXECUTOR,
     parse: (args, resourceClass, properties) => {
-      const macOSArgs = args as Partial<MacOSExecutor>;
+      const macOSArgs = args as { xcode: string };
 
       return new MacOSExecutor(
-        macOSArgs.xcode || '13.1',
+        macOSArgs.xcode,
         resourceClass as MacOSResourceClass,
         properties,
       );
@@ -155,7 +155,7 @@ export function parseExecutor(
   }
 
   if (!executorKey) {
-    throw errorParsing('No executor found.');
+    throw errorParsing(`No executor found.`);
   }
 
   const { generableType, parse } = subtypeParsers[executorType || executorKey];

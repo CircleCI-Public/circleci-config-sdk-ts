@@ -1,4 +1,4 @@
-import { Condition } from '../exports/Condition';
+import { Condition } from '../exports/conditions';
 
 export type AndConditionShape = {
   and: AnyConditionShape[];
@@ -23,4 +23,5 @@ export type AnyConditionShape =
   | unknown;
 
 export type ConditionValue = string | boolean | number;
+
 export type ConditionOrValue = Condition | ConditionValue;
