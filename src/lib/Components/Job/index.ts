@@ -2,7 +2,6 @@ import { GenerableType } from '../../Config/exports/Mapping';
 import { Command } from '../Commands/exports/Command';
 import { ExecutorShape } from '../Executors/types/Executor.types';
 import { Generable } from '../index';
-import { ParameterizedJob } from './exports/ParameterizedJob';
 import { AnyExecutor, JobContentsShape, JobsShape } from './types/Job.types';
 
 /**
@@ -78,5 +77,3 @@ export type UnknownJobShape = {
   resource_class: string;
   parameters?: { [key: string]: unknown };
 };
-
-export { ParameterizedJob };

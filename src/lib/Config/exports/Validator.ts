@@ -189,12 +189,8 @@ export class Validator extends Ajv {
   validateComponent(schema: SchemaObject, data: unknown): ValidationResult {
     const valid = super.validate(schema, data);
 
-    if (!valid && this.errors) {
-      if (Array.isArray(this.errors) && data) {
-        return validationError(schema, data, this.errors as ErrorObject[]);
-      }
-
-      return this.errors.map((error) => error.message).join('\n');
+    if (!valid && Array.isArray(this.errors) && data) {
+      return validationError(schema, data, this.errors as ErrorObject[]);
     }
 
     return valid;

@@ -11,6 +11,7 @@ describe('Instantiate Workflow', () => {
 
   const generatedWorkflow = myWorkflow.generate();
   const expected = { 'my-workflow': { jobs: [{ 'my-job': {} }] } };
+
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
   });
@@ -69,10 +70,17 @@ describe('Parse a workflow', () => {
   const workflowListShape = {
     'my-workflow': { jobs: [{ 'my-job': {} }] },
   };
+
   it('Should match the expected output', () => {
     expect(
       CircleCI.parsers.parseWorkflowList(workflowListShape, [job])[0],
     ).toEqual(myWorkflow);
+  });
+
+  it('Should throw error if no job is provided', () => {
+    expect(() => {
+      CircleCI.parsers.parseWorkflowList(workflowListShape, []);
+    }).toThrowError('Job my-job not found in config');
   });
 });
 

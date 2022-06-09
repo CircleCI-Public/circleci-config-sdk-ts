@@ -44,7 +44,15 @@ export function parseParameter(
   let type = undefined;
 
   if (customParamIn && typeof customParamIn === 'object') {
-    type = Object.entries(customParamIn).find(([key]) => key === 'type')?.[1];
+    const typeEntry = Object.entries(customParamIn).find(
+      ([key]) => key === 'type',
+    );
+
+    if (!typeEntry) {
+      throw errorParsing(`Missing type property on parameter: ${name}`);
+    } else {
+      type = typeEntry[1];
+    }
   }
 
   if (type === 'enum') {
