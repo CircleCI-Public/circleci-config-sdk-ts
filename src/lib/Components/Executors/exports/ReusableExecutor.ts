@@ -2,12 +2,14 @@ import { Generable } from '../..';
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { CustomParametersList } from '../../Parameters';
 import { Parameterized } from '../../Parameters/exports/Parameterized';
+import { ExecutorParameterTypes } from '../../Parameters/types/ComponentParameters.types';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import {
   ReusableExecutorJobRefShape,
   ReusableExecutorsShape,
 } from '../types/ReusableExecutor.types';
 import { Executor } from './Executor';
+import { ReusedExecutor } from './ReusedExecutor';
 /**
  * A 2.1 wrapper for reusing CircleCI executor.
  * @see {@link https://circleci.com/docs/2.0/reusing-config/#the-executors-key}
@@ -88,5 +90,9 @@ export class ReusableExecutor
 
   get generableType(): GenerableType {
     return GenerableType.REUSABLE_EXECUTOR;
+  }
+
+  reuse(parameters?: Record<string, ExecutorParameterTypes>): ReusedExecutor {
+    return new ReusedExecutor(this, parameters);
   }
 }

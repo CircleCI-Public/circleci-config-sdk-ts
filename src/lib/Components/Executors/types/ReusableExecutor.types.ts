@@ -20,3 +20,20 @@ export type ReusableExecutorsShape = {
     parameters?: CustomParametersListShape;
   };
 };
+
+/**
+ * The shape output when a reusable executor is generated for a job
+ */
+export type ReusedExecutorShapeContents =
+  | {
+      name: StringParameter;
+      [key: string]: AnyParameterType;
+    }
+  | StringParameter;
+
+/**
+ * The shape output when a reusable executor is generated for a job
+ */
+export type ReusedExecutorShape = {
+  executor: ReusedExecutorShapeContents;
+};

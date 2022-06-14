@@ -1,11 +1,11 @@
-import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
-import { version as SDKVersion } from '../src/package-version.json';
+import * as CircleCI from '../src/index';
+import { GenerableType } from '../src/lib/Config/exports/Mapping';
 import {
   parseGenerable,
   setLogParsing,
 } from '../src/lib/Config/exports/Parsing';
-import { GenerableType } from '../src/lib/Config/exports/Mapping';
+import { version as SDKVersion } from '../src/package-version.json';
 
 describe('Generate a Setup workflow config', () => {
   const myConfig = new CircleCI.Config(true).generate();
@@ -63,12 +63,15 @@ describe('Parse a fully complete config', () => {
 
   myConfig.defineParameter('greeting', 'string', 'hello world!');
 
-  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
+  const docker = new CircleCI.executors.DockerExecutor(
+    'cimg/node:<< parameters.version >>',
+  );
   const reusableDocker = new CircleCI.reusable.ReusableExecutor(
     'docker',
     docker,
   );
 
+  reusableDocker.defineParameter('version', 'string', '16.3');
   myConfig.addReusableExecutor(reusableDocker);
 
   const customCommand = new CircleCI.reusable.CustomCommand(
@@ -85,12 +88,16 @@ describe('Parse a fully complete config', () => {
 
   myConfig.addCustomCommand(customCommand);
 
-  const jobA = new CircleCI.Job('my-job-A', reusableDocker, [
-    new CircleCI.reusable.ReusableCommand(customCommand, {
-      greeting: '<< pipeline.parameters.greeting >>',
-    }),
-  ]);
-  const jobB = new CircleCI.Job('my-job-B', reusableDocker, [
+  const jobA = new CircleCI.Job(
+    'my-job-A',
+    reusableDocker.reuse({ version: '17.2' }),
+    [
+      new CircleCI.reusable.ReusableCommand(customCommand, {
+        greeting: '<< pipeline.parameters.greeting >>',
+      }),
+    ],
+  );
+  const jobB = new CircleCI.Job('my-job-B', reusableDocker.reuse(), [
     new CircleCI.reusable.ReusableCommand(customCommand, {
       greeting: 'sup world!',
     }),
@@ -133,12 +140,18 @@ describe('Parse a fully complete config', () => {
     },
     executors: {
       docker: {
-        docker: [{ image: 'cimg/node:lts' }],
+        docker: [{ image: 'cimg/node:<< parameters.version >>' }],
+        parameters: {
+          version: {
+            type: 'string',
+            default: '16.3',
+          },
+        },
       },
     },
     jobs: {
       'my-job-A': {
-        executor: 'docker',
+        executor: { name: 'docker', version: '17.2' },
         steps: [
           {
             say_hello: {

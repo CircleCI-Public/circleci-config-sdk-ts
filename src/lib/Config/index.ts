@@ -187,13 +187,6 @@ export class Config
       workflows: generatedWorkflows,
     };
 
-    // remove undefined values
-    Object.entries(generatedConfig).forEach(([key, value]) => {
-      if (value === undefined) {
-        delete generatedConfig[key as keyof CircleCIConfigShape];
-      }
-    });
-
     return this.prependVersionComment(
       stringify(generatedConfig as CircleCIConfigShape, {
         defaultStringType: Scalar.PLAIN,

@@ -1,11 +1,14 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { Generable } from '../../index';
+import { CustomParametersList } from '../../Parameters';
+import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import {
   AnyResourceClass,
   ExecutorLiteral,
   ExecutorShape,
 } from '../types/Executor.types';
 import { ExecutableParameters } from '../types/ExecutorParameters.types';
+import { ReusableExecutor } from './ReusableExecutor';
 
 /**
  * A generic reusable Executor
@@ -41,5 +44,12 @@ export abstract class Executor<
       resource_class: this.generateResourceClass,
       ...this.parameters,
     };
+  }
+
+  asReusable(
+    name: string,
+    parameters?: CustomParametersList<ExecutorParameterLiteral>,
+  ): ReusableExecutor {
+    return new ReusableExecutor(name, this, parameters);
   }
 }

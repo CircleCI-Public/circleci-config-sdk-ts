@@ -3,8 +3,10 @@ import {
   ParameterizedComponent,
 } from '../../../Config/exports/Mapping';
 import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
+import { AnyExecutor } from '../../Job/types/Job.types';
 import { CustomParametersList } from '../../Parameters';
 import { parseParameterList } from '../../Parameters/parsers';
+import { ExecutorParameterTypes } from '../../Parameters/types/ComponentParameters.types';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { DockerExecutor } from '../exports/DockerExecutor';
 import { Executor } from '../exports/Executor';
@@ -79,14 +81,14 @@ const subtypeParsers: ExecutorSubtypeMap = {
   },
   // Parses a reusable executor by it's name
   executor: {
-    generableType: GenerableType.ANY_EXECUTOR,
+    generableType: GenerableType.REUSED_EXECUTOR,
     parse: (args, _, __, reusableExecutors) => {
       const executorArgs = args as
         | { name: string; [key: string]: unknown }
         | string;
 
-      const name =
-        typeof executorArgs === 'string' ? executorArgs : executorArgs.name;
+      const isFlat = typeof executorArgs === 'string';
+      const name = isFlat ? executorArgs : executorArgs.name;
 
       const executor = reusableExecutors?.find(
         (executor) => executor.name === name,
@@ -96,7 +98,21 @@ const subtypeParsers: ExecutorSubtypeMap = {
         throw errorParsing(`Reusable executor ${name} not found in config`);
       }
 
-      return executor;
+      let parameters = undefined;
+
+      if (!isFlat) {
+        // destructure and ignore the name.
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { name, ...parsedParameters } = executorArgs;
+
+        if (Object.values(parsedParameters).length > 0) {
+          parameters = parsedParameters as
+            | Record<string, ExecutorParameterTypes>
+            | undefined;
+        }
+      }
+
+      return executor.reuse(parameters);
     },
   },
 };
@@ -135,7 +151,7 @@ export function extractExecutableProps(
 export function parseExecutor(
   executableIn: unknown,
   reusableExecutors?: ReusableExecutor[],
-): Executor | ReusableExecutor {
+): AnyExecutor {
   const executableArgs = executableIn as UnknownExecutableShape;
   let resourceClass = executableArgs.resource_class;
   let executorType: ExecutorUsageLiteral | 'windows' | undefined;
@@ -160,7 +176,7 @@ export function parseExecutor(
 
   const { generableType, parse } = subtypeParsers[executorType || executorKey];
 
-  return parseGenerable<UnknownExecutableShape, Executor | ReusableExecutor>(
+  return parseGenerable<UnknownExecutableShape, AnyExecutor>(
     generableType,
     executableArgs,
     (args) => {
