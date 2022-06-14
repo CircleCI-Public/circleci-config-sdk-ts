@@ -1,6 +1,7 @@
 import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
 import { CustomParametersList } from '../src/lib/Components/Parameters';
+import { ReusableExecutor } from '../src/lib/Components/Reusable';
 import { GenerableType } from '../src/lib/Config/exports/Mapping';
 
 describe('Instantiate Docker Executor', () => {
@@ -31,12 +32,24 @@ describe('Instantiate Docker Executor', () => {
     expect(docker instanceof CircleCI.executors.Executor).toBeTruthy();
   });
 
+  const reusableExecutor = new CircleCI.reusable.ReusableExecutor(
+    'default',
+    docker,
+  );
+
   it('Add executor to config and validate', () => {
     const myConfig = new CircleCI.Config();
-    myConfig.addReusableExecutor(
-      new CircleCI.reusable.ReusableExecutor('default', docker),
-    );
+    myConfig.addReusableExecutor(reusableExecutor);
     expect(myConfig.executors?.length).toBeGreaterThan(0);
+  });
+
+  it('Should generate without parameters', () => {
+    expect(reusableExecutor.generate()).toEqual({
+      default: {
+        docker: [{ image: 'cimg/node:lts' }],
+        resource_class: 'medium',
+      },
+    });
   });
 
   it('Should have the correct static properties for persist', () => {
@@ -452,10 +465,8 @@ describe('Generate a config with a Reusable Executor', () => {
     'default',
     machine,
   );
-  const reusableBase = new CircleCI.reusable.ReusableExecutor(
-    'base',
-    dockerBase,
-  );
+
+  const reusableBase = dockerBase.asReusable('base');
 
   reusableMachine.defineParameter('version', 'string');
   myConfig.addReusableExecutor(reusableMachine);
@@ -486,15 +497,21 @@ describe('Generate a config with a Reusable Executor', () => {
   //   ).not.toEqual(true);
   // });
 
+  const reusedBase = reusableBase.reuse();
+
   it('Should validate reusable base image shapeless', () => {
     expect(
       CircleCI.Validator.validateGenerable(
         CircleCI.mapping.GenerableType.REUSED_EXECUTOR,
-        {
-          executor: 'base',
-        },
+        reusedBase.generate(),
       ),
     ).toEqual(true);
+  });
+
+  it('Should have correct static properties', () => {
+    expect(reusedBase.generableType).toEqual(GenerableType.REUSED_EXECUTOR);
+    expect(reusedBase.executor instanceof ReusableExecutor).toEqual(true);
+    expect(reusedBase.parameters === undefined).toEqual(true);
   });
 
   it('Should validate reusable base image', () => {

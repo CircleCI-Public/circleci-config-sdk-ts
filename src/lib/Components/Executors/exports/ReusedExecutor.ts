@@ -43,7 +43,7 @@ export class ReusedExecutor implements Generable {
    * @returns The generated JSON for the Reused Executor.
    */
   generateContents(): ReusedExecutorShapeContents {
-    if (this._executor.parameters) {
+    if (this._parameters) {
       return {
         name: this._executor.name,
         ...this._parameters,

@@ -105,7 +105,7 @@ const subtypeParsers: ExecutorSubtypeMap = {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { name, ...parsedParameters } = executorArgs;
 
-        if (Object.values(parsedParameters).length !== 0) {
+        if (Object.values(parsedParameters).length > 0) {
           parameters = parsedParameters as
             | Record<string, ExecutorParameterTypes>
             | undefined;

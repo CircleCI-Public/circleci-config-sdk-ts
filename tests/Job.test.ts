@@ -1,5 +1,6 @@
 import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
+import { GenerableType } from '../src/lib/Config/exports/Mapping';
 
 describe('Instantiate Docker Job', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
@@ -246,6 +247,10 @@ describe('Parse Docker Job With A Parameterized Custom Command', () => {
     );
 
     expect(result).toEqual(job);
+  });
+
+  it('Should have correct static properties', () => {
+    expect(job.generableType).toEqual(GenerableType.JOB);
   });
 
   // TODO: Make these tests pass. Something weird with having multiple config validators
