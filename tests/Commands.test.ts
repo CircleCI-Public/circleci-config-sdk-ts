@@ -42,6 +42,16 @@ describe('Instantiate a Checkout step', () => {
     expect(CircleCI.parsers.parseStep('checkout')).toEqual(checkout);
   });
 
+  it('Should parse steps list with command as string from YAML parse result and match raw example', () => {
+    expect(
+      CircleCI.parsers.parseSteps(
+        parse(`steps:
+    - checkout
+    `).steps,
+      ),
+    ).toEqual([checkout]);
+  });
+
   const checkoutWithPathResult = {
     checkout: { path: './src' },
   };

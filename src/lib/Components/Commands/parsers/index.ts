@@ -107,6 +107,10 @@ export function parseSteps(
     (stepsListIn) => {
       return {
         steps: stepsListIn.map((subtype) => {
+          if (typeof subtype === 'string') {
+            return parseStep(subtype, undefined, commands);
+          }
+
           const commandName = Object.keys(subtype)[0];
 
           return parseStep(commandName, subtype[commandName], commands);
