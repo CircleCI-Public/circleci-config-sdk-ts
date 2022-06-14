@@ -6,7 +6,7 @@ import { SchemaObject } from 'ajv';
 */
 const StepSchema: SchemaObject = {
   $id: '#/definitions/Step',
-  type: 'object',
+  type: ['object', 'string'],
   minProperties: 1,
   maxProperties: 1,
   properties: {
