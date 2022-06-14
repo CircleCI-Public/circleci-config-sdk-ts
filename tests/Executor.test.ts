@@ -397,7 +397,7 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
 
     expect(
       CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR_USAGE,
+        CircleCI.mapping.GenerableType.REUSED_EXECUTOR,
         expectedShapeless,
       ),
     ).toEqual(true);
@@ -465,7 +465,7 @@ describe('Generate a config with a Reusable Executor', () => {
   it('Should validate reusable machine image', () => {
     expect(
       CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR_USAGE,
+        CircleCI.mapping.GenerableType.REUSED_EXECUTOR,
         {
           executor: {
             name: 'default',
@@ -489,7 +489,7 @@ describe('Generate a config with a Reusable Executor', () => {
   it('Should validate reusable base image shapeless', () => {
     expect(
       CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR_USAGE,
+        CircleCI.mapping.GenerableType.REUSED_EXECUTOR,
         {
           executor: 'base',
         },
@@ -500,7 +500,7 @@ describe('Generate a config with a Reusable Executor', () => {
   it('Should validate reusable base image', () => {
     expect(
       CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR_USAGE,
+        CircleCI.mapping.GenerableType.REUSED_EXECUTOR,
         {
           executor: {
             name: 'base',

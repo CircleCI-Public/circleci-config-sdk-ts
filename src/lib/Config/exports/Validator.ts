@@ -80,7 +80,7 @@ const schemaRegistry: ValidationMap = {
   [GenerableType.WINDOWS_EXECUTOR]: WindowsExecutableSchema,
   [GenerableType.REUSABLE_EXECUTOR]: ReusableExecutorSchema,
   [GenerableType.REUSABLE_EXECUTOR_LIST]: ReusableExecutorsListSchema,
-  [GenerableType.REUSABLE_EXECUTOR_USAGE]: ReusableExecutorUsageSchema,
+  [GenerableType.REUSED_EXECUTOR]: ReusableExecutorUsageSchema,
 
   [GenerableType.STEP]: StepSchema,
   [GenerableType.STEP_LIST]: StepsSchema,

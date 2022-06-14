@@ -8,7 +8,6 @@ export const ReusableExecutorUsageSchema: SchemaObject = {
       properties: {
         executor: { type: 'string' },
       },
-      additionalProperties: false,
     },
     {
       properties: {
@@ -18,7 +17,6 @@ export const ReusableExecutorUsageSchema: SchemaObject = {
             name: { type: 'string' },
           },
         },
-        additionalProperties: false,
       },
     },
   ],

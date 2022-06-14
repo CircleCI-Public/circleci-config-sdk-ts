@@ -28,7 +28,7 @@ export enum GenerableType {
   MACHINE_EXECUTOR = 'machine_executor',
   MACOS_EXECUTOR = 'macos_executor',
   WINDOWS_EXECUTOR = 'windows_executor',
-  REUSABLE_EXECUTOR_USAGE = 'reusable_executor_usage',
+  REUSED_EXECUTOR = 'reused_executor',
   REUSABLE_EXECUTOR = 'reusable_executor',
   REUSABLE_EXECUTOR_LIST = 'reusable_executors_list',
 

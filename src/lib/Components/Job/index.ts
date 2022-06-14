@@ -1,6 +1,5 @@
 import { GenerableType } from '../../Config/exports/Mapping';
 import { Command } from '../Commands/exports/Command';
-import { ExecutorShape } from '../Executors/types/Executor.types';
 import { Generable } from '../index';
 import { AnyExecutor, JobContentsShape, JobsShape } from './types/Job.types';
 
@@ -41,9 +40,7 @@ export class Job implements Generable {
     const generatedSteps = this.steps.map((step) => {
       return step.generate();
     });
-    const generatedExecutor = this.executor.generate(
-      this.generableType,
-    ) as ExecutorShape;
+    const generatedExecutor = this.executor.generate();
 
     return { steps: generatedSteps, ...generatedExecutor };
   }
