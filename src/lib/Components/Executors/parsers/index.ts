@@ -104,9 +104,12 @@ const subtypeParsers: ExecutorSubtypeMap = {
         // destructure and ignore the name.
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { name, ...parsedParameters } = executorArgs;
-        parameters = parsedParameters as
-          | Record<string, ExecutorParameterTypes>
-          | undefined;
+
+        if (Object.values(parsedParameters).length !== 0) {
+          parameters = parsedParameters as
+            | Record<string, ExecutorParameterTypes>
+            | undefined;
+        }
       }
 
       return executor.reuse(parameters);
