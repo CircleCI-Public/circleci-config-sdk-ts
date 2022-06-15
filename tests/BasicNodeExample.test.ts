@@ -4,7 +4,7 @@ describe('Generate a Hello World config', () => {
   // Instantiate new Config
   const myConfig = new CircleCI.Config();
   // Create new Workflow
-  const myWorkflow = new CircleCI.workflow.Workflow('myWorkflow');
+  const myWorkflow = new CircleCI.Workflow('myWorkflow');
   myConfig.addWorkflow(myWorkflow);
 
   // Create an executor. Reusable.

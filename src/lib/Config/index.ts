@@ -10,7 +10,7 @@ import { CustomParametersList } from '../Components/Parameters';
 import { Parameterized } from '../Components/Parameters/exports/Parameterized';
 import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
 import { CustomCommand } from '../Components/Reusable';
-import { Workflow } from '../Components/Workflow';
+import { Workflow } from '../Components/Workflow/exports/Workflow';
 import { WorkflowsShape } from '../Components/Workflow/types/Workflow.types';
 import { GenerableType } from './exports/Mapping';
 import { Validator } from './exports/Validator';

@@ -105,7 +105,7 @@ describe('Parse a fully complete config', () => {
   myConfig.addJob(jobA);
   myConfig.addJob(jobB);
 
-  const myWorkflow = new CircleCI.workflow.Workflow('my-workflow');
+  const myWorkflow = new CircleCI.Workflow('my-workflow');
 
   myWorkflow.addJob(jobA);
   myWorkflow.addJob(jobB, { requires: [jobA.name] });

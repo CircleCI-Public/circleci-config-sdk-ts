@@ -1,7 +1,7 @@
-import { Workflow } from '..';
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
 import { Job } from '../../Job';
+import { Workflow } from '../exports/Workflow';
 import { WorkflowJob } from '../exports/WorkflowJob';
 import { WorkflowJobAbstract } from '../exports/WorkflowJobAbstract';
 import { WorkflowJobApproval } from '../exports/WorkflowJobApproval';

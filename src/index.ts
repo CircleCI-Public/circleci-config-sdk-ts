@@ -51,3 +51,4 @@ export * as workflow from './lib/Components/Workflow';
 export { Job } from './lib/Components/Job';
 export { Config, Validator } from './lib/Config';
 export { Pipeline } from './lib/Config/Pipeline';
+export { Workflow } from './lib/Components/Workflow/exports/Workflow';
