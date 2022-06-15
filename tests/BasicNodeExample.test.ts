@@ -1,5 +1,5 @@
-import * as CircleCI from '../src/index';
 import * as YAML from 'yaml';
+import * as CircleCI from '../src/index';
 describe('Generate a Hello World config', () => {
   // Instantiate new Config
   const myConfig = new CircleCI.Config();
@@ -52,7 +52,7 @@ describe('Generate a Hello World config', () => {
           ],
         },
       },
-      workflows: { myWorkflow: { jobs: [{ 'node-test': {} }] } },
+      workflows: { myWorkflow: { jobs: ['node-test'] } },
     };
     const configYAML = myConfig.generate();
     expect(YAML.parse(configYAML)).toEqual(expectedResult);
