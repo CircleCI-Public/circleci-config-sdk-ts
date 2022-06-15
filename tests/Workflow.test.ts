@@ -10,7 +10,7 @@ describe('Instantiate Workflow', () => {
   const myWorkflow = new CircleCI.Workflow('my-workflow', [job]);
 
   const generatedWorkflow = myWorkflow.generate();
-  const expected = { 'my-workflow': { jobs: [{ 'my-job': {} }] } };
+  const expected = { 'my-workflow': { jobs: [{ 'my-job': undefined }] } };
 
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);

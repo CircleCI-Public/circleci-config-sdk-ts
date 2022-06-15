@@ -30,6 +30,10 @@ export function parseWorkflowJob(
     GenerableType.WORKFLOW_JOB,
     workflowJobIn,
     (workflowJobArgs) => {
+      if (workflowJobArgs.type) {
+        return new WorkflowJob(undefined, { name, ...workflowJobArgs });
+      }
+
       const job = jobs.find((c) => c.name === name);
 
       if (job) {

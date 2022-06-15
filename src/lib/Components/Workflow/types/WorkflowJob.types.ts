@@ -41,7 +41,7 @@ export type approval = 'approval';
  * Full Workflow Job parameter type
  */
 export interface WorkflowJobShape {
-  [workflowJobName: StringParameter]: WorkflowJobParametersShape;
+  [workflowJobName: StringParameter]: WorkflowJobParametersShape | undefined;
 }
 
 /**

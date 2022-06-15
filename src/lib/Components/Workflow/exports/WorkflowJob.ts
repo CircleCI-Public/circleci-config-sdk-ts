@@ -14,26 +14,40 @@ import {
  * @see {@link Workflow.addJob} for general use.
  */
 export class WorkflowJob implements Generable {
-  job: Job;
-  parameters: WorkflowJobParameters = {};
-  constructor(job: Job, parameters?: WorkflowJobParameters) {
+  job?: Job;
+  parameters?: WorkflowJobParameters = {};
+  constructor(job?: Job, parameters?: WorkflowJobParameters) {
     this.job = job;
-    if (parameters) {
-      this.parameters = parameters;
-    }
+    this.parameters = parameters;
   }
-  generate(): WorkflowJobShape {
-    const { matrix, ...jobParameters } = this.parameters;
-    const parameters: WorkflowJobParametersShape = { ...jobParameters };
 
-    if (matrix) {
-      parameters.matrix = {
-        parameters: matrix,
-      };
+  generate(): WorkflowJobShape {
+    let parameters: WorkflowJobParametersShape | undefined;
+
+    if (this.parameters) {
+      const { matrix, ...jobParameters } = this.parameters;
+      parameters = { ...jobParameters };
+
+      if (matrix) {
+        parameters.matrix = {
+          parameters: matrix,
+        };
+      }
+    }
+
+    const jobName = this.job?.name || this.parameters?.name;
+
+    if (
+      (this.job === undefined && parameters?.type !== 'approval') ||
+      jobName === undefined
+    ) {
+      throw new Error(
+        'Cannot generate a Workflow Job without assigned Job reference',
+      );
     }
 
     return {
-      [this.job.name]: parameters,
+      [jobName]: parameters,
     };
   }
 
