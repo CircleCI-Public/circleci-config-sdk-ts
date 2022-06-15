@@ -2,7 +2,7 @@ import { SchemaObject } from 'ajv';
 
 const WorkflowJobSchema: SchemaObject = {
   $id: '#/definitions/WorkflowJob',
-  type: 'object',
+  type: ['object', 'null', 'string'],
   properties: {
     requires: {
       type: 'array',

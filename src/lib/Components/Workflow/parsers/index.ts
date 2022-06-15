@@ -1,11 +1,10 @@
-import { Workflow } from '..';
 import { GenerableType } from '../../../Config/exports/Mapping';
-import {
-  parseGenerable as parseGenerable,
-  errorParsing,
-} from '../../../Config/exports/Parsing';
+import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
 import { Job } from '../../Job';
+import { Workflow } from '../exports/Workflow';
 import { WorkflowJob } from '../exports/WorkflowJob';
+import { WorkflowJobAbstract } from '../exports/WorkflowJobAbstract';
+import { WorkflowJobApproval } from '../exports/WorkflowJobApproval';
 import {
   UnknownWorkflowJobShape,
   UnknownWorkflowShape,
@@ -25,11 +24,15 @@ export function parseWorkflowJob(
   name: string,
   workflowJobIn: unknown,
   jobs: Job[],
-): WorkflowJob {
-  return parseGenerable<UnknownWorkflowJobShape, WorkflowJob>(
+): WorkflowJobAbstract {
+  return parseGenerable<UnknownWorkflowJobShape, WorkflowJobAbstract>(
     GenerableType.WORKFLOW_JOB,
     workflowJobIn,
     (workflowJobArgs) => {
+      if (workflowJobArgs?.type === 'approval') {
+        return new WorkflowJobApproval(name, workflowJobArgs);
+      }
+
       const job = jobs.find((c) => c.name === name);
 
       if (job) {
@@ -62,6 +65,10 @@ export function parseWorkflow(
     (workflowArgs, { jobList }) => new Workflow(name, jobList),
     (workflowArgs) => {
       const jobList = workflowArgs.jobs.map((job) => {
+        if (typeof job === 'string') {
+          return parseWorkflowJob(job, undefined, jobs);
+        }
+
         const [name, args] = Object.entries(job)[0];
 
         return parseWorkflowJob(name, args, jobs);

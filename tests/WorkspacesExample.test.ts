@@ -53,7 +53,7 @@ describe('Generate a config utilizing workspaces', () => {
       },
       workflows: {
         btd: {
-          jobs: [{ flow: {} }, { downstream: { requires: ['flow'] } }],
+          jobs: ['flow', { downstream: { requires: ['flow'] } }],
         },
       },
     };

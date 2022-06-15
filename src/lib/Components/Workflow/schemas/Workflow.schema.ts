@@ -10,7 +10,7 @@ const WorkflowSchema: SchemaObject = {
       type: 'array',
       minItems: 1,
       items: {
-        type: 'object',
+        type: ['object', 'string'],
         patternProperties: {
           '^.*$': {
             $ref: '#/definitions/WorkflowJob',

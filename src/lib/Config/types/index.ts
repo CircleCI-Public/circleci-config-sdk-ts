@@ -7,7 +7,7 @@ import { CustomParametersList } from '../../Components/Parameters';
 import { ParameterShape } from '../../Components/Parameters/types';
 import { AnyParameterLiteral } from '../../Components/Parameters/types/CustomParameterLiterals.types';
 import { CustomCommand } from '../../Components/Reusable';
-import { Workflow } from '../../Components/Workflow';
+import { Workflow } from '../../Components/Workflow/exports/Workflow';
 import { WorkflowsShape } from '../../Components/Workflow/types/Workflow.types';
 import * as mapping from './Mapping.types';
 import * as validator from './Validator.types';
