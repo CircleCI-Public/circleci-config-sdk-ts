@@ -10,19 +10,18 @@ describe('Instantiate Workflow', () => {
   const myWorkflow = new CircleCI.Workflow('my-workflow', [job]);
 
   const generatedWorkflow = myWorkflow.generate();
-  const expected = { 'my-workflow': { jobs: [{ 'my-job': undefined }] } };
+  const expected = { 'my-workflow': { jobs: ['my-job'] } };
 
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
   });
 
-  it('Should validate', () => {
+  it('Should parse and match raw example', () => {
     expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.WORKFLOW,
-        expected['my-workflow'],
-      ),
-    ).toEqual(true);
+      CircleCI.parsers.parseWorkflow('my-workflow', { jobs: ['my-job'] }, [
+        job,
+      ]),
+    ).toEqual(myWorkflow);
   });
 });
 
@@ -38,6 +37,16 @@ describe('Instantiate Workflow with a custom name', () => {
   const expected = {
     'my-workflow': { jobs: [{ 'my-job': { name: 'custom-name' } }] },
   };
+
+  it('Should validate', () => {
+    expect(
+      CircleCI.Validator.validateGenerable(
+        CircleCI.mapping.GenerableType.WORKFLOW,
+        expected['my-workflow'],
+      ),
+    ).toEqual(true);
+  });
+
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
   });
@@ -52,7 +61,7 @@ describe('Instantiate a new Workflow with a job in the constructor', () => {
   const myWorkflow = new CircleCI.Workflow('my-workflow', [job]);
   const generatedWorkflow = myWorkflow.generate();
   const expected = {
-    'my-workflow': { jobs: [{ 'my-job': {} }] },
+    'my-workflow': { jobs: ['my-job'] },
   };
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
@@ -68,7 +77,7 @@ describe('Parse a workflow', () => {
   const myWorkflow = new CircleCI.Workflow('my-workflow', [job]);
 
   const workflowListShape = {
-    'my-workflow': { jobs: [{ 'my-job': {} }] },
+    'my-workflow': { jobs: ['my-job'] },
   };
 
   it('Should match the expected output', () => {
@@ -95,7 +104,7 @@ describe('Instantiate a new Workflow with a workflow job added manually', () => 
 
   const generatedWorkflow = myWorkflow.generate();
   const expected = {
-    'my-workflow': { jobs: [{ 'my-job': {} }] },
+    'my-workflow': { jobs: ['my-job'] },
   };
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
@@ -140,7 +149,7 @@ describe('Instantiate a new Workflow with a when condition', () => {
           },
         ],
       },
-      jobs: [{ 'my-job': {} }],
+      jobs: ['my-job'],
     },
   };
 
@@ -222,22 +231,30 @@ describe('Instantiate Workflow with a manual approval job', () => {
 
   const myWorkflow = new CircleCI.Workflow('my-workflow');
   myWorkflow.addJob(jobTest);
-  myWorkflow.addJob(new CircleCI.Job('on-hold', docker), {
-    type: 'approval',
-  });
+  myWorkflow.addJobApproval('on-hold');
   myWorkflow.addJob(jobDeploy);
+  const workflowContents = {
+    jobs: ['test-job', { 'on-hold': { type: 'approval' } }, 'deploy-job'],
+  };
+  const expected = {
+    'my-workflow': workflowContents,
+  };
+  const generatedWorkflow = myWorkflow.generate();
+
   it('Should match the expected output', () => {
-    const expected = {
-      'my-workflow': {
-        jobs: [
-          { 'test-job': {} },
-          { 'on-hold': { type: 'approval' } },
-          { 'deploy-job': {} },
-        ],
-      },
-    };
-    const generatedWorkflow = myWorkflow.generate();
     expect(generatedWorkflow).toEqual(expected);
+  });
+
+  it('Should match the expected output', () => {
+    expect(
+      CircleCI.parsers.parseWorkflow(
+        'my-workflow',
+        {
+          jobs: ['test-job', { 'on-hold': { type: 'approval' } }, 'deploy-job'],
+        },
+        [jobTest, jobDeploy],
+      ),
+    ).toEqual(myWorkflow);
   });
 });
 
@@ -254,7 +271,7 @@ describe('Instantiate a Workflow with sequential jobs', () => {
   it('Should match the expected output', () => {
     const expected = {
       'my-workflow': {
-        jobs: [{ 'my-job-A': {} }, { 'my-job-B': { requires: ['my-job-A'] } }],
+        jobs: ['my-job-A', { 'my-job-B': { requires: ['my-job-A'] } }],
       },
     };
     const generatedWorkflow = myWorkflow.generate();
@@ -273,7 +290,7 @@ describe('Instantiate a Workflow with 2 jobs', () => {
   it('Should match the expected output', () => {
     const expected = {
       'my-workflow': {
-        jobs: [{ 'my-job-A': { myParam: 'my-value' } }, { 'my-job-B': {} }],
+        jobs: [{ 'my-job-A': { myParam: 'my-value' } }, 'my-job-B'],
       },
     };
     const generatedWorkflow = myWorkflow.generate();

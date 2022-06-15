@@ -1,5 +1,5 @@
 import { AnyConditionShape } from '../../Logic/types';
-import { WorkflowJob } from '../exports/WorkflowJob';
+import { WorkflowJobAbstract } from '../exports/WorkflowJobAbstract';
 import { WorkflowJobShape } from './WorkflowJob.types';
 
 export type WorkflowsShape = {
@@ -23,5 +23,5 @@ export type UnknownWorkflowJobShape = {
 };
 
 export type WorkflowDependencies = {
-  jobList: WorkflowJob[];
+  jobList: WorkflowJobAbstract[];
 };

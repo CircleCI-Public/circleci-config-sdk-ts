@@ -173,7 +173,7 @@ describe('Parse a fully complete config', () => {
     },
     workflows: {
       'my-workflow': {
-        jobs: [{ 'my-job-A': {} }, { 'my-job-B': { requires: ['my-job-A'] } }],
+        jobs: ['my-job-A', { 'my-job-B': { requires: ['my-job-A'] } }],
       },
     },
   };

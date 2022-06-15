@@ -1,13 +1,13 @@
 import {
-  ComponentParameter,
-  JobParameterTypes,
-} from '../../Parameters/types/ComponentParameters.types';
-import {
   FilterParameter,
   ListParameter,
   MatrixParameter,
   StringParameter,
 } from '../../Parameters/types';
+import {
+  ComponentParameter,
+  JobParameterTypes,
+} from '../../Parameters/types/ComponentParameters.types';
 
 /**
  * CircleCI provided parameters for all workflow jobs
@@ -40,9 +40,13 @@ export type approval = 'approval';
 /**
  * Full Workflow Job parameter type
  */
-export interface WorkflowJobShape {
-  [workflowJobName: StringParameter]: WorkflowJobParametersShape | undefined;
-}
+export type WorkflowJobShape =
+  | {
+      [workflowJobName: StringParameter]: WorkflowJobContentsShape;
+    }
+  | string;
+
+export type WorkflowJobContentsShape = WorkflowJobParametersShape | undefined;
 
 /**
  * Workflow Job parameter output shape
