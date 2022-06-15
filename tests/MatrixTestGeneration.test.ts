@@ -4,7 +4,7 @@ import * as CircleCI from '../src/index';
 describe('Generate 3 node-based jobs with different node versions', () => {
   const config = new CircleCI.Config();
   const nodeVersions = ['13.0.0', '16.0.0', '18.0.0'];
-  const workflow = new CircleCI.Workflow('my-workflow');
+  const workflow = new CircleCI.workflow.Workflow('my-workflow');
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo hello world',
   });

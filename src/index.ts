@@ -42,8 +42,12 @@ export * as types from './lib/Types';
  */
 export * as parsers from './lib/Config/parsers';
 
+/**
+ * Workflow and workflow job components.
+ */
+export * as workflow from './lib/Components/Workflow';
+
 // Top-level exports
 export { Job } from './lib/Components/Job';
-export { Workflow, WorkflowJob } from './lib/Components/Workflow';
 export { Config, Validator } from './lib/Config';
 export { Pipeline } from './lib/Config/Pipeline';

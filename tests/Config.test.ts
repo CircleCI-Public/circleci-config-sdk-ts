@@ -1,6 +1,5 @@
 import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
-import { GenerableType } from '../src/lib/Config/exports/Mapping';
 import {
   parseGenerable,
   setLogParsing,
@@ -106,7 +105,7 @@ describe('Parse a fully complete config', () => {
   myConfig.addJob(jobA);
   myConfig.addJob(jobB);
 
-  const myWorkflow = new CircleCI.Workflow('my-workflow');
+  const myWorkflow = new CircleCI.workflow.Workflow('my-workflow');
 
   myWorkflow.addJob(jobA);
   myWorkflow.addJob(jobB, { requires: [jobA.name] });
@@ -200,7 +199,11 @@ describe('Parse a fully complete config', () => {
 
   it('Should throw error when parsing returns undefined', () => {
     expect(() => {
-      parseGenerable(GenerableType.CONFIG, configResult, () => undefined);
+      parseGenerable(
+        CircleCI.mapping.GenerableType.CONFIG,
+        configResult,
+        () => undefined,
+      );
     }).toThrowError();
   });
 });

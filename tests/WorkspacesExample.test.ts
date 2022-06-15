@@ -22,7 +22,7 @@ describe('Generate a config utilizing workspaces', () => {
   ]);
   myConfig.addJob(jobDownstream);
   // Create a Workflow
-  const myWorkflow = new CircleCI.Workflow('btd');
+  const myWorkflow = new CircleCI.workflow.Workflow('btd');
   myWorkflow.addJob(jobFlow).addJob(jobDownstream, {
     requires: ['flow'],
   });

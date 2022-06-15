@@ -87,4 +87,4 @@ export class Workflow implements Generable, Conditional {
   }
 }
 
-export { WorkflowJob };
+export { WorkflowJob, WorkflowJobApproval, WorkflowJobAbstract };
