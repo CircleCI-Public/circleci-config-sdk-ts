@@ -61,7 +61,7 @@ jobs:
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             # Get alpha or beta tag and set if available
             if [ -n "$CIRCLE_TAG" ]; then
-                PATTERN="[0-9]*\.[0-9]*\.[0-9]*(-(alpha|beta)(\.[0-9]*)?)?"
+                PATTERN="v[0-9]*\.[0-9]*\.[0-9]*(-(alpha|beta)(\.[0-9]*)?)?"
                 [[ $CIRCLE_TAG =~ $PATTERN ]]
                 
                 if [ -n "${BASH_REMATCH[2]}" ]; then
@@ -104,7 +104,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^\d+\.\d+\.\d+$/
+              only: /^v\d+\.\d+\.\d+$/
       - deploy-package:
           context: cci-config-sdk-publishing
           requires:
@@ -114,4 +114,4 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^\d+\.\d+\.\d+(-(beta|alpha)(\.\d)?)?$/
+              only: /^v\d+\.\d+\.\d+(-(beta|alpha)(\.\d)?)?$/
