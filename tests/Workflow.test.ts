@@ -58,15 +58,19 @@ describe('Instantiate a new Workflow with a job in the constructor', () => {
     command: 'echo hello world',
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
-  const myWorkflow = new CircleCI.Workflow('my-workflow', [
-    new CircleCI.workflow.WorkflowJob(job),
-  ]);
+  const workflowJob = new CircleCI.workflow.WorkflowJob(job);
+  const myWorkflow = new CircleCI.Workflow('my-workflow', [workflowJob]);
   const generatedWorkflow = myWorkflow.generate();
   const expected = {
     'my-workflow': { jobs: ['my-job'] },
   };
+
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
+  });
+
+  it('Names should be equal', () => {
+    expect(workflowJob.name).toEqual(job.name);
   });
 });
 

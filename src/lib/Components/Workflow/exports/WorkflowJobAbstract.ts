@@ -41,5 +41,6 @@ export abstract class WorkflowJobAbstract implements Generable {
     return GenerableType.WORKFLOW_JOB;
   }
 
+  abstract get name(): string;
   abstract generate(ctx?: GenerableType): WorkflowJobShape;
 }

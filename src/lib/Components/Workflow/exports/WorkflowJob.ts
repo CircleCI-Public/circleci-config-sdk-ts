@@ -28,4 +28,8 @@ export class WorkflowJob extends WorkflowJobAbstract {
       [this.job.name]: this.generateContents(),
     };
   }
+
+  get name(): string {
+    return this.job.name;
+  }
 }
