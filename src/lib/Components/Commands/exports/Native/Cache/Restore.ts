@@ -36,7 +36,8 @@ export interface RestoreCacheParameters extends CommandParameters {
   /**
    * List of cache keys to lookup for a cache to restore. Only first existing key will be restored.
    */
-  readonly keys: ListParameter;
+  readonly keys?: ListParameter;
+  readonly key?: StringParameter;
 }
 /**
  * Generated Shape of the RestoreCache command.

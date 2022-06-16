@@ -151,6 +151,20 @@ describe('Save and load cache', () => {
     ).toEqual(restore_cache);
   });
 
+  const restoreCacheSingle = new CircleCI.commands.cache.Restore({
+    key: 'v1-npm-deps-{{ checksum "package-lock.json" }}',
+  });
+
+  const restoreExampleSingle = {
+    restore_cache: {
+      key: 'v1-npm-deps-{{ checksum "package-lock.json" }}',
+    },
+  };
+
+  it('Should generate restore cache yaml', () => {
+    expect(restoreCacheSingle.generate()).toEqual(restoreExampleSingle);
+  });
+
   it('Should have the correct static properties for save_cache', () => {
     expect(save_cache.generableType).toBe(CircleCI.mapping.GenerableType.SAVE);
     expect(save_cache.name).toBe('save_cache');
