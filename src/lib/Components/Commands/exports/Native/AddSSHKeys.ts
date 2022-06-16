@@ -1,6 +1,6 @@
 import { GenerableType } from '../../../../Config/exports/Mapping';
 import { ListParameter, StringParameter } from '../../../Parameters/types';
-import { CommandParameters, CommandShape } from '../../types/Command.types';
+import { CommandParameters } from '../../types/Command.types';
 import { Command } from '../Command';
 
 /**
@@ -8,8 +8,8 @@ import { Command } from '../Command';
  * @param parameters - AddSSHKeysParameters
  */
 export class AddSSHKeys implements Command {
-  parameters: AddSSHKeysParameters;
-  constructor(parameters: AddSSHKeysParameters) {
+  parameters?: AddSSHKeysParameters;
+  constructor(parameters?: AddSSHKeysParameters) {
     this.parameters = parameters;
   }
   /**
@@ -17,9 +17,11 @@ export class AddSSHKeys implements Command {
    * @returns The generated JSON for the AddSSHKeys Commands.
    */
   generate(): AddSSHKeysCommandShape {
-    const command = { add_ssh_keys: {} };
-    command.add_ssh_keys = { ...command.add_ssh_keys, ...this.parameters };
-    return command as AddSSHKeysCommandShape;
+    if (!this.parameters) {
+      return this.name;
+    }
+
+    return { add_ssh_keys: this.parameters };
   }
 
   get name(): StringParameter {
@@ -44,6 +46,8 @@ export interface AddSSHKeysParameters extends CommandParameters {
 /**
  * JSON shape for the AddSSHKeys command.
  */
-export interface AddSSHKeysCommandShape extends CommandShape {
-  add_ssh_keys: AddSSHKeysParameters;
-}
+export type AddSSHKeysCommandShape =
+  | {
+      add_ssh_keys: AddSSHKeysParameters;
+    }
+  | string;

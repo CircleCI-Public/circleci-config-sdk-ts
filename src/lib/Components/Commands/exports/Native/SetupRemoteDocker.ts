@@ -9,10 +9,8 @@ import { Command } from '../Command';
  * @param parameters - SetupRemoteDockerParameters
  */
 export class SetupRemoteDocker implements Command {
-  parameters: SetupRemoteDockerParameters;
-  constructor(
-    parameters: SetupRemoteDockerParameters = { version: '20.10.6' },
-  ) {
+  parameters?: SetupRemoteDockerParameters;
+  constructor(parameters?: SetupRemoteDockerParameters) {
     this.parameters = parameters;
   }
   /**
@@ -20,6 +18,10 @@ export class SetupRemoteDocker implements Command {
    * @returns The generated JSON for the SetupRemoteDocker Commands.
    */
   generate(): SetupRemoteDockerCommandShape {
+    if (!this.parameters) {
+      return this.name;
+    }
+
     return {
       setup_remote_docker: { ...this.parameters },
     };
@@ -48,6 +50,8 @@ export interface SetupRemoteDockerParameters extends CommandParameters {
 /**
  * Generated Shape of the SetupRemoteDocker command.
  */
-export interface SetupRemoteDockerCommandShape extends CommandShape {
-  setup_remote_docker: SetupRemoteDockerParameters;
-}
+export type SetupRemoteDockerCommandShape =
+  | (CommandShape & {
+      setup_remote_docker: SetupRemoteDockerParameters;
+    })
+  | string;

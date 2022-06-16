@@ -18,6 +18,10 @@ export class Checkout implements Command {
    * @returns The generated JSON for the Checkout Commands.
    */
   generate(): CheckoutCommandShape {
+    if (!this.parameters) {
+      return this.name;
+    }
+
     return {
       checkout: { ...this.parameters },
     };
@@ -42,6 +46,8 @@ export interface CheckoutParameters extends CommandParameters {
    */
   path?: StringParameter;
 }
-export interface CheckoutCommandShape extends CommandShape {
-  checkout: CheckoutParameters;
-}
+export type CheckoutCommandShape =
+  | string
+  | (CommandShape & {
+      checkout: CheckoutParameters;
+    });

@@ -17,7 +17,7 @@ export type CommandParameters = ComponentParameter<CommandParameterTypes>;
 
 export type CommandShape = Record<string, CommandParameters>;
 
-export type CommandShorthandShape = Record<string, string>;
+export type CommandShorthandShape = Record<string, string> | string;
 
 export type AnyCommandShape = CommandShape | CommandShorthandShape;
 
