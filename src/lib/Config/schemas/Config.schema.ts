@@ -7,7 +7,7 @@ const ConfigSchema: SchemaObject = {
     workflows: {
       type: 'object',
       patternProperties: {
-        '^.*$': {
+        '^[a-z][a-z\\d_-]*$': {
           $ref: '#/definitions/Workflow',
         },
       },
@@ -23,7 +23,7 @@ const ConfigSchema: SchemaObject = {
     executors: {
       type: 'object',
       patternProperties: {
-        '^.*$': {
+        '^[a-z][a-z\\d_-]*$': {
           $ref: '#/executor/Executor', // TODO: Move executor under /definitions
         },
       },
@@ -31,7 +31,7 @@ const ConfigSchema: SchemaObject = {
     parameters: {
       type: 'object',
       patternProperties: {
-        '^.*$': {
+        '^[a-z][a-z\\d_-]*$': {
           $ref: '#/parameters/PipelineParameters', // TODO: Move parameters under /definitions
         },
       },
@@ -39,7 +39,7 @@ const ConfigSchema: SchemaObject = {
     commands: {
       type: 'object',
       patternProperties: {
-        '^.*$': {
+        '^[a-z][a-z\\d_-]*$': {
           $ref: '#/commands/custom_command', // TODO: Move commands under /definitions
         },
       },
