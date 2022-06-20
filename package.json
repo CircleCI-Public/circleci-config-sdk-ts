@@ -58,7 +58,7 @@
     "ajv": "^8.8.2",
     "ajv-merge-patch": "^5.0.1",
     "better-ajv-errors": "^1.2.0",
-    "yaml": "2.0.0-9"
+    "yaml": "2.1.1"
   },
   "directories": {
     "doc": "docs",
