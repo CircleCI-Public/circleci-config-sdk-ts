@@ -1,4 +1,10 @@
 // Namespace exports
+// Schemas must be exported first.
+
+/**
+ * All schemas used to validate the components.
+ */
+export * as schemas from './lib/Schemas';
 
 /**
  * Reusable components are an extension of base components

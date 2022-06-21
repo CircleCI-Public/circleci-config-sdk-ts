@@ -1,15 +1,15 @@
-import { SchemaObject } from 'ajv';
+import ExecutorParametersSchema from './ExecutorParameters.schema';
+import JobParametersSchema from './JobParameters.schema';
+import CommandParametersSchema from './CommandParameters.schema';
+import PipelineParametersSchema from './PipelineParameters.schema';
+import * as lists from './ComponentParameterLists.schema';
+import * as types from './ParameterTypes.schema';
 
-const genParameterListSchema = (type: string): SchemaObject => {
-  return {
-    $id: `#/parameters/${type}ParameterList`,
-    type: 'object',
-    description:
-      'https://circleci.com/docs/2.0/reusing-config/#using-the-parameters-declaration\n\nA map of parameter keys.',
-    patternProperties: {
-      '^[a-z][a-z0-9_-]+$': { $ref: `#/parameters/${type}Parameters` },
-    },
-  };
+export {
+  lists,
+  types,
+  ExecutorParametersSchema,
+  JobParametersSchema,
+  CommandParametersSchema,
+  PipelineParametersSchema,
 };
-
-export { genParameterListSchema };

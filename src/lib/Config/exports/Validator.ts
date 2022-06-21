@@ -1,54 +1,5 @@
 import Ajv, { ErrorObject, SchemaObject } from 'ajv';
 import ajvMergePatch from 'ajv-merge-patch';
-import AddSSHKeysSchema from '../../Components/Commands/schemas/Native/AddSSHKeys.schema';
-import RestoreSchema from '../../Components/Commands/schemas/Native/Cache/Restore.schema';
-import SaveSchema from '../../Components/Commands/schemas/Native/Cache/Save.schema';
-import CheckoutSchema from '../../Components/Commands/schemas/Native/Checkout.schema';
-import RunSchema from '../../Components/Commands/schemas/Native/Run.schema';
-import SetupRemoteDockerSchema from '../../Components/Commands/schemas/Native/SetupRemoteDocker.schema';
-import StoreArtifactsSchema from '../../Components/Commands/schemas/Native/StoreArtifacts.schema';
-import StoreTestResultsSchema from '../../Components/Commands/schemas/Native/StoreTestResults.schema';
-import AttachWorkspaceSchema from '../../Components/Commands/schemas/Native/Workspace/Attach.schema';
-import PersistSchema from '../../Components/Commands/schemas/Native/Workspace/Persist.schema';
-import CustomCommandSchema from '../../Components/Commands/schemas/Reusable/CustomCommand.schema';
-import ReusableCommandSchema from '../../Components/Commands/schemas/Reusable/ReusableCommand.schema';
-import {
-  StepSchema,
-  StepsSchema,
-} from '../../Components/Commands/schemas/Steps.schema';
-import DockerExecutableSchema from '../../Components/Executors/schemas/DockerExecutable.schema';
-import ExecutorSchema from '../../Components/Executors/schemas/Executor.schema';
-import MachineExecutableSchema from '../../Components/Executors/schemas/MachineExecutable.schema';
-import MacOSExecutableSchema from '../../Components/Executors/schemas/MacosExecutable.schema';
-import {
-  ReusableExecutorUsageSchema,
-  ReusableExecutorsListSchema,
-  ReusableExecutorSchema,
-} from '../../Components/Executors/schemas/ReusableExecutable.schema';
-import WindowsExecutableSchema from '../../Components/Executors/schemas/WindowsExecutable.schema';
-import JobSchema from '../../Components/Job/schemas/Job.schema';
-import CommandParametersSchema from '../../Components/Parameters/schemas/CommandParameters.schema';
-import {
-  CommandParameterListSchema,
-  ExecutorParameterListSchema,
-  JobParameterListSchema,
-  PipelineParameterListSchema,
-} from '../../Components/Parameters/schemas/ComponentParameterLists.schema';
-import ExecutorParametersSchema from '../../Components/Parameters/schemas/ExecutorParameters.schema';
-import JobParametersSchema from '../../Components/Parameters/schemas/JobParameters.schema';
-import {
-  BooleanParameterSchema,
-  EnumParameterSchema,
-  EnvVarNameParameterSchema,
-  ExecutorParameterSchema,
-  IntegerParameterSchema,
-  StepsParameterSchema,
-  StringParameterSchema,
-} from '../../Components/Parameters/schemas/ParameterTypes.schema';
-import PipelineParametersSchema from '../../Components/Parameters/schemas/PipelineParameters.schema';
-import WorkflowSchema from '../../Components/Workflow/schemas/Workflow.schema';
-import WorkflowJobSchema from '../../Components/Workflow/schemas/WorkflowJob.schema';
-import ConfigSchema from '../schemas/Config.schema';
 import { GenerableSubtypes } from '../types/Mapping.types';
 import { ValidationMap, ValidationResult } from '../types/Validator.types';
 import {
@@ -57,57 +8,71 @@ import {
   ParameterSubtype,
 } from './Mapping';
 import validationError from 'better-ajv-errors';
+import { schemas } from '../../..';
 
 const schemaRegistry: ValidationMap = {
-  [GenerableType.CONFIG]: ConfigSchema,
-  [GenerableType.REUSABLE_COMMAND]: ReusableCommandSchema,
-  [GenerableType.CUSTOM_COMMAND]: CustomCommandSchema,
-  [GenerableType.RESTORE]: RestoreSchema,
-  [GenerableType.SAVE]: SaveSchema,
-  [GenerableType.ATTACH]: AttachWorkspaceSchema,
-  [GenerableType.PERSIST]: PersistSchema,
-  [GenerableType.ADD_SSH_KEYS]: AddSSHKeysSchema,
-  [GenerableType.CHECKOUT]: CheckoutSchema,
-  [GenerableType.RUN]: RunSchema,
-  [GenerableType.SETUP_REMOTE_DOCKER]: SetupRemoteDockerSchema,
-  [GenerableType.STORE_ARTIFACTS]: StoreArtifactsSchema,
-  [GenerableType.STORE_TEST_RESULTS]: StoreTestResultsSchema,
+  [GenerableType.CONFIG]: schemas.ConfigSchema,
+  [GenerableType.REUSABLE_COMMAND]:
+    schemas.command.reusable.ReusableCommandSchema,
+  [GenerableType.CUSTOM_COMMAND]: schemas.command.reusable.CustomCommandSchema,
+  [GenerableType.RESTORE]: schemas.command.cache.RestoreSchema,
+  [GenerableType.SAVE]: schemas.command.cache.SaveSchema,
+  [GenerableType.ATTACH]: schemas.command.workspace.AttachWorkspaceSchema,
+  [GenerableType.PERSIST]: schemas.command.workspace.PersistSchema,
+  [GenerableType.ADD_SSH_KEYS]: schemas.command.AddSSHKeysSchema,
+  [GenerableType.CHECKOUT]: schemas.command.CheckoutSchema,
+  [GenerableType.RUN]: schemas.command.RunSchema,
+  [GenerableType.SETUP_REMOTE_DOCKER]: schemas.command.SetupRemoteDockerSchema,
+  [GenerableType.STORE_ARTIFACTS]: schemas.command.StoreArtifactsSchema,
+  [GenerableType.STORE_TEST_RESULTS]: schemas.command.StoreTestResultsSchema,
 
-  [GenerableType.ANY_EXECUTOR]: ExecutorSchema,
-  [GenerableType.DOCKER_EXECUTOR]: DockerExecutableSchema,
-  [GenerableType.MACHINE_EXECUTOR]: MachineExecutableSchema,
-  [GenerableType.MACOS_EXECUTOR]: MacOSExecutableSchema,
-  [GenerableType.WINDOWS_EXECUTOR]: WindowsExecutableSchema,
-  [GenerableType.REUSABLE_EXECUTOR]: ReusableExecutorSchema,
-  [GenerableType.REUSABLE_EXECUTOR_LIST]: ReusableExecutorsListSchema,
-  [GenerableType.REUSED_EXECUTOR]: ReusableExecutorUsageSchema,
+  [GenerableType.ANY_EXECUTOR]: schemas.executor.ExecutorSchema,
+  [GenerableType.DOCKER_EXECUTOR]: schemas.executor.DockerExecutableSchema,
+  [GenerableType.MACHINE_EXECUTOR]: schemas.executor.MachineExecutableSchema,
+  [GenerableType.MACOS_EXECUTOR]: schemas.executor.MacOSExecutableSchema,
+  [GenerableType.WINDOWS_EXECUTOR]: schemas.executor.WindowsExecutableSchema,
+  [GenerableType.REUSABLE_EXECUTOR]:
+    schemas.executor.reusable.ReusableExecutorSchema,
+  [GenerableType.REUSABLE_EXECUTOR_LIST]:
+    schemas.executor.reusable.ReusableExecutorsListSchema,
+  [GenerableType.REUSED_EXECUTOR]:
+    schemas.executor.reusable.ReusableExecutorUsageSchema,
 
-  [GenerableType.STEP]: StepSchema,
-  [GenerableType.STEP_LIST]: StepsSchema,
-  [GenerableType.JOB]: JobSchema,
-  [GenerableType.WORKFLOW_JOB]: WorkflowJobSchema,
-  [GenerableType.WORKFLOW]: WorkflowSchema,
+  [GenerableType.STEP]: schemas.command.steps.StepSchema,
+  [GenerableType.STEP_LIST]: schemas.command.steps.StepsSchema,
+  [GenerableType.JOB]: schemas.JobSchema,
+  [GenerableType.WORKFLOW_JOB]: schemas.workflow.WorkflowJobSchema,
+  [GenerableType.WORKFLOW]: schemas.workflow.WorkflowSchema,
 
   [GenerableType.CUSTOM_PARAMETER]: {
     /* Custom Parameter Config Components */
-    [ParameterizedComponent.JOB]: JobParametersSchema,
-    [ParameterizedComponent.COMMAND]: CommandParametersSchema,
-    [ParameterizedComponent.EXECUTOR]: ExecutorParametersSchema,
-    [ParameterizedComponent.PIPELINE]: PipelineParametersSchema,
+    [ParameterizedComponent.JOB]: schemas.parameter.JobParametersSchema,
+    [ParameterizedComponent.COMMAND]: schemas.parameter.CommandParametersSchema,
+    [ParameterizedComponent.EXECUTOR]:
+      schemas.parameter.ExecutorParametersSchema,
+    [ParameterizedComponent.PIPELINE]:
+      schemas.parameter.PipelineParametersSchema,
     /** Custom Parameter Generics */
-    [ParameterSubtype.STRING]: StringParameterSchema,
-    [ParameterSubtype.BOOLEAN]: BooleanParameterSchema,
-    [ParameterSubtype.INTEGER]: IntegerParameterSchema,
-    [ParameterSubtype.EXECUTOR]: ExecutorParameterSchema,
-    [ParameterSubtype.STEPS]: StepsParameterSchema,
-    [ParameterSubtype.ENV_VAR_NAME]: EnvVarNameParameterSchema,
+    [ParameterSubtype.STRING]: schemas.parameter.types.StringParameterSchema,
+    [ParameterSubtype.BOOLEAN]: schemas.parameter.types.BooleanParameterSchema,
+    [ParameterSubtype.INTEGER]: schemas.parameter.types.IntegerParameterSchema,
+    [ParameterSubtype.EXECUTOR]:
+      schemas.parameter.types.ExecutorParameterSchema,
+    [ParameterSubtype.STEPS]: schemas.parameter.types.StepsParameterSchema,
+    [ParameterSubtype.ENV_VAR_NAME]:
+      schemas.parameter.types.EnvVarNameParameterSchema,
   },
-  [GenerableType.CUSTOM_ENUM_PARAMETER]: EnumParameterSchema,
+  [GenerableType.CUSTOM_ENUM_PARAMETER]:
+    schemas.parameter.types.EnumParameterSchema,
   [GenerableType.CUSTOM_PARAMETERS_LIST]: {
-    [ParameterizedComponent.JOB]: JobParameterListSchema,
-    [ParameterizedComponent.COMMAND]: CommandParameterListSchema,
-    [ParameterizedComponent.EXECUTOR]: ExecutorParameterListSchema,
-    [ParameterizedComponent.PIPELINE]: PipelineParameterListSchema,
+    [ParameterizedComponent.JOB]:
+      schemas.parameter.lists.JobParameterListSchema,
+    [ParameterizedComponent.COMMAND]:
+      schemas.parameter.lists.CommandParameterListSchema,
+    [ParameterizedComponent.EXECUTOR]:
+      schemas.parameter.lists.ExecutorParameterListSchema,
+    [ParameterizedComponent.PIPELINE]:
+      schemas.parameter.lists.PipelineParameterListSchema,
   },
 
   [GenerableType.WHEN]: {},
