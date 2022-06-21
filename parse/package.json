@@ -1,0 +1,16 @@
+{
+  "name": "circleci-config-sdk-parse-interface",
+  "version": "1.0.0",
+  "description": "Takes in the input from CLI, attempts to parse and returns whether the result was successful.",
+  "main": "index.js",
+  "scripts": {
+    "prep": "cd .. && npm run sink && cd ${PWD} && npm install"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@circleci/circleci-config-sdk": "file:..",
+    "fs": "^0.0.1-security",
+    "yaml": "^2.1.1"
+  }
+}

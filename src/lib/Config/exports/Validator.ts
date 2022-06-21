@@ -123,23 +123,25 @@ const schemaRegistry: ValidationMap = {
  * An Ajv object that can validate a config and it's components
  * Does not handle validation of parameter usage.
  */
-export class Validator extends Ajv {
+export class Validator {
   private static instance: Validator;
 
   public static validateOnParse: boolean;
 
-  private constructor() {
-    super({ allowUnionTypes: true });
+  private ajv: Ajv;
 
-    ajvMergePatch(this);
+  private constructor(allErrors?: boolean) {
+    this.ajv = new Ajv({ allowUnionTypes: true, allErrors });
+
+    ajvMergePatch(this.ajv);
 
     Object.values(schemaRegistry).forEach((source) => {
       if ('$id' in source) {
         const schema = source as SchemaObject;
-        this.addSchema(schema, schema.$id);
+        this.ajv.addSchema(schema, schema.$id);
       } else {
         Object.values(source).forEach((schema) => {
-          this.addSchema(schema, schema.$id);
+          this.ajv.addSchema(schema, schema.$id);
         });
       }
     });
@@ -152,9 +154,9 @@ export class Validator extends Ajv {
    * @returns generic instance of ConfigValidator
    */
 
-  static getInstance(): Validator {
+  static getInstance(allErrors?: boolean): Validator {
     if (!Validator.instance) {
-      Validator.instance = new Validator();
+      Validator.instance = new Validator(allErrors);
     }
 
     return Validator.instance;
@@ -170,29 +172,42 @@ export class Validator extends Ajv {
     generable: GenerableType,
     input: unknown,
     subtype?: GenerableSubtypes,
+    raw?: boolean,
   ): ValidationResult {
     const schemaSource = schemaRegistry[generable];
 
     if ('$id' in schemaSource) {
       const schema = schemaSource as SchemaObject;
 
-      return Validator.getInstance().validateComponent(schema, input);
+      return Validator.getInstance().validate(schema, input, raw);
     } else if (subtype !== undefined && subtype in schemaSource) {
       const schema = schemaSource[subtype] as ValidationMap;
 
-      return Validator.getInstance().validateComponent(schema, input);
+      return Validator.getInstance().validate(schema, input, raw);
     } else {
       throw new Error(`No validator found for ${generable}:${subtype}`);
     }
   }
 
-  validateComponent(schema: SchemaObject, data: unknown): ValidationResult {
-    const valid = super.validate(schema, data);
+  validate(
+    schema: SchemaObject,
+    data: unknown,
+    raw?: boolean,
+  ): ValidationResult {
+    const valid = this.ajv.validate(schema, data);
 
-    if (!valid && Array.isArray(this.errors) && data) {
-      return validationError(schema, data, this.errors as ErrorObject[]);
+    if (!valid && Array.isArray(this.ajv.errors) && data) {
+      if (raw) {
+        return this.ajv.errors.join(',');
+      }
+
+      return validationError(schema, data, this.ajv.errors as ErrorObject[]);
     }
 
     return valid;
+  }
+
+  get errors(): ErrorObject[] | null | undefined {
+    return this.ajv.errors;
   }
 }
