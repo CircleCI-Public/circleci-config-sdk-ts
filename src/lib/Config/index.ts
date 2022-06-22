@@ -12,6 +12,8 @@ import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomP
 import { CustomCommand } from '../Components/Reusable';
 import { Workflow } from '../Components/Workflow/exports/Workflow';
 import { WorkflowsShape } from '../Components/Workflow/types/Workflow.types';
+import { OrbImport } from '../Orb/exports/OrbImport';
+import { OrbImportsShape } from '../Orb/types/Orb.types';
 import { GenerableType } from './exports/Mapping';
 import { Validator } from './exports/Validator';
 import { Pipeline } from './Pipeline';
@@ -63,6 +65,8 @@ export class Config
    */
   setup: boolean;
 
+  orbs?: OrbImport[];
+
   /**
    * Instantiate a new CircleCI config. Build up your config by adding components.
    * @param jobs - Instantiate with pre-defined Jobs.
@@ -76,6 +80,7 @@ export class Config
     executors?: ReusableExecutor[],
     commands?: CustomCommand[],
     parameters?: CustomParametersList<PipelineParameterLiteral>,
+    orbs?: OrbImport[],
   ) {
     this.setup = setup;
     this.jobs = jobs || [];
@@ -83,6 +88,7 @@ export class Config
     this.executors = executors;
     this.commands = commands;
     this.parameters = parameters;
+    this.orbs = orbs;
   }
 
   /**
@@ -132,6 +138,16 @@ export class Config
     return this;
   }
 
+  importOrb(orb: OrbImport): this {
+    if (!this.orbs) {
+      this.orbs = [orb];
+    } else {
+      this.orbs.push(orb);
+    }
+
+    return this;
+  }
+
   /**
    * Define a pipeline parameter for the current Config. Chainable
    *
@@ -176,6 +192,7 @@ export class Config
     );
     const generatedCommands = generateList<CustomCommandShape>(this.commands);
     const generatedParameters = this.parameters?.generate();
+    const generatedOrbs = generateList<OrbImportsShape>(this.orbs);
 
     const generatedConfig: CircleCIConfigShape = {
       version: this.version,
@@ -185,6 +202,7 @@ export class Config
       executors: generatedExecutors,
       jobs: generatedJobs,
       workflows: generatedWorkflows,
+      orbs: generatedOrbs,
     };
 
     return this.prependVersionComment(
