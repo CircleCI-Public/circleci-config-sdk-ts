@@ -23,6 +23,21 @@ commands:
             echo "{\"version\": \"$CIRCLE_TAG\"}" > ./src/package-version.json
 
 jobs:
+  test: 
+    parameters: 
+      version: 
+        type: string
+    executor: 
+      name: node/default
+      version: << parameters.version >>
+    parallelism: 5
+    steps: 
+      - checkout
+      - node/install-packages
+      - run: npm run test $(circleci tests glob "src/__tests__/*.js" | circleci tests split)
+      - codecov/upload:
+          file: coverage/lcov.info
+
   deploy-docs:
     executor: node/default
     steps:
@@ -81,7 +96,7 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - node/test:
+      - test:
           matrix:
             parameters:
               version:
@@ -90,9 +105,6 @@ workflows:
                 - "16.12"
                 - "15.14"
                 - "12.22"
-          post-steps:
-            - codecov/upload:
-                file: coverage/lcov.info
           filters:
             tags:
               only: /.*/
