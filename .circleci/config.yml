@@ -34,7 +34,7 @@ jobs:
     steps: 
       - checkout
       - node/install-packages
-      - run: npm test -- $(circleci tests glob "tests/*.ts" | circleci tests split)
+      - run: npm test -- --coverageThreshold '{}' $(circleci tests glob "tests/*.ts" | circleci tests split)
       - codecov/upload:
           file: coverage/lcov.info
 
