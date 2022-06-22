@@ -5,7 +5,7 @@
   "main": "dist/circleci-config-sdk.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "test": "npx jest && npm run build:docs",
+    "test": "npx jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
     "prettier": "prettier --write .",
     "prettier:ci": "prettier --check .",

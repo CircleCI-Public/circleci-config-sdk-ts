@@ -30,11 +30,11 @@ jobs:
     executor: 
       name: node/default
       tag: << parameters.version >>
-    parallelism: 5
+    parallelism: 3
     steps: 
       - checkout
       - node/install-packages
-      - run: npm run test $(circleci tests glob "src/__tests__/*.js" | circleci tests split)
+      - run: npm test -- $(circleci tests glob "tests/*.ts" | circleci tests split)
       - codecov/upload:
           file: coverage/lcov.info
 
