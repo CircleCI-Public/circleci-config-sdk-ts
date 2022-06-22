@@ -110,7 +110,7 @@ workflows:
               only: /.*/
       - deploy-docs:
           requires:
-            - node/test
+            - test
             - lint
           filters:
             branches:
@@ -120,7 +120,7 @@ workflows:
       - deploy-package:
           context: cci-config-sdk-publishing
           requires:
-            - node/test
+            - test
             - lint
           filters:
             branches:
