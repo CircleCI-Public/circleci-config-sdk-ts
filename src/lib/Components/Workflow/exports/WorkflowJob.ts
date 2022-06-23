@@ -1,4 +1,6 @@
+import { OrbRef } from '../../../Orb/exports/OrbRef';
 import { Job } from '../../Job';
+import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import {
   WorkflowJobParameters,
   WorkflowJobShape,
@@ -12,9 +14,12 @@ import { WorkflowJobAbstract } from './WorkflowJobAbstract';
  * @see {@link Workflow.addJob} for general use.
  */
 export class WorkflowJob extends WorkflowJobAbstract {
-  job: Job;
+  job: Job | OrbRef<JobParameterLiteral>;
 
-  constructor(job: Job, parameters?: Exclude<WorkflowJobParameters, 'type'>) {
+  constructor(
+    job: Job | OrbRef<JobParameterLiteral>,
+    parameters?: Exclude<WorkflowJobParameters, 'type'>,
+  ) {
     super(parameters);
     this.job = job;
   }

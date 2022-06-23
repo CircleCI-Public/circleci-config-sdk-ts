@@ -9,6 +9,8 @@ import { AnyParameterLiteral } from '../../Components/Parameters/types/CustomPar
 import { CustomCommand } from '../../Components/Reusable';
 import { Workflow } from '../../Components/Workflow/exports/Workflow';
 import { WorkflowsShape } from '../../Components/Workflow/types/Workflow.types';
+import { OrbImport } from '../../Orb';
+import { OrbImportsShape } from '../../Orb/types/Orb.types';
 import * as mapping from './Mapping.types';
 import * as validator from './Validator.types';
 
@@ -20,10 +22,7 @@ export type ConfigVersion = 2 | 2.1;
 /**
  * Orb import object
  */
-export type ConfigOrbImport = {
-  orbAlias: string;
-  orbImport: string;
-};
+export type ConfigOrbImport = Record<string, string>;
 
 /**
  * CircleCI configuration object
@@ -34,6 +33,7 @@ export type CircleCIConfigObject = {
   executors?: ReusableExecutor[];
   commands?: CustomCommand[];
   workflows?: Workflow[];
+  orbs?: OrbImport[];
 };
 
 /**
@@ -44,7 +44,7 @@ export type CircleCIConfigShape = {
   setup: boolean;
   parameters?: Record<string, ParameterShape>;
   executors?: ReusableExecutorsShape;
-  orbs?: ConfigOrbImport[];
+  orbs?: OrbImportsShape;
   jobs: JobsShape;
   commands?: CustomCommandShape;
   workflows: WorkflowsShape;

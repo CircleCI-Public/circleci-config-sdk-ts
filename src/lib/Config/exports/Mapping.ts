@@ -1,5 +1,8 @@
 export enum GenerableType {
   CONFIG = 'config',
+  ORB = 'orb',
+  ORB_IMPORT = 'orb_import',
+  ORB_REF = 'orb_ref',
 
   // Commands
   REUSABLE_COMMAND = 'reusable_command',

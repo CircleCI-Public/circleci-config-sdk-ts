@@ -1,6 +1,8 @@
 import { Generable } from '../..';
 import { GenerableType } from '../../../Config/exports/Mapping';
+import { OrbRef } from '../../../Orb';
 import { ExecutorParameterTypes } from '../../Parameters/types/ComponentParameters.types';
+import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import {
   ReusedExecutorShape,
   ReusedExecutorShapeContents,
@@ -15,7 +17,7 @@ export class ReusedExecutor implements Generable {
   /**
    * The referenced executor to use.
    */
-  private _executor: ReusableExecutor;
+  private _executor: ReusableExecutor | OrbRef<ExecutorParameterLiteral>;
 
   /**
    * Parameters to assign to the executor
@@ -23,9 +25,10 @@ export class ReusedExecutor implements Generable {
   private _parameters?: Record<string, ExecutorParameterTypes>;
 
   constructor(
-    executor: ReusableExecutor,
+    executor: ReusableExecutor | OrbRef<ExecutorParameterLiteral>,
     parameters?: Record<string, ExecutorParameterTypes>,
   ) {
+    this._executor = executor;
     this._executor = executor;
     this._parameters = parameters;
   }
@@ -57,7 +60,7 @@ export class ReusedExecutor implements Generable {
     return GenerableType.REUSED_EXECUTOR;
   }
 
-  get executor(): ReusableExecutor {
+  get executor(): ReusableExecutor | OrbRef<ExecutorParameterLiteral> {
     return this._executor;
   }
 

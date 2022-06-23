@@ -53,6 +53,11 @@ export * as parsers from './lib/Config/parsers';
  */
 export * as workflow from './lib/Components/Workflow';
 
+/**
+ * All imports pertaining to orbs
+ */
+export * as orb from './lib/Orb';
+
 // Top-level exports
 export { Job } from './lib/Components/Job';
 export { Config, Validator } from './lib/Config';
