@@ -12,5 +12,5 @@ import {
 export interface Command extends Generable {
   name: StringParameter;
   parameters?: CommandParameters;
-  generate(): CommandShape | CommandShorthandShape;
+  generate(flatten?: boolean): CommandShape | CommandShorthandShape;
 }

@@ -368,15 +368,11 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
     new CircleCI.parameters.CustomParametersList(),
   );
   const expectedUsageShape = {
-    executor: {
-      name: 'default',
-    },
+    executor: 'default',
   };
 
   it('Should match the expected output in job context', () => {
-    expect(reusable.generate(CircleCI.mapping.GenerableType.JOB)).toEqual(
-      expectedUsageShape,
-    );
+    expect(reusable.reuse().generate(true)).toEqual(expectedUsageShape);
   });
 
   it('Should throw error during parsing', () => {

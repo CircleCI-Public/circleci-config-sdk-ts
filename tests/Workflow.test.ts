@@ -125,20 +125,17 @@ describe('Instantiate a new Workflow with a when condition', () => {
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
   const workflowJob = new CircleCI.workflow.WorkflowJob(job);
   const { and, or, equal, not } = CircleCI.logic;
-  const myWorkflow = new CircleCI.Workflow(
-    'my-workflow',
-    [workflowJob],
-    new CircleCI.logic.When(
-      or(
-        and(
-          '<< parameters.should_retry >>',
-          equal('<< parameters.attempt >>', 3),
-        ),
-        not(equal('<< parameters.user >>', 'bob')),
+  const when = new CircleCI.logic.When(
+    or(
+      and(
+        '<< parameters.should_retry >>',
+        equal('<< parameters.attempt >>', 3),
       ),
+      not(equal('<< parameters.user >>', 'bob')),
     ),
   );
 
+  const myWorkflow = new CircleCI.Workflow('my-workflow', [workflowJob], when);
   const generatedWorkflow = myWorkflow.generate();
   const expected = {
     'my-workflow': {
@@ -166,6 +163,7 @@ describe('Instantiate a new Workflow with a when condition', () => {
     expect(workflowJob.generableType).toBe(
       CircleCI.mapping.GenerableType.WORKFLOW_JOB,
     );
+    expect(when.generableType).toBe(CircleCI.mapping.GenerableType.WHEN);
   });
 });
 

@@ -8,12 +8,12 @@ export interface Generable {
    * Generate the CircleCI YAML equivalent JSON for config compilation
    * Generable's name is the key in the output.
    */
-  generate(ctx?: GenerableType): unknown;
+  generate(flatten?: boolean): unknown;
 
   /**
    * Generate the CircleCI YAML equivalent JSON contents for config compilation
    */
-  generateContents?(): unknown;
+  generateContents?(flatten?: boolean): unknown;
 
   /**
    * Type of generable object

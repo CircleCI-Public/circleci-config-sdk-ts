@@ -5,6 +5,6 @@ import { Evaluable } from './Evaluable';
 
 export abstract class Condition implements Generable, Evaluable<boolean> {
   abstract evaluate(): boolean;
-  abstract generate(ctx?: GenerableType): AnyConditionShape;
+  abstract generate(flatten?: boolean): AnyConditionShape;
   abstract get generableType(): GenerableType;
 }

@@ -14,7 +14,7 @@ export class When implements Generable {
   }
 
   generate(): AnyConditionShape {
-    return this.condition.generate(this.generableType);
+    return this.condition.generate();
   }
 
   get generableType(): GenerableType {

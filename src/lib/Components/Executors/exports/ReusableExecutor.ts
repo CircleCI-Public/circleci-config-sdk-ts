@@ -46,24 +46,7 @@ export class ReusableExecutor
    * Generate Reusable Executor schema.
    * @returns The generated JSON for the Reusable Executor.
    */
-  generate(
-    ctx?: GenerableType,
-  ): ReusableExecutorsShape | ReusableExecutorJobRefShape {
-    if (ctx == GenerableType.JOB) {
-      // TODO: Enable for 'minification'
-      // if (!this.parameters) {
-      //   return {
-      //     executor: this.name;
-      //   }
-      // }
-
-      return {
-        executor: {
-          name: this.name,
-        },
-      };
-    }
-
+  generate(): ReusableExecutorsShape | ReusableExecutorJobRefShape {
     return {
       [this.name]: {
         ...this.executor.generate(),

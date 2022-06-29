@@ -16,7 +16,7 @@ export class Not extends Condition {
   }
 
   generate(): NotConditionShape {
-    return { not: this.condition.generate(this.generableType) };
+    return { not: this.condition.generate() };
   }
 
   get generableType(): GenerableType {

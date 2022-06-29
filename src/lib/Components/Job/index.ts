@@ -36,11 +36,11 @@ export class Job implements Generable {
    * Generates the contents of the Job.
    * @returns The generated JSON for the Job's contents.
    */
-  generateContents(): JobContentsShape {
+  generateContents(flatten?: boolean): JobContentsShape {
     const generatedSteps = this.steps.map((step) => {
-      return step.generate();
+      return step.generate(flatten);
     });
-    const generatedExecutor = this.executor.generate();
+    const generatedExecutor = this.executor.generate(flatten);
 
     return { steps: generatedSteps, ...generatedExecutor };
   }
@@ -48,9 +48,9 @@ export class Job implements Generable {
    * Generate Job schema
    * @returns The generated JSON for the Job.
    */
-  generate(): JobsShape {
+  generate(flatten?: boolean): JobsShape {
     return {
-      [this.name]: this.generateContents(),
+      [this.name]: this.generateContents(flatten),
     };
   }
 
