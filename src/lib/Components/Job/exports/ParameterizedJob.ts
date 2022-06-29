@@ -33,10 +33,10 @@ class ParameterizedJob
    * Generate the internal contents of this job.
    * @returns The job contents in it's generated shape.
    */
-  generateContents(): ParameterizedJobContents {
+  generateContents(flatten?: boolean): ParameterizedJobContents {
     return {
       parameters: this.parameters.generate(),
-      ...super.generateContents(),
+      ...super.generateContents(flatten),
     };
   }
 

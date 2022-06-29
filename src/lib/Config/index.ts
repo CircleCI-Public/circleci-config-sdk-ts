@@ -184,13 +184,17 @@ export class Config
   /**
    * Export the CircleCI configuration as a YAML string.
    */
-  generate(): string {
+  generate(flatten?: boolean): string {
     const generatedWorkflows = generateList<WorkflowsShape>(this.workflows, {});
-    const generatedJobs = generateList<JobsShape>(this.jobs, {});
+    const generatedJobs = generateList<JobsShape>(this.jobs, {}, flatten);
     const generatedExecutors = generateList<ReusableExecutorsShape>(
       this.executors,
     );
-    const generatedCommands = generateList<CustomCommandShape>(this.commands);
+    const generatedCommands = generateList<CustomCommandShape>(
+      this.commands,
+      undefined,
+      flatten,
+    );
     const generatedParameters = this.parameters?.generate();
     const generatedOrbs = generateList<OrbImportsShape>(this.orbs);
 
@@ -220,7 +224,11 @@ export class Config
   }
 }
 
-function generateList<Shape>(listIn?: Generable[], failSafe?: Shape): Shape {
+function generateList<Shape>(
+  listIn?: Generable[],
+  failSafe?: Shape,
+  flatten?: boolean,
+): Shape {
   if (!listIn) {
     return failSafe as Shape;
   }
@@ -228,7 +236,7 @@ function generateList<Shape>(listIn?: Generable[], failSafe?: Shape): Shape {
   return Object.assign(
     {},
     ...listIn.map((generable) => {
-      return generable.generate();
+      return generable.generate(flatten);
     }),
   );
 }

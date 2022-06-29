@@ -36,17 +36,17 @@ export class ReusedExecutor implements Generable {
    * Generate Reused Executor schema.
    * @returns The generated JSON for the Reused Executor.
    */
-  generate(): ReusedExecutorShape {
+  generate(flatten?: boolean): ReusedExecutorShape {
     return {
-      executor: this.generateContents(),
+      executor: this.generateContents(flatten),
     };
   }
   /**
    * Generate Reused Executor schema.
    * @returns The generated JSON for the Reused Executor.
    */
-  generateContents(): ReusedExecutorShapeContents {
-    if (this._parameters) {
+  generateContents(flatten?: boolean): ReusedExecutorShapeContents {
+    if (this._parameters || !flatten) {
       return {
         name: this._executor.name,
         ...this._parameters,

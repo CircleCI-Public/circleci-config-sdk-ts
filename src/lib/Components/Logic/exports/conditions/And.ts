@@ -16,7 +16,7 @@ export class And extends Condition {
   }
 
   generate(): AndConditionShape {
-    return { and: this.conditions.map((c) => c.generate(this.generableType)) };
+    return { and: this.conditions.map((c) => c.generate()) };
   }
 
   get generableType(): GenerableType {

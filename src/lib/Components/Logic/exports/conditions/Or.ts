@@ -22,7 +22,7 @@ export class Or extends Condition {
   }
 
   generate(): OrConditionShape {
-    return { or: this.conditions.map((c) => c.generate(this.generableType)) };
+    return { or: this.conditions.map((c) => c.generate()) };
   }
 
   get generableType(): GenerableType {
