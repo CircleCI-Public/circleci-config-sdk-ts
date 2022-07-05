@@ -64,6 +64,7 @@ describe('Use an OrbImport within a config', () => {
   it('OrbRef should have static properties', () => {
     expect(sayHelloJob instanceof CircleCI.orb.OrbRef).toBe(true);
     expect(sayHelloJob.parameters.parameters.length).toBe(1);
+    expect(sayHelloJob.orb.name).toBe(orbName);
     expect(sayHelloJob.generableType).toBe(
       CircleCI.mapping.GenerableType.ORB_REF,
     );

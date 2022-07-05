@@ -29,4 +29,8 @@ export class OrbRef<Literal extends AnyParameterLiteral> {
   get parameters(): CustomParametersList<Literal> {
     return this._parameters;
   }
+
+  get orb(): OrbImport {
+    return this._orb;
+  }
 }
