@@ -26,8 +26,6 @@ export class Run implements Command {
   generate(flatten?: boolean): RunCommandShape | RunCommandShorthandShape {
     const { command, ...parameters } = this.parameters;
 
-    console.log(Object.keys(parameters).length, flatten);
-
     if (Object.keys(parameters).length === 0 && flatten) {
       return { run: command } as RunCommandShorthandShape;
     }
