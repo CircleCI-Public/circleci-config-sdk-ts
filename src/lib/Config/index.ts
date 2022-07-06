@@ -185,7 +185,11 @@ export class Config
    * Export the CircleCI configuration as a YAML string.
    */
   generate(flatten?: boolean): string {
-    const generatedWorkflows = generateList<WorkflowsShape>(this.workflows, {});
+    const generatedWorkflows = generateList<WorkflowsShape>(
+      this.workflows,
+      {},
+      flatten,
+    );
     const generatedJobs = generateList<JobsShape>(this.jobs, {}, flatten);
     const generatedExecutors = generateList<ReusableExecutorsShape>(
       this.executors,

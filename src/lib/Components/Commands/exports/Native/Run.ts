@@ -23,10 +23,10 @@ export class Run implements Command {
   /**
    * Generate Run Command shape.* @returns The generated JSON for the Run Commands.
    */
-  generate(): RunCommandShape | RunCommandShorthandShape {
+  generate(flatten?: boolean): RunCommandShape | RunCommandShorthandShape {
     const { command, ...parameters } = this.parameters;
 
-    if (Object.keys(parameters).length === 0) {
+    if (Object.keys(parameters).length === 0 && flatten) {
       return { run: command } as RunCommandShorthandShape;
     }
 

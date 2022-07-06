@@ -16,7 +16,7 @@ describe('Instantiate Docker Job', () => {
   };
 
   it('Should match the expected output', () => {
-    expect(job.generate()).toEqual({ [jobName]: jobContents });
+    expect(job.generate(true)).toEqual({ [jobName]: jobContents });
   });
 
   it('Should match the expected output', () => {
@@ -52,7 +52,7 @@ describe('Instantiate Parameterized Docker Job With Custom Parameters', () => {
     - run: echo << parameters.greeting >>`;
 
   it('Should match the expected output', () => {
-    expect(job.generate()).toEqual(YAML.parse(expectedOutput));
+    expect(job.generate(true)).toEqual(YAML.parse(expectedOutput));
   });
 
   it('Should throw error when no enum values are provided', () => {
@@ -127,7 +127,7 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
     const myConfig = new CircleCI.Config();
     myConfig.addCustomCommand(customCommand);
     myConfig.addJob(job);
-    expect(YAML.parse(myConfig.generate())).toEqual(expectedOutput);
+    expect(YAML.parse(myConfig.generate(true))).toEqual(expectedOutput);
   });
 });
 
