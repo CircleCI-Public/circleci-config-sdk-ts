@@ -50,9 +50,9 @@ export class Workflow implements Generable, Conditional {
    * Generate Workflow Shape.
    * @returns The generated JSON for the Workflow.
    */
-  generate(): WorkflowsShape {
+  generate(flatten?: boolean): WorkflowsShape {
     const generatedWorkflowJobs = this.jobs.map((job) => {
-      return job.generate();
+      return job.generate(flatten);
     });
 
     const generatedWhen = this.when?.generate();

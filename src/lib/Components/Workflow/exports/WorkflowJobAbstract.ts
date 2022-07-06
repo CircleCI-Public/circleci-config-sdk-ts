@@ -22,7 +22,7 @@ export abstract class WorkflowJobAbstract implements Generable {
     this.parameters = parameters;
   }
 
-  generateContents(): WorkflowJobContentsShape {
+  generateContents(flatten?: boolean): WorkflowJobContentsShape {
     let parameters: WorkflowJobParametersShape | undefined;
 
     if (this.parameters) {
@@ -30,8 +30,8 @@ export abstract class WorkflowJobAbstract implements Generable {
         this.parameters;
       parameters = {
         ...jobParameters,
-        'pre-steps': this.generateSteps(pre_steps),
-        'post-steps': this.generateSteps(post_steps),
+        'pre-steps': this.generateSteps(pre_steps, flatten),
+        'post-steps': this.generateSteps(post_steps, flatten),
       };
 
       if (matrix) {
@@ -48,10 +48,13 @@ export abstract class WorkflowJobAbstract implements Generable {
     return GenerableType.WORKFLOW_JOB;
   }
 
-  private generateSteps(steps?: StepsParameter): AnyCommandShape[] | undefined {
-    return steps?.map((step) => step.generate());
+  private generateSteps(
+    steps?: StepsParameter,
+    flatten?: boolean,
+  ): AnyCommandShape[] | undefined {
+    return steps?.map((step) => step.generate(flatten));
   }
 
   abstract get name(): string;
-  abstract generate(): WorkflowJobShape;
+  abstract generate(flatten?: boolean): WorkflowJobShape;
 }

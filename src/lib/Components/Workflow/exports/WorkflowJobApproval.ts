@@ -13,9 +13,9 @@ export class WorkflowJobApproval extends WorkflowJobAbstract {
     this._name = name;
   }
 
-  generate(): WorkflowJobShape {
+  generate(flatten?: boolean): WorkflowJobShape {
     return {
-      [this.name]: this.generateContents(),
+      [this.name]: this.generateContents(flatten),
     };
   }
 

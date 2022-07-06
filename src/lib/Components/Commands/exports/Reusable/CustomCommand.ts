@@ -27,7 +27,7 @@ export class CustomCommand
   parameters?: CustomParametersList<CommandParameterLiteral>;
 
   /**
-   * A string that describes the purpose of the command.
+   * A string that describes the purpose of the command
    */
   description?: string;
 
@@ -43,9 +43,9 @@ export class CustomCommand
     this.description = description;
   }
 
-  generate(): CustomCommandShape {
+  generate(flatten?: boolean): CustomCommandShape {
     const generatedSteps: AnyCommandShape[] = this.steps.map((step) =>
-      step.generate(),
+      step.generate(flatten),
     );
 
     return {

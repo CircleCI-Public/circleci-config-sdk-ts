@@ -14,7 +14,7 @@ describe('Instantiate a Run step', () => {
   const run = new CircleCI.commands.Run({
     command: 'echo hello world',
   });
-  const runStep = run.generate();
+  const runStep = run.generate(true);
   const expectedResult = { run: 'echo hello world' };
   it('Should generate checkout yaml', () => {
     expect(runStep).toEqual(expectedResult);
@@ -312,7 +312,8 @@ describe('Instantiate a Custom Command', () => {
       type: string
       default: hello world
   steps:
-    - run: echo << parameters.greeting >>`;
+    - run: 
+        command: echo << parameters.greeting >>`;
 
   it('Should generate checkout yaml', () => {
     expect(customCommand.generate()).toEqual(parse(expectedOutput));
@@ -405,7 +406,9 @@ describe('Instantiate reusable commands', () => {
     steps:
       - run: echo << parameters.axis >>`;
 
-    expect(firstCustomCommand.generate()).toEqual(parse(firstExpectedOutput));
+    expect(firstCustomCommand.generate(true)).toEqual(
+      parse(firstExpectedOutput),
+    );
   });
 
   const secondCustomCommand = new CircleCI.reusable.CustomCommand(
@@ -432,7 +435,9 @@ describe('Instantiate reusable commands', () => {
     steps:
       - run: echo << parameters.year >>`;
 
-    expect(secondCustomCommand.generate()).toEqual(parse(secondExpectedOutput));
+    expect(secondCustomCommand.generate(true)).toEqual(
+      parse(secondExpectedOutput),
+    );
   });
 
   const myConfig = new CircleCI.Config();
@@ -600,9 +605,9 @@ echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single
   echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
 `;
   it('Should match expectedOutput', () => {
-    expect(stringify(multiLineCommand.generate(), stringifyOptions)).toEqual(
-      expectedOutput,
-    );
+    expect(
+      stringify(multiLineCommand.generate(true), stringifyOptions),
+    ).toEqual(expectedOutput);
   });
 });
 
@@ -614,7 +619,7 @@ describe('Instantiate a Run command with 70 characters in the command string and
   const expectedOutput = `run: echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
 `;
   it('Should match expectedOutput', () => {
-    expect(stringify(longCommand.generate(), stringifyOptions)).toEqual(
+    expect(stringify(longCommand.generate(true), stringifyOptions)).toEqual(
       expectedOutput,
     );
   });

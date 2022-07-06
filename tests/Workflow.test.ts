@@ -360,7 +360,7 @@ describe('Add pre/post steps to workflow', () => {
         ],
       },
     };
-    const generatedWorkflow = myWorkflow.generate();
+    const generatedWorkflow = myWorkflow.generate(true);
     expect(generatedWorkflow).toEqual(expected);
   });
 });

@@ -24,13 +24,13 @@ export class WorkflowJob extends WorkflowJobAbstract {
     this.job = job;
   }
 
-  generate(): WorkflowJobShape {
+  generate(flatten?: boolean): WorkflowJobShape {
     if (this.parameters === undefined) {
       return this.job.name;
     }
 
     return {
-      [this.job.name]: this.generateContents(),
+      [this.job.name]: this.generateContents(flatten),
     };
   }
 
