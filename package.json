@@ -1,80 +1,12 @@
 {
-  "name": "@circleci/circleci-config-sdk",
-  "version": "0.0.0-development",
-  "description": "An SDK for building CircleCI Configuration files with JavaScript.",
-  "main": "dist/circleci-config-sdk.js",
-  "types": "dist/src/index.d.ts",
-  "scripts": {
-    "test": "npx jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
-    "prettier": "prettier --write .",
-    "prettier:ci": "prettier --check .",
-    "lint:ci": "npm run prettier:ci && npm run lint",
-    "build": "rm -rf ./dist && npx webpack --mode production",
-    "build:docs": "typedoc --logLevel Verbose --listInvalidSymbolLinks --internalNamespace internalTypes",
-    "prepare": "husky install",
-    "sink": "npm run prettier && npm run lint && npm run test && npm run build && npm run build:docs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CircleCI-Public/circleci-config-sdk-ts.git"
-  },
-  "author": {
-    "name": "Kyle Tryon",
-    "email": "community-partner@circleci.com"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues"
-  },
-  "homepage": "https://github.com/CircleCI-Public/circleci-config-sdk-ts#readme",
+  "name": "root",
+  "private": true,
+  "useNx": true,
   "devDependencies": {
-    "@types/ajv-merge-patch": "^4.1.2",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^14.14.37",
-    "@types/webpack": "^5.0.0",
-    "@types/webpack-node-externals": "^2.5.1",
-    "@typescript-eslint/eslint-plugin": "^4.20.0",
-    "@typescript-eslint/parser": "^4.20.0",
-    "eslint": "^7.23.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-security": "^1.4.0",
-    "eslint-plugin-tsdoc": "^0.2.11",
-    "husky": "^6.0.0",
-    "jest": "^27.3.0",
-    "lint-staged": "^11.0.0",
-    "prettier": "^2.3.1",
-    "ts-jest": "^27.0.6",
-    "ts-loader": "^9.2.6",
-    "ts-node": "^9.1.1",
-    "typedoc": "^0.22.5",
-    "typedoc-plugin-missing-exports": "^0.22.3",
-    "typescript": "^4.2.3",
-    "webpack": "^5.58.2",
-    "webpack-cli": "^4.9.1",
-    "webpack-node-externals": "^2.5.2"
+    "lerna": "^5.1.8",
+    "nx": "^14.4.2"
   },
-  "dependencies": {
-    "ajv": "^8.8.2",
-    "ajv-merge-patch": "^5.0.1",
-    "better-ajv-errors": "^1.2.0",
-    "yaml": "2.0.0-9"
-  },
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
-  "keywords": [
-    "circleci"
-  ],
-  "lint-staged": {
-    "!(sample)/**/*.{js,jsx,ts,tsx}": [
-      "npm run prettier",
-      "npm run lint"
-    ]
-  },
-  "stability": "stable",
-  "bundleDependencies": [
-    "yaml"
+  "workspaces": [
+    "packages/*"
   ]
 }
