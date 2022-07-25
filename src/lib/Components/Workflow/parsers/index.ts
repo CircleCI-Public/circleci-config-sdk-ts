@@ -1,5 +1,6 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
+import { parseSteps } from '../../Commands/parsers';
 import { Job } from '../../Job';
 import { Workflow } from '../exports/Workflow';
 import { WorkflowJob } from '../exports/WorkflowJob';
@@ -9,6 +10,7 @@ import {
   UnknownWorkflowJobShape,
   UnknownWorkflowShape,
   WorkflowDependencies,
+  WorkflowJobParameters,
 } from '../types';
 
 /**
@@ -29,14 +31,38 @@ export function parseWorkflowJob(
     GenerableType.WORKFLOW_JOB,
     workflowJobIn,
     (workflowJobArgs) => {
+      let args = workflowJobArgs;
+      let parsedPresteps, parsedPoststeps;
+
+      if (args) {
+        if ('pre-steps' in args) {
+          const { 'pre-steps': steps, ...argsRestTemp } = args;
+          parsedPresteps = parseSteps(steps);
+          args = argsRestTemp;
+        }
+
+        if ('post-steps' in args) {
+          const { 'post-steps': steps, ...argsRestTemp } = args;
+          parsedPoststeps = parseSteps(steps);
+          args = argsRestTemp;
+        }
+      }
+
+      const parameters = args as WorkflowJobParameters | undefined;
+
       if (workflowJobArgs?.type === 'approval') {
-        return new WorkflowJobApproval(name, workflowJobArgs);
+        return new WorkflowJobApproval(name, parameters);
       }
 
       const job = jobs.find((c) => c.name === name);
 
       if (job) {
-        return new WorkflowJob(job, workflowJobArgs);
+        return new WorkflowJob(
+          job,
+          parameters,
+          parsedPresteps,
+          parsedPoststeps,
+        );
       }
 
       throw errorParsing(`Job ${name} not found in config`);

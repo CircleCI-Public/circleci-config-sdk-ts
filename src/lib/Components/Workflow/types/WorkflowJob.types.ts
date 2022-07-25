@@ -1,15 +1,14 @@
+import { AnyCommandShape } from '../../Commands/types/Command.types';
 import {
   FilterParameter,
   ListParameter,
   MatrixParameter,
-  StepsParameter,
   StringParameter,
 } from '../../Parameters/types';
 import {
   ComponentParameter,
   JobParameterTypes,
 } from '../../Parameters/types/ComponentParameters.types';
-import { AnyCommandShape } from '../../Commands/types/Command.types';
 
 /**
  * CircleCI provided parameters for all workflow jobs
@@ -35,9 +34,6 @@ export interface WorkflowJobParameters
    * An "approval" type job is a special job which pauses the workflow. This "job" is not defined outside of the workflow, you may enter any potential name for the job name. As long as the parameter of "type" is present and equal to "approval" this job will act as a placeholder that awaits user input to continue.
    */
   type?: approval;
-
-  pre_steps?: StepsParameter;
-  post_steps?: StepsParameter;
 }
 
 export type approval = 'approval';

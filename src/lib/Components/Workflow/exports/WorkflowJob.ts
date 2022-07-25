@@ -1,7 +1,10 @@
 import { OrbRef } from '../../../Orb/exports/OrbRef';
+import { AnyCommandShape } from '../../Commands/types/Command.types';
 import { Job } from '../../Job';
+import { StepsParameter } from '../../Parameters/types';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import {
+  WorkflowJobContentsShape,
   WorkflowJobParameters,
   WorkflowJobShape,
 } from '../types/WorkflowJob.types';
@@ -16,12 +19,19 @@ import { WorkflowJobAbstract } from './WorkflowJobAbstract';
 export class WorkflowJob extends WorkflowJobAbstract {
   job: Job | OrbRef<JobParameterLiteral>;
 
+  pre_steps?: StepsParameter;
+  post_steps?: StepsParameter;
+
   constructor(
     job: Job | OrbRef<JobParameterLiteral>,
     parameters?: Exclude<WorkflowJobParameters, 'type'>,
+    pre_steps?: StepsParameter,
+    post_steps?: StepsParameter,
   ) {
     super(parameters);
     this.job = job;
+    this.pre_steps = pre_steps;
+    this.post_steps = post_steps;
   }
 
   generate(flatten?: boolean): WorkflowJobShape {
@@ -29,12 +39,29 @@ export class WorkflowJob extends WorkflowJobAbstract {
       return this.job.name;
     }
 
+    console.log(this.generateContents(flatten));
+
     return {
       [this.job.name]: this.generateContents(flatten),
     };
   }
 
+  generateContents(flatten?: boolean): WorkflowJobContentsShape {
+    return {
+      ...super.generateContents(flatten),
+      'pre-steps': this.generateSteps(this.pre_steps, flatten),
+      'post-steps': this.generateSteps(this.post_steps, flatten),
+    };
+  }
+
   get name(): string {
     return this.job.name;
+  }
+
+  private generateSteps(
+    steps?: StepsParameter,
+    flatten?: boolean,
+  ): AnyCommandShape[] | undefined {
+    return steps?.map((step) => step.generate(flatten));
   }
 }

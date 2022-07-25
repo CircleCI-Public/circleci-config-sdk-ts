@@ -1,5 +1,6 @@
 import { Generable } from '../..';
 import { GenerableType } from '../../../Config/exports/Mapping';
+import { Command } from '../../Commands/exports/Command';
 import { Job } from '../../Job';
 import { When } from '../../Logic';
 import { Conditional } from '../../Logic/exports/Conditional';
@@ -68,8 +69,13 @@ export class Workflow implements Generable, Conditional {
   /**
    * Add a Job to the current Workflow. Chainable
    */
-  addJob(job: Job, parameters?: WorkflowJobParameters): this {
-    this.jobs.push(new WorkflowJob(job, parameters));
+  addJob(
+    job: Job,
+    parameters?: WorkflowJobParameters,
+    pre_steps?: Command[],
+    post_steps?: Command[],
+  ): this {
+    this.jobs.push(new WorkflowJob(job, parameters, pre_steps, post_steps));
     return this;
   }
 

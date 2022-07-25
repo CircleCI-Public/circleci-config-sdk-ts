@@ -341,11 +341,14 @@ describe('Add pre/post steps to workflow', () => {
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
   const myWorkflow = new CircleCI.Workflow('my-workflow');
-  myWorkflow.addJob(job, {
-    name: 'custom-name',
-    pre_steps: [helloWorld],
-    post_steps: [helloWorld],
-  });
+  myWorkflow.addJob(
+    job,
+    {
+      name: 'custom-name',
+    },
+    [helloWorld],
+    [helloWorld],
+  );
   it('Should match the expected output', () => {
     const expected = {
       'my-workflow': {
@@ -361,6 +364,10 @@ describe('Add pre/post steps to workflow', () => {
       },
     };
     const generatedWorkflow = myWorkflow.generate(true);
+
     expect(generatedWorkflow).toEqual(expected);
+    expect(CircleCI.parsers.parseWorkflowList(expected, [job])[0]).toEqual(
+      myWorkflow,
+    );
   });
 });
