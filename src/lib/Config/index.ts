@@ -89,8 +89,6 @@ export class Config
     this.commands = commands;
     this.parameters = parameters;
     this.orbs = orbs;
-
-    console.log(orbs);
   }
 
   /**

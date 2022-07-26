@@ -158,7 +158,6 @@ export function parseStep(
             'commands',
             orbs,
           ) || commands?.find((c) => c.name === name);
-        console.log(command);
 
         if (!command) {
           throw errorParsing(
