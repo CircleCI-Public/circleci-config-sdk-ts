@@ -4,6 +4,7 @@ import {
   ParameterizedComponent,
 } from '../../../Config/exports/Mapping';
 import { parseGenerable } from '../../../Config/exports/Parsing';
+import { OrbImport } from '../../../Orb';
 import { CustomCommand } from '../../Commands/exports/Reusable/CustomCommand';
 import { parseSteps } from '../../Commands/parsers';
 import { parseExecutor } from '../../Executors/parsers';
@@ -27,9 +28,10 @@ export function parseJobList(
   jobListIn: { [key: string]: unknown },
   customCommands?: CustomCommand[],
   reusableExecutors?: ReusableExecutor[],
+  orbs?: OrbImport[],
 ): Job[] {
   return Object.entries(jobListIn).map(([name, args]) =>
-    parseJob(name, args, customCommands, reusableExecutors),
+    parseJob(name, args, customCommands, reusableExecutors, orbs),
   );
 }
 
@@ -49,6 +51,7 @@ export function parseJob(
   jobIn: unknown,
   customCommands?: CustomCommand[],
   reusableExecutors?: ReusableExecutor[],
+  orbs?: OrbImport[],
 ): Job {
   return parseGenerable<UnknownJobShape, Job, JobDependencies>(
     GenerableType.JOB,
@@ -63,8 +66,8 @@ export function parseJob(
     (jobArgs) => {
       let parametersList;
 
-      const executor = parseExecutor(jobArgs, reusableExecutors);
-      const steps = parseSteps(jobArgs.steps, customCommands);
+      const executor = parseExecutor(jobArgs, reusableExecutors, orbs);
+      const steps = parseSteps(jobArgs.steps, customCommands, orbs);
 
       if (jobArgs.parameters) {
         parametersList = parseParameterList(

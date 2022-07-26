@@ -1,5 +1,8 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
+import { OrbImport } from '../../../Orb';
+import { parseOrbRef } from '../../../Orb/parsers';
+import { parseSteps } from '../../Commands/parsers';
 import { Job } from '../../Job';
 import { Workflow } from '../exports/Workflow';
 import { WorkflowJob } from '../exports/WorkflowJob';
@@ -9,6 +12,7 @@ import {
   UnknownWorkflowJobShape,
   UnknownWorkflowShape,
   WorkflowDependencies,
+  WorkflowJobParameters,
 } from '../types';
 
 /**
@@ -24,19 +28,49 @@ export function parseWorkflowJob(
   name: string,
   workflowJobIn: unknown,
   jobs: Job[],
+  orbs?: OrbImport[],
 ): WorkflowJobAbstract {
   return parseGenerable<UnknownWorkflowJobShape, WorkflowJobAbstract>(
     GenerableType.WORKFLOW_JOB,
     workflowJobIn,
     (workflowJobArgs) => {
-      if (workflowJobArgs?.type === 'approval') {
-        return new WorkflowJobApproval(name, workflowJobArgs);
+      let args = workflowJobArgs;
+      let parsedPresteps, parsedPoststeps;
+
+      if (args) {
+        if ('pre-steps' in args) {
+          const { 'pre-steps': steps, ...argsRestTemp } = args;
+          parsedPresteps = steps
+            ? parseSteps(steps, undefined, orbs)
+            : undefined;
+          args = argsRestTemp;
+        }
+
+        if ('post-steps' in args) {
+          const { 'post-steps': steps, ...argsRestTemp } = args;
+          parsedPoststeps = steps
+            ? parseSteps(steps, undefined, orbs)
+            : undefined;
+          args = argsRestTemp;
+        }
       }
 
-      const job = jobs.find((c) => c.name === name);
+      const parameters = args as WorkflowJobParameters | undefined;
+
+      if (workflowJobArgs?.type === 'approval') {
+        return new WorkflowJobApproval(name, parameters);
+      }
+
+      const job =
+        parseOrbRef(name, 'jobs', orbs) || jobs.find((c) => c.name === name);
 
       if (job) {
-        return new WorkflowJob(job, workflowJobArgs);
+        return new WorkflowJob(
+          job,
+          parameters,
+          parsedPresteps,
+          parsedPoststeps,
+        );
       }
 
       throw errorParsing(`Job ${name} not found in config`);
@@ -58,6 +92,7 @@ export function parseWorkflow(
   name: string,
   workflowIn: unknown,
   jobs: Job[],
+  orbs?: OrbImport[],
 ): Workflow {
   return parseGenerable<UnknownWorkflowShape, Workflow, WorkflowDependencies>(
     GenerableType.WORKFLOW,
@@ -71,7 +106,7 @@ export function parseWorkflow(
 
         const [name, args] = Object.entries(job)[0];
 
-        return parseWorkflowJob(name, args, jobs);
+        return parseWorkflowJob(name, args, jobs, orbs);
       });
 
       return { jobList };
@@ -90,10 +125,11 @@ export function parseWorkflow(
 export function parseWorkflowList(
   workflowsIn: unknown,
   jobs: Job[],
+  orbs?: OrbImport[],
 ): Workflow[] {
   const workflowList = Object.entries(
     workflowsIn as { [name: string]: UnknownWorkflowShape },
-  ).map(([name, workflow]) => parseWorkflow(name, workflow, jobs));
+  ).map(([name, workflow]) => parseWorkflow(name, workflow, jobs, orbs));
 
   return workflowList;
 }

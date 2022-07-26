@@ -1,4 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
+import { OrbImport } from '../../../Orb';
 import { AnyExecutor } from '../../Job/types/Job.types';
 import { CustomParametersList } from '../../Parameters';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
@@ -70,4 +71,5 @@ export type ExecutorSubtypeParser = (
   resourceClass: AnyResourceClass,
   properties?: ExecutableProperties,
   reusableExecutors?: ReusableExecutor[],
+  orbs?: OrbImport[],
 ) => AnyExecutor;

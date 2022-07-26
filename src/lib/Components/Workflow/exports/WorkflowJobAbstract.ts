@@ -1,7 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
-import { AnyCommandShape } from '../../Commands/types/Command.types';
 import { Generable } from '../../index';
-import { StepsParameter } from '../../Parameters/types';
 import {
   WorkflowJobContentsShape,
   WorkflowJobParameters,
@@ -22,17 +20,13 @@ export abstract class WorkflowJobAbstract implements Generable {
     this.parameters = parameters;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   generateContents(flatten?: boolean): WorkflowJobContentsShape {
     let parameters: WorkflowJobParametersShape | undefined;
 
     if (this.parameters) {
-      const { matrix, pre_steps, post_steps, ...jobParameters } =
-        this.parameters;
-      parameters = {
-        ...jobParameters,
-        'pre-steps': this.generateSteps(pre_steps, flatten),
-        'post-steps': this.generateSteps(post_steps, flatten),
-      };
+      const { matrix, ...jobParameters } = this.parameters;
+      parameters = jobParameters;
 
       if (matrix) {
         parameters.matrix = {
@@ -46,13 +40,6 @@ export abstract class WorkflowJobAbstract implements Generable {
 
   get generableType(): GenerableType {
     return GenerableType.WORKFLOW_JOB;
-  }
-
-  private generateSteps(
-    steps?: StepsParameter,
-    flatten?: boolean,
-  ): AnyCommandShape[] | undefined {
-    return steps?.map((step) => step.generate(flatten));
   }
 
   abstract get name(): string;

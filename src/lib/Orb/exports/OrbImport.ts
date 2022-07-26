@@ -16,9 +16,9 @@ export class OrbImport implements Generable {
   name: string;
   version: string;
 
-  jobs: Record<string, OrbRef<JobParameterLiteral>>;
-  commands: Record<string, OrbRef<CommandParameterLiteral>>;
-  executors: Record<string, OrbRef<ExecutorParameterLiteral>>;
+  jobs: Record<string, OrbRef<JobParameterLiteral>> = {};
+  commands: Record<string, OrbRef<CommandParameterLiteral>> = {};
+  executors: Record<string, OrbRef<ExecutorParameterLiteral>> = {};
 
   description?: string;
   display?: OrbDisplayMeta;
@@ -27,8 +27,8 @@ export class OrbImport implements Generable {
     alias: string,
     namespace: string,
     orb: string,
-    manifest: OrbImportManifest,
     version: string,
+    manifest?: OrbImportManifest,
     description?: string,
     display?: OrbDisplayMeta,
   ) {
@@ -38,9 +38,12 @@ export class OrbImport implements Generable {
     this.version = version;
     this.description = description;
     this.display = display;
-    this.jobs = parseImportManifest(manifest.jobs, this);
-    this.commands = parseImportManifest(manifest.commands, this);
-    this.executors = parseImportManifest(manifest.executors, this);
+
+    if (manifest) {
+      this.jobs = parseImportManifest(manifest.jobs, this);
+      this.commands = parseImportManifest(manifest.commands, this);
+      this.executors = parseImportManifest(manifest.executors, this);
+    }
   }
 
   generate(): Record<string, string> {

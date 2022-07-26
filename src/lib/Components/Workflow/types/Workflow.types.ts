@@ -2,24 +2,25 @@ import { AnyConditionShape } from '../../Logic/types';
 import { WorkflowJobAbstract } from '../exports/WorkflowJobAbstract';
 import { WorkflowJobShape } from './WorkflowJob.types';
 
-export type WorkflowsShape = {
-  [workflowName: string]: {
-    when: AnyConditionShape;
-    jobs: WorkflowJobShape[];
-  };
+export type WorkflowsContentsShape = {
+  when: AnyConditionShape;
+  jobs: WorkflowJobShape[];
 };
 
+export type WorkflowsShape = Record<string, WorkflowsContentsShape>;
 export type UnknownWorkflowShape = {
   jobs: { [key: string]: unknown }[];
 };
 
 export type UnknownWorkflowJobShape = {
   requires?: string[];
-  parameters?: { [key: string]: unknown };
+  parameters?: {
+    [key: string]: unknown;
+  };
+  'pre-steps'?: unknown[];
+  'post-steps'?: unknown[];
   name?: string;
   type?: 'approval';
-  // 'pre-steps'?: { [key: string]: unknown }[];
-  // 'post-steps'?: { [key: string]: unknown }[];
 };
 
 export type WorkflowDependencies = {
