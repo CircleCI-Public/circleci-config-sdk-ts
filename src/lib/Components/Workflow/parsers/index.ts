@@ -40,13 +40,17 @@ export function parseWorkflowJob(
       if (args) {
         if ('pre-steps' in args) {
           const { 'pre-steps': steps, ...argsRestTemp } = args;
-          parsedPresteps = steps ? parseSteps(steps) : undefined;
+          parsedPresteps = steps
+            ? parseSteps(steps, undefined, orbs)
+            : undefined;
           args = argsRestTemp;
         }
 
         if ('post-steps' in args) {
           const { 'post-steps': steps, ...argsRestTemp } = args;
-          parsedPoststeps = steps ? parseSteps(steps) : undefined;
+          parsedPoststeps = steps
+            ? parseSteps(steps, undefined, orbs)
+            : undefined;
           args = argsRestTemp;
         }
       }
@@ -121,10 +125,11 @@ export function parseWorkflow(
 export function parseWorkflowList(
   workflowsIn: unknown,
   jobs: Job[],
+  orbs?: OrbImport[],
 ): Workflow[] {
   const workflowList = Object.entries(
     workflowsIn as { [name: string]: UnknownWorkflowShape },
-  ).map(([name, workflow]) => parseWorkflow(name, workflow, jobs));
+  ).map(([name, workflow]) => parseWorkflow(name, workflow, jobs, orbs));
 
   return workflowList;
 }

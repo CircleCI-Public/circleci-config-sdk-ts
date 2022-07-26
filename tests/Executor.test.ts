@@ -378,7 +378,7 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
   it('Should throw error during parsing', () => {
     expect(() => {
       CircleCI.parsers.parseExecutor(expectedUsageShape);
-    }).toThrowError('Reusable executor default not found in config');
+    }).toThrowError('Reusable executor default not found in config or any orb');
   });
 
   it('Should match the expected output with no context', () => {

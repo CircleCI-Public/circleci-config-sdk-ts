@@ -3,6 +3,8 @@ import {
   ParameterizedComponent,
 } from '../../../Config/exports/Mapping';
 import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
+import { OrbImport } from '../../../Orb';
+import { parseOrbRef } from '../../../Orb/parsers';
 import { CustomParametersList } from '../../Parameters';
 import { parseParameterList } from '../../Parameters/parsers';
 import { CommandParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
@@ -95,6 +97,7 @@ const nativeSubtypes: CommandSubtypeMap = {
 export function parseSteps(
   stepsListIn: unknown,
   commands?: CustomCommand[],
+  orbs?: OrbImport[],
 ): Command[] {
   return parseGenerable<
     Record<string, unknown>[],
@@ -108,12 +111,12 @@ export function parseSteps(
       return {
         steps: stepsListIn.map((subtype) => {
           if (typeof subtype === 'string') {
-            return parseStep(subtype, undefined, commands);
+            return parseStep(subtype, undefined, commands, orbs);
           }
 
           const commandName = Object.keys(subtype)[0];
 
-          return parseStep(commandName, subtype[commandName], commands);
+          return parseStep(commandName, subtype[commandName], commands, orbs);
         }),
       };
     },
@@ -132,6 +135,7 @@ export function parseStep(
   name: string,
   args?: unknown,
   commands?: CustomCommand[],
+  orbs?: OrbImport[],
 ): Command {
   if (name in nativeSubtypes) {
     const commandMapping = nativeSubtypes[name as NativeCommandLiteral];
@@ -143,12 +147,18 @@ export function parseStep(
     );
   }
 
-  if (commands) {
+  if (commands || orbs) {
     return parseGenerable<CommandParameters, ReusableCommand>(
       GenerableType.REUSABLE_COMMAND,
       args,
       (parameterArgs) => {
-        const command = commands.find((c) => c.name === name);
+        const command =
+          parseOrbRef<CommandParameterLiteral>(
+            { [name]: args },
+            'commands',
+            orbs,
+          ) || commands?.find((c) => c.name === name);
+        console.log(command);
 
         if (!command) {
           throw errorParsing(
@@ -172,13 +182,19 @@ export function parseStep(
  * @param custom_commands - The custom commands to parse.
  * @returns A list of custom commands.
  */
+
 export function parseCustomCommands(
   commandListIn: { [key: string]: unknown },
-  custom_commands?: CustomCommand[],
+  orbs?: OrbImport[],
 ): CustomCommand[] {
-  return Object.entries(commandListIn).map(([name, args]) =>
-    parseCustomCommand(name, args, custom_commands),
-  );
+  const parsed: CustomCommand[] = [];
+
+  Object.entries(commandListIn).forEach(([name, args]) => {
+    const command = parseCustomCommand(name, args, parsed, orbs);
+    parsed.push(command);
+  });
+
+  return parsed;
 }
 
 /**
@@ -193,6 +209,7 @@ export function parseCustomCommand(
   name: string,
   args: unknown,
   custom_commands?: CustomCommand[],
+  orbs?: OrbImport[],
 ): CustomCommand {
   return parseGenerable<
     CustomCommandBodyShape,
@@ -217,7 +234,7 @@ export function parseCustomCommand(
           ParameterizedComponent.COMMAND,
         ) as CustomParametersList<CommandParameterLiteral>);
 
-      const steps = parseSteps(commandArgs.steps, custom_commands);
+      const steps = parseSteps(commandArgs.steps, custom_commands, orbs);
 
       return { parametersList, steps };
     },

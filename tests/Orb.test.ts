@@ -113,15 +113,13 @@ describe('Use an OrbImport within a config', () => {
   config.importOrb(exampleOrb);
   config.importOrb(exampleOrb2);
 
-  const job = new CircleCI.Job(
-    'test',
-    new CircleCI.reusable.ReusedExecutor(pythonExecutor, { version: '1.2.3' }),
-    [
-      new CircleCI.reusable.ReusableCommand(sayItCommand, {
-        what: 'cheese',
-      }),
-    ],
-  );
+  const orbRefExecutor = new CircleCI.reusable.ReusedExecutor(pythonExecutor, {
+    version: '1.2.3',
+  });
+  const orbRefCommand = new CircleCI.reusable.ReusableCommand(sayItCommand, {
+    what: 'cheese',
+  });
+  const job = new CircleCI.Job('test', orbRefExecutor, [orbRefCommand]);
 
   const wfName = 'default';
   const workflow = new CircleCI.Workflow(wfName, [
@@ -132,12 +130,33 @@ describe('Use an OrbImport within a config', () => {
 
   const contents = workflow.generateContents();
 
-  it('Should parse from workflow', () => {
+  it('Should parse orb ref job in workflow', () => {
     expect(
       CircleCI.parsers
         .parseWorkflow(wfName, contents, [], [exampleOrb])
         .generateContents(),
     ).toEqual(contents);
+  });
+
+  it('Should parse reused orb ref executor', () => {
+    expect(
+      CircleCI.parsers
+        .parseExecutor(orbRefExecutor.generate(), [], [exampleOrb])
+        .generate(),
+    ).toEqual(orbRefExecutor.generate());
+  });
+
+  it('Should parse reused orb ref command', () => {
+    expect(
+      CircleCI.parsers
+        .parseStep(
+          'my-orb/say_it',
+          orbRefCommand.generateContents(),
+          [],
+          [exampleOrb],
+        )
+        .generate(),
+    ).toEqual(orbRefCommand.generate());
   });
 
   workflow.addJob(job);
@@ -177,6 +196,17 @@ describe('Use an OrbImport within a config', () => {
       },
     };
 
-    expect(parse(config.generate())).toEqual(expected);
+    const regenerated = parse(config.generate());
+
+    expect(regenerated).toEqual(expected);
+    expect(
+      parse(
+        CircleCI.parsers
+          .parseConfig(regenerated, {
+            'my-orb': manifest,
+          })
+          .generate(),
+      ),
+    ).toEqual(regenerated);
   });
 });

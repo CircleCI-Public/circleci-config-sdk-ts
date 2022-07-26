@@ -1,8 +1,10 @@
+import { parsers } from '../../../..';
 import {
   GenerableType,
   ParameterizedComponent,
 } from '../../../Config/exports/Mapping';
 import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
+import { OrbImport } from '../../../Orb';
 import { AnyExecutor } from '../../Job/types/Job.types';
 import { CustomParametersList } from '../../Parameters';
 import { parseParameterList } from '../../Parameters/parsers';
@@ -13,6 +15,7 @@ import { Executor } from '../exports/Executor';
 import { MachineExecutor } from '../exports/MachineExecutor';
 import { MacOSExecutor } from '../exports/MacOSExecutor';
 import { ReusableExecutor } from '../exports/ReusableExecutor';
+import { ReusedExecutor } from '../exports/ReusedExecutor';
 import { WindowsExecutor } from '../exports/WindowsExecutor';
 import { DockerResourceClass } from '../types/DockerExecutor.types';
 import {
@@ -82,21 +85,16 @@ const subtypeParsers: ExecutorSubtypeMap = {
   // Parses a reusable executor by it's name
   executor: {
     generableType: GenerableType.REUSED_EXECUTOR,
-    parse: (args, _, __, reusableExecutors) => {
+    parse: (args, _, __, reusableExecutors, orbs) => {
       const executorArgs = args as
         | { name: string; [key: string]: unknown }
         | string;
 
       const isFlat = typeof executorArgs === 'string';
       const name = isFlat ? executorArgs : executorArgs.name;
-
       const executor = reusableExecutors?.find(
         (executor) => executor.name === name,
       );
-
-      if (!executor) {
-        throw errorParsing(`Reusable executor ${name} not found in config`);
-      }
 
       let parameters = undefined;
 
@@ -110,6 +108,22 @@ const subtypeParsers: ExecutorSubtypeMap = {
             | Record<string, ExecutorParameterTypes>
             | undefined;
         }
+      }
+
+      if (!executor) {
+        const orbImport = parsers.parseOrbRef<ExecutorParameterLiteral>(
+          { [name]: parameters },
+          'executors',
+          orbs,
+        );
+
+        if (!orbImport) {
+          throw errorParsing(
+            `Reusable executor ${name} not found in config or any orb`,
+          );
+        }
+
+        return new ReusedExecutor(orbImport, parameters);
       }
 
       return executor.reuse(parameters);
@@ -151,6 +165,7 @@ export function extractExecutableProps(
 export function parseExecutor(
   executableIn: unknown,
   reusableExecutors?: ReusableExecutor[],
+  orbs?: OrbImport[],
 ): AnyExecutor {
   const executableArgs = executableIn as UnknownExecutableShape;
   let resourceClass = executableArgs.resource_class;
@@ -185,6 +200,7 @@ export function parseExecutor(
         resourceClass,
         extractExecutableProps(executableArgs),
         reusableExecutors,
+        orbs,
       );
     },
   );

@@ -7,6 +7,8 @@ import { CustomParametersList } from '../../Components/Parameters';
 import { parseParameterList } from '../../Components/Parameters/parsers';
 import { PipelineParameterLiteral } from '../../Components/Parameters/types/CustomParameterLiterals.types';
 import { parseWorkflowList } from '../../Components/Workflow/parsers';
+import { parseOrbImports } from '../../Orb/parsers';
+import { OrbImportManifest } from '../../Orb/types/Orb.types';
 import { GenerableType } from '../exports/Mapping';
 import { parseGenerable } from '../exports/Parsing';
 import { ConfigDependencies, UnknownConfigShape } from '../types';
@@ -18,7 +20,10 @@ import { ConfigDependencies, UnknownConfigShape } from '../types';
  * @returns A complete config
  * @throws Error if any config component not valid
  */
-export function parseConfig(configIn: unknown): Config {
+export function parseConfig(
+  configIn: unknown,
+  orbImportManifests?: Record<string, OrbImportManifest>,
+): Config {
   const configProps = (
     typeof configIn == 'string' ? parse(configIn) : configIn
   ) as UnknownConfigShape;
@@ -28,7 +33,14 @@ export function parseConfig(configIn: unknown): Config {
     configProps,
     (
       config,
-      { jobList, workflows, executorList, commandList, parameterList },
+      {
+        jobList,
+        workflows,
+        executorList,
+        commandList,
+        parameterList,
+        orbImportList,
+      },
     ) => {
       return new Config(
         config.setup,
@@ -37,17 +49,29 @@ export function parseConfig(configIn: unknown): Config {
         executorList,
         commandList,
         parameterList as CustomParametersList<PipelineParameterLiteral>,
+        orbImportList,
       );
     },
     (config) => {
+      const orbImportList =
+        config.orbs && parseOrbImports(config.orbs, orbImportManifests);
       const executorList =
         config.executors && parseReusableExecutors(config.executors);
       const commandList =
-        config.commands && parseCustomCommands(config.commands);
+        config.commands && parseCustomCommands(config.commands, orbImportList);
       const parameterList =
         config.parameters && parseParameterList(config.parameters);
-      const jobList = parseJobList(config.jobs, commandList, executorList);
-      const workflows = parseWorkflowList(config.workflows, jobList);
+      const jobList = parseJobList(
+        config.jobs,
+        commandList,
+        executorList,
+        orbImportList,
+      );
+      const workflows = parseWorkflowList(
+        config.workflows,
+        jobList,
+        orbImportList,
+      );
 
       return {
         jobList,
@@ -55,6 +79,7 @@ export function parseConfig(configIn: unknown): Config {
         executorList,
         commandList,
         parameterList,
+        orbImportList,
       };
     },
   );

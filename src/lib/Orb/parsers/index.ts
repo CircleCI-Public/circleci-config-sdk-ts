@@ -14,7 +14,6 @@ export function parseOrbImport(
   unknownImport: unknown,
   manifest?: OrbImportManifest,
 ): OrbImport | undefined {
-  console.log('?');
   const [alias, orbImport] = Object.entries(
     unknownImport as Record<string, string>,
   )[0];
@@ -29,11 +28,35 @@ export function parseOrbImport(
   return new OrbImport(alias, namespace, orb, version, manifest);
 }
 
-export function parseOrbRef(
+export function parseOrbImports(
+  unknownOrbs: Record<string, unknown>,
+  manifests?: Record<string, OrbImportManifest>,
+): OrbImport[] | undefined {
+  let orbImports: OrbImport[] | undefined = undefined;
+
+  Object.entries(unknownOrbs).forEach(([alias, orbImport]) => {
+    const parsedImport = parseOrbImport(
+      { [alias]: orbImport },
+      manifests ? manifests[alias] : undefined,
+    );
+
+    if (parsedImport) {
+      if (orbImports) {
+        orbImports.push(parsedImport);
+      } else {
+        orbImports = [parsedImport];
+      }
+    }
+  });
+
+  return orbImports;
+}
+
+export function parseOrbRef<Literal extends AnyParameterLiteral>(
   orbRefInput: Record<string, unknown> | string,
   refType: AnyOrbComponentLiteral,
   orbs?: OrbImport[],
-): OrbRef<AnyParameterLiteral> | undefined {
+): OrbRef<Literal> | undefined {
   const isFlat = typeof orbRefInput === 'string';
   const orbRef = isFlat ? orbRefInput : Object.keys(orbRefInput)[0];
 
@@ -45,6 +68,6 @@ export function parseOrbRef(
   const orbImport = orbs?.find((orb) => orb.alias === orbAlias);
 
   if (orbImport && orbImport[refType]) {
-    return orbImport[refType][name];
+    return orbImport[refType][name] as OrbRef<Literal>;
   }
 }
