@@ -1,5 +1,7 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
+import { OrbImport } from '../../../Orb';
+import { parseOrbRef } from '../../../Orb/parsers';
 import { parseSteps } from '../../Commands/parsers';
 import { Job } from '../../Job';
 import { Workflow } from '../exports/Workflow';
@@ -26,6 +28,7 @@ export function parseWorkflowJob(
   name: string,
   workflowJobIn: unknown,
   jobs: Job[],
+  orbs?: OrbImport[],
 ): WorkflowJobAbstract {
   return parseGenerable<UnknownWorkflowJobShape, WorkflowJobAbstract>(
     GenerableType.WORKFLOW_JOB,
@@ -37,13 +40,13 @@ export function parseWorkflowJob(
       if (args) {
         if ('pre-steps' in args) {
           const { 'pre-steps': steps, ...argsRestTemp } = args;
-          parsedPresteps = parseSteps(steps);
+          parsedPresteps = steps ? parseSteps(steps) : undefined;
           args = argsRestTemp;
         }
 
         if ('post-steps' in args) {
           const { 'post-steps': steps, ...argsRestTemp } = args;
-          parsedPoststeps = parseSteps(steps);
+          parsedPoststeps = steps ? parseSteps(steps) : undefined;
           args = argsRestTemp;
         }
       }
@@ -54,7 +57,8 @@ export function parseWorkflowJob(
         return new WorkflowJobApproval(name, parameters);
       }
 
-      const job = jobs.find((c) => c.name === name);
+      const job =
+        parseOrbRef(name, 'jobs', orbs) || jobs.find((c) => c.name === name);
 
       if (job) {
         return new WorkflowJob(
@@ -84,6 +88,7 @@ export function parseWorkflow(
   name: string,
   workflowIn: unknown,
   jobs: Job[],
+  orbs?: OrbImport[],
 ): Workflow {
   return parseGenerable<UnknownWorkflowShape, Workflow, WorkflowDependencies>(
     GenerableType.WORKFLOW,
@@ -97,7 +102,7 @@ export function parseWorkflow(
 
         const [name, args] = Object.entries(job)[0];
 
-        return parseWorkflowJob(name, args, jobs);
+        return parseWorkflowJob(name, args, jobs, orbs);
       });
 
       return { jobList };

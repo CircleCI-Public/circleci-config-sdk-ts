@@ -4,7 +4,11 @@ import { Command } from '../../Commands/exports/Command';
 import { Job } from '../../Job';
 import { When } from '../../Logic';
 import { Conditional } from '../../Logic/exports/Conditional';
-import { WorkflowJobParameters, WorkflowsShape } from '../types';
+import {
+  WorkflowJobParameters,
+  WorkflowsContentsShape,
+  WorkflowsShape,
+} from '../types';
 import { WorkflowJob } from './WorkflowJob';
 import { WorkflowJobAbstract } from './WorkflowJobAbstract';
 import { WorkflowJobApproval } from './WorkflowJobApproval';
@@ -52,6 +56,12 @@ export class Workflow implements Generable, Conditional {
    * @returns The generated JSON for the Workflow.
    */
   generate(flatten?: boolean): WorkflowsShape {
+    return {
+      [this.name]: this.generateContents(flatten),
+    };
+  }
+
+  generateContents(flatten?: boolean): WorkflowsContentsShape {
     const generatedWorkflowJobs = this.jobs.map((job) => {
       return job.generate(flatten);
     });
@@ -59,10 +69,8 @@ export class Workflow implements Generable, Conditional {
     const generatedWhen = this.when?.generate();
 
     return {
-      [this.name]: {
-        when: generatedWhen,
-        jobs: generatedWorkflowJobs,
-      },
+      when: generatedWhen,
+      jobs: generatedWorkflowJobs,
     };
   }
 

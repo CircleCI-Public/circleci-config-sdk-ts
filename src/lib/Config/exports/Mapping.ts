@@ -60,8 +60,8 @@ export enum ParameterSubtype {
 }
 
 export enum ParameterizedComponent {
-  JOB = '/parameters/components/job',
-  COMMAND = '/parameters/components/command',
-  EXECUTOR = '/parameters/components/executor',
-  PIPELINE = '/parameters/components/pipeline',
+  JOB = 'jobs',
+  COMMAND = 'commands',
+  EXECUTOR = 'executors',
+  PIPELINE = 'pipelines',
 }

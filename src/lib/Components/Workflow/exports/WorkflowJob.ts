@@ -39,8 +39,6 @@ export class WorkflowJob extends WorkflowJobAbstract {
       return this.job.name;
     }
 
-    console.log(this.generateContents(flatten));
-
     return {
       [this.job.name]: this.generateContents(flatten),
     };

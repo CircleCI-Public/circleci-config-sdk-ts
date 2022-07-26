@@ -33,16 +33,16 @@ describe('Use an OrbImport within a config', () => {
     orbName,
     orbNamespace,
     orbName,
-    manifest,
     orbVersion,
+    manifest,
   );
 
   const exampleOrb2 = new CircleCI.orb.OrbImport(
     'my-orb-aliased',
     orbNamespace,
     orbName,
-    manifest,
     '1.1.1',
+    manifest,
   );
 
   it('Should match expected shape', () => {
@@ -55,6 +55,44 @@ describe('Use an OrbImport within a config', () => {
     expect(exampleOrb.generableType).toBe(
       CircleCI.mapping.GenerableType.ORB_IMPORT,
     );
+  });
+
+  const orbImport = CircleCI.parsers.parseOrbImport(
+    {
+      'my-orb': `${orbNamespace}/${'my-orb'}@${orbVersion}`,
+    },
+    manifest,
+  );
+
+  it('Should match expected shape', () => {
+    // needs to be compared generatively, as the OrbRef circularly imports OrbImport
+    expect(orbImport?.generate()).toEqual(exampleOrb.generate());
+  });
+
+  it('Should be able to load refs from import', () => {
+    const jobName = 'my-orb/say_hello';
+    const jobParameters = { greeting: 'hi %user%' };
+    const refShape = { [jobName]: jobParameters };
+    const orbJobRef = CircleCI.parsers.parseOrbRef(refShape, 'jobs', [
+      exampleOrb,
+    ]);
+
+    expect(
+      orbJobRef
+        ? new CircleCI.workflow.WorkflowJob(orbJobRef, jobParameters).generate()
+        : undefined,
+    ).toEqual(refShape);
+  });
+
+  it('Should not parse a regular job as an orb ref', () => {
+    const jobName = 'say_hello';
+    const jobParameters = { greeting: 'hi %user%' };
+    const badJobRef = CircleCI.parsers.parseOrbRef(
+      { [jobName]: jobParameters },
+      'jobs',
+    );
+
+    expect(badJobRef).toEqual(undefined);
   });
 
   const sayHelloJob = exampleOrb.jobs['say_hello'];
@@ -85,11 +123,22 @@ describe('Use an OrbImport within a config', () => {
     ],
   );
 
-  const workflow = new CircleCI.Workflow('default', [
+  const wfName = 'default';
+  const workflow = new CircleCI.Workflow(wfName, [
     new CircleCI.workflow.WorkflowJob(exampleOrb.jobs['say_hello'], {
       greeting: 'hello',
     }),
   ]);
+
+  const contents = workflow.generateContents();
+
+  it('Should parse from workflow', () => {
+    expect(
+      CircleCI.parsers
+        .parseWorkflow(wfName, contents, [], [exampleOrb])
+        .generateContents(),
+    ).toEqual(contents);
+  });
 
   workflow.addJob(job);
   config.addJob(job);
