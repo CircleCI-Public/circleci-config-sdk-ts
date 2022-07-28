@@ -11,6 +11,7 @@ import { Workflow } from '../../Components/Workflow/exports/Workflow';
 import { WorkflowsShape } from '../../Components/Workflow/types/Workflow.types';
 import { OrbImport } from '../../Orb';
 import { OrbImportsShape } from '../../Orb/types/Orb.types';
+import { Generable } from '../../Components';
 import * as mapping from './Mapping.types';
 
 /**
@@ -66,4 +67,4 @@ export type ConfigDependencies = {
   parameterList?: CustomParametersList<AnyParameterLiteral>;
 };
 
-export { mapping };
+export { mapping, Generable };

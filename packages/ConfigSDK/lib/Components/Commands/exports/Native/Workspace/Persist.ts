@@ -32,7 +32,7 @@ export class Persist implements Command {
 /**
  * Generated Shape of the Persist command.
  */
-export interface PersistCommandShape extends CommandShape {
+interface PersistCommandShape extends CommandShape {
   persist_to_workspace: PersistParameters;
 }
 

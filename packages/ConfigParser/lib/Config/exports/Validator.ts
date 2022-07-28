@@ -1,92 +1,106 @@
 import Ajv, { ErrorObject, SchemaObject } from 'ajv';
 import ajvMergePatch from 'ajv-merge-patch';
-import { GenerableSubtypes } from '../types/Mapping.types';
 import { ValidationMap, ValidationResult } from '../types/Validator.types';
 
 import validationError from 'better-ajv-errors';
 import { schemas } from '../../..';
-import {
-  GenerableType,
-  ParameterizedComponent,
-  ParameterSubtype,
-} from '@circleci/circleci-config-sdk/lib/Config/exports/Mapping';
+import * as CircleCI from '@circleci/circleci-config-sdk';
 
 const schemaRegistry: ValidationMap = {
-  [GenerableType.ORB]: {},
-  [GenerableType.ORB_IMPORT]: {},
-  [GenerableType.ORB_REF]: {},
+  [CircleCI.mapping.GenerableType.ORB]: {},
+  [CircleCI.mapping.GenerableType.ORB_IMPORT]: {},
+  [CircleCI.mapping.GenerableType.ORB_REF]: {},
 
-  [GenerableType.CONFIG]: schemas.ConfigSchema,
-  [GenerableType.REUSABLE_COMMAND]:
+  [CircleCI.mapping.GenerableType.CONFIG]: schemas.ConfigSchema,
+  [CircleCI.mapping.GenerableType.REUSABLE_COMMAND]:
     schemas.command.reusable.ReusableCommandSchema,
-  [GenerableType.CUSTOM_COMMAND]: schemas.command.reusable.CustomCommandSchema,
-  [GenerableType.RESTORE]: schemas.command.cache.RestoreSchema,
-  [GenerableType.SAVE]: schemas.command.cache.SaveSchema,
-  [GenerableType.ATTACH]: schemas.command.workspace.AttachWorkspaceSchema,
-  [GenerableType.PERSIST]: schemas.command.workspace.PersistSchema,
-  [GenerableType.ADD_SSH_KEYS]: schemas.command.AddSSHKeysSchema,
-  [GenerableType.CHECKOUT]: schemas.command.CheckoutSchema,
-  [GenerableType.RUN]: schemas.command.RunSchema,
-  [GenerableType.SETUP_REMOTE_DOCKER]: schemas.command.SetupRemoteDockerSchema,
-  [GenerableType.STORE_ARTIFACTS]: schemas.command.StoreArtifactsSchema,
-  [GenerableType.STORE_TEST_RESULTS]: schemas.command.StoreTestResultsSchema,
+  [CircleCI.mapping.GenerableType.CUSTOM_COMMAND]:
+    schemas.command.reusable.CustomCommandSchema,
+  [CircleCI.mapping.GenerableType.RESTORE]: schemas.command.cache.RestoreSchema,
+  [CircleCI.mapping.GenerableType.SAVE]: schemas.command.cache.SaveSchema,
+  [CircleCI.mapping.GenerableType.ATTACH]:
+    schemas.command.workspace.AttachWorkspaceSchema,
+  [CircleCI.mapping.GenerableType.PERSIST]:
+    schemas.command.workspace.PersistSchema,
+  [CircleCI.mapping.GenerableType.ADD_SSH_KEYS]:
+    schemas.command.AddSSHKeysSchema,
+  [CircleCI.mapping.GenerableType.CHECKOUT]: schemas.command.CheckoutSchema,
+  [CircleCI.mapping.GenerableType.RUN]: schemas.command.RunSchema,
+  [CircleCI.mapping.GenerableType.SETUP_REMOTE_DOCKER]:
+    schemas.command.SetupRemoteDockerSchema,
+  [CircleCI.mapping.GenerableType.STORE_ARTIFACTS]:
+    schemas.command.StoreArtifactsSchema,
+  [CircleCI.mapping.GenerableType.STORE_TEST_RESULTS]:
+    schemas.command.StoreTestResultsSchema,
 
-  [GenerableType.ANY_EXECUTOR]: schemas.executor.ExecutorSchema,
-  [GenerableType.DOCKER_EXECUTOR]: schemas.executor.DockerExecutableSchema,
-  [GenerableType.MACHINE_EXECUTOR]: schemas.executor.MachineExecutableSchema,
-  [GenerableType.MACOS_EXECUTOR]: schemas.executor.MacOSExecutableSchema,
-  [GenerableType.WINDOWS_EXECUTOR]: schemas.executor.WindowsExecutableSchema,
-  [GenerableType.REUSABLE_EXECUTOR]:
+  [CircleCI.mapping.GenerableType.ANY_EXECUTOR]:
+    schemas.executor.ExecutorSchema,
+  [CircleCI.mapping.GenerableType.DOCKER_EXECUTOR]:
+    schemas.executor.DockerExecutableSchema,
+  [CircleCI.mapping.GenerableType.MACHINE_EXECUTOR]:
+    schemas.executor.MachineExecutableSchema,
+  [CircleCI.mapping.GenerableType.MACOS_EXECUTOR]:
+    schemas.executor.MacOSExecutableSchema,
+  [CircleCI.mapping.GenerableType.WINDOWS_EXECUTOR]:
+    schemas.executor.WindowsExecutableSchema,
+  [CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR]:
     schemas.executor.reusable.ReusableExecutorSchema,
-  [GenerableType.REUSABLE_EXECUTOR_LIST]:
+  [CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR_LIST]:
     schemas.executor.reusable.ReusableExecutorsListSchema,
-  [GenerableType.REUSED_EXECUTOR]:
+  [CircleCI.mapping.GenerableType.REUSED_EXECUTOR]:
     schemas.executor.reusable.ReusableExecutorUsageSchema,
 
-  [GenerableType.STEP]: schemas.command.steps.StepSchema,
-  [GenerableType.STEP_LIST]: schemas.command.steps.StepsSchema,
-  [GenerableType.JOB]: schemas.JobSchema,
-  [GenerableType.WORKFLOW_JOB]: schemas.workflow.WorkflowJobSchema,
-  [GenerableType.WORKFLOW]: schemas.workflow.WorkflowSchema,
+  [CircleCI.mapping.GenerableType.STEP]: schemas.command.steps.StepSchema,
+  [CircleCI.mapping.GenerableType.STEP_LIST]: schemas.command.steps.StepsSchema,
+  [CircleCI.mapping.GenerableType.JOB]: schemas.JobSchema,
+  [CircleCI.mapping.GenerableType.WORKFLOW_JOB]:
+    schemas.workflow.WorkflowJobSchema,
+  [CircleCI.mapping.GenerableType.WORKFLOW]: schemas.workflow.WorkflowSchema,
 
-  [GenerableType.CUSTOM_PARAMETER]: {
+  [CircleCI.mapping.GenerableType.CUSTOM_PARAMETER]: {
     /* Custom Parameter Config Components */
-    [ParameterizedComponent.JOB]: schemas.parameter.JobParametersSchema,
-    [ParameterizedComponent.COMMAND]: schemas.parameter.CommandParametersSchema,
-    [ParameterizedComponent.EXECUTOR]:
+    [CircleCI.mapping.ParameterizedComponent.JOB]:
+      schemas.parameter.JobParametersSchema,
+    [CircleCI.mapping.ParameterizedComponent.COMMAND]:
+      schemas.parameter.CommandParametersSchema,
+    [CircleCI.mapping.ParameterizedComponent.EXECUTOR]:
       schemas.parameter.ExecutorParametersSchema,
-    [ParameterizedComponent.PIPELINE]:
+    [CircleCI.mapping.ParameterizedComponent.PIPELINE]:
       schemas.parameter.PipelineParametersSchema,
     /** Custom Parameter Generics */
-    [ParameterSubtype.STRING]: schemas.parameter.types.StringParameterSchema,
-    [ParameterSubtype.BOOLEAN]: schemas.parameter.types.BooleanParameterSchema,
-    [ParameterSubtype.INTEGER]: schemas.parameter.types.IntegerParameterSchema,
-    [ParameterSubtype.EXECUTOR]:
+    [CircleCI.mapping.ParameterSubtype.STRING]:
+      schemas.parameter.types.StringParameterSchema,
+    [CircleCI.mapping.ParameterSubtype.BOOLEAN]:
+      schemas.parameter.types.BooleanParameterSchema,
+    [CircleCI.mapping.ParameterSubtype.INTEGER]:
+      schemas.parameter.types.IntegerParameterSchema,
+    [CircleCI.mapping.ParameterSubtype.EXECUTOR]:
       schemas.parameter.types.ExecutorParameterSchema,
-    [ParameterSubtype.STEPS]: schemas.parameter.types.StepsParameterSchema,
-    [ParameterSubtype.ENV_VAR_NAME]:
+    [CircleCI.mapping.ParameterSubtype.STEPS]:
+      schemas.parameter.types.StepsParameterSchema,
+    [CircleCI.mapping.ParameterSubtype.ENV_VAR_NAME]:
       schemas.parameter.types.EnvVarNameParameterSchema,
   },
-  [GenerableType.CUSTOM_ENUM_PARAMETER]:
+  [CircleCI.mapping.GenerableType.CUSTOM_ENUM_PARAMETER]:
     schemas.parameter.types.EnumParameterSchema,
-  [GenerableType.CUSTOM_PARAMETERS_LIST]: {
-    [ParameterizedComponent.JOB]:
+  [CircleCI.mapping.GenerableType.CUSTOM_PARAMETERS_LIST]: {
+    [CircleCI.mapping.ParameterizedComponent.JOB]:
       schemas.parameter.lists.JobParameterListSchema,
-    [ParameterizedComponent.COMMAND]:
+    [CircleCI.mapping.ParameterizedComponent.COMMAND]:
       schemas.parameter.lists.CommandParameterListSchema,
-    [ParameterizedComponent.EXECUTOR]:
+    [CircleCI.mapping.ParameterizedComponent.EXECUTOR]:
       schemas.parameter.lists.ExecutorParameterListSchema,
-    [ParameterizedComponent.PIPELINE]:
+    [CircleCI.mapping.ParameterizedComponent.PIPELINE]:
       schemas.parameter.lists.PipelineParameterListSchema,
   },
 
-  [GenerableType.WHEN]: {},
-  [GenerableType.AND]: {},
-  [GenerableType.NOT]: {},
-  [GenerableType.OR]: {},
-  [GenerableType.EQUAL]: {},
-  [GenerableType.PARAMETER_REFERENCE]: {},
-  [GenerableType.TRUTHY]: {},
+  [CircleCI.mapping.GenerableType.WHEN]: {},
+  [CircleCI.mapping.GenerableType.AND]: {},
+  [CircleCI.mapping.GenerableType.NOT]: {},
+  [CircleCI.mapping.GenerableType.OR]: {},
+  [CircleCI.mapping.GenerableType.EQUAL]: {},
+  [CircleCI.mapping.GenerableType.PARAMETER_REFERENCE]: {},
+  [CircleCI.mapping.GenerableType.TRUTHY]: {},
 };
 
 /**
@@ -137,9 +151,9 @@ export class Validator extends Ajv {
    * @returns
    */
   static validateGenerable(
-    generable: GenerableType,
+    generable: CircleCI.mapping.GenerableType,
     input: unknown,
-    subtype?: GenerableSubtypes,
+    subtype?: CircleCI.types.config.mapping.GenerableSubtypes,
   ): ValidationResult {
     const schemaSource = schemaRegistry[generable];
 

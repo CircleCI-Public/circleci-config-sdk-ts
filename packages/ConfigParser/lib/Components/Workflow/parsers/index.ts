@@ -1,16 +1,5 @@
-import { GenerableType } from '../../../Config/exports/Mapping';
-import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
-import { Job } from '../../Job';
-import { Workflow } from '../exports/Workflow';
-import { WorkflowJob } from '../exports/WorkflowJob';
-import { WorkflowJobAbstract } from '../exports/WorkflowJobAbstract';
-import { WorkflowJobApproval } from '../exports/WorkflowJobApproval';
-import {
-  UnknownWorkflowJobShape,
-  UnknownWorkflowShape,
-  WorkflowDependencies,
-} from '../types';
-
+import * as CircleCI from '@circleci/circleci-config-sdk';
+import { parseGenerable, errorParsing } from '../../../Config/exports/Parsing';
 /**
  * Parse a workflow's job reference.
  * Each job referenced by a workflow job must exist in the jobs list.
@@ -23,20 +12,23 @@ import {
 export function parseWorkflowJob(
   name: string,
   workflowJobIn: unknown,
-  jobs: Job[],
-): WorkflowJobAbstract {
-  return parseGenerable<UnknownWorkflowJobShape, WorkflowJobAbstract>(
-    GenerableType.WORKFLOW_JOB,
+  jobs: CircleCI.Job[],
+): CircleCI.workflow.WorkflowJobAbstract {
+  return parseGenerable<
+    CircleCI.types.workflow.UnknownWorkflowJobShape,
+    CircleCI.workflow.WorkflowJobAbstract
+  >(
+    CircleCI.mapping.GenerableType.WORKFLOW_JOB,
     workflowJobIn,
     (workflowJobArgs) => {
       if (workflowJobArgs?.type === 'approval') {
-        return new WorkflowJobApproval(name, workflowJobArgs);
+        return new CircleCI.workflow.WorkflowJobApproval(name, workflowJobArgs);
       }
 
       const job = jobs.find((c) => c.name === name);
 
       if (job) {
-        return new WorkflowJob(job, workflowJobArgs);
+        return new CircleCI.workflow.WorkflowJob(job, workflowJobArgs);
       }
 
       throw errorParsing(`Job ${name} not found in config`);
@@ -57,12 +49,16 @@ export function parseWorkflowJob(
 export function parseWorkflow(
   name: string,
   workflowIn: unknown,
-  jobs: Job[],
-): Workflow {
-  return parseGenerable<UnknownWorkflowShape, Workflow, WorkflowDependencies>(
-    GenerableType.WORKFLOW,
+  jobs: CircleCI.Job[],
+): CircleCI.Workflow {
+  return parseGenerable<
+    CircleCI.types.workflow.UnknownWorkflowShape,
+    CircleCI.Workflow,
+    CircleCI.types.workflow.WorkflowDependencies
+  >(
+    CircleCI.mapping.GenerableType.WORKFLOW,
     workflowIn,
-    (workflowArgs, { jobList }) => new Workflow(name, jobList),
+    (workflowArgs, { jobList }) => new CircleCI.Workflow(name, jobList),
     (workflowArgs) => {
       const jobList = workflowArgs.jobs.map((job) => {
         if (typeof job === 'string') {
@@ -89,10 +85,12 @@ export function parseWorkflow(
  */
 export function parseWorkflowList(
   workflowsIn: unknown,
-  jobs: Job[],
-): Workflow[] {
+  jobs: CircleCI.Job[],
+): CircleCI.Workflow[] {
   const workflowList = Object.entries(
-    workflowsIn as { [name: string]: UnknownWorkflowShape },
+    workflowsIn as {
+      [name: string]: CircleCI.types.workflow.UnknownWorkflowShape;
+    },
   ).map(([name, workflow]) => parseWorkflow(name, workflow, jobs));
 
   return workflowList;

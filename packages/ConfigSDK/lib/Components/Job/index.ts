@@ -67,10 +67,3 @@ export class Job implements Generable {
     return GenerableType.JOB;
   }
 }
-
-export type UnknownJobShape = {
-  [key: string]: unknown;
-  steps: { [key: string]: unknown }[];
-  resource_class: string;
-  parameters?: { [key: string]: unknown };
-};

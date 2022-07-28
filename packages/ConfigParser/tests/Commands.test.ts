@@ -24,9 +24,6 @@ describe('Parse a "checkout" step', () => {
   const checkout = new CircleCI.commands.Checkout();
   const checkoutBasicResult = { checkout: {} };
   const checkoutWithPath = new CircleCI.commands.Checkout({ path: './src' });
-  const checkoutWithPathResult = {
-    checkout: { path: './src' },
-  };
 
   it('Should produce checkout string', () => {
     expect(checkout.generate()).toEqual(checkoutBasicResult);

@@ -1,17 +1,4 @@
-import { Job } from '@circleci/circleci-config-sdk';
-import { UnknownJobShape } from '@circleci/circleci-config-sdk/lib/Components/Job';
-import { JobDependencies } from '@circleci/circleci-config-sdk/lib/Components/Job/types/Job.types';
-import { CustomParametersList } from '@circleci/circleci-config-sdk/lib/Components/Parameters';
-import { JobParameterLiteral } from '@circleci/circleci-config-sdk/lib/Components/Parameters/types/CustomParameterLiterals.types';
-import {
-  CustomCommand,
-  ReusableExecutor,
-  ParameterizedJob,
-} from '@circleci/circleci-config-sdk/lib/Components/Reusable';
-import {
-  GenerableType,
-  ParameterizedComponent,
-} from '@circleci/circleci-config-sdk/lib/Config/exports/Mapping';
+import * as CircleCI from '@circleci/circleci-config-sdk';
 import { parseGenerable } from '../../../Config/exports/Parsing';
 import { parseSteps } from '../../Commands/parsers';
 import { parseExecutor } from '../../Executors/parsers';
@@ -28,9 +15,9 @@ import { parseParameterList } from '../../Parameters/parsers';
  */
 export function parseJobList(
   jobListIn: { [key: string]: unknown },
-  customCommands?: CustomCommand[],
-  reusableExecutors?: ReusableExecutor[],
-): Job[] {
+  customCommands?: CircleCI.reusable.CustomCommand[],
+  reusableExecutors?: CircleCI.reusable.ReusableExecutor[],
+): CircleCI.Job[] {
   return Object.entries(jobListIn).map(([name, args]) =>
     parseJob(name, args, customCommands, reusableExecutors),
   );
@@ -50,18 +37,27 @@ export function parseJobList(
 export function parseJob(
   name: string,
   jobIn: unknown,
-  customCommands?: CustomCommand[],
-  reusableExecutors?: ReusableExecutor[],
-): Job {
-  return parseGenerable<UnknownJobShape, Job, JobDependencies>(
-    GenerableType.JOB,
+  customCommands?: CircleCI.reusable.CustomCommand[],
+  reusableExecutors?: CircleCI.reusable.ReusableExecutor[],
+): CircleCI.Job {
+  return parseGenerable<
+    CircleCI.types.job.UnknownJobShape,
+    CircleCI.Job,
+    CircleCI.types.job.JobDependencies
+  >(
+    CircleCI.mapping.GenerableType.JOB,
     jobIn,
     (_, { executor, steps, parametersList }) => {
       if (parametersList) {
-        return new ParameterizedJob(name, executor, parametersList, steps);
+        return new CircleCI.reusable.ParameterizedJob(
+          name,
+          executor,
+          parametersList,
+          steps,
+        );
       }
 
-      return new Job(name, executor, steps);
+      return new CircleCI.Job(name, executor, steps);
     },
     (jobArgs) => {
       let parametersList;
@@ -72,8 +68,8 @@ export function parseJob(
       if (jobArgs.parameters) {
         parametersList = parseParameterList(
           jobArgs.parameters,
-          ParameterizedComponent.JOB,
-        ) as CustomParametersList<JobParameterLiteral>;
+          CircleCI.mapping.ParameterizedComponent.JOB,
+        ) as CircleCI.parameters.CustomParametersList<CircleCI.types.parameter.literals.JobParameterLiteral>;
       }
 
       return { executor, steps, parametersList };

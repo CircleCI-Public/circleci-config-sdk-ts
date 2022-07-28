@@ -57,3 +57,5 @@ export type CustomCommandDependencies = {
   parametersList?: CustomParametersList<CommandParameterLiteral>;
   steps: Command[];
 };
+
+export { Command };

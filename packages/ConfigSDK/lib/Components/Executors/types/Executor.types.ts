@@ -1,8 +1,8 @@
+import { Executor } from '..';
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { AnyExecutor } from '../../Job/types/Job.types';
 import { CustomParametersList } from '../../Parameters';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
-import { Executor } from '../exports/Executor';
 import { ReusableExecutor } from '../exports/ReusableExecutor';
 import { ExecutableProperties } from './ExecutorParameters.types';
 import { ReusedExecutorShape } from './ReusableExecutor.types';
@@ -71,3 +71,8 @@ export type ExecutorSubtypeParser = (
   properties?: ExecutableProperties,
   reusableExecutors?: ReusableExecutor[],
 ) => AnyExecutor;
+
+export {
+  ExecutableParameters,
+  ExecutableProperties,
+} from './ExecutorParameters.types';

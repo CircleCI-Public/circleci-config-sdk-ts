@@ -1,20 +1,18 @@
 import { SchemaObject } from 'ajv';
-import { Generable } from '../../Components';
-import {
-  GenerableType,
-  ParameterizedComponent,
-  ParameterSubtype,
-} from '../exports/Mapping';
+import * as CircleCI from '@circleci/circleci-config-sdk';
 
-export type GenerableSubtypes = ParameterSubtype | ParameterizedComponent;
+export type GenerableSubtypes =
+  | CircleCI.mapping.ParameterSubtype
+  | CircleCI.mapping.ParameterizedComponent;
 
 export type GenerableSubTypesMap = {
-  [GenerableType.CUSTOM_PARAMETER]: {
+  [CircleCI.mapping.GenerableType.CUSTOM_PARAMETER]: {
     [key in GenerableSubtypes]: SchemaObject;
   };
-  [GenerableType.CUSTOM_PARAMETERS_LIST]: {
-    [key in ParameterizedComponent]: SchemaObject;
+  [CircleCI.mapping.GenerableType.CUSTOM_PARAMETERS_LIST]: {
+    [key in CircleCI.mapping.ParameterizedComponent]: SchemaObject;
   };
 };
-
-export type OneOrMoreGenerable = Generable | Generable[];
+export type OneOrMoreGenerable =
+  | CircleCI.types.config.Generable
+  | CircleCI.types.config.Generable[];

@@ -1,17 +1,4 @@
-import { Job, Workflow } from '@circleci/circleci-config-sdk';
-import { CustomCommandShape } from '@circleci/circleci-config-sdk/lib/Components/Commands/types/Command.types';
-import { ReusableExecutorsShape } from '@circleci/circleci-config-sdk/lib/Components/Executors/types/ReusableExecutor.types';
-import { JobsShape } from '@circleci/circleci-config-sdk/lib/Components/Job/types/Job.types';
-import { CustomParametersList } from '@circleci/circleci-config-sdk/lib/Components/Parameters';
-import { ParameterShape } from '@circleci/circleci-config-sdk/lib/Components/Parameters/types';
-import { AnyParameterLiteral } from '@circleci/circleci-config-sdk/lib/Components/Parameters/types/CustomParameterLiterals.types';
-import {
-  ReusableExecutor,
-  CustomCommand,
-} from '@circleci/circleci-config-sdk/lib/Components/Reusable';
-import { WorkflowsShape } from '@circleci/circleci-config-sdk/lib/Components/Workflow/types';
-import { OrbImport } from '@circleci/circleci-config-sdk/lib/Orb';
-import { OrbImportsShape } from '@circleci/circleci-config-sdk/lib/Orb/types/Orb.types';
+import * as CircleCI from '@circleci/circleci-config-sdk';
 import * as mapping from './Mapping.types';
 import * as validator from './Validator.types';
 
@@ -30,11 +17,11 @@ export type ConfigOrbImport = Record<string, string>;
  */
 export type CircleCIConfigObject = {
   version: ConfigVersion;
-  jobs?: Job[];
-  executors?: ReusableExecutor[];
-  commands?: CustomCommand[];
-  workflows?: Workflow[];
-  orbs?: OrbImport[];
+  jobs?: CircleCI.Job[];
+  executors?: CircleCI.reusable.ReusableExecutor[];
+  commands?: CircleCI.reusable.CustomCommand[];
+  workflows?: CircleCI.Workflow[];
+  orbs?: CircleCI.orb.OrbImport[];
 };
 
 /**
@@ -43,12 +30,12 @@ export type CircleCIConfigObject = {
 export type CircleCIConfigShape = {
   version: ConfigVersion;
   setup: boolean;
-  parameters?: Record<string, ParameterShape>;
-  executors?: ReusableExecutorsShape;
-  orbs?: OrbImportsShape;
-  jobs: JobsShape;
-  commands?: CustomCommandShape;
-  workflows: WorkflowsShape;
+  parameters?: Record<string, CircleCI.types.parameter.ParameterShape>;
+  executors?: CircleCI.types.executor.reusable.ReusableExecutorsShape;
+  orbs?: CircleCI.types.orb.OrbImportsShape;
+  jobs: CircleCI.types.job.JobsShape;
+  commands?: CircleCI.types.command.CustomCommandShape;
+  workflows: CircleCI.types.workflow.WorkflowsShape;
 };
 
 export type UnknownConfigShape = {
@@ -61,11 +48,11 @@ export type UnknownConfigShape = {
 };
 
 export type ConfigDependencies = {
-  jobList: Job[];
-  workflows: Workflow[];
-  executorList?: ReusableExecutor[];
-  commandList?: CustomCommand[];
-  parameterList?: CustomParametersList<AnyParameterLiteral>;
+  jobList: CircleCI.Job[];
+  workflows: CircleCI.Workflow[];
+  executorList?: CircleCI.reusable.ReusableExecutor[];
+  commandList?: CircleCI.reusable.CustomCommand[];
+  parameterList?: CircleCI.parameters.CustomParametersList<CircleCI.types.parameter.literals.AnyParameterLiteral>;
 };
 
 export { validator, mapping };

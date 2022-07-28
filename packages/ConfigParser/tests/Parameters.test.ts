@@ -1,7 +1,6 @@
 import * as CircleCI from '@circleci/circleci-config-sdk';
 import * as ConfigParser from '../index';
 import { parse as yamlParse } from 'yaml';
-import { ParameterizedComponent } from '@circleci/circleci-config-sdk/lib/Config/exports/Mapping';
 
 describe('Parse yaml pipeline parameters', () => {
   const parametersIn = yamlParse(`
@@ -49,7 +48,7 @@ describe('Parse yaml pipeline parameters', () => {
     expect(() => {
       ConfigParser.parsers.parseParameterList(
         { invalid_parameter: {} },
-        ParameterizedComponent.JOB,
+        CircleCI.mapping.ParameterizedComponent.JOB,
       );
     }).toThrowError('Could not find valid parameter list in provided object');
   });

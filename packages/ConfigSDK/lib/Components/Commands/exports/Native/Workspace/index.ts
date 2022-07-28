@@ -1,2 +1,2 @@
-export { Attach } from './Attach';
-export { Persist } from './Persist';
+export { Attach, AttachParameters } from './Attach';
+export { Persist, PersistParameters } from './Persist';

@@ -6,6 +6,11 @@
     "lerna": "^5.1.8",
     "nx": "^14.4.2"
   },
+  "scripts": {
+    "setup": "npx lerna bootstrap --use-workspaces && npx lerna run build",
+    "prep": "npx lerna run test && npx lerna run lint && npx lerna run prettier",
+    "test": "npx lerna run test"
+  },
   "workspaces": [
     "packages/*"
   ]

@@ -1,96 +1,81 @@
-import {
-  AddSSHKeys,
-  Checkout,
-  Run,
-  SetupRemoteDocker,
-  StoreArtifacts,
-  StoreTestResults,
-} from '@circleci/circleci-config-sdk/lib/Components/Commands';
-import { Command } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Command';
-import { AddSSHKeysParameters } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/AddSSHKeys';
-import {
-  Restore,
-  Save,
-} from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/Cache';
-import { RestoreCacheParameters } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/Cache/Restore';
-import { SaveCacheParameters } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/Cache/Save';
-import { CheckoutParameters } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/Checkout';
-import { RunParameters } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/Run';
-import { SetupRemoteDockerParameters } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/SetupRemoteDocker';
-import { StoreArtifactsParameters } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/StoreArtifacts';
-import { StoreTestResultsParameters } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/StoreTestResults';
-import {
-  Attach,
-  Persist,
-} from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/Workspace';
-import { AttachParameters } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/Workspace/Attach';
-import { PersistParameters } from '@circleci/circleci-config-sdk/lib/Components/Commands/exports/Native/Workspace/Persist';
-import {
-  CommandSubtypeMap,
-  NativeCommandLiteral,
-  CommandParameters,
-  CustomCommandBodyShape,
-  CustomCommandDependencies,
-} from '@circleci/circleci-config-sdk/lib/Components/Commands/types/Command.types';
-import { CustomParametersList } from '@circleci/circleci-config-sdk/lib/Components/Parameters';
-import { CommandParameterLiteral } from '@circleci/circleci-config-sdk/lib/Components/Parameters/types/CustomParameterLiterals.types';
-import {
-  CustomCommand,
-  ReusableCommand,
-} from '@circleci/circleci-config-sdk/lib/Components/Reusable';
-import {
-  GenerableType,
-  ParameterizedComponent,
-} from '@circleci/circleci-config-sdk/lib/Config/exports/Mapping';
+import * as CircleCI from '@circleci/circleci-config-sdk';
+
 import { parseGenerable, errorParsing } from '../../../Config/exports/Parsing';
 import { parseParameterList } from '../../Parameters/parsers';
 
-const nativeSubtypes: CommandSubtypeMap = {
+const nativeSubtypes: CircleCI.types.command.CommandSubtypeMap = {
   restore_cache: {
-    generableType: GenerableType.RESTORE,
-    parse: (args) => new Restore(args as RestoreCacheParameters),
+    generableType: CircleCI.mapping.GenerableType.RESTORE,
+    parse: (args) =>
+      new CircleCI.commands.cache.Restore(
+        args as CircleCI.commands.cache.RestoreCacheParameters,
+      ),
   },
   save_cache: {
-    generableType: GenerableType.SAVE,
-    parse: (args) => new Save(args as SaveCacheParameters),
+    generableType: CircleCI.mapping.GenerableType.SAVE,
+    parse: (args) =>
+      new CircleCI.commands.cache.Save(
+        args as CircleCI.commands.cache.SaveCacheParameters,
+      ),
   },
   attach_workspace: {
-    generableType: GenerableType.ATTACH,
-    parse: (args) => new Attach(args as AttachParameters),
+    generableType: CircleCI.mapping.GenerableType.ATTACH,
+    parse: (args) =>
+      new CircleCI.commands.workspace.Attach(
+        args as CircleCI.commands.workspace.AttachParameters,
+      ),
   },
   persist_to_workspace: {
-    generableType: GenerableType.PERSIST,
-    parse: (args) => new Persist(args as PersistParameters),
+    generableType: CircleCI.mapping.GenerableType.PERSIST,
+    parse: (args) =>
+      new CircleCI.commands.workspace.Persist(
+        args as CircleCI.commands.workspace.PersistParameters,
+      ),
   },
   add_ssh_keys: {
-    generableType: GenerableType.ADD_SSH_KEYS,
-    parse: (args) => new AddSSHKeys(args as AddSSHKeysParameters),
+    generableType: CircleCI.mapping.GenerableType.ADD_SSH_KEYS,
+    parse: (args) =>
+      new CircleCI.commands.AddSSHKeys(
+        args as CircleCI.commands.AddSSHKeysParameters,
+      ),
   },
   checkout: {
-    generableType: GenerableType.CHECKOUT,
-    parse: (args) => new Checkout(args as CheckoutParameters),
+    generableType: CircleCI.mapping.GenerableType.CHECKOUT,
+    parse: (args) =>
+      new CircleCI.commands.Checkout(
+        args as CircleCI.commands.CheckoutParameters,
+      ),
   },
   run: {
-    generableType: GenerableType.RUN,
+    generableType: CircleCI.mapping.GenerableType.RUN,
     parse: (args) => {
       if (typeof args === 'string') {
-        return new Run({ command: args as string });
+        return new CircleCI.commands.Run({ command: args as string });
       }
 
-      return new Run(args as RunParameters);
+      return new CircleCI.commands.Run(args as CircleCI.commands.RunParameters);
     },
   },
   setup_remote_docker: {
-    generableType: GenerableType.SETUP_REMOTE_DOCKER,
-    parse: (args) => new SetupRemoteDocker(args as SetupRemoteDockerParameters),
+    generableType: CircleCI.mapping.GenerableType.SETUP_REMOTE_DOCKER,
+    parse: (args) =>
+      new CircleCI.commands.SetupRemoteDocker(
+        args as CircleCI.commands.SetupRemoteDockerParameters,
+      ),
   },
   store_artifacts: {
-    generableType: GenerableType.STORE_ARTIFACTS,
-    parse: (args) => new StoreArtifacts(args as StoreArtifactsParameters),
+    generableType: CircleCI.mapping.GenerableType.STORE_ARTIFACTS,
+    parse: (args) =>
+      new CircleCI.commands.StoreArtifacts(
+        args as CircleCI.commands.StoreArtifactsParameters,
+      ),
   },
   store_test_results: {
-    generableType: GenerableType.STORE_TEST_RESULTS,
-    parse: (args) => new StoreTestResults(args as StoreTestResultsParameters),
+    generableType: CircleCI.mapping.GenerableType.STORE_TEST_RESULTS,
+    parse: (args) =>
+      new CircleCI.commands.StoreTestResults(
+        args as CircleCI.commands.StoreTestResultsParameters,
+      ),
   },
 };
 
@@ -102,14 +87,14 @@ const nativeSubtypes: CommandSubtypeMap = {
  */
 export function parseSteps(
   stepsListIn: unknown,
-  commands?: CustomCommand[],
-): Command[] {
+  commands?: CircleCI.reusable.CustomCommand[],
+): CircleCI.types.command.Command[] {
   return parseGenerable<
     Record<string, unknown>[],
-    Command[],
-    { steps: Command[] }
+    CircleCI.types.command.Command[],
+    { steps: CircleCI.types.command.Command[] }
   >(
-    GenerableType.STEP_LIST,
+    CircleCI.mapping.GenerableType.STEP_LIST,
     stepsListIn,
     (_, { steps }) => steps,
     (stepsListIn) => {
@@ -139,21 +124,24 @@ export function parseSteps(
 export function parseStep(
   name: string,
   args?: unknown,
-  commands?: CustomCommand[],
-): Command {
+  commands?: CircleCI.reusable.CustomCommand[],
+): CircleCI.types.command.Command {
   if (name in nativeSubtypes) {
-    const commandMapping = nativeSubtypes[name as NativeCommandLiteral];
+    const commandMapping =
+      nativeSubtypes[name as CircleCI.types.command.NativeCommandLiteral];
 
-    return parseGenerable<CommandParameters | undefined, Command>(
-      commandMapping.generableType,
-      args,
-      commandMapping.parse,
-    );
+    return parseGenerable<
+      CircleCI.types.command.CommandParameters | undefined,
+      CircleCI.types.command.Command
+    >(commandMapping.generableType, args, commandMapping.parse);
   }
 
   if (commands) {
-    return parseGenerable<CommandParameters, ReusableCommand>(
-      GenerableType.REUSABLE_COMMAND,
+    return parseGenerable<
+      CircleCI.types.command.CommandParameters,
+      CircleCI.reusable.ReusableCommand
+    >(
+      CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
       args,
       (parameterArgs) => {
         const command = commands.find((c) => c.name === name);
@@ -164,7 +152,7 @@ export function parseStep(
           );
         }
 
-        return new ReusableCommand(command, parameterArgs);
+        return new CircleCI.reusable.ReusableCommand(command, parameterArgs);
       },
       undefined,
       name,
@@ -182,8 +170,8 @@ export function parseStep(
  */
 export function parseCustomCommands(
   commandListIn: { [key: string]: unknown },
-  custom_commands?: CustomCommand[],
-): CustomCommand[] {
+  custom_commands?: CircleCI.reusable.CustomCommand[],
+): CircleCI.reusable.CustomCommand[] {
   return Object.entries(commandListIn).map(([name, args]) =>
     parseCustomCommand(name, args, custom_commands),
   );
@@ -200,17 +188,17 @@ export function parseCustomCommands(
 export function parseCustomCommand(
   name: string,
   args: unknown,
-  custom_commands?: CustomCommand[],
-): CustomCommand {
+  custom_commands?: CircleCI.reusable.CustomCommand[],
+): CircleCI.reusable.CustomCommand {
   return parseGenerable<
-    CustomCommandBodyShape,
-    CustomCommand,
-    CustomCommandDependencies
+    CircleCI.types.command.CustomCommandBodyShape,
+    CircleCI.reusable.CustomCommand,
+    CircleCI.types.command.CustomCommandDependencies
   >(
-    GenerableType.CUSTOM_COMMAND,
+    CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
     args,
     (commandArgs, { parametersList, steps }) => {
-      return new CustomCommand(
+      return new CircleCI.reusable.CustomCommand(
         name,
         steps,
         parametersList,
@@ -222,8 +210,8 @@ export function parseCustomCommand(
         commandArgs.parameters &&
         (parseParameterList(
           commandArgs.parameters,
-          ParameterizedComponent.COMMAND,
-        ) as CustomParametersList<CommandParameterLiteral>);
+          CircleCI.mapping.ParameterizedComponent.COMMAND,
+        ) as CircleCI.parameters.CustomParametersList<CircleCI.types.parameter.literals.CommandParameterLiteral>);
 
       const steps = parseSteps(commandArgs.steps, custom_commands);
 

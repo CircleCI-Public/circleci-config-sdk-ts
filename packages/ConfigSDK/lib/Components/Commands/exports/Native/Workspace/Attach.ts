@@ -32,7 +32,7 @@ export class Attach implements Command {
 /**
  * Generated Shape of the Attach command.
  */
-export interface AttachCommandShape extends CommandShape {
+interface AttachCommandShape extends CommandShape {
   attach_workspace: AttachParameters;
 }
 
