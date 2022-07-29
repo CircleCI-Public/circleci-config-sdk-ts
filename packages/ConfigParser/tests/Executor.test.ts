@@ -95,8 +95,6 @@ describe('Parse a MacOS Executor', () => {
 describe('Parse Windows Executor', () => {
   const windows = new CircleCI.executors.WindowsExecutor();
 
-  delete windows.parameters?.shell;
-
   const expectedShape = {
     machine: {
       image: 'windows-server-2019-vs2019:stable',

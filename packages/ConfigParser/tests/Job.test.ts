@@ -102,22 +102,25 @@ describe('Parse Docker Job With A Parameterized Custom Command', () => {
     const helloWorld = new CircleCI.commands.Run({
       command: 'echo << parameters.greeting >>',
     });
-    const customCommand = new CircleCI.reusable.CustomCommand(
+    const reusableCommand = new CircleCI.reusable.ReusableCommand(
       'say_hello',
       [helloWorld],
       new CircleCI.parameters.CustomParametersList([
         new CircleCI.parameters.CustomParameter('greeting', 'string'),
       ]),
     );
-    const job = new CircleCI.Job('my_job', docker);
+    const job = new CircleCI.Job('my_job', docker, [
+      new CircleCI.reusable.ReusedCommand(reusableCommand, {
+        greeting: 'hello world',
+      }),
+    ]);
     const myConfig = new CircleCI.Config();
     myConfig.addJob(job);
-    myConfig.addCustomCommand(customCommand);
+    myConfig.addReusableCommand(reusableCommand);
     const result = ConfigParser.parsers.parseJob(
       'my_job',
       jobIn,
       myConfig.commands,
-      undefined,
     );
 
     expect(result).toEqual(job);

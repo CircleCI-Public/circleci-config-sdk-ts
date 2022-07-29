@@ -8,18 +8,18 @@ import { parseParameterList } from '../../Parameters/parsers';
  * Parse a config's list of jobs into a list of Job instances.
  *
  * @param jobListIn - The high level list of jobs to be parsed
- * @param customCommands - The reference list of custom commands to be used when parsing reusable command steps
+ * @param ReusableCommands - The reference list of custom commands to be used when parsing reusable command steps
  * @param reusableExecutors - The reference list of reusable executors to be used
  * @returns A list of jobs
  * @throws Error if a job is not valid
  */
 export function parseJobList(
   jobListIn: { [key: string]: unknown },
-  customCommands?: CircleCI.reusable.CustomCommand[],
+  ReusableCommands?: CircleCI.reusable.ReusableCommand[],
   reusableExecutors?: CircleCI.reusable.ReusableExecutor[],
 ): CircleCI.Job[] {
   return Object.entries(jobListIn).map(([name, args]) =>
-    parseJob(name, args, customCommands, reusableExecutors),
+    parseJob(name, args, ReusableCommands, reusableExecutors),
   );
 }
 
@@ -29,7 +29,7 @@ export function parseJobList(
  *
  * @param name - The name of the job.
  * @param jobIn - The job to be parsed.
- * @param customCommands - The reference list of custom commands to be used for parsing reusable command steps.
+ * @param ReusableCommands - The reference list of custom commands to be used for parsing reusable command steps.
  * @param reusableExecutors - The reference list of reusable executors to be used.
  * @returns A generic or parameterized job.
  * @throws Error if the job is not valid.
@@ -37,7 +37,7 @@ export function parseJobList(
 export function parseJob(
   name: string,
   jobIn: unknown,
-  customCommands?: CircleCI.reusable.CustomCommand[],
+  ReusableCommands?: CircleCI.reusable.ReusableCommand[],
   reusableExecutors?: CircleCI.reusable.ReusableExecutor[],
 ): CircleCI.Job {
   return parseGenerable<
@@ -63,7 +63,7 @@ export function parseJob(
       let parametersList;
 
       const executor = parseExecutor(jobArgs, reusableExecutors);
-      const steps = parseSteps(jobArgs.steps, customCommands);
+      const steps = parseSteps(jobArgs.steps, ReusableCommands);
 
       if (jobArgs.parameters) {
         parametersList = parseParameterList(

@@ -1,4 +1,4 @@
-import { CustomCommand } from './CustomCommand';
 import { ReusableCommand } from './ReusableCommand';
+import { ReusedCommand } from './ReusedCommand';
 
-export { CustomCommand, ReusableCommand };
+export { ReusableCommand, ReusedCommand };

@@ -6,7 +6,7 @@ export enum GenerableType {
 
   // Commands
   REUSABLE_COMMAND = 'reusable_command',
-  CUSTOM_COMMAND = 'custom_command',
+  REUSED_COMMAND = 'reused_command',
   RESTORE = 'restore_cache',
   SAVE = 'save_cache',
   ATTACH = 'attach_workspace',

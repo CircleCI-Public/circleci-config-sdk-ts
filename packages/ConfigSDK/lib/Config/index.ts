@@ -1,7 +1,7 @@
 import { Scalar, stringify } from 'yaml';
 import { version as SDKVersion } from '../../package-version.json';
 import { Generable } from '../Components';
-import { CustomCommandShape } from '../Components/Commands/types/Command.types';
+import { ReusableCommandShape } from '../Components/Commands/types/Command.types';
 import { ReusableExecutor } from '../Components/Executors/exports/ReusableExecutor';
 import { ReusableExecutorsShape } from '../Components/Executors/types/ReusableExecutor.types';
 import { Job } from '../Components/Job';
@@ -9,7 +9,7 @@ import { JobsShape } from '../Components/Job/types/Job.types';
 import { CustomParametersList } from '../Components/Parameters';
 import { Parameterized } from '../Components/Parameters/exports/Parameterized';
 import { PipelineParameterLiteral } from '../Components/Parameters/types/CustomParameterLiterals.types';
-import { CustomCommand } from '../Components/Reusable';
+import { ReusableCommand } from '../Components/Reusable';
 import { Workflow } from '../Components/Workflow/exports/Workflow';
 import { WorkflowsShape } from '../Components/Workflow/types/Workflow.types';
 import { OrbImport } from '../Orb/exports/OrbImport';
@@ -46,7 +46,7 @@ export class Config
   /**
    * A command definition defines a sequence of steps as a map to be executed in a job, enabling you to reuse a single command definition across multiple jobs.
    */
-  commands?: CustomCommand[];
+  commands?: ReusableCommand[];
   /**
    * A Workflow is comprised of one or more uniquely named jobs.
    */
@@ -77,7 +77,7 @@ export class Config
     jobs?: Job[],
     workflows?: Workflow[],
     executors?: ReusableExecutor[],
-    commands?: CustomCommand[],
+    commands?: ReusableCommand[],
     parameters?: CustomParametersList<PipelineParameterLiteral>,
     orbs?: OrbImport[],
   ) {
@@ -103,7 +103,7 @@ export class Config
    * Add a Custom Command to the current Config. Chainable
    * @param command - Injectable command
    */
-  addCustomCommand(command: CustomCommand): this {
+  addReusableCommand(command: ReusableCommand): this {
     if (!this.commands) {
       this.commands = [command];
     } else {
@@ -193,7 +193,7 @@ export class Config
     const generatedExecutors = generateList<ReusableExecutorsShape>(
       this.executors,
     );
-    const generatedCommands = generateList<CustomCommandShape>(
+    const generatedCommands = generateList<ReusableCommandShape>(
       this.commands,
       undefined,
       flatten,

@@ -15,7 +15,7 @@ describe('Parse a "run" step', () => {
   });
 
   it('Should have the correct static properties', () => {
-    expect(run.generableType).toBe(CircleCI.mapping.GenerableType);
+    expect(run.generableType).toBe(CircleCI.mapping.GenerableType.RUN);
     expect(run.name).toBe('run');
   });
 });
@@ -153,7 +153,7 @@ describe('Parse a "add_ssh_keys" step', () => {
 });
 
 describe('Parse a Custom Command without parameters', () => {
-  const customCommand = new CircleCI.reusable.CustomCommand('say_hello', [
+  const reusableCommand = new CircleCI.reusable.ReusableCommand('say_hello', [
     new CircleCI.commands.Run({
       command: 'echo "Hello, World!"',
       name: 'Say hello!',
@@ -166,8 +166,8 @@ describe('Parse a Custom Command without parameters', () => {
   };
   it('Should parse and match example', () => {
     expect(
-      ConfigParser.parsers.parseCustomCommand('say_hello', example.say_hello),
-    ).toEqual(customCommand);
+      ConfigParser.parsers.parseReusableCommand('say_hello', example.say_hello),
+    ).toEqual(reusableCommand);
   });
 });
 

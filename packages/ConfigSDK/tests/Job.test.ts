@@ -70,7 +70,7 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
     command: 'echo << parameters.greeting >>',
   });
 
-  const customCommand = new CircleCI.reusable.CustomCommand(
+  const reusableCommand = new CircleCI.reusable.ReusableCommand(
     'say_hello',
     [helloWorld],
     new CircleCI.parameters.CustomParametersList([
@@ -78,13 +78,13 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
     ]),
   );
 
-  const reusableCommand = new CircleCI.reusable.ReusableCommand(customCommand, {
+  const reusedCommand = new CircleCI.reusable.ReusedCommand(reusableCommand, {
     greeting: 'hello world',
   });
 
   const job = new CircleCI.Job('my_job', docker);
 
-  job.addStep(reusableCommand);
+  job.addStep(reusedCommand);
 
   const expectedOutput = {
     version: 2.1,
@@ -121,7 +121,7 @@ describe('Instantiate Parameterized Docker Job With A Custom Command', () => {
 
   it('Add job to config and validate', () => {
     const myConfig = new CircleCI.Config();
-    myConfig.addCustomCommand(customCommand);
+    myConfig.addReusableCommand(reusableCommand);
     myConfig.addJob(job);
     expect(YAML.parse(myConfig.generate(true))).toEqual(expectedOutput);
   });
@@ -133,7 +133,7 @@ describe('Parse Docker Job With A Parameterized Custom Command', () => {
     command: 'echo << parameters.greeting >>',
   });
 
-  const customCommand = new CircleCI.reusable.CustomCommand(
+  const reusableCommand = new CircleCI.reusable.ReusableCommand(
     'say_hello',
     [helloWorld],
     new CircleCI.parameters.CustomParametersList([
@@ -141,18 +141,18 @@ describe('Parse Docker Job With A Parameterized Custom Command', () => {
     ]),
   );
 
-  const reusableCommand = new CircleCI.reusable.ReusableCommand(customCommand, {
+  const reusedCommand = new CircleCI.reusable.ReusedCommand(reusableCommand, {
     greeting: 'hello world',
   });
 
   const job = new CircleCI.Job('my_job', docker);
 
-  job.addStep(reusableCommand);
+  job.addStep(reusedCommand);
   // CircleCI.config.ConfigValidator.getGeneric();
   const myConfig = new CircleCI.Config();
 
   myConfig.addJob(job);
-  myConfig.addCustomCommand(customCommand);
+  myConfig.addReusableCommand(reusableCommand);
 
   it('Should have correct static properties', () => {
     expect(job.generableType).toEqual(GenerableType.JOB);

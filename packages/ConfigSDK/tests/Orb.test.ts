@@ -73,7 +73,7 @@ describe('Use an OrbImport within a config', () => {
     'test',
     new CircleCI.reusable.ReusedExecutor(pythonExecutor, { version: '1.2.3' }),
     [
-      new CircleCI.reusable.ReusableCommand(sayItCommand, {
+      new CircleCI.reusable.ReusedCommand(sayItCommand, {
         what: 'cheese',
       }),
     ],

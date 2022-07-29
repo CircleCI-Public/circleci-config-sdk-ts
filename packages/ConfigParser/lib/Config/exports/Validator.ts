@@ -14,8 +14,8 @@ const schemaRegistry: ValidationMap = {
   [CircleCI.mapping.GenerableType.CONFIG]: schemas.ConfigSchema,
   [CircleCI.mapping.GenerableType.REUSABLE_COMMAND]:
     schemas.command.reusable.ReusableCommandSchema,
-  [CircleCI.mapping.GenerableType.CUSTOM_COMMAND]:
-    schemas.command.reusable.CustomCommandSchema,
+  [CircleCI.mapping.GenerableType.REUSED_COMMAND]:
+    schemas.command.reusable.ReusedCommandSchema,
   [CircleCI.mapping.GenerableType.RESTORE]: schemas.command.cache.RestoreSchema,
   [CircleCI.mapping.GenerableType.SAVE]: schemas.command.cache.SaveSchema,
   [CircleCI.mapping.GenerableType.ATTACH]:

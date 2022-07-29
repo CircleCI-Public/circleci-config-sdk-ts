@@ -69,7 +69,7 @@ describe('Parse a fully complete config', () => {
   reusableDocker.defineParameter('version', 'string', '16.3');
   myConfig.addReusableExecutor(reusableDocker);
 
-  const customCommand = new CircleCI.reusable.CustomCommand(
+  const reusableCommand = new CircleCI.reusable.ReusableCommand(
     'say_hello',
     [
       new CircleCI.commands.Run({
@@ -81,19 +81,19 @@ describe('Parse a fully complete config', () => {
     ]),
   );
 
-  myConfig.addCustomCommand(customCommand);
+  myConfig.addReusableCommand(reusableCommand);
 
   const jobA = new CircleCI.Job(
     'my-job-A',
     reusableDocker.reuse({ version: '17.2' }),
     [
-      new CircleCI.reusable.ReusableCommand(customCommand, {
+      new CircleCI.reusable.ReusedCommand(reusableCommand, {
         greeting: '<< pipeline.parameters.greeting >>',
       }),
     ],
   );
   const jobB = new CircleCI.Job('my-job-B', reusableDocker.reuse(), [
-    new CircleCI.reusable.ReusableCommand(customCommand, {
+    new CircleCI.reusable.ReusedCommand(reusableCommand, {
       greeting: 'sup world!',
     }),
   ]);

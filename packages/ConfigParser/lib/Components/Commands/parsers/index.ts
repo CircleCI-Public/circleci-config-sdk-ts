@@ -87,7 +87,7 @@ const nativeSubtypes: CircleCI.types.command.CommandSubtypeMap = {
  */
 export function parseSteps(
   stepsListIn: unknown,
-  commands?: CircleCI.reusable.CustomCommand[],
+  commands?: CircleCI.reusable.ReusableCommand[],
 ): CircleCI.types.command.Command[] {
   return parseGenerable<
     Record<string, unknown>[],
@@ -119,12 +119,12 @@ export function parseSteps(
  * @param name - The name of the command.
  * @param args - The arguments to the command.
  * @param commands - Only required when parsing reusable commands
- * @returns Command or ReusableCommand
+ * @returns Command or ReusedCommand
  */
 export function parseStep(
   name: string,
   args?: unknown,
-  commands?: CircleCI.reusable.CustomCommand[],
+  commands?: CircleCI.reusable.ReusableCommand[],
 ): CircleCI.types.command.Command {
   if (name in nativeSubtypes) {
     const commandMapping =
@@ -139,7 +139,7 @@ export function parseStep(
   if (commands) {
     return parseGenerable<
       CircleCI.types.command.CommandParameters,
-      CircleCI.reusable.ReusableCommand
+      CircleCI.reusable.ReusedCommand
     >(
       CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
       args,
@@ -152,7 +152,7 @@ export function parseStep(
           );
         }
 
-        return new CircleCI.reusable.ReusableCommand(command, parameterArgs);
+        return new CircleCI.reusable.ReusedCommand(command, parameterArgs);
       },
       undefined,
       name,
@@ -163,17 +163,17 @@ export function parseStep(
 }
 
 /**
- * Parse a config's list of custom commands, to later be referenced by ReusableCommands.
- * @param commandListIn - The list of custom commands to parse.
+ * Parse a config's list of custom commands, to later be referenced by ReusedCommands.
+ * @param commandListIn - The list of custom commands to parse.ReusableCommand
  * @param custom_commands - The custom commands to parse.
  * @returns A list of custom commands.
  */
-export function parseCustomCommands(
+export function parseReusableCommands(
   commandListIn: { [key: string]: unknown },
-  custom_commands?: CircleCI.reusable.CustomCommand[],
-): CircleCI.reusable.CustomCommand[] {
+  custom_commands?: CircleCI.reusable.ReusableCommand[],
+): CircleCI.reusable.ReusableCommand[] {
   return Object.entries(commandListIn).map(([name, args]) =>
-    parseCustomCommand(name, args, custom_commands),
+    parseReusableCommand(name, args, custom_commands),
   );
 }
 
@@ -185,20 +185,20 @@ export function parseCustomCommands(
  * @returns A custom command.
  * @throws Error if the custom command is not valid.
  */
-export function parseCustomCommand(
+export function parseReusableCommand(
   name: string,
   args: unknown,
-  custom_commands?: CircleCI.reusable.CustomCommand[],
-): CircleCI.reusable.CustomCommand {
+  custom_commands?: CircleCI.reusable.ReusableCommand[],
+): CircleCI.reusable.ReusableCommand {
   return parseGenerable<
-    CircleCI.types.command.CustomCommandBodyShape,
-    CircleCI.reusable.CustomCommand,
-    CircleCI.types.command.CustomCommandDependencies
+    CircleCI.types.command.ReusableCommandBodyShape,
+    CircleCI.reusable.ReusableCommand,
+    CircleCI.types.command.ReusableCommandDependencies
   >(
-    CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
+    CircleCI.mapping.GenerableType.REUSED_COMMAND,
     args,
     (commandArgs, { parametersList, steps }) => {
-      return new CircleCI.reusable.CustomCommand(
+      return new CircleCI.reusable.ReusableCommand(
         name,
         steps,
         parametersList,

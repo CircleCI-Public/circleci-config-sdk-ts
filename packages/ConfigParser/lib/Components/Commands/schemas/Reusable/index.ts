@@ -1,4 +1,4 @@
-import CustomCommandSchema from './CustomCommand.schema';
 import ReusableCommandSchema from './ReusableCommand.schema';
+import ReusedCommandSchema from './ReusedCommand.schema';
 
-export { CustomCommandSchema, ReusableCommandSchema };
+export { ReusableCommandSchema, ReusedCommandSchema };

@@ -21,14 +21,14 @@ export type CommandShorthandShape = Record<string, string>;
 
 export type AnyCommandShape = CommandShape | CommandShorthandShape;
 
-export type CustomCommandBodyShape = {
+export type ReusableCommandBodyShape = {
   parameters?: CustomParametersListShape;
   steps: AnyCommandShape[];
   description?: string;
 };
 
-export type CustomCommandShape = {
-  [name: string]: CustomCommandBodyShape;
+export type ReusableCommandShape = {
+  [name: string]: ReusableCommandBodyShape;
 };
 
 /**
@@ -53,7 +53,7 @@ export type CommandSubtypeMap = {
   };
 };
 
-export type CustomCommandDependencies = {
+export type ReusableCommandDependencies = {
   parametersList?: CustomParametersList<CommandParameterLiteral>;
   steps: Command[];
 };

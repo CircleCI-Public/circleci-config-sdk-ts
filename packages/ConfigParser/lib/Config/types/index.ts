@@ -19,7 +19,7 @@ export type CircleCIConfigObject = {
   version: ConfigVersion;
   jobs?: CircleCI.Job[];
   executors?: CircleCI.reusable.ReusableExecutor[];
-  commands?: CircleCI.reusable.CustomCommand[];
+  commands?: CircleCI.reusable.ReusableCommand[];
   workflows?: CircleCI.Workflow[];
   orbs?: CircleCI.orb.OrbImport[];
 };
@@ -34,7 +34,7 @@ export type CircleCIConfigShape = {
   executors?: CircleCI.types.executor.reusable.ReusableExecutorsShape;
   orbs?: CircleCI.types.orb.OrbImportsShape;
   jobs: CircleCI.types.job.JobsShape;
-  commands?: CircleCI.types.command.CustomCommandShape;
+  commands?: CircleCI.types.command.ReusableCommandShape;
   workflows: CircleCI.types.workflow.WorkflowsShape;
 };
 
@@ -51,7 +51,7 @@ export type ConfigDependencies = {
   jobList: CircleCI.Job[];
   workflows: CircleCI.Workflow[];
   executorList?: CircleCI.reusable.ReusableExecutor[];
-  commandList?: CircleCI.reusable.CustomCommand[];
+  commandList?: CircleCI.reusable.ReusableCommand[];
   parameterList?: CircleCI.parameters.CustomParametersList<CircleCI.types.parameter.literals.AnyParameterLiteral>;
 };
 

@@ -1,5 +1,5 @@
 import * as CircleCI from '@circleci/circleci-config-sdk';
-import { parseCustomCommands } from '../../Components/Commands/parsers';
+import { parseReusableCommands } from '../../Components/Commands/parsers';
 import { parseReusableExecutors } from '../../Components/Executors/parsers';
 import { parseJobList } from '../../Components/Job/parsers';
 import { parseParameterList } from '../../Components/Parameters/parsers';
@@ -36,7 +36,7 @@ export function parseConfig(configIn: unknown): CircleCI.Config {
         jobList,
         workflows,
         executorList as CircleCI.reusable.ReusableExecutor[] | undefined,
-        commandList as CircleCI.reusable.CustomCommand[] | undefined,
+        commandList as CircleCI.reusable.ReusableCommand[] | undefined,
         parameterList as CircleCI.parameters.CustomParametersList<CircleCI.types.parameter.literals.PipelineParameterLiteral>,
       );
     },
@@ -44,7 +44,7 @@ export function parseConfig(configIn: unknown): CircleCI.Config {
       const executorList =
         config.executors && parseReusableExecutors(config.executors);
       const commandList =
-        config.commands && parseCustomCommands(config.commands);
+        config.commands && parseReusableCommands(config.commands);
       const parameterList =
         config.parameters && parseParameterList(config.parameters);
       const jobList = parseJobList(config.jobs, commandList, executorList);

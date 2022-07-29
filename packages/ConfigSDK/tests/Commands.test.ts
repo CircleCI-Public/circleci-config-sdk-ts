@@ -184,7 +184,7 @@ describe('Add SSH Keys', () => {
 });
 
 describe('Instantiate a Custom Command without parameters', () => {
-  const customCommand = new CircleCI.reusable.CustomCommand('say_hello', [
+  const reusableCommand = new CircleCI.reusable.ReusableCommand('say_hello', [
     new CircleCI.commands.Run({
       command: 'echo "Hello, World!"',
       name: 'Say hello!',
@@ -198,12 +198,12 @@ describe('Instantiate a Custom Command without parameters', () => {
   };
 
   it('Should generate checkout yaml', () => {
-    expect(customCommand.generate()).toEqual(example);
+    expect(reusableCommand.generate()).toEqual(example);
   });
 
   it('Should have the correct static properties', () => {
-    expect(customCommand.generableType).toBe(
-      CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
+    expect(reusableCommand.generableType).toBe(
+      CircleCI.mapping.GenerableType.REUSED_COMMAND,
     );
   });
 });
@@ -212,9 +212,9 @@ describe('Instantiate a Custom Command with parameters', () => {
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
   });
-  const customCommand = new CircleCI.reusable.CustomCommand('say_hello');
+  const reusableCommand = new CircleCI.reusable.ReusableCommand('say_hello');
 
-  customCommand
+  reusableCommand
     .addStep(helloWorld)
     .defineParameter('greeting', 'string', 'hello world');
 
@@ -228,7 +228,7 @@ describe('Instantiate a Custom Command with parameters', () => {
         command: echo << parameters.greeting >>`;
 
   it('Should generate checkout yaml', () => {
-    expect(customCommand.generate()).toEqual(YAML.parse(expectedOutput));
+    expect(reusableCommand.generate()).toEqual(YAML.parse(expectedOutput));
   });
 });
 
@@ -237,7 +237,7 @@ describe('Instantiate a Reusable Command', () => {
     command: 'echo << parameters.greeting >>',
   });
 
-  const customCommand = new CircleCI.reusable.CustomCommand(
+  const reusableCommand = new CircleCI.reusable.ReusableCommand(
     'say_hello',
     [helloWorld],
     new CircleCI.parameters.CustomParametersList([
@@ -245,7 +245,7 @@ describe('Instantiate a Reusable Command', () => {
     ]),
   );
 
-  const reusableCommand = new CircleCI.reusable.ReusableCommand(customCommand, {
+  const reusedCommand = new CircleCI.reusable.ReusedCommand(reusableCommand, {
     greeting: 'hello world',
   });
 
@@ -256,35 +256,35 @@ describe('Instantiate a Reusable Command', () => {
   };
 
   it('Should generate checkout yaml', () => {
-    expect(reusableCommand.generate()).toEqual(expected);
+    expect(reusedCommand.generate()).toEqual(expected);
   });
 
   it('Should have the correct static properties', () => {
-    expect(reusableCommand.generableType).toBe(
+    expect(reusedCommand.generableType).toBe(
       CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
     );
   });
 
   it('Should be able to generate with string name', () => {
-    const reusableCommandByName = new CircleCI.reusable.ReusableCommand(
-      customCommand.name,
+    const reusedCommandByName = new CircleCI.reusable.ReusedCommand(
+      reusableCommand.name,
       {
         greeting: 'hello world',
       },
     );
 
-    expect(reusableCommandByName.generate()).toEqual(expected);
+    expect(reusedCommandByName.generate()).toEqual(expected);
   });
 });
 /**
  * instantiate a parameter with an enum value of x y z
  */
 describe('Instantiate reusable commands', () => {
-  const firstCustomCommand = new CircleCI.reusable.CustomCommand(
+  const firstReusableCommand = new CircleCI.reusable.ReusableCommand(
     'point_direction',
   );
 
-  firstCustomCommand
+  firstReusableCommand
     .defineParameter('axis', 'enum', 'x', undefined, ['x', 'y', 'z'])
     .defineParameter('angle', 'integer', 90)
     .addStep(
@@ -306,16 +306,16 @@ describe('Instantiate reusable commands', () => {
     steps:
       - run: echo << parameters.axis >>`;
 
-    expect(firstCustomCommand.generate(true)).toEqual(
+    expect(firstReusableCommand.generate(true)).toEqual(
       YAML.parse(firstExpectedOutput),
     );
   });
 
-  const secondCustomCommand = new CircleCI.reusable.CustomCommand(
+  const secondReusableCommand = new CircleCI.reusable.ReusableCommand(
     'search_year',
   );
 
-  secondCustomCommand
+  secondReusableCommand
     .defineParameter('year', 'integer')
     .defineParameter('type', 'string', 'gregorian')
     .addStep(
@@ -335,24 +335,24 @@ describe('Instantiate reusable commands', () => {
     steps:
       - run: echo << parameters.year >>`;
 
-    expect(secondCustomCommand.generate(true)).toEqual(
+    expect(secondReusableCommand.generate(true)).toEqual(
       YAML.parse(secondExpectedOutput),
     );
   });
 
   const myConfig = new CircleCI.Config();
-  myConfig.addCustomCommand(firstCustomCommand);
+  myConfig.addReusableCommand(firstReusableCommand);
 
   // Testing that the validator will update the schema with new command
-  myConfig.addCustomCommand(secondCustomCommand);
+  myConfig.addReusableCommand(secondReusableCommand);
 
   it('Add commands to config and validate', () => {
     expect(myConfig.commands?.length).toBe(2);
   });
 
   it('Should have the correct static properties', () => {
-    expect(firstCustomCommand.generableType).toBe(
-      CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
+    expect(firstReusableCommand.generableType).toBe(
+      CircleCI.mapping.GenerableType.REUSED_COMMAND,
     );
   });
 
