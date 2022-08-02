@@ -1,7 +1,7 @@
 # Contributing
 
 Thank you for considering to contribute to the CircleCI Config SDK! Before you
-get started, we recommend taking a look at the guidelines belowL
+get started, we recommend taking a look at the guidelines below:
 
 - [Have a Question?](#question)
 - [Issues and Bugs](#issue)
@@ -119,11 +119,11 @@ Must be one of the following:
 
 ##### Scope
 
-Scopes should be limited to the following list:
+Scopes can be used to denote which package this change is affecting
 
-- _**ClassName**_: The name of the TS class being modified or tested
-- **sample/#**: The number of the sample added or modified
-- **pkg**: Anything related to modifying the package.json
+- _**sdk**_: The CircleCI Configuration SDK
+- **parser**: The CircleCI Configuration Parser
+
 
 #### <a name="pull"></a>Submitting a Pull Request
 
@@ -141,14 +141,12 @@ After the issue has been created, follow these steps to create a Pull Request.
    repo.
 1. Clone your newly forked repository to your local machine.
 1. Create a new branch for your changes: `git checkout -b fix_my_issue main`
+1. Run `npm run setup`
 1. Implement your change with appropriate test coverage.
 1. Utilize our [commit message conventions](commit).
-1. Run tests, linters, and formatters locally:
-   - `npm run test`
-   - `npm run prettier`
-   - `npm run lint`
-1. Push all changes back to GitHub `git push origin fix_my_issue`
-1. In GitHub, send a Pull Request to `circleci-config-sdk-ts:main`
+2. Run tests, linters, and formatters locally, with: `npm run prep`
+3. Push all changes back to GitHub `git push origin fix_my_issue`
+4. In GitHub, send a Pull Request to `circleci-config-sdk-ts:main`
 
 Thank you for your contribution!
 
