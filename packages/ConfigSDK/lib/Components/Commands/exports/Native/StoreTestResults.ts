@@ -5,7 +5,7 @@ import { Command } from '../Command';
 
 /**
  * Special step used to upload and store test results for a build. Test results are visible on the CircleCI web application, under each build’s “Test Summary” section. Storing test results is useful for timing analysis of your test suites.
- * @param parameters - StoreTestResultsParameters
+ * @see {@link https://circleci.com/docs/configuration-reference#storetestresults}
  */
 export class StoreTestResults implements Command {
   parameters: StoreTestResultsParameters;

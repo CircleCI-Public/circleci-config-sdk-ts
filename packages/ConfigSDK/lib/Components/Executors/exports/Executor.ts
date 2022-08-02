@@ -11,7 +11,7 @@ import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import { ReusableExecutor } from './ReusableExecutor';
 
 /**
- * A generic reusable Executor
+ * A generic reusable Executor.
  */
 export abstract class Executor<
   ResourceClass extends AnyResourceClass = AnyResourceClass,

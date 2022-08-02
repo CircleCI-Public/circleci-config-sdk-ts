@@ -4,6 +4,7 @@ import { CommandParameters, CommandShape } from '../../../types/Command.types';
 import { Command } from '../../Command';
 /**
  * Special step used to attach the workflow’s workspace to the current container. The full contents of the workspace are downloaded and copied into the directory the workspace is being attached at.
+ * @see {@link https://circleci.com/docs/configuration-reference#attachworkspace}
  */
 export class Attach implements Command {
   parameters: AttachParameters;

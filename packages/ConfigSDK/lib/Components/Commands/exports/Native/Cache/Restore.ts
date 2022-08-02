@@ -3,7 +3,8 @@ import { ListParameter, StringParameter } from '../../../../Parameters/types';
 import { CommandParameters, CommandShape } from '../../../types/Command.types';
 import { Command } from '../../Command';
 /**
- * Restores a previously saved cache based on a key..cache needs to have been saved first for this key using save_cache step. Learn more in the caching documentation.
+ * Restores a previously saved cache based on a key. A cache must have been previously created using the Save step.
+ * @see {@link https://circleci.com/docs/configuration-reference#restorecache}
  */
 export class Restore implements Command {
   parameters: RestoreCacheParameters;
@@ -12,7 +13,7 @@ export class Restore implements Command {
   }
   /**
    * Generate Restore.cache Command shape.
-   * @returns The generated JSON for the Restore.cache Commands.
+   * @returns The generated JSON for the Restore.cache Command.
    */
   generate(): RestoreCacheCommandShape {
     return {

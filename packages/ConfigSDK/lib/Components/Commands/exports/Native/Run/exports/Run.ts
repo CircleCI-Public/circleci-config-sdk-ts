@@ -8,8 +8,8 @@ import { Command } from '../../../Command';
 import { RunParameters } from './RunParameters';
 
 /**
- * The Run command step is used for invoking all command-line programs.
- * @param parameters - RunParameters
+ * The Run step is used for invoking all command-line programs.
+ * @see {@link https://circleci.com/docs/configuration-reference#run}
  */
 export class Run implements Command {
   parameters: RunParameters;
@@ -17,7 +17,8 @@ export class Run implements Command {
     this.parameters = parameters;
   }
   /**
-   * Generate Run Command shape.* @returns The generated JSON for the Run Commands.
+   * Generate Run Command shape.*
+   * @returns The generated JSON for the Run Command.
    */
   generate(flatten = false): RunCommandShape | RunCommandShorthandShape {
     const { command, ...parameters } = this.parameters;

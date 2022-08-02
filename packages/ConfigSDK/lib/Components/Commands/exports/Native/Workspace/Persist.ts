@@ -4,6 +4,7 @@ import { CommandParameters, CommandShape } from '../../../types/Command.types';
 import { Command } from '../../Command';
 /**
  * Special step used to Persist the workflow’s workspace to the current container. The full contents of the workspace are downloaded and copied into the directory the workspace is being Persisted at.
+ * @see {@link https://circleci.com/docs/configuration-reference#persistworkspace}
  */
 export class Persist implements Command {
   parameters: PersistParameters;

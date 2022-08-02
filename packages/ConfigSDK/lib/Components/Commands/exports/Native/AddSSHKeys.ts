@@ -5,7 +5,7 @@ import { Command } from '../Command';
 
 /**
  * The AddSSHKeys command is a special step that adds SSH keys from a project’s settings to a container. Also configures SSH to use these keys.
- * @param parameters - AddSSHKeysParameters
+ * @see {@link https://circleci.com/docs/configuration-reference#add-ssh-keys}
  */
 export class AddSSHKeys implements Command {
   parameters: AddSSHKeysParameters;
@@ -14,7 +14,7 @@ export class AddSSHKeys implements Command {
   }
   /**
    * Generate AddSSHKeys Command shape.
-   * @returns The generated JSON for the AddSSHKeys Commands.
+   * @returns The generated JSON for the AddSSHKeys Command.
    */
   generate(): AddSSHKeysCommandShape {
     const command = { add_ssh_keys: {} };

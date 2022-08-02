@@ -6,7 +6,7 @@ import { Command } from '../Command';
 /**
  * A special step used to check out source code to the configured path.
  * (defaults to the working_directory).
- * @param parameters - CheckoutParameters
+ * @see {@link https://circleci.com/docs/configuration-reference#checkout}
  */
 export class Checkout implements Command {
   parameters?: CheckoutParameters;
@@ -15,7 +15,7 @@ export class Checkout implements Command {
   }
   /**
    * Generate Checkout Command shape.
-   * @returns The generated JSON for the Checkout Commands.
+   * @returns The generated JSON for the Checkout Command.
    */
   generate(): CheckoutCommandShape {
     return {
