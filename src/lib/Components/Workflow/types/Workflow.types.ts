@@ -17,6 +17,7 @@ export type UnknownWorkflowJobShape = {
   parameters?: {
     [key: string]: unknown;
   };
+  matrix?: { parameters: Record<string, string[]> };
   'pre-steps'?: unknown[];
   'post-steps'?: unknown[];
   name?: string;

@@ -35,7 +35,7 @@ export function parseWorkflowJob(
     workflowJobIn,
     (workflowJobArgs) => {
       let args = workflowJobArgs;
-      let parsedPresteps, parsedPoststeps;
+      let parsedPresteps, parsedPoststeps, matrix;
 
       if (args) {
         if ('pre-steps' in args) {
@@ -53,9 +53,19 @@ export function parseWorkflowJob(
             : undefined;
           args = argsRestTemp;
         }
+
+        // we reduce matrix to be without the parameters key.
+        if ('matrix' in args) {
+          const { matrix: tempMatrix, ...argsRestTemp } = args;
+          matrix = tempMatrix?.parameters;
+
+          args = argsRestTemp;
+        }
       }
 
-      const parameters = args as WorkflowJobParameters | undefined;
+      const parameters = (matrix ? { ...args, matrix } : args) as
+        | WorkflowJobParameters
+        | undefined;
 
       if (workflowJobArgs?.type === 'approval') {
         return new WorkflowJobApproval(name, parameters);

@@ -1,4 +1,5 @@
 import * as CircleCI from '../src/index';
+import { WorkflowJobShape } from '../src/lib/Components/Workflow/types';
 
 describe('Instantiate Workflow', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
@@ -203,25 +204,36 @@ describe('Utilize workflow job matrix', () => {
     command: 'echo hello world',
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
-
-  it('Should create a parameter matrix', () => {
-    const myWorkflow = new CircleCI.Workflow('my-workflow');
-    myWorkflow.addJob(job, {
+  const myWorkflow = new CircleCI.Workflow('my-workflow');
+  myWorkflow.addJob(job, {
+    matrix: {
+      versions: ['1.0.0', '2.0.0'],
+    },
+  });
+  const workflowJob = myWorkflow.jobs[0];
+  const generatedWorkflowJob: WorkflowJobShape = workflowJob.generate();
+  const expected = {
+    'my-job': {
       matrix: {
-        versions: ['1.0.0', '2.0.0'],
-      },
-    });
-    const generatedWorkflowJob = myWorkflow.jobs[0].generate();
-    const expected = {
-      'my-job': {
-        matrix: {
-          parameters: {
-            versions: ['1.0.0', '2.0.0'],
-          },
+        parameters: {
+          versions: ['1.0.0', '2.0.0'],
         },
       },
-    };
+    },
+  };
+
+  it('Should create a parameter matrix', () => {
     expect(generatedWorkflowJob).toEqual(expected);
+  });
+
+  it('Should circularly parse', () => {
+    expect(
+      CircleCI.parsers.parseWorkflowJob(
+        'my-job',
+        myWorkflow.jobs[0].generateContents(),
+        [job],
+      ),
+    ).toEqual(workflowJob);
   });
 });
 
