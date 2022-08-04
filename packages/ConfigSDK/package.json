@@ -10,7 +10,7 @@
     "prettier": "prettier --write .",
     "prettier:ci": "prettier --check .",
     "build": "rm -rf ./dist && npx webpack --mode production",
-    "build:docs": "typedoc --logLevel Verbose --listInvalidSymbolLinks --internalNamespace internalTypes"
+    "build:docs": "typedoc ./ --logLevel Verbose --excludeInternal --internalNamespace internalTypes"
   },
   "repository": {
     "type": "git",
