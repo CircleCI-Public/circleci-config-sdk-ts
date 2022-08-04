@@ -203,7 +203,7 @@ describe('Instantiate a Custom Command without parameters', () => {
 
   it('Should have the correct static properties', () => {
     expect(reusableCommand.generableType).toBe(
-      CircleCI.mapping.GenerableType.REUSED_COMMAND,
+      CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
     );
   });
 });
@@ -261,7 +261,7 @@ describe('Instantiate a Reusable Command', () => {
 
   it('Should have the correct static properties', () => {
     expect(reusedCommand.generableType).toBe(
-      CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
+      CircleCI.mapping.GenerableType.REUSED_COMMAND,
     );
   });
 
@@ -352,7 +352,7 @@ describe('Instantiate reusable commands', () => {
 
   it('Should have the correct static properties', () => {
     expect(firstReusableCommand.generableType).toBe(
-      CircleCI.mapping.GenerableType.REUSED_COMMAND,
+      CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
     );
   });
 

@@ -136,12 +136,12 @@ export function parseStep(
     >(commandMapping.generableType, args, commandMapping.parse);
   }
 
-  if (commands) {
+  if (commands !== undefined) {
     return parseGenerable<
       CircleCI.types.command.CommandParameters,
       CircleCI.reusable.ReusedCommand
     >(
-      CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
+      CircleCI.mapping.GenerableType.REUSED_COMMAND,
       args,
       (parameterArgs) => {
         const command = commands.find((c) => c.name === name);
@@ -195,7 +195,7 @@ export function parseReusableCommand(
     CircleCI.reusable.ReusableCommand,
     CircleCI.types.command.ReusableCommandDependencies
   >(
-    CircleCI.mapping.GenerableType.REUSED_COMMAND,
+    CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
     args,
     (commandArgs, { parametersList, steps }) => {
       return new CircleCI.reusable.ReusableCommand(

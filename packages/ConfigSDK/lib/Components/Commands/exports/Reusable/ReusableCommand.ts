@@ -83,6 +83,6 @@ export class ReusableCommand
   }
 
   get generableType(): GenerableType {
-    return GenerableType.REUSED_COMMAND;
+    return GenerableType.REUSABLE_COMMAND;
   }
 }

@@ -40,6 +40,6 @@ export class ReusedCommand implements Command {
   }
 
   get generableType(): GenerableType {
-    return GenerableType.REUSABLE_COMMAND;
+    return GenerableType.REUSED_COMMAND;
   }
 }
