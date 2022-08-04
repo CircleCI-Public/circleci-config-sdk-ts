@@ -61,7 +61,9 @@ export class CustomParametersList<
         );
       } else {
         // Create event based error system to replace this.
-        throw new Error("Enum values must be provided for enum type parameters.");
+        throw new Error(
+          'Enum values must be provided for enum type parameters.',
+        );
       }
     } else {
       parameter = new CustomParameter(name, type, defaultValue, description);

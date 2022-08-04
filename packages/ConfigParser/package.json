@@ -8,6 +8,9 @@
   },
   "scripts": {
     "test": "npx jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
+    "prettier": "prettier --write .",
+    "prettier:ci": "prettier --check .",
     "build": "rm -rf ./dist && npx webpack --mode production"
   },
   "author": {

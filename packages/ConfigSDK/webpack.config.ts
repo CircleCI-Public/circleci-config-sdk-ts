@@ -8,7 +8,7 @@ export const config: webpack.Configuration = {
   module: {
     rules: [
       {
-        test: (modulePath) => {
+        test: (modulePath: string): boolean => {
           return modulePath.endsWith('.ts') && !modulePath.endsWith('test.ts');
         },
         use: 'ts-loader',

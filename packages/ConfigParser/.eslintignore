@@ -4,7 +4,9 @@ node_modules
 dist
 # don't lint coverage output
 coverage
-# dont lint docs
+# don't lint docs
 docs
-# Dont lint samples
-sample 
+# don't lint samples
+sample
+# don't lint configs
+webpack.config.*
