@@ -31,7 +31,7 @@ export type CircleCIConfigShape = {
   version: ConfigVersion;
   setup: boolean;
   parameters?: Record<string, CircleCI.types.parameter.ParameterShape>;
-  executors?: CircleCI.types.executor.reusable.ReusableExecutorsShape;
+  executors?: CircleCI.types.executors.reusable.ReusableExecutorsShape;
   orbs?: CircleCI.types.orb.OrbImportsShape;
   jobs: CircleCI.types.job.JobsShape;
   commands?: CircleCI.types.command.ReusableCommandShape;

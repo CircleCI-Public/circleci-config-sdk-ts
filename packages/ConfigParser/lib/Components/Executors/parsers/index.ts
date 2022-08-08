@@ -1,8 +1,7 @@
 import * as CircleCI from '@circleci/circleci-config-sdk';
 import { errorParsing, parseGenerable } from '../../../Config/exports/Parsing';
 import { parseParameterList } from '../../Parameters/parsers';
-
-const subtypeParsers: CircleCI.types.executor.executor.ExecutorSubtypeMap = {
+const subtypeParsers: CircleCI.types.executors.executor.ExecutorSubtypeMap = {
   docker: {
     generableType: CircleCI.mapping.GenerableType.DOCKER_EXECUTOR,
     parse: (args, resourceClass, properties) => {
@@ -11,7 +10,7 @@ const subtypeParsers: CircleCI.types.executor.executor.ExecutorSubtypeMap = {
 
       return new CircleCI.executors.DockerExecutor(
         mainImage.image,
-        resourceClass as CircleCI.types.executor.docker.DockerResourceClass,
+        resourceClass as CircleCI.types.executors.docker.DockerResourceClass,
         serviceImages,
         properties,
       );
@@ -23,7 +22,7 @@ const subtypeParsers: CircleCI.types.executor.executor.ExecutorSubtypeMap = {
       const machineArgs = args as Partial<CircleCI.executors.MachineExecutor>;
 
       return new CircleCI.executors.MachineExecutor(
-        resourceClass as CircleCI.types.executor.machine.MachineResourceClass,
+        resourceClass as CircleCI.types.executors.machine.MachineResourceClass,
         machineArgs.image,
         properties,
       );
@@ -35,7 +34,7 @@ const subtypeParsers: CircleCI.types.executor.executor.ExecutorSubtypeMap = {
       const machineArgs = args as Partial<CircleCI.executors.WindowsExecutor>;
 
       return new CircleCI.executors.WindowsExecutor(
-        resourceClass as CircleCI.types.executor.windows.WindowsResourceClass,
+        resourceClass as CircleCI.types.executors.windows.WindowsResourceClass,
         machineArgs.image,
         properties,
       );
@@ -48,7 +47,7 @@ const subtypeParsers: CircleCI.types.executor.executor.ExecutorSubtypeMap = {
 
       return new CircleCI.executors.MacOSExecutor(
         macOSArgs.xcode,
-        resourceClass as CircleCI.types.executor.macos.MacOSResourceClass,
+        resourceClass as CircleCI.types.executors.macos.MacOSResourceClass,
         properties,
       );
     },
@@ -105,8 +104,8 @@ const subtypeParsers: CircleCI.types.executor.executor.ExecutorSubtypeMap = {
  * Helper function to extract ExecutableProperties from an executable.
  */
 export function extractExecutableProps(
-  executable: CircleCI.types.executor.executor.UnknownExecutableShape,
-): CircleCI.types.executor.executor.ExecutableProperties {
+  executable: CircleCI.types.executors.executor.UnknownExecutableShape,
+): CircleCI.types.executors.executor.ExecutableProperties {
   const keys = ['description', 'shell', 'working_directory', 'environment'];
   let notNull = false;
   const values = Object.assign(
@@ -137,27 +136,27 @@ export function parseExecutor(
   reusableExecutors?: CircleCI.reusable.ReusableExecutor[],
 ): CircleCI.types.job.AnyExecutor {
   const executableArgs =
-    executableIn as CircleCI.types.executor.executor.UnknownExecutableShape;
+    executableIn as CircleCI.types.executors.executor.UnknownExecutableShape;
   let resourceClass = executableArgs.resource_class;
   let executorType:
-    | CircleCI.types.executor.executor.ExecutorUsageLiteral
+    | CircleCI.types.executors.executor.ExecutorUsageLiteral
     | 'windows'
     | undefined;
   let executorKey:
-    | CircleCI.types.executor.executor.ExecutorUsageLiteral
+    | CircleCI.types.executors.executor.ExecutorUsageLiteral
     | undefined;
   const winPrefix = 'windows.';
 
   if (resourceClass?.startsWith(winPrefix)) {
     resourceClass = resourceClass.substring(
       winPrefix.length,
-    ) as CircleCI.types.executor.windows.WindowsResourceClass;
+    ) as CircleCI.types.executors.windows.WindowsResourceClass;
     executorType = 'windows';
     executorKey = 'machine';
   } else {
     executorKey = Object.keys(executableArgs).find(
       (subtype) => subtype in subtypeParsers,
-    ) as CircleCI.types.executor.executor.ExecutorLiteral | undefined;
+    ) as CircleCI.types.executors.executor.ExecutorLiteral | undefined;
   }
 
   if (!executorKey) {
@@ -167,12 +166,12 @@ export function parseExecutor(
   const { generableType, parse } = subtypeParsers[executorType || executorKey];
 
   return parseGenerable<
-    CircleCI.types.executor.executor.UnknownExecutableShape,
+    CircleCI.types.executors.executor.UnknownExecutableShape,
     CircleCI.types.job.AnyExecutor
   >(generableType, executableArgs, (args) => {
     return parse(
       args[
-        executorKey as CircleCI.types.executor.executor.ExecutorUsageLiteral
+        executorKey as CircleCI.types.executors.executor.ExecutorUsageLiteral
       ],
       resourceClass,
       extractExecutableProps(executableArgs),
@@ -190,7 +189,7 @@ export function parseReusableExecutors(
   executorListIn: unknown,
 ): CircleCI.reusable.ReusableExecutor[] {
   const executorListArgs =
-    executorListIn as CircleCI.types.executor.executor.ReusableExecutorDefinition[];
+    executorListIn as CircleCI.types.executors.executor.ReusableExecutorDefinition[];
 
   const parsedList = Object.entries(executorListArgs).map(([name, executor]) =>
     parseReusableExecutor(name, executor),
@@ -204,9 +203,9 @@ export function parseReusableExecutor(
   executableIn: unknown,
 ): CircleCI.reusable.ReusableExecutor {
   return parseGenerable<
-    CircleCI.types.executor.executor.ReusableExecutorDefinition,
+    CircleCI.types.executors.executor.ReusableExecutorDefinition,
     CircleCI.reusable.ReusableExecutor,
-    CircleCI.types.executor.reusable.ReusableExecutorDependencies
+    CircleCI.types.executors.reusable.ReusableExecutorDependencies
   >(
     CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR,
     executableIn,
