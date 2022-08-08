@@ -1,7 +1,8 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  modulePaths: ['<rootDir>/lib/', '<rootDir>/dist/'],
+  modulePaths: ['<rootDir>/lib/'],
+  coveragePathIgnorePatterns: ['<rootDir>/dist/'],
   collectCoverage: true,
   coverageThreshold: {
     global: {
