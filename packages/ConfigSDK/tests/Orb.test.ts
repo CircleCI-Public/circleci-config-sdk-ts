@@ -121,6 +121,6 @@ describe('Use an OrbImport within a config', () => {
         'my-orb-aliased': `${orbNamespace}/${orbName}@1.1.1`,
       },
     };
-    expect(parse(config.generate())).toEqual(expected);
+    expect(parse(config.stringify())).toEqual(expected);
   });
 });

@@ -280,7 +280,7 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
       jobs: {},
       workflows: {},
     };
-    expect(YAML.parse(myConfig.generate())).toEqual(expectedConfigShape);
+    expect(YAML.parse(myConfig.stringify())).toEqual(expectedConfigShape);
   });
 
   it('Should have the correct static properties for persist', () => {
@@ -360,6 +360,6 @@ describe('Generate a config with a Reusable Executor', () => {
       jobs: {},
       workflows: {},
     };
-    expect(YAML.parse(myConfig.generate())).toEqual(expected);
+    expect(YAML.parse(myConfig.stringify())).toEqual(expected);
   });
 });

@@ -16,7 +16,7 @@ describe('Parse a CircleCI Config', () => {
   it('Should be fully circular', () => {
     setLogParsing(true);
     expect(
-      ConfigParser.parsers.parseConfig(parse(myConfig.generate())),
+      ConfigParser.parsers.parseConfig(parse(myConfig.stringify())),
     ).toEqual(myConfig);
     setLogParsing(false);
   });
