@@ -46,7 +46,7 @@ export abstract class Executor<
     };
   }
 
-  asReusable(
+  toReusable(
     name: string,
     parameters?: CustomParametersList<ExecutorParameterLiteral>,
   ): ReusableExecutor {

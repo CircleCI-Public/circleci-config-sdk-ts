@@ -260,7 +260,7 @@ describe('Validate Config with Reusable Executor', () => {
     machine,
   );
 
-  const reusableBase = dockerBase.asReusable('base');
+  const reusableBase = dockerBase.toReusable('base');
 
   reusableMachine.defineParameter('version', 'string');
   myConfig.addReusableExecutor(reusableMachine);
@@ -304,7 +304,7 @@ describe('', () => {
     machine,
   );
 
-  const reusableBase = dockerBase.asReusable('base');
+  const reusableBase = dockerBase.toReusable('base');
 
   reusableMachine.defineParameter('version', 'string');
   myConfig.addReusableExecutor(reusableMachine);

@@ -302,7 +302,7 @@ describe('Generate a config with a Reusable Executor', () => {
     machine,
   );
 
-  const reusableBase = dockerBase.asReusable('base');
+  const reusableBase = dockerBase.toReusable('base');
 
   reusableMachine.defineParameter('version', 'string');
   myConfig.addReusableExecutor(reusableMachine);
