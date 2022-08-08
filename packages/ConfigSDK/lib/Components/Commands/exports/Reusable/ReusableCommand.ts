@@ -5,9 +5,11 @@ import { Parameterized } from '../../../Parameters/exports/Parameterized';
 import { CommandParameterLiteral } from '../../../Parameters/types/CustomParameterLiterals.types';
 import {
   AnyCommandShape,
+  CommandParameters,
   ReusableCommandShape,
 } from '../../types/Command.types';
 import { Command } from '../Command';
+import { ReusedCommand } from './ReusedCommand';
 
 /**
  * Define a custom Command with custom parameters
@@ -58,6 +60,14 @@ export class ReusableCommand
         description: this.description,
       },
     };
+  }
+
+  /**
+   * @param parameters - The parameters to be passed to the command.
+   * @returns A parameterized implementation of this command.
+   */
+  toReused(parameters?: CommandParameters): ReusedCommand {
+    return new ReusedCommand(this, parameters);
   }
 
   addStep(step: Command): ReusableCommand {

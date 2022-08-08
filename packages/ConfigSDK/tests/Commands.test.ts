@@ -255,6 +255,12 @@ describe('Instantiate a Reusable Command', () => {
     },
   };
 
+  it('Should generate a reused command from toReused', () => {
+    expect(reusableCommand.toReused({ greeting: 'hello world' })).toEqual(
+      reusedCommand,
+    );
+  });
+
   it('Should generate checkout yaml', () => {
     expect(reusedCommand.generate()).toEqual(expected);
   });
