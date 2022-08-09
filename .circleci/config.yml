@@ -106,7 +106,6 @@ workflows:
                 - "lts"
                 - "16.12"
                 - "15.14"
-                - "12.22"
           filters:
             tags:
               only: /.*/
