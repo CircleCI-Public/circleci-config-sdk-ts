@@ -1,4 +1,4 @@
-import * as CircleCI from '../index';
+import * as CircleCI from '../src/index';
 // Enforce local testing
 delete process.env.CIRCLECI;
 describe('Check built-in pipeline parameters', () => {

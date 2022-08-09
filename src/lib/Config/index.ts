@@ -1,5 +1,5 @@
 import * as YAML from 'yaml';
-import { version as SDKVersion } from '../../package-version.json';
+import { version as SDKVersion } from '../../../package-version.json';
 import { Generable } from '../Components';
 import { ReusableCommandShape } from '../Components/Commands/types/Command.types';
 import { ReusableExecutor } from '../Components/Executors/exports/ReusableExecutor';

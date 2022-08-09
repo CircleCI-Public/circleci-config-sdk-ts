@@ -1,4 +1,4 @@
-import * as CircleCI from '../index';
+import * as CircleCI from '../src/index';
 
 describe('Parse yaml pipeline parameters and validate', () => {
   const expectedParameters =

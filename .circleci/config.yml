@@ -60,6 +60,7 @@ jobs:
             git add -A
             git commit -m "Deploy-<<pipeline.git.branch>>-<<pipeline.number>> [ci skip]"
             git push -f git@github.com:CircleCI-Public/circleci-config-sdk-ts.git master:gh-pages
+
   deploy-package:
     executor: node/default
     steps:
@@ -86,6 +87,7 @@ jobs:
             fi
             # Publish
             npm publish --access public "$@"
+
 workflows:
   test:
     jobs:

@@ -1,17 +1,62 @@
 {
-  "name": "root",
-  "private": true,
-  "useNx": true,
-  "devDependencies": {
-    "lerna": "^5.1.8",
-    "nx": "^14.4.2"
-  },
+  "name": "@circleci/circleci-config-sdk",
+  "version": "0.0.0-development",
+  "description": "An SDK for building CircleCI Configuration files with JavaScript.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "setup": "npx lerna bootstrap --use-workspaces && npx lerna run build",
-    "prep": "npx lerna run test && npx lerna run lint && npx lerna run prettier",
-    "test": "npx lerna run test"
+    "test": "npx jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
+    "prettier": "prettier --write .",
+    "prettier:ci": "prettier --check .",
+    "build": "rm -rf ./dist && npx webpack --mode production",
+    "build:docs": "typedoc --tsconfig ./tsconfig.json --logLevel Verbose --excludeInternal --internalNamespace internalTypes"
   },
-  "workspaces": [
-    "packages/*"
-  ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CircleCI-Public/circleci-config-sdk-ts.git"
+  },
+  "author": {
+    "name": "Kyle Tryon",
+    "email": "community-partner@circleci.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues"
+  },
+  "homepage": "https://github.com/CircleCI-Public/circleci-config-sdk-ts#readme",
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@types/node": "^14.18.21",
+    "@types/webpack": "^5.0.0",
+    "@types/webpack-node-externals": "^2.5.3",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "eslint": "^7.23.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-tsdoc": "^0.2.11",
+    "jest": "^28.1.3",
+    "prettier": "^2.3.1",
+    "ts-jest": "^28.0.7",
+    "ts-loader": "^9.3.1",
+    "ts-node": "^10.9.1",
+    "typedoc": "^0.22.5",
+    "typedoc-plugin-missing-exports": "^0.22.3",
+    "typescript": "^4.3.5",
+    "webpack": "^5.58.2",
+    "webpack-cli": "^4.9.1",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "dependencies": {
+    "yaml": "2.1.1"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "keywords": [
+    "circleci"
+  ],
+  "stability": "stable"
 }

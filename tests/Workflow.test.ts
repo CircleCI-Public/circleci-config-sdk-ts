@@ -1,4 +1,4 @@
-import * as CircleCI from '../index';
+import * as CircleCI from '../src/index';
 
 describe('Instantiate Workflow', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');

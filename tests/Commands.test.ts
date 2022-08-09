@@ -1,6 +1,6 @@
 import * as YAML from 'yaml';
 import { DocumentOptions } from 'yaml';
-import * as CircleCI from '../index';
+import * as CircleCI from '../src/index';
 
 describe('Instantiate a Run step', () => {
   const run = new CircleCI.commands.Run({

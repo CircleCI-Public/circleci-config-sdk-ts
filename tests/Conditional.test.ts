@@ -1,5 +1,5 @@
-import * as CircleCI from '../index';
-import { GenerableType } from '../lib/Config/exports/Mapping';
+import * as CircleCI from '../src/index';
+import { GenerableType } from '../src/lib/Config/exports/Mapping';
 
 const { and, or, not, equal, conditional } = CircleCI.logic;
 

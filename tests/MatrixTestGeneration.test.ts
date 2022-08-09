@@ -1,4 +1,4 @@
-import * as CircleCI from '../index';
+import * as CircleCI from '../src/index';
 
 // Generate a "Matrix" of Jobs with node executors, testing node versions: 13.0.0, 16.0.0, 18.0.0
 describe('Generate 3 node-based jobs with different node versions', () => {

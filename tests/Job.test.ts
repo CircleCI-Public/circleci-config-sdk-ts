@@ -1,6 +1,6 @@
 import * as YAML from 'yaml';
-import * as CircleCI from '../index';
-import { GenerableType } from '../lib/Config/exports/Mapping';
+import * as CircleCI from '../src//index';
+import { GenerableType } from '../src/lib/Config/exports/Mapping';
 
 describe('Instantiate Docker Job', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');

@@ -1,5 +1,5 @@
 import { parse } from 'yaml';
-import * as CircleCI from '../index';
+import * as CircleCI from '../src/index';
 
 describe('Use an OrbImport within a config', () => {
   const orbName = 'my-orb';

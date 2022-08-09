@@ -1,5 +1,5 @@
 import * as YAML from 'yaml';
-import * as CircleCI from '../index';
+import * as CircleCI from '../src/index';
 import { version as SDKVersion } from '../package-version.json';
 
 describe('Generate a Setup workflow config', () => {
