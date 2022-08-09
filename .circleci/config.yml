@@ -93,7 +93,7 @@ workflows:
     jobs:
       - node/test:
           name: lint
-          run-command: lint:ci
+          run-command: lint
           version: "16.12"
           filters:
             tags:
