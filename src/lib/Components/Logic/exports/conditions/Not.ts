@@ -3,6 +3,10 @@ import { GenerableType } from '../../../../Config/exports/Mapping';
 import { ConditionOrValue, NotConditionShape } from '../../types';
 import { Condition } from '../Condition';
 
+/**
+ * True the argument is not truthy.
+ * @see {@link https://circleci.com/docs/configuration-reference#logic-statements}
+ */
 export class Not extends Condition {
   condition: Condition;
 

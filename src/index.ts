@@ -21,7 +21,7 @@ export * as parameters from './lib/Components/Parameters';
 export * as executors from './lib/Components/Executors';
 
 /**
- * Logical conditions for conditional components.
+ * Conditional statements for 2.1 config conditionals.
  */
 export * as logic from './lib/Components/Logic';
 
@@ -36,7 +36,7 @@ export * as types from './lib/Types';
 export * as workflow from './lib/Components/Workflow';
 
 /**
- * All imports pertaining to orbs
+ * All orb components.
  */
 export * as orb from './lib/Orb';
 

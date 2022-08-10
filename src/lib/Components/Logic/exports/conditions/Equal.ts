@@ -3,7 +3,8 @@ import { ConditionValue, EqualConditionShape } from '../../types';
 import { Condition } from '../Condition';
 
 /**
- * Compare two or more values.
+ * True if all arguments evaluate to equal values.
+ * @see {@link https://circleci.com/docs/configuration-reference#logic-statements}
  */
 export class Equal extends Condition {
   constructor(private values: ConditionValue[]) {

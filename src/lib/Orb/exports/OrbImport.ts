@@ -10,6 +10,10 @@ import { GenerableType } from '../../Config/exports/Mapping';
 import { OrbDisplayMeta, OrbImportManifest } from '../types/Orb.types';
 import { OrbRef } from './OrbRef';
 
+/**
+ * A reference to an imported Orb.
+ * {@label STATIC_2.1}
+ */
 export class OrbImport implements Generable {
   alias: string;
   namespace: string;
