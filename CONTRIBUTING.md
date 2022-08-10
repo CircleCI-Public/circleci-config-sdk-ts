@@ -124,7 +124,6 @@ Scopes can be used to denote which package this change is affecting
 - _**sdk**_: The CircleCI Configuration SDK
 - **parser**: The CircleCI Configuration Parser
 
-
 #### <a name="pull"></a>Submitting a Pull Request
 
 After searching for potentially existing pull requests or issues in progress, if
@@ -144,9 +143,9 @@ After the issue has been created, follow these steps to create a Pull Request.
 1. Run `npm run setup`
 1. Implement your change with appropriate test coverage.
 1. Utilize our [commit message conventions](commit).
-2. Run tests, linters, and formatters locally, with: `npm run prep`
-3. Push all changes back to GitHub `git push origin fix_my_issue`
-4. In GitHub, send a Pull Request to `circleci-config-sdk-ts:main`
+1. Run tests, linters, and formatters locally, with: `npm run prep`
+1. Push all changes back to GitHub `git push origin fix_my_issue`
+1. In GitHub, send a Pull Request to `circleci-config-sdk-ts:main`
 
 Thank you for your contribution!
 
