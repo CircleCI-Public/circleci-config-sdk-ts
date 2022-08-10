@@ -1,7 +1,8 @@
 import { Project } from './Project';
 import { Git } from './Git';
 /**
- * Access Pipeline variables from within CircleCI Cloud.
+ * Not fully implemented yet. Fetch pipeline parameters from inside a CircleCI job.
+ * @alpha
  */
 export class Pipeline {
   /**

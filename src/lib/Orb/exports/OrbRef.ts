@@ -5,6 +5,7 @@ import { OrbImport } from './OrbImport';
 
 /**
  * An abstract reference to an orb component.
+ * {@label STATIC_2.1}
  */
 export class OrbRef<Literal extends AnyParameterLiteral> {
   private _parameters: CustomParametersList<Literal>;

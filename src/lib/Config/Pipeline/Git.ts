@@ -1,3 +1,7 @@
+/**
+ * Not fully implemented yet. Fetch git pipeline parameters from inside a CircleCI job.
+ * @alpha
+ */
 export class Git {
   public _isLocal = true;
   constructor(isLocal: boolean) {

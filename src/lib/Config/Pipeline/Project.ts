@@ -1,7 +1,8 @@
 export type VCSLiteral = 'bitbucket' | 'github' | 'local';
 
 /**
- * Pipeline Project level information
+ * Not fully implemented yet. Fetch project pipeline parameters from inside a CircleCI job.
+ * @alpha
  */
 export class Project {
   private _isLocal: boolean;
