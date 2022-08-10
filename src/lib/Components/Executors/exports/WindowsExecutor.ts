@@ -33,10 +33,6 @@ export class WindowsExecutor extends Executor<WindowsResourceClass> {
 
     this.image = image || this.image;
     this.resource_class = resource_class;
-    this.parameters = {
-      shell: WindowsExecutor.defaultShell,
-      ...parameters,
-    };
   }
 
   generateContents(): WindowsExecutorShape {

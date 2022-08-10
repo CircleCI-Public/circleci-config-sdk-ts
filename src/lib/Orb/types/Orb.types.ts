@@ -1,14 +1,11 @@
+import { CustomParametersList } from '../../Components/Parameters';
 import { Parameterized } from '../../Components/Parameters/exports/Parameterized';
-import { AnyParameterLiteral } from '../../Components/Parameters/types/CustomParameterLiterals.types';
-
-export type OrbJobComponentLiteral = 'jobs';
-export type OrbExecutorComponentLiteral = 'executors';
-export type OrbCommandComponentLiteral = 'commands';
-
-export type AnyOrbComponentLiteral =
-  | OrbJobComponentLiteral
-  | OrbExecutorComponentLiteral
-  | OrbCommandComponentLiteral;
+import {
+  AnyParameterLiteral,
+  CommandParameterLiteral,
+  ExecutorParameterLiteral,
+  JobParameterLiteral,
+} from '../../Components/Parameters/types/CustomParameterLiterals.types';
 
 export type OrbDisplayMeta = {
   home_url: string;
@@ -21,7 +18,8 @@ export type OrbImportShape = {
 
 export type OrbImportsShape = Record<string, OrbImportShape>;
 export type OrbComponent = Parameterized<AnyParameterLiteral>;
-export type OrbImportManifest = Record<
-  AnyOrbComponentLiteral,
-  Record<string, unknown>
->;
+export type OrbImportManifest = {
+  jobs: Record<string, CustomParametersList<JobParameterLiteral>>;
+  executors: Record<string, CustomParametersList<ExecutorParameterLiteral>>;
+  commands: Record<string, CustomParametersList<CommandParameterLiteral>>;
+};

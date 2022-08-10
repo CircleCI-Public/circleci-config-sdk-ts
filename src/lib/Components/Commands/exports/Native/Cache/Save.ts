@@ -5,6 +5,7 @@ import { Command } from '../../Command';
 
 /**
  * Generates and stores a cache of a file or directory of files such as dependencies or source code in our object storage. Later jobs can restore this cache.
+ * @see {@link https://circleci.com/docs/configuration-reference#savecache}
  */
 export class Save implements Command {
   parameters: SaveCacheParameters;
@@ -48,6 +49,6 @@ export interface SaveCacheParameters extends CommandParameters {
 /**
  * Generated Shape of the SaveCache command.
  */
-export interface SaveCacheCommandShape extends CommandShape {
+interface SaveCacheCommandShape extends CommandShape {
   save_cache: SaveCacheParameters;
 }

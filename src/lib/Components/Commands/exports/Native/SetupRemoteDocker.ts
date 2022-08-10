@@ -6,7 +6,6 @@ import { Command } from '../Command';
 /**
  * Creates a remote Docker environment configured to execute Docker commands.
  * @see {@link https://circleci.com/docs/2.0/configuration-reference/#setupremotedocker}
- * @param parameters - SetupRemoteDockerParameters
  */
 export class SetupRemoteDocker implements Command {
   parameters: SetupRemoteDockerParameters;
@@ -48,6 +47,6 @@ export interface SetupRemoteDockerParameters extends CommandParameters {
 /**
  * Generated Shape of the SetupRemoteDocker command.
  */
-export interface SetupRemoteDockerCommandShape extends CommandShape {
+interface SetupRemoteDockerCommandShape extends CommandShape {
   setup_remote_docker: SetupRemoteDockerParameters;
 }

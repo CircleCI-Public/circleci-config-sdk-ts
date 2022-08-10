@@ -8,19 +8,6 @@ describe('Instantiate Docker Executor', () => {
     resource_class: 'medium',
   };
 
-  it('Should validate', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.DOCKER_EXECUTOR,
-        expectedShape,
-      ),
-    ).toEqual(true);
-  });
-
-  it('Should parse', () => {
-    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(docker);
-  });
-
   it('Should match the expected output', () => {
     expect(docker.generate()).toEqual(expectedShape);
   });
@@ -63,19 +50,6 @@ describe('Instantiate Machine Executor', () => {
     resource_class: 'medium',
   };
 
-  it('Should validate', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.MACHINE_EXECUTOR,
-        expectedShape,
-      ),
-    ).toEqual(true);
-  });
-
-  it('Should parse', () => {
-    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(machine);
-  });
-
   it('Should match the expected output', () => {
     expect(machine.generate()).toEqual(expectedShape);
   });
@@ -104,19 +78,6 @@ describe('Instantiate MacOS Executor', () => {
     resource_class: 'medium',
   };
 
-  it('Should validate', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.MACOS_EXECUTOR,
-        expectedShape,
-      ),
-    ).toEqual(true);
-  });
-
-  it('Should parse', () => {
-    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(macos);
-  });
-
   it('Should match the expected output', () => {
     expect(macos.generate()).toEqual(expectedShape);
   });
@@ -144,19 +105,6 @@ describe('Instantiate Large MacOS Executor', () => {
     },
     resource_class: 'large',
   };
-
-  it('Should validate', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.MACOS_EXECUTOR,
-        expectedShape,
-      ),
-    ).toEqual(true);
-  });
-
-  it('Should parse', () => {
-    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(macos);
-  });
 
   it('Should match the expected output', () => {
     expect(macos.generate()).toEqual(expectedShape);
@@ -187,15 +135,6 @@ describe('Instantiate Windows Executor and remove shell', () => {
     resource_class: 'windows.medium',
   };
 
-  it('Should validate', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.WINDOWS_EXECUTOR,
-        expectedShape,
-      ),
-    ).toEqual(true);
-  });
-
   it('Should match the expected output', () => {
     expect(windows.generate()).toEqual(expectedShape);
   });
@@ -217,27 +156,8 @@ describe('Instantiate Windows Executor', () => {
     shell: 'powershell.exe -ExecutionPolicy Bypass',
   };
 
-  it('Should validate', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.WINDOWS_EXECUTOR,
-        expectedShape,
-      ),
-    ).toEqual(true);
-  });
-
-  it('Should parse', () => {
-    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(windows);
-  });
-
   it('Should match the expected output', () => {
     expect(windows.generate()).toEqual(expectedShape);
-  });
-
-  it('Should throw error if fails validation', () => {
-    expect(() => {
-      CircleCI.parsers.parseExecutor({ not_an_executor: {} });
-    }).toThrowError('No executor found.');
   });
 
   it('Add executor to config and validate', () => {
@@ -259,25 +179,6 @@ describe('Instantiate a 2xlarge Docker Executor', () => {
     docker: [{ image: 'cimg/node:lts' }],
     resource_class: '2xlarge',
   };
-
-  it('Should validate', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.DOCKER_EXECUTOR,
-        expectedShape,
-      ),
-    ).toEqual(true);
-  });
-
-  it('Should parse', () => {
-    expect(CircleCI.parsers.parseExecutor(expectedShape)).toEqual(xxlDocker);
-  });
-
-  it('Should parse', () => {
-    expect(() => {
-      CircleCI.parsers.parseExecutor({ docker: {} });
-    }).toThrowError(`Failed to validate: `);
-  });
 
   it('Should match the expected output', () => {
     expect(xxlDocker.generate()).toEqual(expectedShape);
@@ -305,21 +206,6 @@ describe('Instantiate Large Machine Executor', () => {
     expect(machineLarge.generate()).toEqual(expectedShapeLarge);
   });
 
-  it('Should validate the large machine', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.MACHINE_EXECUTOR,
-        expectedShapeLarge,
-      ),
-    ).toEqual(true);
-  });
-
-  it('Should parse the large machine', () => {
-    expect(CircleCI.parsers.parseExecutor(expectedShapeLarge)).toEqual(
-      machineLarge,
-    );
-  });
-
   const machineMedium = new CircleCI.executors.MachineExecutor('medium');
   const expectedShapeMedium = {
     machine: {
@@ -330,21 +216,6 @@ describe('Instantiate Large Machine Executor', () => {
 
   it('Should match the expected output', () => {
     expect(machineMedium.generate()).toEqual(expectedShapeMedium);
-  });
-
-  it('Should validate the medium machine', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.MACHINE_EXECUTOR,
-        expectedShapeMedium,
-      ),
-    ).toEqual(true);
-  });
-
-  it('Should parse the medium machine', () => {
-    expect(CircleCI.parsers.parseExecutor(expectedShapeMedium)).toEqual(
-      machineMedium,
-    );
   });
 
   it('Add executors to config and validate', () => {
@@ -375,12 +246,6 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
     expect(reusable.reuse().generate(true)).toEqual(expectedUsageShape);
   });
 
-  it('Should throw error during parsing', () => {
-    expect(() => {
-      CircleCI.parsers.parseExecutor(expectedUsageShape);
-    }).toThrowError('Reusable executor default not found in config');
-  });
-
   it('Should match the expected output with no context', () => {
     const expectedShape = {
       default: {
@@ -394,25 +259,7 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
     expect(reusable.generate()).toEqual(expectedShape);
   });
 
-  const config = new CircleCI.Config();
-
-  config.addReusableExecutor(reusable);
-
-  it('Should validate shapeless', () => {
-    const expectedShapeless = {
-      executor: 'default',
-    };
-
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSED_EXECUTOR,
-        expectedShapeless,
-      ),
-    ).toEqual(true);
-  });
-
   const myConfig = new CircleCI.Config();
-
   myConfig.addReusableExecutor(reusable);
 
   const executorsList = {
@@ -433,13 +280,7 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
       jobs: {},
       workflows: {},
     };
-    expect(YAML.parse(myConfig.generate())).toEqual(expectedConfigShape);
-  });
-
-  it('Should produce a config with executors', () => {
-    expect(CircleCI.parsers.parseReusableExecutors(executorsList)).toEqual(
-      myConfig.executors,
-    );
+    expect(YAML.parse(myConfig.stringify())).toEqual(expectedConfigShape);
   });
 
   it('Should have the correct static properties for persist', () => {
@@ -461,48 +302,14 @@ describe('Generate a config with a Reusable Executor', () => {
     machine,
   );
 
-  const reusableBase = dockerBase.asReusable('base');
+  const reusableBase = dockerBase.toReusable('base');
 
   reusableMachine.defineParameter('version', 'string');
   myConfig.addReusableExecutor(reusableMachine);
   reusableBase.defineParameter('tag', 'string', 'latest', undefined);
   myConfig.addReusableExecutor(reusableBase);
-
-  it('Should validate reusable machine image', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSED_EXECUTOR,
-        {
-          executor: {
-            name: 'default',
-            version: '1.2.1',
-          },
-        },
-      ),
-    ).toEqual(true);
-  });
-
-  // it('Should not validate with undefined parameter', () => {
-  //   expect(
-  //     CircleCI.Validator.validateGenerable(CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR, {
-  //       executor: {
-  //         name: 'default',
-  //       },
-  //     }),
-  //   ).not.toEqual(true);
-  // });
-
   const reusedBase = new CircleCI.reusable.ReusedExecutor(reusableBase);
 
-  it('Should validate reusable base image shapeless', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSED_EXECUTOR,
-        reusedBase.generate(),
-      ),
-    ).toEqual(true);
-  });
-
   it('Should have correct static properties', () => {
     expect(reusedBase.generableType).toEqual(
       CircleCI.mapping.GenerableType.REUSED_EXECUTOR,
@@ -522,49 +329,6 @@ describe('Generate a config with a Reusable Executor', () => {
     ).toEqual(true);
     expect(reusedBase.parameters === undefined).toEqual(true);
   });
-
-  it('Should validate reusable base image', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.REUSED_EXECUTOR,
-        {
-          executor: {
-            name: 'base',
-          },
-        },
-      ),
-    ).toEqual(true);
-  });
-
-  // TODO: Add strict parsing tests
-  // it('Should not shapeless with required parameter', () => {
-  //   expect(
-  //     CircleCI.Validator.validateGenerable(CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR, {
-  //       executor: 'default',
-  //     }),
-  //   ).not.toEqual(true);
-  // });
-
-  // it('Should not validate with improper parameter', () => {
-  //   expect(
-  //     CircleCI.Validator.validateGenerable(CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR, {
-  //       executor: {
-  //         name: 'default',
-  //         version: 1.0,
-  //       },
-  //     }),
-  //   ).not.toEqual(true);
-  // });
-
-  // it('Should not validate with undefined reusable executor', () => {
-  //   expect(
-  //     CircleCI.Validator.validateGenerable(CircleCI.mapping.GenerableType.REUSABLE_EXECUTOR, {
-  //       executor: {
-  //         name: 'undefined',
-  //       },
-  //     }),
-  //   ).not.toEqual(true);
-  // });
 
   it('Should produce a config with executors', () => {
     const expected = {
@@ -596,6 +360,6 @@ describe('Generate a config with a Reusable Executor', () => {
       jobs: {},
       workflows: {},
     };
-    expect(YAML.parse(myConfig.generate())).toEqual(expected);
+    expect(YAML.parse(myConfig.stringify())).toEqual(expected);
   });
 });

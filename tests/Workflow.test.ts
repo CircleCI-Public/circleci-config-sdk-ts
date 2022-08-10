@@ -15,14 +15,6 @@ describe('Instantiate Workflow', () => {
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
   });
-
-  it('Should parse and match raw example', () => {
-    expect(
-      CircleCI.parsers.parseWorkflow('my-workflow', { jobs: ['my-job'] }, [
-        job,
-      ]),
-    ).toEqual(myWorkflow);
-  });
 });
 
 describe('Instantiate Workflow with a custom name', () => {
@@ -37,15 +29,6 @@ describe('Instantiate Workflow with a custom name', () => {
   const expected = {
     'my-workflow': { jobs: [{ 'my-job': { name: 'custom-name' } }] },
   };
-
-  it('Should validate', () => {
-    expect(
-      CircleCI.Validator.validateGenerable(
-        CircleCI.mapping.GenerableType.WORKFLOW,
-        expected['my-workflow'],
-      ),
-    ).toEqual(true);
-  });
 
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
@@ -71,31 +54,6 @@ describe('Instantiate a new Workflow with a job in the constructor', () => {
 
   it('Names should be equal', () => {
     expect(workflowJob.name).toEqual(job.name);
-  });
-});
-
-describe('Parse a workflow', () => {
-  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
-  const helloWorld = new CircleCI.commands.Run({
-    command: 'echo hello world',
-  });
-  const job = new CircleCI.Job('my-job', docker, [helloWorld]);
-  const myWorkflow = new CircleCI.Workflow('my-workflow', [job]);
-
-  const workflowListShape = {
-    'my-workflow': { jobs: ['my-job'] },
-  };
-
-  it('Should match the expected output', () => {
-    expect(
-      CircleCI.parsers.parseWorkflowList(workflowListShape, [job])[0],
-    ).toEqual(myWorkflow);
-  });
-
-  it('Should throw error if no job is provided', () => {
-    expect(() => {
-      CircleCI.parsers.parseWorkflowList(workflowListShape, []);
-    }).toThrowError('Job my-job not found in config');
   });
 });
 
@@ -253,15 +211,6 @@ describe('Instantiate Workflow with a manual approval job', () => {
 
   it('Should match the expected output', () => {
     expect(generatedWorkflow).toEqual(expected);
-  });
-
-  it('Should match the expected output', () => {
-    expect(
-      CircleCI.parsers.parseWorkflow('my-workflow', workflowContents, [
-        jobTest,
-        jobDeploy,
-      ]),
-    ).toEqual(myWorkflow);
   });
 
   it('Workflow approval should be instanceof WorkflowJobAbstract', () => {

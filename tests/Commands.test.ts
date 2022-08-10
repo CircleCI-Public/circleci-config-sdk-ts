@@ -1,13 +1,5 @@
-import {
-  CreateNodeOptions,
-  DocumentOptions,
-  parse,
-  ParseOptions,
-  Scalar,
-  SchemaOptions,
-  stringify,
-  ToStringOptions,
-} from 'yaml';
+import * as YAML from 'yaml';
+import { DocumentOptions } from 'yaml';
 import * as CircleCI from '../src/index';
 
 describe('Instantiate a Run step', () => {
@@ -18,10 +10,6 @@ describe('Instantiate a Run step', () => {
   const expectedResult = { run: 'echo hello world' };
   it('Should generate checkout yaml', () => {
     expect(runStep).toEqual(expectedResult);
-  });
-
-  it('Should parse and match example', () => {
-    expect(CircleCI.parsers.parseStep('run', expectedResult.run)).toEqual(run);
   });
 
   it('Should have the correct static properties', () => {
@@ -38,20 +26,6 @@ describe('Instantiate a Checkout step', () => {
     expect(checkout.generate()).toEqual(checkoutBasicResult);
   });
 
-  it('Should parse and match raw example', () => {
-    expect(CircleCI.parsers.parseStep('checkout')).toEqual(checkout);
-  });
-
-  it('Should parse steps list with command as string from YAML parse result and match raw example', () => {
-    expect(
-      CircleCI.parsers.parseSteps(
-        parse(`steps:
-    - checkout
-    `).steps,
-      ),
-    ).toEqual([checkout]);
-  });
-
   const checkoutWithPathResult = {
     checkout: { path: './src' },
   };
@@ -59,12 +33,6 @@ describe('Instantiate a Checkout step', () => {
   const checkoutWithPath = new CircleCI.commands.Checkout({ path: './src' });
   it('Should produce checkout with path parameter', () => {
     expect(checkoutWithPath.generate()).toEqual(checkoutWithPathResult);
-  });
-
-  it('Should parse and match example with provided path', () => {
-    expect(CircleCI.parsers.parseStep('checkout', { path: './src' })).toEqual(
-      checkoutWithPath,
-    );
   });
 
   it('Should have the correct static properties', () => {
@@ -85,21 +53,6 @@ describe('Instantiate a Setup_Remote_Docker step', () => {
 
   it('Should produce setup_remote_docker step with the current default', () => {
     expect(srdExample.generate()).toEqual(srdResult);
-  });
-
-  it('Should parse and match example with default version', () => {
-    expect(CircleCI.parsers.parseStep('setup_remote_docker')).toEqual(
-      srdExample,
-    );
-  });
-
-  it('Should parse and match example with passed version', () => {
-    expect(
-      CircleCI.parsers.parseStep(
-        'setup_remote_docker',
-        srdResult.setup_remote_docker,
-      ),
-    ).toEqual(srdExample);
   });
 
   it('Should have the correct static properties', () => {
@@ -126,12 +79,6 @@ describe('Save and load cache', () => {
     expect(saveExample).toEqual(save_cache.generate());
   });
 
-  it('Should parse and match example', () => {
-    expect(
-      CircleCI.parsers.parseStep('save_cache', saveExample.save_cache),
-    ).toEqual(save_cache);
-  });
-
   const restoreExample = {
     restore_cache: {
       keys: ['v1-npm-deps-{{ checksum "package-lock.json" }}', 'v1-npm-deps-'],
@@ -143,12 +90,6 @@ describe('Save and load cache', () => {
 
   it('Should generate restore cache yaml', () => {
     expect(restoreExample).toEqual(restore_cache.generate());
-  });
-
-  it('Should parse and match example', () => {
-    expect(
-      CircleCI.parsers.parseStep('restore_cache', restoreExample.restore_cache),
-    ).toEqual(restore_cache);
   });
 
   const restoreCacheSingle = new CircleCI.commands.cache.Restore({
@@ -194,15 +135,6 @@ describe('Store artifacts', () => {
     expect(storeResult).toEqual(storeExample.generate());
   });
 
-  it('Should parse and match example', () => {
-    expect(
-      CircleCI.parsers.parseStep(
-        'store_artifacts',
-        storeResult.store_artifacts,
-      ),
-    ).toEqual(storeExample);
-  });
-
   it('Should have the correct static properties', () => {
     expect(storeExample.generableType).toBe(
       CircleCI.mapping.GenerableType.STORE_ARTIFACTS,
@@ -221,14 +153,6 @@ describe('Store test results', () => {
     expect(example).toEqual(storeTestResults.generate());
   });
 
-  it('Should parse and match example', () => {
-    expect(
-      CircleCI.parsers.parseStep(
-        'store_test_results',
-        example.store_test_results,
-      ),
-    ).toEqual(storeTestResults);
-  });
   it('Should have the correct static properties', () => {
     expect(storeTestResults.generableType).toBe(
       CircleCI.mapping.GenerableType.STORE_TEST_RESULTS,
@@ -238,7 +162,7 @@ describe('Store test results', () => {
 });
 
 describe('Add SSH Keys', () => {
-  const example = {
+  const sshExample = {
     add_ssh_keys: {
       fingerprints: ['b7:35:a6:4e:9b:0d:6d:d4:78:1e:9a:97:2a:66:6b:be'],
     },
@@ -248,16 +172,10 @@ describe('Add SSH Keys', () => {
   });
 
   it('Should generate the add_ssh_keys command schema', () => {
-    expect(example).toEqual(addSSHKeys.generate());
+    expect(sshExample).toEqual(addSSHKeys.generate());
   });
 
-  it('Should parse and match example', () => {
-    expect(
-      CircleCI.parsers.parseStep('add_ssh_keys', example.add_ssh_keys),
-    ).toEqual(addSSHKeys);
-  });
-
-  it('Shoould have correct properties', () => {
+  it('Should have correct properties', () => {
     expect(addSSHKeys.generableType).toBe(
       CircleCI.mapping.GenerableType.ADD_SSH_KEYS,
     );
@@ -265,8 +183,8 @@ describe('Add SSH Keys', () => {
   });
 });
 
-describe('Instantiate a Blank Custom Command', () => {
-  const customCommand = new CircleCI.reusable.CustomCommand('say_hello', [
+describe('Instantiate a Custom Command without parameters', () => {
+  const reusableCommand = new CircleCI.reusable.ReusableCommand('say_hello', [
     new CircleCI.commands.Run({
       command: 'echo "Hello, World!"',
       name: 'Say hello!',
@@ -280,29 +198,23 @@ describe('Instantiate a Blank Custom Command', () => {
   };
 
   it('Should generate checkout yaml', () => {
-    expect(customCommand.generate()).toEqual(example);
-  });
-
-  it('Should parse and match example', () => {
-    expect(
-      CircleCI.parsers.parseCustomCommand('say_hello', example.say_hello),
-    ).toEqual(customCommand);
+    expect(reusableCommand.generate()).toEqual(example);
   });
 
   it('Should have the correct static properties', () => {
-    expect(customCommand.generableType).toBe(
-      CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
+    expect(reusableCommand.generableType).toBe(
+      CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
     );
   });
 });
 
-describe('Instantiate a Custom Command', () => {
+describe('Instantiate a Custom Command with parameters', () => {
   const helloWorld = new CircleCI.commands.Run({
     command: 'echo << parameters.greeting >>',
   });
-  const customCommand = new CircleCI.reusable.CustomCommand('say_hello');
+  const reusableCommand = new CircleCI.reusable.ReusableCommand('say_hello');
 
-  customCommand
+  reusableCommand
     .addStep(helloWorld)
     .defineParameter('greeting', 'string', 'hello world');
 
@@ -312,11 +224,11 @@ describe('Instantiate a Custom Command', () => {
       type: string
       default: hello world
   steps:
-    - run: 
+    - run:
         command: echo << parameters.greeting >>`;
 
   it('Should generate checkout yaml', () => {
-    expect(customCommand.generate()).toEqual(parse(expectedOutput));
+    expect(reusableCommand.generate()).toEqual(YAML.parse(expectedOutput));
   });
 });
 
@@ -325,7 +237,7 @@ describe('Instantiate a Reusable Command', () => {
     command: 'echo << parameters.greeting >>',
   });
 
-  const customCommand = new CircleCI.reusable.CustomCommand(
+  const reusableCommand = new CircleCI.reusable.ReusableCommand(
     'say_hello',
     [helloWorld],
     new CircleCI.parameters.CustomParametersList([
@@ -333,7 +245,7 @@ describe('Instantiate a Reusable Command', () => {
     ]),
   );
 
-  const reusableCommand = new CircleCI.reusable.ReusableCommand(customCommand, {
+  const reusedCommand = new CircleCI.reusable.ReusedCommand(reusableCommand, {
     greeting: 'hello world',
   });
 
@@ -343,48 +255,42 @@ describe('Instantiate a Reusable Command', () => {
     },
   };
 
+  it('Should generate a reused command from toReused', () => {
+    expect(reusableCommand.toReused({ greeting: 'hello world' })).toEqual(
+      reusedCommand,
+    );
+  });
+
   it('Should generate checkout yaml', () => {
-    expect(reusableCommand.generate()).toEqual(expected);
+    expect(reusedCommand.generate()).toEqual(expected);
   });
 
   it('Should have the correct static properties', () => {
-    expect(reusableCommand.generableType).toBe(
-      CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
+    expect(reusedCommand.generableType).toBe(
+      CircleCI.mapping.GenerableType.REUSED_COMMAND,
     );
   });
 
   it('Should be able to generate with string name', () => {
-    const reusableCommandByName = new CircleCI.reusable.ReusableCommand(
-      customCommand.name,
+    const reusedCommandByName = new CircleCI.reusable.ReusedCommand(
+      reusableCommand.name,
       {
         greeting: 'hello world',
       },
     );
 
-    expect(reusableCommandByName.generate()).toEqual(expected);
-  });
-
-  it('Should throw error when parsing without a command being declared', () => {
-    expect(() => {
-      CircleCI.parsers.parseStep('say_hello', { greeting: 'hello world' });
-    }).toThrowError(`Unknown native command: say_hello`);
-  });
-
-  it('Should throw error when parsing without a command being declared', () => {
-    expect(() => {
-      CircleCI.parsers.parseStep('say_hello', { greeting: 'hello world' }, []);
-    }).toThrowError(`Custom Command say_hello not found in command list.`);
+    expect(reusedCommandByName.generate()).toEqual(expected);
   });
 });
 /**
  * instantiate a parameter with an enum value of x y z
  */
 describe('Instantiate reusable commands', () => {
-  const firstCustomCommand = new CircleCI.reusable.CustomCommand(
+  const firstReusableCommand = new CircleCI.reusable.ReusableCommand(
     'point_direction',
   );
 
-  firstCustomCommand
+  firstReusableCommand
     .defineParameter('axis', 'enum', 'x', undefined, ['x', 'y', 'z'])
     .defineParameter('angle', 'integer', 90)
     .addStep(
@@ -406,16 +312,16 @@ describe('Instantiate reusable commands', () => {
     steps:
       - run: echo << parameters.axis >>`;
 
-    expect(firstCustomCommand.generate(true)).toEqual(
-      parse(firstExpectedOutput),
+    expect(firstReusableCommand.generate(true)).toEqual(
+      YAML.parse(firstExpectedOutput),
     );
   });
 
-  const secondCustomCommand = new CircleCI.reusable.CustomCommand(
+  const secondReusableCommand = new CircleCI.reusable.ReusableCommand(
     'search_year',
   );
 
-  secondCustomCommand
+  secondReusableCommand
     .defineParameter('year', 'integer')
     .defineParameter('type', 'string', 'gregorian')
     .addStep(
@@ -435,49 +341,24 @@ describe('Instantiate reusable commands', () => {
     steps:
       - run: echo << parameters.year >>`;
 
-    expect(secondCustomCommand.generate(true)).toEqual(
-      parse(secondExpectedOutput),
+    expect(secondReusableCommand.generate(true)).toEqual(
+      YAML.parse(secondExpectedOutput),
     );
   });
 
   const myConfig = new CircleCI.Config();
-  myConfig.addCustomCommand(firstCustomCommand);
+  myConfig.addReusableCommand(firstReusableCommand);
 
   // Testing that the validator will update the schema with new command
-  myConfig.addCustomCommand(secondCustomCommand);
+  myConfig.addReusableCommand(secondReusableCommand);
 
   it('Add commands to config and validate', () => {
     expect(myConfig.commands?.length).toBe(2);
   });
 
-  it('Should validate with the proper parameters', () => {
-    const result = CircleCI.Validator.validateGenerable(
-      CircleCI.mapping.GenerableType.STEP_LIST,
-      [
-        {
-          search_year: {
-            year: 2022,
-            type: 'solar',
-          },
-        },
-        {
-          point_direction: {
-            axis: 'x',
-          },
-        },
-        {
-          run: {
-            command: 'echo "Hello, World!"',
-          },
-        },
-      ],
-    );
-    expect(result).toEqual(true);
-  });
-
   it('Should have the correct static properties', () => {
-    expect(firstCustomCommand.generableType).toBe(
-      CircleCI.mapping.GenerableType.CUSTOM_COMMAND,
+    expect(firstReusableCommand.generableType).toBe(
+      CircleCI.mapping.GenerableType.REUSABLE_COMMAND,
     );
   });
 
@@ -577,21 +458,20 @@ describe('Instantiate reusable commands', () => {
   // });
 });
 
-const stringifyOptions:
-  | (DocumentOptions &
-      SchemaOptions &
-      ParseOptions &
-      CreateNodeOptions &
-      ToStringOptions)
-  | undefined = {
-  defaultStringType: Scalar.PLAIN,
-  lineWidth: 0,
-  minContentWidth: 0,
-  doubleQuotedMinMultiLineLength: 999,
-};
-
 // Test a Run command with a multi-line command string
 describe('Instantiate a Run command with a multi-line command string', () => {
+  const stringifyOptions:
+    | (DocumentOptions &
+        YAML.SchemaOptions &
+        YAML.ParseOptions &
+        YAML.CreateNodeOptions &
+        YAML.ToStringOptions)
+    | undefined = {
+    defaultStringType: YAML.Scalar.PLAIN,
+    lineWidth: 0,
+    minContentWidth: 0,
+    doubleQuotedMinMultiLineLength: 999,
+  };
   const multiLineCommand = new CircleCI.commands.Run({
     command: `echo "hello world 1"
 echo "hello world 2"
@@ -606,46 +486,43 @@ echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single
 `;
   it('Should match expectedOutput', () => {
     expect(
-      stringify(multiLineCommand.generate(true), stringifyOptions),
+      YAML.stringify(multiLineCommand.generate(true), stringifyOptions),
     ).toEqual(expectedOutput);
   });
 });
 
 // Test a Run command with 70 characters in the command string and ensure it remains a single string
 describe('Instantiate a Run command with 70 characters in the command string and ensure it remains a single string', () => {
+  const stringifyOptions:
+    | (DocumentOptions &
+        YAML.SchemaOptions &
+        YAML.ParseOptions &
+        YAML.CreateNodeOptions &
+        YAML.ToStringOptions)
+    | undefined = {
+    defaultStringType: YAML.Scalar.PLAIN,
+    lineWidth: 0,
+    minContentWidth: 0,
+    doubleQuotedMinMultiLineLength: 999,
+  };
   const longCommand = new CircleCI.commands.Run({
     command: `echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line`,
   });
   const expectedOutput = `run: echo hello world 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 this string is a single line, and should output as a single line
 `;
   it('Should match expectedOutput', () => {
-    expect(stringify(longCommand.generate(true), stringifyOptions)).toEqual(
-      expectedOutput,
-    );
+    expect(
+      YAML.stringify(longCommand.generate(true), stringifyOptions),
+    ).toEqual(expectedOutput);
   });
 });
 
-// Test using Workspaces to Share Data Between Jobs and attatch workflows workspace to current conatiner.
+// Test using Workspaces to Share Data Between Jobs and attach workflows workspace to current container.
 describe('Instantiate a Run command with 70 characters in the command string and ensure it remains a single string', () => {
   const myExecutor = new CircleCI.executors.DockerExecutor('cimg/base:stable');
-  const attachExample = {
-    attatch_workspace: {
-      at: '/tmp/workspace',
-    },
-  };
-
-  const persistExample = {
-    persist_to_workspace: {
-      root: 'workspace',
-      paths: ['echo-output'],
-    },
-  };
-
-  const attatchWorkspace = new CircleCI.Job(
-    'attatch to workspace',
-    myExecutor,
-    [new CircleCI.commands.workspace.Attach({ at: '/tmp/workspace' })],
-  );
+  const attachWorkspace = new CircleCI.Job('attach to workspace', myExecutor, [
+    new CircleCI.commands.workspace.Attach({ at: '/tmp/workspace' }),
+  ]);
 
   const persistWorkspace = new CircleCI.Job(
     'persist to workspace',
@@ -658,29 +535,11 @@ describe('Instantiate a Run command with 70 characters in the command string and
     ],
   );
 
-  it('Should parse and match attatchWorkspace Example', () => {
-    expect(
-      CircleCI.parsers.parseStep(
-        'attach_workspace',
-        attachExample.attatch_workspace,
-      ),
-    ).toEqual(attatchWorkspace.steps[0]);
-  });
-
-  it('Should parse and match persistWorkspace Example', () => {
-    expect(
-      CircleCI.parsers.parseStep(
-        'persist_to_workspace',
-        persistExample.persist_to_workspace,
-      ),
-    ).toEqual(persistWorkspace.steps[0]);
-  });
-
-  it('Should have the correct static properties for attatch workspace', () => {
-    expect(attatchWorkspace.steps[0].generableType).toBe(
+  it('Should have the correct static properties for attach workspace', () => {
+    expect(attachWorkspace.steps[0].generableType).toBe(
       CircleCI.mapping.GenerableType.ATTACH,
     );
-    expect(attatchWorkspace.steps[0].name).toBe('attach_workspace');
+    expect(attachWorkspace.steps[0].name).toBe('attach_workspace');
   });
 
   it('Should have the correct static properties for persist', () => {

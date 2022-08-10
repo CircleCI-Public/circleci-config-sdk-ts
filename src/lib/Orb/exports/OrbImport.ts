@@ -1,5 +1,5 @@
-import { parsers } from '../../..';
 import { Generable } from '../../Components';
+import { CustomParametersList } from '../../Components/Parameters';
 import {
   AnyParameterLiteral,
   CommandParameterLiteral,
@@ -38,9 +38,9 @@ export class OrbImport implements Generable {
     this.version = version;
     this.description = description;
     this.display = display;
-    this.jobs = parseImportManifest(manifest.jobs, this);
-    this.commands = parseImportManifest(manifest.commands, this);
-    this.executors = parseImportManifest(manifest.executors, this);
+    this.jobs = asImportManifest(manifest.jobs, this);
+    this.commands = asImportManifest(manifest.commands, this);
+    this.executors = asImportManifest(manifest.executors, this);
   }
 
   generate(): Record<string, string> {
@@ -54,12 +54,12 @@ export class OrbImport implements Generable {
   }
 }
 
-const parseImportManifest = <Literal extends AnyParameterLiteral>(
-  definitions: Record<string, unknown>,
+const asImportManifest = <Literal extends AnyParameterLiteral>(
+  parameters: Record<string, CustomParametersList<Literal>>,
   orb: OrbImport,
 ): Record<string, OrbRef<Literal>> => {
-  const objs = Object.entries(definitions).map(([name, definition]) => ({
-    [name]: new OrbRef(name, parsers.parseParameterList(definition), orb),
+  const objs = Object.entries(parameters).map(([name, list]) => ({
+    [name]: new OrbRef(name, list, orb),
   }));
 
   return Object.assign({}, ...objs);

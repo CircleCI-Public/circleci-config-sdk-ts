@@ -5,28 +5,22 @@ describe('Use an OrbImport within a config', () => {
   const orbName = 'my-orb';
   const orbNamespace = 'circleci';
   const orbVersion = '1.0.0';
+  // TODO: Add a parser for this
   const manifest: CircleCI.types.orb.OrbImportManifest = {
     jobs: {
-      say_hello: {
-        greeting: {
-          type: 'string',
-        },
-      },
+      say_hello: new CircleCI.parameters.CustomParametersList([
+        new CircleCI.parameters.CustomParameter('greeting', 'string'),
+      ]),
     },
     commands: {
-      say_it: {
-        what: {
-          type: 'string',
-        },
-      },
+      say_it: new CircleCI.parameters.CustomParametersList([
+        new CircleCI.parameters.CustomParameter('what', 'string'),
+      ]),
     },
     executors: {
-      python: {
-        version: {
-          type: 'string',
-          default: '1.0.0',
-        },
-      },
+      python: new CircleCI.parameters.CustomParametersList([
+        new CircleCI.parameters.CustomParameter('greeting', 'string', '1.0.0'),
+      ]),
     },
   };
   const exampleOrb = new CircleCI.orb.OrbImport(
@@ -79,7 +73,7 @@ describe('Use an OrbImport within a config', () => {
     'test',
     new CircleCI.reusable.ReusedExecutor(pythonExecutor, { version: '1.2.3' }),
     [
-      new CircleCI.reusable.ReusableCommand(sayItCommand, {
+      new CircleCI.reusable.ReusedCommand(sayItCommand, {
         what: 'cheese',
       }),
     ],
@@ -127,7 +121,6 @@ describe('Use an OrbImport within a config', () => {
         'my-orb-aliased': `${orbNamespace}/${orbName}@1.1.1`,
       },
     };
-
-    expect(parse(config.generate())).toEqual(expected);
+    expect(parse(config.stringify())).toEqual(expected);
   });
 });

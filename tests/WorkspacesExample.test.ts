@@ -57,11 +57,11 @@ describe('Generate a config utilizing workspaces', () => {
         },
       },
     };
-    const generatedConfig = YAML.parse(myConfig.generate());
+    const generatedConfig = YAML.parse(myConfig.stringify());
     expect(expectedConfig).toEqual(generatedConfig);
   });
 
-  it('Should have the correct static properties for attatch workspace', () => {
+  it('Should have the correct static properties for attach workspace', () => {
     expect(jobDownstream.steps[0].generableType).toBe(
       CircleCI.mapping.GenerableType.ATTACH,
     );

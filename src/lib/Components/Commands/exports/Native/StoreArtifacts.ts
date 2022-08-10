@@ -4,8 +4,8 @@ import { CommandParameters, CommandShape } from '../../types/Command.types';
 import { Command } from '../Command';
 
 /**
- * A special step used to check out source code to the configured path (defaults to the working_directory).
- * @param parameters - StoreArtifactsParameters
+ * Step to store artifacts (for example logs, binaries, etc) to be available in the web app or through the API.
+ * @see {@link https://circleci.com/docs/configuration-reference#storeartifacts}
  */
 export class StoreArtifacts implements Command {
   parameters: StoreArtifactsParameters;
@@ -47,6 +47,6 @@ export interface StoreArtifactsParameters extends CommandParameters {
 /**
  * Generated Shape of the StoreArtifacts command.
  */
-export interface StoreArtifactsCommandShape extends CommandShape {
+interface StoreArtifactsCommandShape extends CommandShape {
   store_artifacts: StoreArtifactsParameters;
 }

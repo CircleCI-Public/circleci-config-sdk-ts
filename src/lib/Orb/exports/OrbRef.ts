@@ -3,6 +3,9 @@ import { AnyParameterLiteral } from '../../Components/Parameters/types/CustomPar
 import { GenerableType } from '../../Config/exports/Mapping';
 import { OrbImport } from './OrbImport';
 
+/**
+ * An abstract reference to an orb component.
+ */
 export class OrbRef<Literal extends AnyParameterLiteral> {
   private _parameters: CustomParametersList<Literal>;
   private _name: string;

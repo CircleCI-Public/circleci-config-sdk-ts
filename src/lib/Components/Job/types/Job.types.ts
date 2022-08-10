@@ -27,3 +27,10 @@ export type JobDependencies = {
   steps: Command[];
   parametersList?: CustomParametersList<JobParameterLiteral>;
 };
+
+export type UnknownJobShape = {
+  [key: string]: unknown;
+  steps: { [key: string]: unknown }[];
+  resource_class: string;
+  parameters?: { [key: string]: unknown };
+};

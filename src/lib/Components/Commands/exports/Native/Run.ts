@@ -1,19 +1,19 @@
 import { GenerableType } from '../../../../Config/exports/Mapping';
 import {
-  BooleanParameter,
-  EnvironmentParameter,
   StringParameter,
+  EnvironmentParameter,
+  BooleanParameter,
 } from '../../../Parameters/types';
 import {
-  CommandParameters,
   CommandShape,
   CommandShorthandShape,
+  CommandParameters,
 } from '../../types/Command.types';
 import { Command } from '../Command';
 
 /**
- * The Run command step is used for invoking all command-line programs.
- * @param parameters - RunParameters
+ * The Run step is used for invoking all command-line programs.
+ * @see {@link https://circleci.com/docs/configuration-reference#run}
  */
 export class Run implements Command {
   parameters: RunParameters;
@@ -21,9 +21,10 @@ export class Run implements Command {
     this.parameters = parameters;
   }
   /**
-   * Generate Run Command shape.* @returns The generated JSON for the Run Commands.
+   * Generate Run Command shape.*
+   * @returns The generated JSON for the Run Command.
    */
-  generate(flatten?: boolean): RunCommandShape | RunCommandShorthandShape {
+  generate(flatten = false): RunCommandShape | RunCommandShorthandShape {
     const { command, ...parameters } = this.parameters;
 
     if (Object.keys(parameters).length === 0 && flatten) {
@@ -40,6 +41,17 @@ export class Run implements Command {
   get generableType(): GenerableType {
     return GenerableType.RUN;
   }
+}
+
+/**
+ * Run Command Shape
+ */
+interface RunCommandShape extends CommandShape {
+  run: RunParameters;
+}
+
+interface RunCommandShorthandShape extends CommandShorthandShape {
+  run: string;
 }
 
 /**
@@ -74,15 +86,4 @@ export interface RunParameters extends CommandParameters {
    * Specify when to enable or disable the step. (default: on_success)
    */
   when?: 'always' | 'on_success' | 'on_fail';
-}
-
-/**
- * Run Command Shape
- */
-export interface RunCommandShape extends CommandShape {
-  run: RunParameters;
-}
-
-export interface RunCommandShorthandShape extends CommandShorthandShape {
-  run: string;
 }

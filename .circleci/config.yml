@@ -60,6 +60,7 @@ jobs:
             git add -A
             git commit -m "Deploy-<<pipeline.git.branch>>-<<pipeline.number>> [ci skip]"
             git push -f git@github.com:CircleCI-Public/circleci-config-sdk-ts.git master:gh-pages
+
   deploy-package:
     executor: node/default
     steps:
@@ -86,12 +87,13 @@ jobs:
             fi
             # Publish
             npm publish --access public "$@"
+
 workflows:
   test:
     jobs:
       - node/test:
           name: lint
-          run-command: lint:ci
+          run-command: lint
           version: "16.12"
           filters:
             tags:
@@ -104,7 +106,6 @@ workflows:
                 - "lts"
                 - "16.12"
                 - "15.14"
-                - "12.22"
           filters:
             tags:
               only: /.*/

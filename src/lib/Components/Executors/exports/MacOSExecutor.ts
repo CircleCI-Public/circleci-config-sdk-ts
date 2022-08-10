@@ -13,7 +13,7 @@ import { Executor } from './Executor';
  */
 export class MacOSExecutor extends Executor<MacOSResourceClass> {
   /**
-   * Select an xcode version
+   * Select an xcode version.
    * @see {@link https://circleci.com/developer/machine/image/macos}
    */
   xcode: string;
