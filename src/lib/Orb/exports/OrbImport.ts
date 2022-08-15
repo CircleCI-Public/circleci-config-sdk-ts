@@ -20,9 +20,9 @@ export class OrbImport implements Generable {
   name: string;
   version: string;
 
-  jobs: Record<string, OrbRef<JobParameterLiteral>>;
-  commands: Record<string, OrbRef<CommandParameterLiteral>>;
-  executors: Record<string, OrbRef<ExecutorParameterLiteral>>;
+  jobs: Record<string, OrbRef<JobParameterLiteral>> = {};
+  commands: Record<string, OrbRef<CommandParameterLiteral>> = {};
+  executors: Record<string, OrbRef<ExecutorParameterLiteral>> = {};
 
   description?: string;
   display?: OrbDisplayMeta;
@@ -42,9 +42,12 @@ export class OrbImport implements Generable {
     this.version = version;
     this.description = description;
     this.display = display;
-    this.jobs = asImportManifest(manifest.jobs, this);
-    this.commands = asImportManifest(manifest.commands, this);
-    this.executors = asImportManifest(manifest.executors, this);
+
+    if (manifest) {
+      this.jobs = asImportManifest(manifest.jobs, this);
+      this.commands = asImportManifest(manifest.commands, this);
+      this.executors = asImportManifest(manifest.executors, this);
+    }
   }
 
   generate(): Record<string, string> {
