@@ -6,6 +6,7 @@ import { CommandParameterLiteral } from '../../../Parameters/types/CustomParamet
 import {
   AnyCommandShape,
   CommandParameters,
+  ReusableCommandBodyShape,
   ReusableCommandShape,
 } from '../../types/Command.types';
 import { Command } from '../Command';
@@ -49,16 +50,20 @@ export class ReusableCommand
   }
 
   generate(flatten?: boolean): ReusableCommandShape {
+    return {
+      [this.name]: this.generateContents(flatten),
+    };
+  }
+
+  generateContents(flatten?: boolean): ReusableCommandBodyShape {
     const generatedSteps: AnyCommandShape[] = this.steps.map((step) =>
       step.generate(flatten),
     );
 
     return {
-      [this.name]: {
-        parameters: this.parameters?.generate(),
-        steps: generatedSteps,
-        description: this.description,
-      },
+      parameters: this.parameters?.generate(),
+      steps: generatedSteps,
+      description: this.description,
     };
   }
 

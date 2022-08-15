@@ -35,8 +35,12 @@ export class ReusedCommand implements Command {
    */
   generate(): CommandShape {
     return {
-      [this.name]: { ...this.parameters },
+      [this.name]: this.generateContents(),
     };
+  }
+
+  generateContents(): CommandParameters {
+    return { ...this.parameters };
   }
 
   get generableType(): GenerableType {
