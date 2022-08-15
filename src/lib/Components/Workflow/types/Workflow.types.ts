@@ -9,6 +9,11 @@ export type WorkflowsShape = {
   };
 };
 
+export type WorkflowContentsShape = {
+  when: AnyConditionShape;
+  jobs: WorkflowJobShape[];
+};
+
 export type UnknownWorkflowShape = {
   jobs: { [key: string]: unknown }[];
 };

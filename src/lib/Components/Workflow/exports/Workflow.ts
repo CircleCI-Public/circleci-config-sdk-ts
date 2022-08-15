@@ -1,9 +1,14 @@
 import { Generable } from '../..';
 import { GenerableType } from '../../../Config/exports/Mapping';
+import { Command } from '../../Commands/types/Command.types';
 import { Job } from '../../Job';
 import { When } from '../../Logic';
 import { Conditional } from '../../Logic/exports/Conditional';
-import { WorkflowJobParameters, WorkflowsShape } from '../types';
+import {
+  WorkflowContentsShape,
+  WorkflowJobParameters,
+  WorkflowsShape,
+} from '../types';
 import { WorkflowJob } from './WorkflowJob';
 import { WorkflowJobAbstract } from './WorkflowJobAbstract';
 import { WorkflowJobApproval } from './WorkflowJobApproval';
@@ -46,11 +51,21 @@ export class Workflow implements Generable, Conditional {
       );
     }
   }
+
   /**
    * Generate Workflow Shape.
    * @returns The generated JSON for the Workflow.
    */
   generate(flatten?: boolean): WorkflowsShape {
+    return {
+      [this.name]: this.generateContents(flatten),
+    };
+  }
+
+  /**
+   * Generate contents of the Workflow.
+   */
+  generateContents(flatten?: boolean): WorkflowContentsShape {
     const generatedWorkflowJobs = this.jobs.map((job) => {
       return job.generate(flatten);
     });
@@ -58,18 +73,21 @@ export class Workflow implements Generable, Conditional {
     const generatedWhen = this.when?.generate();
 
     return {
-      [this.name]: {
-        when: generatedWhen,
-        jobs: generatedWorkflowJobs,
-      },
+      when: generatedWhen,
+      jobs: generatedWorkflowJobs,
     };
   }
 
   /**
    * Add a Job to the current Workflow. Chainable
    */
-  addJob(job: Job, parameters?: WorkflowJobParameters): this {
-    this.jobs.push(new WorkflowJob(job, parameters));
+  addJob(
+    job: Job,
+    parameters?: WorkflowJobParameters,
+    pre_steps?: Command[],
+    post_steps?: Command[],
+  ): this {
+    this.jobs.push(new WorkflowJob(job, parameters, pre_steps, post_steps));
     return this;
   }
 
