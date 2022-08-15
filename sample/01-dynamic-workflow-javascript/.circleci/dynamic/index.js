@@ -18,6 +18,8 @@ const dynamicWorkflow = new CircleCI.Workflow("dynamic-workflow");
 dynamicWorkflow.addJob(jobA);
 
 // Conditionally add jobB
+// This condition could be based on anything from the response of an API call
+// to the contents of a file
 if (1 == 1) {
   dynamicWorkflow.addJob(jobB);
 }

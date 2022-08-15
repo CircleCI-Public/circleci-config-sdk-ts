@@ -5,15 +5,23 @@
 [![npm](https://img.shields.io/npm/v/@circleci/circleci-config-sdk?logo=npm)](https://www.npmjs.com/package/@circleci/circleci-config-sdk)
 [![codecov](https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts/branch/main/graph/badge.svg?token=Z4C4RXABS7)](https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts)
 [![npm](https://img.shields.io/npm/dm/@circleci/circleci-config-sdk?logo=npm)](https://www.npmjs.com/package/@circleci/circleci-config-sdk)
+![GitHub Repo stars](https://img.shields.io/github/stars/CircleCI-Public/circleci-config-sdk-ts?style=social)
 
-Create and manage your CircleCI configuration files with JavaScript and
+Create and manage your [CircleCI](https://circleci.com/) configuration files with JavaScript and
 TypeScript.
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-- [Getting Help](#getting-help)
+- [CircleCI Config SDK](#circleci-config-sdk)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+    - [Installation](#installation)
+      - [Usage](#usage)
+    - [Example](#example)
+  - [Getting Help](#getting-help)
+    - [Resources](#resources)
 - [Contributing](#contributing)
+- [Related](#related)
 
 ## Getting Started
 
@@ -139,7 +147,7 @@ Consider checking the following common resources before opening a new issue.
 
 # Contributing
 
-This repository welcomes community contributions! See our
+This [repository](https://github.com/CircleCI-Public/circleci-config-sdk-ts) welcomes community contributions! See our
 [CONTRIBUTING.md](https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/main/CONTRIBUTING.md)
 for guidance on configuring your development environment and how to submit
 quality pull requests.
