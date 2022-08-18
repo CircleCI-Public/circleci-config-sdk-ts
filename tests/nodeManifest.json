@@ -1,0 +1,185 @@
+{
+  "jobs": {
+    "run": {
+      "app-dir": {
+        "default": "~/project",
+        "description": "Path to the directory containing your package.json file. Not needed if package.json lives in the root.",
+        "type": "string"
+      },
+      "cache-version": {
+        "default": "v1",
+        "description": "Change the default cache version if you need to clear the cache for any reason.",
+        "type": "string"
+      },
+      "npm-run": {
+        "default": "",
+        "description": "The name of the script within your package.json which you would like to run.",
+        "type": "string"
+      },
+      "override-ci-command": {
+        "default": "",
+        "description": "By default, packages will be installed with \"npm ci\" or \"yarn install --frozen-lockfile\".\nOptionally supply a custom package installation command, with any additional flags needed.\n",
+        "type": "string"
+      },
+      "pkg-manager": {
+        "default": "npm",
+        "description": "Select the default node package manager to use.",
+        "enum": ["npm", "yarn", "yarn-berry"],
+        "type": "enum"
+      },
+      "setup": {
+        "default": [],
+        "description": "Provide any optional steps you would like to run prior to installing the node dependencies. This is a good place to install global modules.",
+        "type": "steps"
+      },
+      "version": {
+        "default": "lts",
+        "description": "Pick a specific cimg/node image version tag: https://hub.docker.com/r/cimg/node\n",
+        "type": "string"
+      },
+      "yarn-run": {
+        "default": "",
+        "description": "The name of the script within your package.json which you would like to run.",
+        "type": "string"
+      }
+    },
+    "test": {
+      "app-dir": {
+        "default": "~/project",
+        "description": "Path to the directory containing your package.json file. Not needed if package.json lives in the root.",
+        "type": "string"
+      },
+      "cache-version": {
+        "default": "v1",
+        "description": "Change the default cache version if you need to clear the cache for any reason.",
+        "type": "string"
+      },
+      "override-ci-command": {
+        "default": "",
+        "description": "By default, packages will be installed with \"npm ci\" or \"yarn install --frozen-lockfile\".\nOptionally supply a custom package installation command, with any additional flags needed.\n",
+        "type": "string"
+      },
+      "pkg-manager": {
+        "default": "npm",
+        "description": "Select the default node package manager to use.",
+        "enum": ["npm", "yarn", "yarn-berry"],
+        "type": "enum"
+      },
+      "run-command": {
+        "default": "test",
+        "description": "The name of the script within your package.json which will run your tests.",
+        "type": "string"
+      },
+      "setup": {
+        "default": [],
+        "description": "Provide any optional steps you would like to run prior to installing the node dependencies. This is a good place to install global modules.",
+        "type": "steps"
+      },
+      "test-results-for": {
+        "default": "other",
+        "description": "Testing framework your project uses.\nIf this is set to jest or mocha, test results will be automatically produced. When using jest, the jest-junit package is required as a dev dependency. See https://github.com/jest-community/jest-junit for more information.\nWhen using mocha, the mocha-junit-reporter and mocha-multi packages are required as dev dependency. See https://github.com/michaelleeallen/mocha-junit-reporter and https://github.com/glenjamin/mocha-multi for more information.\n",
+        "enum": ["jest", "mocha", "other"],
+        "type": "enum"
+      },
+      "test-results-path": {
+        "default": "",
+        "description": "If you use test-results-for, this will be configured automatically.\nIf you configure test results yourself (for example in your node config files) set this to the location that you write them to, and they will be uploaded.\n",
+        "type": "string"
+      },
+      "version": {
+        "default": "lts",
+        "description": "Pick a specific cimg/node image version tag: https://hub.docker.com/r/cimg/node\n",
+        "type": "string"
+      }
+    }
+  },
+  "commands": {
+    "install": {
+      "install-yarn": {
+        "default": false,
+        "description": "Install Yarn?",
+        "type": "boolean"
+      },
+      "node-install-dir": {
+        "default": "/usr/local",
+        "description": "Where should Node.js be installed?\n",
+        "type": "string"
+      },
+      "node-version": {
+        "default": "",
+        "description": "Specify the full version tag to install. To install the latest version, set the version to `latest`. If unspecified, the version listed in .nvmrc will be installed. If no .nvmrc file exists the active LTS version of Node.js will be installed by default. For a full list of releases, see the following: https://nodejs.org/en/download/releases\n",
+        "type": "string"
+      },
+      "yarn-version": {
+        "default": "",
+        "description": "Pick a version of Yarn to install (if no version is specified, the latest stable version will be installed): https://github.com/yarnpkg/yarn/releases\n",
+        "type": "string"
+      }
+    },
+    "install-packages": {
+      "app-dir": {
+        "default": ".",
+        "description": "Path to the directory containing your package.json file. Not needed if package.json lives in the root.",
+        "type": "string"
+      },
+      "cache-only-lockfile": {
+        "default": true,
+        "description": "If true, package.json will be ignored in the cache key. Useful for projects where package.json changes do not always invalidate dependencies.\nNote: package.json will still be the final fallback key incase a project is not configured with a lock file.\n",
+        "type": "boolean"
+      },
+      "cache-path": {
+        "default": "",
+        "description": "By default, this orb will utilize 'npm ci' and cache the '~/.npm' directory. Override which path to cache with this parameter.\n",
+        "type": "string"
+      },
+      "cache-version": {
+        "default": "v1",
+        "description": "Change the default cache version if you need to clear the cache for any reason.",
+        "type": "string"
+      },
+      "check-cache": {
+        "default": "never",
+        "description": "Yarn berry only for Zero install support -\nUse 'always' to always --check-cache argument to yarn install.\nUse 'detect' to enable caching of yarn.lock and to only add when required.\n",
+        "enum": ["never", "always", "detect"],
+        "type": "enum"
+      },
+      "include-branch-in-cache-key": {
+        "default": true,
+        "description": "If true, this cache bucket will only apply to jobs within the same branch.\n",
+        "type": "boolean"
+      },
+      "override-ci-command": {
+        "default": "",
+        "description": "By default, packages will be installed with \"npm ci\", \"yarn install --frozen-lockfile\" or \"yarn install --immutable\".\nOptionally supply a custom package installation command, with any additional flags needed.\n",
+        "type": "string"
+      },
+      "pkg-manager": {
+        "default": "npm",
+        "description": "Select the default node package manager to use. NPM v5+ Required.",
+        "enum": ["npm", "yarn", "yarn-berry"],
+        "type": "enum"
+      },
+      "with-cache": {
+        "default": true,
+        "description": "Cache your node packages automatically for faster install times.",
+        "type": "boolean"
+      }
+    },
+    "install-yarn": {
+      "version": {
+        "default": "",
+        "description": "Pick a version of Yarn to install (if no version is specified, the latest stable version will be installed): https://github.com/yarnpkg/yarn/releases\n",
+        "type": "string"
+      }
+    }
+  },
+  "executors": {
+    "default": {
+      "tag": {
+        "default": "lts",
+        "description": "Pick a specific cimg/node image version tag: https://hub.docker.com/r/cimg/node\n",
+        "type": "string"
+      }
+    }
+  }
+}

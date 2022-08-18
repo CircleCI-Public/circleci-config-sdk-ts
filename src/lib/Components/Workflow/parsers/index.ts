@@ -111,7 +111,7 @@ export function parseWorkflow(
     (workflowArgs) => {
       const jobList = workflowArgs.jobs.map((job) => {
         if (typeof job === 'string') {
-          return parseWorkflowJob(job, undefined, jobs);
+          return parseWorkflowJob(job, undefined, jobs, orbs);
         }
 
         const [name, args] = Object.entries(job)[0];

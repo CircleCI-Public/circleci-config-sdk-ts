@@ -16,10 +16,13 @@ export type CommandType<T> = Extract<string | number, T>;
 export type CommandParameters = ComponentParameter<CommandParameterTypes>;
 
 export type CommandShape = Record<string, CommandParameters>;
-
+export type BodylessCommand = string;
 export type CommandShorthandShape = Record<string, string>;
 
-export type AnyCommandShape = CommandShape | CommandShorthandShape;
+export type AnyCommandShape =
+  | CommandShape
+  | CommandShorthandShape
+  | BodylessCommand;
 
 export type CustomCommandBodyShape = {
   parameters?: CustomParametersListShape;

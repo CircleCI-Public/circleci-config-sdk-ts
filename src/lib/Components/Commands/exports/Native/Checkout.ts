@@ -17,7 +17,11 @@ export class Checkout implements Command {
    * Generate Checkout Command shape.
    * @returns The generated JSON for the Checkout Commands.
    */
-  generate(): CheckoutCommandShape {
+  generate(): CheckoutCommandShape | string {
+    if (this.parameters === undefined) {
+      return 'checkout';
+    }
+
     return {
       checkout: { ...this.parameters },
     };

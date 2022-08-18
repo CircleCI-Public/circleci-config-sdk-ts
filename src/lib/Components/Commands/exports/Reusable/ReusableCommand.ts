@@ -33,7 +33,11 @@ export class ReusableCommand implements Command {
   /**
    * @returns JSON representation of the reusable command being called
    */
-  generate(): CommandShape {
+  generate(): CommandShape | string {
+    if (this.parameters === undefined) {
+      return this.name;
+    }
+
     return {
       [this.name]: this.generateContents(),
     };

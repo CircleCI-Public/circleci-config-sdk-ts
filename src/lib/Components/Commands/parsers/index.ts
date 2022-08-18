@@ -150,11 +150,11 @@ export function parseStep(
   if (commands || orbs) {
     return parseGenerable<CommandParameters, ReusableCommand>(
       GenerableType.REUSABLE_COMMAND,
-      args,
+      args ?? name,
       (parameterArgs) => {
         const command =
           parseOrbRef<CommandParameterLiteral>(
-            { [name]: args },
+            typeof name === 'string' ? name : { [name]: args },
             'commands',
             orbs,
           ) || commands?.find((c) => c.name === name);
@@ -165,7 +165,7 @@ export function parseStep(
           );
         }
 
-        return new ReusableCommand(command, parameterArgs);
+        return new ReusableCommand(command, args ? parameterArgs : undefined);
       },
       undefined,
       name,

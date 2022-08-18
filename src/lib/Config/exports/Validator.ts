@@ -98,7 +98,7 @@ export class Validator extends Ajv {
   public static validateOnParse: boolean;
 
   private constructor() {
-    super({ allowUnionTypes: true });
+    super({ allowUnionTypes: true, strict: false });
 
     ajvMergePatch(this);
 
@@ -145,11 +145,11 @@ export class Validator extends Ajv {
     if ('$id' in schemaSource) {
       const schema = schemaSource as SchemaObject;
 
-      return Validator.getInstance().validateComponent(schema, input);
+      return Validator.getInstance().validateComponent(schema, input || null);
     } else if (subtype !== undefined && subtype in schemaSource) {
       const schema = schemaSource[subtype] as ValidationMap;
 
-      return Validator.getInstance().validateComponent(schema, input);
+      return Validator.getInstance().validateComponent(schema, input || null);
     } else {
       throw new Error(`No validator found for ${generable}:${subtype}`);
     }

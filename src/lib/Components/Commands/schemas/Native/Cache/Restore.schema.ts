@@ -18,7 +18,6 @@ const RestoreSchema: SchemaObject = {
     },
     {
       type: 'string',
-      required: ['key'],
     },
   ],
 };

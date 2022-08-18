@@ -34,7 +34,9 @@ export function parseGenerable<
   const valid = Validator.validateGenerable(component, input || null, subtype);
 
   if (valid !== true) {
-    throw errorParsing(`Failed to validate: ${valid}`);
+    throw errorParsing(`Failed to validate: ${valid} 
+    input: ${JSON.stringify(inputShape)}
+    children: ${JSON.stringify(children)}`);
   }
 
   const result = parse(inputShape, children);
