@@ -52,6 +52,7 @@ export type CircleCIConfigShape = {
 
 export type UnknownConfigShape = {
   setup: boolean;
+  orbs?: Record<string, unknown>;
   executors?: Record<string, unknown>;
   jobs: Record<string, unknown>;
   commands?: Record<string, unknown>;
