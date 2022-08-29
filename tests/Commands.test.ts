@@ -20,10 +20,9 @@ describe('Instantiate a Run step', () => {
 
 describe('Instantiate a Checkout step', () => {
   const checkout = new CircleCI.commands.Checkout();
-  const checkoutBasicResult = { checkout: {} };
 
   it('Should produce checkout string', () => {
-    expect(checkout.generate()).toEqual(checkoutBasicResult);
+    expect(checkout.generate()).toEqual('checkout');
   });
 
   const checkoutWithPathResult = {
