@@ -1,9 +1,8 @@
 import { Generable } from '../../index';
 import { StringParameter } from '../../Parameters/types';
 import {
-  CommandParameters,
-  CommandShape,
-  CommandShorthandShape,
+  AnyCommandShape,
+  CommandParameters
 } from '../types/Command.types';
 
 /**
@@ -22,5 +21,5 @@ export interface Command extends Generable {
    * Generate the JSON shape for the Command.
    * @param flatten - If true, short hand will be attempted.
    */
-  generate(flatten?: boolean): CommandShape | CommandShorthandShape;
+  generate(flatten?: boolean): AnyCommandShape;
 }
