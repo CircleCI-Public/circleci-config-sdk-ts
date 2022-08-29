@@ -1,6 +1,10 @@
 import { GenerableType } from '../../../../Config/exports/Mapping';
 import { StringParameter } from '../../../Parameters/types';
-import { BodylessCommand, CommandParameters, CommandShape } from '../../types/Command.types';
+import {
+  BodylessCommand,
+  CommandParameters,
+  CommandShape,
+} from '../../types/Command.types';
 import { Command } from '../Command';
 
 /**

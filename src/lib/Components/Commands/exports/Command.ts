@@ -1,9 +1,6 @@
 import { Generable } from '../../index';
 import { StringParameter } from '../../Parameters/types';
-import {
-  AnyCommandShape,
-  CommandParameters
-} from '../types/Command.types';
+import { AnyCommandShape, CommandParameters } from '../types/Command.types';
 
 /**
  * Abstract - A generic Command
