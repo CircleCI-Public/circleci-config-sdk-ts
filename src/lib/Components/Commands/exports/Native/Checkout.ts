@@ -1,6 +1,10 @@
 import { GenerableType } from '../../../../Config/exports/Mapping';
 import { StringParameter } from '../../../Parameters/types';
-import { CommandParameters, CommandShape } from '../../types/Command.types';
+import {
+  BodylessCommand,
+  CommandParameters,
+  CommandShape,
+} from '../../types/Command.types';
 import { Command } from '../Command';
 
 /**
@@ -17,7 +21,11 @@ export class Checkout implements Command {
    * Generate Checkout Command shape.
    * @returns The generated JSON for the Checkout Command.
    */
-  generate(): CheckoutCommandShape {
+  generate(): CheckoutCommandShape | BodylessCommand {
+    if (this.parameters === undefined) {
+      return this.name;
+    }
+
     return {
       checkout: { ...this.parameters },
     };
