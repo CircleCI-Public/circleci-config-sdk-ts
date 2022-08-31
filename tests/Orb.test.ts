@@ -27,16 +27,18 @@ describe('Use an OrbImport within a config', () => {
     orbName,
     orbNamespace,
     orbName,
-    manifest,
     orbVersion,
+    undefined,
+    manifest,
   );
 
   const exampleOrb2 = new CircleCI.orb.OrbImport(
     'my-orb-aliased',
     orbNamespace,
     orbName,
-    manifest,
     '1.1.1',
+    undefined,
+    manifest,
   );
 
   it('Should match expected shape', () => {
