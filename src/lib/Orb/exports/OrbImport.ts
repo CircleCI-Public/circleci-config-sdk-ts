@@ -31,9 +31,9 @@ export class OrbImport implements Generable {
     alias: string,
     namespace: string,
     orb: string,
-    manifest: OrbImportManifest,
     version: string,
     description?: string,
+    manifest?: OrbImportManifest,
     display?: OrbDisplayMeta,
   ) {
     this.alias = alias;
