@@ -25,9 +25,13 @@ TypeScript.
 
 ## Getting Started
 
-- [View the Getting Started Wiki](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki)
-- [View the SDK API Docs](https://circleci-public.github.io/circleci-config-sdk-ts/)
-- [Examples](https://github.com/CircleCI-Public/circleci-config-sdk-ts/tree/main/sample)
+📖 [Getting Started Wiki](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki)
+
+📖 [SDK API Docs](https://circleci-public.github.io/circleci-config-sdk-ts/)
+
+💻 [Examples](https://github.com/CircleCI-Public/circleci-config-sdk-ts/tree/main/sample)
+
+---
 
 ### Installation
 
