@@ -6,6 +6,29 @@ describe('Instantiate a Run step', () => {
   const run = new CircleCI.commands.Run({
     command: 'echo hello world',
   });
+  const runWithEnv = new CircleCI.commands.Run({
+    command: 'echo hello world',
+    environment: {
+      MY_VAR: 'my value',
+    },
+  });
+  const runWithAddedEnv = new CircleCI.commands.Run({
+    command: 'echo hello world',
+  });
+  runWithAddedEnv.addEnvVar('MY_VAR', 'my value');
+
+  const expectedEnvResult = {
+    run: { command: 'echo hello world', environment: { MY_VAR: 'my value' } },
+  };
+
+  it('Should generate a run step with environment variable', () => {
+    expect(runWithEnv.generate()).toEqual(expectedEnvResult);
+  });
+
+  it('Should generate a run step with an added environment variable', () => {
+    expect(runWithAddedEnv.generate()).toEqual(expectedEnvResult);
+  });
+
   const runStep = run.generate(true);
   const expectedResult = { run: 'echo hello world' };
   it('Should generate checkout yaml', () => {

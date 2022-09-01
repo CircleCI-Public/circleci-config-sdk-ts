@@ -38,6 +38,27 @@ export class Run implements Command {
     return 'run';
   }
 
+  /**
+   * Add an environment variable to the command.
+   * This will be set in plain-text via the exported config file.
+   * Consider using project-level environment variables or a context for sensitive information.
+   * @see {@link https://circleci.com/docs/env-vars}
+   * @example
+   * ```
+   * myCommand.addEnvVar('MY_VAR', 'my value');
+   * ```
+   */
+  addEnvVar(name: string, value: string): this {
+    if (!this.parameters.environment) {
+      this.parameters.environment = {
+        [name]: value,
+      };
+    } else {
+      this.parameters.environment[name] = value;
+    }
+    return this;
+  }
+
   get generableType(): GenerableType {
     return GenerableType.RUN;
   }
