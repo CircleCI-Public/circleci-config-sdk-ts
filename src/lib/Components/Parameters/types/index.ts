@@ -66,7 +66,7 @@ export type ExecutorParameter = Executor;
 /**
  * Parameter type for a map of environment variables. Can only be set on non-parameterizable jobs.
  */
-export type EnvironmentParameter = Map<string, string>;
+export type EnvironmentParameter = Record<string, string>;
 
 export type FilterParameter = {
   /**
