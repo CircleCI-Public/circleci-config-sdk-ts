@@ -3,17 +3,26 @@ import { Executor } from '../../Executors';
 import { ReusedExecutor } from '../../Executors/exports/ReusedExecutor';
 import { AnyExecutorShape } from '../../Executors/types/Executor.types';
 import { CustomParametersList } from '../../Parameters';
-import { CustomParametersListShape } from '../../Parameters/types';
+import {
+  CustomParametersListShape,
+  EnvironmentParameter,
+} from '../../Parameters/types';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 
 export type JobStepsShape = {
   steps: unknown[]; // CommandSchemas for any command.
 };
 
-export type JobContentsShape = JobStepsShape & AnyExecutorShape;
+export type JobContentsShape = JobStepsShape &
+  AnyExecutorShape &
+  JobEnvironmentShape;
 
 export type JobsShape = {
   [key: string]: JobContentsShape;
+};
+
+export type JobEnvironmentShape = {
+  environment?: EnvironmentParameter;
 };
 
 export type AnyExecutor = ReusedExecutor | Executor;
@@ -33,4 +42,5 @@ export type UnknownJobShape = {
   steps: { [key: string]: unknown }[];
   resource_class: string;
   parameters?: { [key: string]: unknown };
+  environment?: { [key: string]: string };
 };

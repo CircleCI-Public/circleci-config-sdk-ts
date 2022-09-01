@@ -1,5 +1,5 @@
 import * as YAML from 'yaml';
-import * as CircleCI from '../src//index';
+import * as CircleCI from '../src/index';
 import { GenerableType } from '../src/lib/Config/exports/Mapping';
 
 describe('Instantiate Docker Job', () => {
@@ -171,4 +171,31 @@ describe('Parse Docker Job With A Parameterized Custom Command', () => {
 
   //   expect(resultCommand).not.toEqual(true);
   // });
+});
+
+describe('Instantiate a Job with two environment variables', () => {
+  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.commands.Run({
+    command: 'echo hello',
+  });
+
+  const job = new CircleCI.Job('my-job', docker);
+  job.addStep(helloWorld);
+  job.addEnvVar('MY_VAR_1', 'value1');
+  job.addEnvVar('MY_VAR_2', 'value2');
+
+  const expectedOutput = `my-job:
+  docker:
+    - image: cimg/node:lts
+  environment:
+    MY_VAR_1: value1
+    MY_VAR_2: value2
+  resource_class: medium
+  steps:
+    - run: echo hello
+`;
+
+  it('Should match the expected output', () => {
+    expect(job.generate(true)).toEqual(YAML.parse(expectedOutput));
+  });
 });
