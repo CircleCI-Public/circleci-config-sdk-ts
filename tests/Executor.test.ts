@@ -8,8 +8,22 @@ describe('Instantiate Docker Executor', () => {
     resource_class: 'medium',
   };
 
+  const dockerWithEnv = new CircleCI.executors.DockerExecutor('cimg/node:lts');
+  dockerWithEnv.addEnvVar('MY_VAR', 'my value');
+  const expectedShapeWithEnv = {
+    docker: [{ image: 'cimg/node:lts' }],
+    resource_class: 'medium',
+    environment: {
+      MY_VAR: 'my value',
+    },
+  };
+
   it('Should match the expected output', () => {
     expect(docker.generate()).toEqual(expectedShape);
+  });
+
+  it('Should match the expected output with env var', () => {
+    expect(dockerWithEnv.generate()).toEqual(expectedShapeWithEnv);
   });
 
   it('Docker executor should be instance of an Executor', () => {
