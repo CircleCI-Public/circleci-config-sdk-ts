@@ -38,7 +38,7 @@ a ticket, why ask that you take these steps:
 Find an issue or bug?
 
 You can help us resolve the issue by
-[submitting an issue](https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues)
+[submitting an issue](https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues/new/choose)
 on our GitHub repository.
 
 Up for a challenge? If you think you can fix the issue, consider sending in a
@@ -49,7 +49,7 @@ Up for a challenge? If you think you can fix the issue, consider sending in a
 Is anything missing?
 
 You can request a new feature by
-[submitting an issue](https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues)
+[submitting an issue](https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues/new/choose)
 to our GitHub repository, utilizing the `Feature Request` template.
 
 If you would like to instead contribute a pull request, please follow the
@@ -116,13 +116,6 @@ Must be one of the following:
   formatting, missing semi-colons, etc)
 - **test**: Adding missing tests or correcting existing tests
 - **sample**: A change to the samples
-
-##### Scope
-
-Scopes can be used to denote which package this change is affecting
-
-- _**sdk**_: The CircleCI Configuration SDK
-- **parser**: The CircleCI Configuration Parser
 
 #### <a name="pull"></a>Submitting a Pull Request
 
