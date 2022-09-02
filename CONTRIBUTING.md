@@ -26,7 +26,7 @@ Share your question with
 
 ### I have a question about the CircleCI Config SDK
 
-You can always open a new [issue]() on the repository on GitHub. Before opening
+You can always open a new [issue](https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues/new/choose) on the repository on GitHub. Before opening
 a ticket, why ask that you take these steps:
 
 - [Review the Wiki](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki)
