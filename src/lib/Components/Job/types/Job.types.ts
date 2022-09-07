@@ -1,7 +1,10 @@
 import { Command } from '../../Commands/exports/Command';
 import { Executor } from '../../Executors';
 import { ReusedExecutor } from '../../Executors/exports/ReusedExecutor';
-import { AnyExecutorShape } from '../../Executors/types/Executor.types';
+import {
+  AnyExecutorShape,
+  ExecutableProperties,
+} from '../../Executors/types/Executor.types';
 import { CustomParametersList } from '../../Parameters';
 import {
   CustomParametersListShape,
@@ -36,6 +39,8 @@ export type JobDependencies = {
   steps: Command[];
   parametersList?: CustomParametersList<JobParameterLiteral>;
 };
+
+export type JobExtraProperties = { parallelism: number } & ExecutableProperties;
 
 export type UnknownJobShape = {
   [key: string]: unknown;

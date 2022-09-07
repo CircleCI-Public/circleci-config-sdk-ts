@@ -1,19 +1,23 @@
-export class DockerImage implements DockerImageShape {
+import { EnvironmentParameter } from '../../Parameters/types';
+import { Executable } from '../types/ExecutorParameters.types';
+
+export class DockerImage implements DockerImageShape, Executable {
   image: string;
   name?: string;
   entrypoint?: string[];
   command?: string[];
   user?: string;
-  environment?: Map<string, string>;
   auth?: DockerAuth;
+  environment?: EnvironmentParameter;
   aws_auth?: DockerAuthAWS;
+
   constructor(
     image: string,
     name?: string,
     entrypoint?: string[],
     command?: string[],
     user?: string,
-    environment?: Map<string, string>,
+    environment?: EnvironmentParameter,
     auth?: DockerAuth,
     aws_auth?: DockerAuthAWS,
   ) {
@@ -31,34 +35,34 @@ export class DockerImage implements DockerImageShape {
 /**
  * Type interface for a single Docker image.
  */
-export interface DockerImageShape {
+export type DockerImageShape = {
   name?: string;
   image: string;
   entrypoint?: string[];
   command?: string[];
   user?: string;
-  environment?: Map<string, string>;
   auth?: DockerAuth;
   aws_auth?: DockerAuthAWS;
-}
+};
+
 /**
  * Authentication for registries using standard `docker login` credentials
  */
-export interface DockerAuth {
+export type DockerAuth = {
   username: string;
   /**
    * Specify an environment variable (e.g. $DOCKER_PASSWORD)
    */
   password: string;
-}
+};
 
 /**
  * Authentication for AWS Elastic Container Registry (ECR)
  */
-export interface DockerAuthAWS {
+export type DockerAuthAWS = {
   aws_access_key_id: string;
   /**
    * Specify an environment variable (e.g. $ECR_AWS_SECRET_ACCESS_KEY)
    */
   aws_secret_access_key: string;
-}
+};

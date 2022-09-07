@@ -1,8 +1,9 @@
-import { StringParameter } from '../../Parameters/types';
+import { BooleanParameter, StringParameter } from '../../Parameters/types';
 import { AnyResourceClass } from './Executor.types';
 
 export type MachineExecutorShape = {
   image: StringParameter;
+  docker_layer_caching?: BooleanParameter;
 };
 
 /**

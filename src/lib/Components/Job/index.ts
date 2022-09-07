@@ -1,17 +1,26 @@
 import { GenerableType } from '../../Config/exports/Mapping';
 import { Command } from '../Commands/exports/Command';
+import {
+  Executable,
+  ExecutableProperties,
+} from '../Executors/types/ExecutorParameters.types';
 import { Generable } from '../index';
-import { EnvironmentParameter } from '../Parameters/types';
-import { AnyExecutor, JobContentsShape, JobsShape } from './types/Job.types';
+import { EnvironmentParameter, StringParameter } from '../Parameters/types';
+import {
+  AnyExecutor,
+  JobContentsShape,
+  JobExtraProperties,
+  JobsShape,
+} from './types/Job.types';
 
 /**
  * Jobs define a collection of steps to be run within a given executor, and are orchestrated using Workflows.
  */
-export class Job implements Generable {
+export class Job implements Generable, Executable {
   /**
    * The name of the current Job.
    */
-  name: string;
+  name: StringParameter;
   /**
    * The reusable executor to use for this job. The Executor must have already been instantiated and added to the config.
    */
@@ -21,9 +30,16 @@ export class Job implements Generable {
    */
   steps: Command[];
   /**
-   * A map of environment variables local to the job.
+   * Number of parallel instances of this job to run (default: 1)
    */
+  parallelism = 1;
+
+  // Execution environment properties
+
   environment?: EnvironmentParameter;
+  shell?: StringParameter;
+  working_directory?: StringParameter;
+
   /**
    * Instantiate a CircleCI Job
    * @param name - Name your job with a unique identifier
@@ -35,12 +51,12 @@ export class Job implements Generable {
     name: string,
     executor: AnyExecutor,
     steps: Command[] = [],
-    environment?: EnvironmentParameter,
+    properties?: JobExtraProperties,
   ) {
     this.name = name;
     this.executor = executor;
     this.steps = steps;
-    this.environment = environment;
+    this.environment = properties?.environment;
   }
 
   /**
