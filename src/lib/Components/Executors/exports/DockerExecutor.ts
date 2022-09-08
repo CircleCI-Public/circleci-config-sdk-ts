@@ -1,14 +1,9 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
-import { EnvironmentParameter, StringParameter } from '../../Parameters/types';
 import {
   DockerExecutorContentsShape,
   DockerResourceClass,
 } from '../types/DockerExecutor.types';
 import { ExecutorLiteral } from '../types/Executor.types';
-import {
-  Executable,
-  ExecutableParameters,
-} from '../types/ExecutorParameters.types';
 import { DockerImage, DockerImageShape } from './DockerImage';
 import { Executor } from './Executor';
 

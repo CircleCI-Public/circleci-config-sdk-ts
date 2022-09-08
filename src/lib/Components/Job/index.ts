@@ -1,9 +1,6 @@
 import { GenerableType } from '../../Config/exports/Mapping';
 import { Command } from '../Commands/exports/Command';
-import {
-  Executable,
-  ExecutableProperties,
-} from '../Executors/types/ExecutorParameters.types';
+import { Executable } from '../Executors/types/ExecutorParameters.types';
 import { Generable } from '../index';
 import { EnvironmentParameter, StringParameter } from '../Parameters/types';
 import {

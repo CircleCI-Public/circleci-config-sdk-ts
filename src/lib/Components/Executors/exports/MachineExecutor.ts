@@ -1,6 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { ExecutorLiteral } from '../types/Executor.types';
-import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import {
   MachineExecutorShape,
   MachineResourceClass,

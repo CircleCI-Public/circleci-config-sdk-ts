@@ -1,6 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { ExecutorLiteral, ExecutorShape } from '../types/Executor.types';
-import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import {
   WindowsExecutorShape,
   WindowsResourceClass,

@@ -1,4 +1,3 @@
-import { Generable } from '../..';
 import { EnvironmentParameter } from '../../Parameters/types';
 
 export class DockerImage implements DockerImageShape {
