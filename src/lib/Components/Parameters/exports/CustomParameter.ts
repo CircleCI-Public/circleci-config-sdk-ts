@@ -1,7 +1,6 @@
 import { Generable } from '../..';
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { Command } from '../../Commands/types/Command.types';
-import { Executor } from '../../Executors';
 import { ReusedExecutor } from '../../Reusable';
 import { CustomParameterContentsShape, CustomParameterShape } from '../types';
 import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
