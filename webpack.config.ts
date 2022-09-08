@@ -11,7 +11,12 @@ export const config: webpack.Configuration = {
         test: (modulePath: string): boolean => {
           return modulePath.endsWith('.ts') && !modulePath.endsWith('test.ts');
         },
-        use: 'ts-loader',
+        use: [
+          {
+            loader: 'ts-loader',
+            options: { configFile: 'tsconfig.webpack.json' },
+          },
+        ],
         exclude: /node_modules/,
       },
     ],
