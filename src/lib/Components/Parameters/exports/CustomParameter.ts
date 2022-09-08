@@ -1,6 +1,9 @@
 import { Generable } from '../..';
 import { GenerableType } from '../../../Config/exports/Mapping';
-import { CustomParameterShape, CustomParameterContentsShape } from '../types';
+import { Command } from '../../Commands/types/Command.types';
+import { Executor } from '../../Executors';
+import { ReusedExecutor } from '../../Reusable';
+import { CustomParameterContentsShape, CustomParameterShape } from '../types';
 import { AnyParameterLiteral } from '../types/CustomParameterLiterals.types';
 
 /**
@@ -42,9 +45,19 @@ export class CustomParameter<ParameterTypeLiteral extends AnyParameterLiteral>
   }
 
   generateContents(): CustomParameterContentsShape<ParameterTypeLiteral> {
+    let defaultValue = this.defaultValue;
+
+    if (this.type === 'executor' && defaultValue instanceof ReusedExecutor) {
+      defaultValue = (this.defaultValue as ReusedExecutor)?.generateContents();
+    } else if (this.type === 'steps' && Array.isArray(defaultValue)) {
+      defaultValue = (this.defaultValue as Command[]).map((step) =>
+        step.generate(),
+      );
+    }
+
     return {
       type: this.type,
-      default: this.defaultValue,
+      default: defaultValue,
       description: this.description,
     };
   }

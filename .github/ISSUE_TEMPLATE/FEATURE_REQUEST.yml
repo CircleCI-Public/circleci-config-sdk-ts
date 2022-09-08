@@ -31,7 +31,7 @@ body:
       required: true
     attributes:
       label: "Teachability, documentation, adoption, migration strategy"
-      description: "If you can, explain how users will be able to use this and possibly write out a version of the docs."
+      description: "If you can, explain how users will be able to use this and possibly write out a version the docs."
   - type: textarea
     validations:
       required: true
