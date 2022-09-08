@@ -9,14 +9,14 @@ import {
   Executable,
   ExecutableParameters,
 } from '../types/ExecutorParameters.types';
-import { DockerImage } from './DockerImage';
+import { DockerImage, DockerImageShape } from './DockerImage';
 import { Executor } from './Executor';
 
 /**
  * A Docker based CircleCI executor.
  * @see {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#docker}
  */
-export class DockerExecutor extends Executor implements Executable {
+export class DockerExecutor extends Executor {
   /**
    * The name of a custom Docker image to use.
    * @example "cimg/base:stable"
@@ -28,23 +28,25 @@ export class DockerExecutor extends Executor implements Executable {
    */
   serviceImages: DockerImage[] = [];
 
-  shell?: StringParameter;
-  working_directory?: StringParameter;
-  environment?: EnvironmentParameter;
-
   constructor(
     image: string,
     resource_class: DockerResourceClass = 'medium',
-    serviceImages: DockerImage[] = [],
-    properties?: ExecutableParameters,
+    properties?: Exclude<DockerImageShape, 'image'>,
+    serviceImages?: DockerImage[],
   ) {
     super(resource_class);
-    const newImage = new DockerImage(image);
+    const newImage = new DockerImage(
+      image,
+      properties?.name,
+      properties?.entrypoint,
+      properties?.command,
+      properties?.user,
+      properties?.environment,
+      properties?.auth,
+      properties?.aws_auth,
+    );
     this.image = newImage;
-    this.serviceImages = serviceImages;
-    this.shell = properties?.shell;
-    this.environment = properties?.environment;
-    this.working_directory = properties?.working_directory;
+    this.serviceImages = serviceImages || [];
   }
   /**
    * Generate Docker Executor schema.
@@ -76,13 +78,21 @@ export class DockerExecutor extends Executor implements Executable {
    * ```
    */
   addEnvVar(name: string, value: string): this {
-    if (!this.environment) {
-      this.environment = {
+    if (!this.image.environment) {
+      this.image.environment = {
         [name]: value,
       };
     } else {
-      this.environment[name] = value;
+      this.image.environment[name] = value;
     }
+    return this;
+  }
+
+  /**
+   * Add additional images to run along side the primary docker image.
+   */
+  addServiceImage(image: DockerImage): this {
+    this.serviceImages.push(image);
     return this;
   }
 }

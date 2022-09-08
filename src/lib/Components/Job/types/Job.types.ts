@@ -40,7 +40,9 @@ export type JobDependencies = {
   parametersList?: CustomParametersList<JobParameterLiteral>;
 };
 
-export type JobExtraProperties = { parallelism: number } & ExecutableProperties;
+export type JobExtraProperties = {
+  parallelism?: number;
+} & ExecutableProperties;
 
 export type UnknownJobShape = {
   [key: string]: unknown;

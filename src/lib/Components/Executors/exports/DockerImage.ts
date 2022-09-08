@@ -1,7 +1,7 @@
+import { Generable } from '../..';
 import { EnvironmentParameter } from '../../Parameters/types';
-import { Executable } from '../types/ExecutorParameters.types';
 
-export class DockerImage implements DockerImageShape, Executable {
+export class DockerImage implements DockerImageShape {
   image: string;
   name?: string;
   entrypoint?: string[];
@@ -42,6 +42,7 @@ export type DockerImageShape = {
   command?: string[];
   user?: string;
   auth?: DockerAuth;
+  environment?: EnvironmentParameter;
   aws_auth?: DockerAuthAWS;
 };
 

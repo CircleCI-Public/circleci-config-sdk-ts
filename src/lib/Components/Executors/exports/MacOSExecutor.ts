@@ -17,12 +17,8 @@ export class MacOSExecutor extends Executor<MacOSResourceClass> {
    * @see {@link https://circleci.com/developer/machine/image/macos}
    */
   xcode: string;
-  constructor(
-    xcode: string,
-    resource_class: MacOSResourceClass = 'medium',
-    parameters?: ExecutableParameters,
-  ) {
-    super(resource_class, parameters);
+  constructor(xcode: string, resource_class: MacOSResourceClass = 'medium') {
+    super(resource_class);
     this.xcode = xcode;
   }
   generateContents(): MacOSExecutorShape {

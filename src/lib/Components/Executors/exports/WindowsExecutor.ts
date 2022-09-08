@@ -1,5 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
-import { ExecutorLiteral } from '../types/Executor.types';
+import { ExecutorLiteral, ExecutorShape } from '../types/Executor.types';
 import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import {
   WindowsExecutorShape,
@@ -21,18 +21,18 @@ export class WindowsExecutor extends Executor<WindowsResourceClass> {
 
   static defaultShell = 'powershell.exe -ExecutionPolicy Bypass';
 
-  constructor(
-    resource_class: WindowsResourceClass = 'medium',
-    image?: string,
-    parameters?: ExecutableParameters,
-  ) {
-    super(resource_class, {
-      shell: WindowsExecutor.defaultShell,
-      ...parameters,
-    });
+  constructor(resource_class: WindowsResourceClass = 'medium', image?: string) {
+    super(resource_class);
 
     this.image = image || this.image;
     this.resource_class = resource_class;
+  }
+
+  generate(): ExecutorShape {
+    return {
+      ...super.generate(),
+      shell: WindowsExecutor.defaultShell,
+    };
   }
 
   generateContents(): WindowsExecutorShape {

@@ -32,7 +32,7 @@ export class Job implements Generable, Executable {
   /**
    * Number of parallel instances of this job to run (default: 1)
    */
-  parallelism = 1;
+  parallelism;
 
   // Execution environment properties
 
@@ -57,6 +57,9 @@ export class Job implements Generable, Executable {
     this.executor = executor;
     this.steps = steps;
     this.environment = properties?.environment;
+    this.shell = properties?.shell;
+    this.working_directory = properties?.working_directory;
+    this.parallelism = properties?.parallelism || 1;
   }
 
   /**
@@ -70,9 +73,11 @@ export class Job implements Generable, Executable {
     const generatedExecutor = this.executor.generate(flatten);
 
     return {
+      ...generatedExecutor,
       steps: generatedSteps,
       environment: this.environment,
-      ...generatedExecutor,
+      shell: this.shell,
+      working_directory: this.working_directory,
     };
   }
   /**
