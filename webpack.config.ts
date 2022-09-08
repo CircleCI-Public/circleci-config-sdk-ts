@@ -27,7 +27,7 @@ export const config: webpack.Configuration = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'INDEX.js',
+    filename: 'index.js',
     library: {
       name: 'CircleCI',
       type: 'umd',
