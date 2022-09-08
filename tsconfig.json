@@ -19,9 +19,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "lib": [
-      "es2017"
-    ]
+    "lib": ["es2017"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/*.d.ts", "**/*.test.ts"],

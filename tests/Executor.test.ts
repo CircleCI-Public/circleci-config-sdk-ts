@@ -8,19 +8,23 @@ describe('Instantiate Docker Executor', () => {
     resource_class: 'medium',
   };
 
-  const dockerWithEnv = new CircleCI.executors.DockerExecutor('cimg/node:lts');
-  dockerWithEnv.addEnvVar('MY_VAR', 'my value');
-  const expectedShapeWithEnv = {
-    docker: [{ image: 'cimg/node:lts' }],
-    resource_class: 'medium',
-    environment: {
-      MY_VAR: 'my value',
-    },
-  };
-
   it('Should match the expected output', () => {
     expect(docker.generate()).toEqual(expectedShape);
   });
+
+  const dockerWithEnv = new CircleCI.executors.DockerExecutor('cimg/node:lts');
+  dockerWithEnv.addEnvVar('MY_VAR', 'my value');
+  const expectedShapeWithEnv = {
+    docker: [
+      {
+        image: 'cimg/node:lts',
+        environment: {
+          MY_VAR: 'my value',
+        },
+      },
+    ],
+    resource_class: 'medium',
+  };
 
   it('Should match the expected output with env var', () => {
     expect(dockerWithEnv.generate()).toEqual(expectedShapeWithEnv);
@@ -137,20 +141,24 @@ describe('Instantiate Large MacOS Executor', () => {
   This test is an edge case where the shell parameter is manually removed from the executor
   Parsing is not applicable to this test
 */
-describe('Instantiate Windows Executor and remove shell', () => {
+describe('Instantiate Windows Executor and override shell', () => {
   const windows = new CircleCI.executors.WindowsExecutor();
-
-  delete windows.parameters?.shell;
 
   const expectedShape = {
     machine: {
       image: 'windows-server-2019-vs2019:stable',
     },
     resource_class: 'windows.medium',
+    shell: 'powershell.exe',
+    steps: [],
   };
 
+  const job = new CircleCI.Job('test', windows, [], {
+    shell: 'powershell.exe',
+  });
+
   it('Should match the expected output', () => {
-    expect(windows.generate()).toEqual(expectedShape);
+    expect(job.generateContents()).toEqual(expectedShape);
   });
 
   it('Should have the correct static properties for persist', () => {

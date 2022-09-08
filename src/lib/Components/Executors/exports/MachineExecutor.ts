@@ -1,6 +1,5 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
 import { ExecutorLiteral } from '../types/Executor.types';
-import { ExecutableParameters } from '../types/ExecutorParameters.types';
 import {
   MachineExecutorShape,
   MachineResourceClass,
@@ -17,12 +16,8 @@ export class MachineExecutor extends Executor<MachineResourceClass> {
    * @see - https://circleci.com/developer/machine
    */
   image = 'ubuntu-2004:202010-01';
-  constructor(
-    resource_class: MachineResourceClass = 'medium',
-    image?: string,
-    parameters?: ExecutableParameters,
-  ) {
-    super(resource_class, parameters);
+  constructor(resource_class: MachineResourceClass = 'medium', image?: string) {
+    super(resource_class);
     this.image = image || this.image;
   }
   generateContents(): MachineExecutorShape {
