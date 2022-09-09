@@ -6,7 +6,7 @@ import { EnvironmentParameter, StringParameter } from '../Parameters/types';
 import {
   AnyExecutor,
   JobContentsShape,
-  JobExtraProperties,
+  JobOptionalProperties,
   JobsShape,
 } from './types/Job.types';
 
@@ -48,7 +48,7 @@ export class Job implements Generable, Executable {
     name: string,
     executor: AnyExecutor,
     steps: Command[] = [],
-    properties?: JobExtraProperties,
+    properties?: JobOptionalProperties,
   ) {
     this.name = name;
     this.executor = executor;

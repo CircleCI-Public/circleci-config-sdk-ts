@@ -40,7 +40,7 @@ export type JobDependencies = {
   parametersList?: CustomParametersList<JobParameterLiteral>;
 };
 
-export type JobExtraProperties = {
+export type JobOptionalProperties = {
   parallelism?: number;
 } & ExecutableProperties;
 

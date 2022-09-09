@@ -3,7 +3,11 @@ import { Command } from '../../Commands/exports/Command';
 import { CustomParametersList } from '../../Parameters';
 import { Parameterized } from '../../Parameters/exports/Parameterized';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
-import { AnyExecutor, ParameterizedJobContents } from '../types/Job.types';
+import {
+  AnyExecutor,
+  JobOptionalProperties,
+  ParameterizedJobContents,
+} from '../types/Job.types';
 
 /**
  * Parameterized jobs are a type of Job which defines the parameters it can accept.
@@ -24,8 +28,9 @@ class ParameterizedJob
     executor: AnyExecutor,
     parameters?: CustomParametersList<JobParameterLiteral>,
     steps?: Command[],
+    properties?: JobOptionalProperties,
   ) {
-    super(name, executor, steps);
+    super(name, executor, steps, properties);
     this.parameters = parameters || new CustomParametersList();
   }
 
