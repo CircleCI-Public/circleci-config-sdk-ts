@@ -49,13 +49,13 @@ $ yarn add @circleci/circleci-config-sdk
 
 #### Usage
 
-In Node.js:
+In Browser:
 
 ```typescript
 import CircleCI from '@circleci/circleci-config-sdk';
 ```
 
-In Browser:
+In Node.js:
 
 ```javascript
 const CircleCI = require('@circleci/circleci-config-sdk');
