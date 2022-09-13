@@ -12,12 +12,10 @@ import {
 } from '../../Parameters/types';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 
-export type JobStepsShape = {
-  steps: unknown[]; // CommandSchemas for any command.
-};
-
-export type JobContentsShape = JobStepsShape &
-  AnyExecutorShape &
+export type JobContentsShape = {
+  steps: unknown[];
+  parallelism?: number;
+} & AnyExecutorShape &
   JobEnvironmentShape;
 
 export type JobsShape = {
@@ -40,7 +38,7 @@ export type JobDependencies = {
   parametersList?: CustomParametersList<JobParameterLiteral>;
 };
 
-export type JobExtraProperties = {
+export type JobOptionalProperties = {
   parallelism?: number;
 } & ExecutableProperties;
 
