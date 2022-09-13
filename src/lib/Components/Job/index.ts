@@ -2,11 +2,15 @@ import { GenerableType } from '../../Config/exports/Mapping';
 import { Command } from '../Commands/exports/Command';
 import { Executable } from '../Executors/types/ExecutorParameters.types';
 import { Generable } from '../index';
-import { EnvironmentParameter, StringParameter } from '../Parameters/types';
+import {
+  EnvironmentParameter,
+  IntegerParameter,
+  StringParameter,
+} from '../Parameters/types';
 import {
   AnyExecutor,
   JobContentsShape,
-  JobExtraProperties,
+  JobOptionalProperties,
   JobsShape,
 } from './types/Job.types';
 
@@ -27,9 +31,9 @@ export class Job implements Generable, Executable {
    */
   steps: Command[];
   /**
-   * Number of parallel instances of this job to run (default: 1)
+   * Number of parallel instances of this job to run (defaults to 1 if undefined)
    */
-  parallelism;
+  parallelism: IntegerParameter | undefined;
 
   // Execution environment properties
 
@@ -42,13 +46,14 @@ export class Job implements Generable, Executable {
    * @param name - Name your job with a unique identifier
    * @param executor - The reusable executor to use for this job. The Executor must have already been instantiated and added to the config.
    * @param steps - A list of Commands to execute within the job in the order which they were added.
+   * @param properties - Additional optional properties to further configure the job.
    * @see {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#jobs}
    */
   constructor(
     name: string,
     executor: AnyExecutor,
     steps: Command[] = [],
-    properties?: JobExtraProperties,
+    properties?: JobOptionalProperties,
   ) {
     this.name = name;
     this.executor = executor;
@@ -56,7 +61,7 @@ export class Job implements Generable, Executable {
     this.environment = properties?.environment;
     this.shell = properties?.shell;
     this.working_directory = properties?.working_directory;
-    this.parallelism = properties?.parallelism || 1;
+    this.parallelism = properties?.parallelism;
   }
 
   /**
@@ -75,6 +80,7 @@ export class Job implements Generable, Executable {
       environment: this.environment,
       shell: this.shell,
       working_directory: this.working_directory,
+      parallelism: this.parallelism,
     };
   }
   /**
