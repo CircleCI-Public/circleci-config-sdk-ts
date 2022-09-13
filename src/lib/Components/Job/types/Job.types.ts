@@ -18,7 +18,8 @@ export type JobStepsShape = {
 
 export type JobContentsShape = JobStepsShape &
   AnyExecutorShape &
-  JobEnvironmentShape;
+  JobEnvironmentShape &
+  ParallelismParameter;
 
 export type JobsShape = {
   [key: string]: JobContentsShape;
@@ -40,9 +41,11 @@ export type JobDependencies = {
   parametersList?: CustomParametersList<JobParameterLiteral>;
 };
 
-export type JobExtraProperties = {
+export type ParallelismParameter = {
   parallelism?: number;
-} & ExecutableProperties;
+};
+
+export type JobExtraProperties = ParallelismParameter & ExecutableProperties;
 
 export type UnknownJobShape = {
   [key: string]: unknown;

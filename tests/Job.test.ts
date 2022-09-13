@@ -199,3 +199,29 @@ describe('Instantiate a Job with two environment variables', () => {
     expect(job.generate(true)).toEqual(YAML.parse(expectedOutput));
   });
 });
+
+describe('Instantiate a Job with parallelism option', () => {
+  it('parallelism option must be added', () => {
+    const expectedOutput = {
+      version: 2.1,
+      setup: false,
+      workflows: {},
+      jobs: {
+        my_job: {
+          parallelism: 3,
+          docker: [{ image: 'cimg/node:lts' }],
+          resource_class: 'medium',
+          steps: [],
+        },
+      },
+    };
+    const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
+    const jobName = 'my_job';
+    const job = new CircleCI.Job(jobName, docker, undefined, {
+      parallelism: 3,
+    });
+    const myConfig = new CircleCI.Config();
+    myConfig.addJob(job);
+    expect(YAML.parse(myConfig.stringify(true))).toEqual(expectedOutput);
+  });
+});

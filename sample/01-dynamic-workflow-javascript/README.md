@@ -2,8 +2,9 @@
 
 This example uses CircleCI's
 [Dynamic Configuration](https://circleci.com/docs/2.0/dynamic-config/) feature,
-which allows us to run any arbitrary config file at runtime. Our `config.yml` file will be used to execute our Javascript config application, which will generate a new `dynamicConfig.yml` file that will be executed.
-
+which allows us to run any arbitrary config file at runtime. Our `config.yml`
+file will be used to execute our Javascript config application, which will
+generate a new `dynamicConfig.yml` file that will be executed.
 
 ```mermaid
 graph TD

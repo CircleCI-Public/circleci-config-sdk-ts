@@ -26,8 +26,10 @@ Share your question with
 
 ### I have a question about the CircleCI Config SDK
 
-You can always open a new [issue](https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues/new/choose) on the repository on GitHub. Before opening
-a ticket, why ask that you take these steps:
+You can always open a new
+[issue](https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues/new/choose)
+on the repository on GitHub. Before opening a ticket, why ask that you take
+these steps:
 
 - [Review the Wiki](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki)
   - Try the
@@ -133,10 +135,11 @@ After the issue has been created, follow these steps to create a Pull Request.
    repo.
 1. Clone your newly forked repository to your local machine.
 1. Create a new branch for your changes: `git checkout -b fix_my_issue main`
-1. Run `npm run setup`
+1. Install dependencies: `npm install`
 1. Implement your change with appropriate test coverage.
 1. Utilize our [commit message conventions](commit).
-1. Run tests, linters, and formatters locally, with: `npm run prep`
+1. Run tests, linters, and formatters locally, with:
+   `npm run test, lint, prettier`
 1. Push all changes back to GitHub `git push origin fix_my_issue`
 1. In GitHub, send a Pull Request to `circleci-config-sdk-ts:main`
 

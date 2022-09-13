@@ -7,8 +7,8 @@
 [![npm](https://img.shields.io/npm/dm/@circleci/circleci-config-sdk?logo=npm)](https://www.npmjs.com/package/@circleci/circleci-config-sdk)
 ![GitHub Repo stars](https://img.shields.io/github/stars/CircleCI-Public/circleci-config-sdk-ts?style=social)
 
-Create and manage your [CircleCI](https://circleci.com/) configuration files with JavaScript and
-TypeScript.
+Create and manage your [CircleCI](https://circleci.com/) configuration files
+with JavaScript and TypeScript.
 
 ## Table of Contents
 
@@ -25,11 +25,13 @@ TypeScript.
 
 ## Getting Started
 
-📖 [Getting Started Wiki](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki)
+📖
+[Getting Started Wiki](https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki)
 
 📖 [SDK API Docs](https://circleci-public.github.io/circleci-config-sdk-ts/)
 
-💻 [Examples](https://github.com/CircleCI-Public/circleci-config-sdk-ts/tree/main/sample)
+💻
+[Examples](https://github.com/CircleCI-Public/circleci-config-sdk-ts/tree/main/sample)
 
 ---
 
@@ -151,7 +153,8 @@ Consider checking the following common resources before opening a new issue.
 
 # Contributing
 
-This [repository](https://github.com/CircleCI-Public/circleci-config-sdk-ts) welcomes community contributions! See our
+This [repository](https://github.com/CircleCI-Public/circleci-config-sdk-ts)
+welcomes community contributions! See our
 [CONTRIBUTING.md](https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/main/CONTRIBUTING.md)
 for guidance on configuring your development environment and how to submit
 quality pull requests.

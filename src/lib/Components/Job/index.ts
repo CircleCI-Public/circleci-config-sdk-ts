@@ -42,6 +42,7 @@ export class Job implements Generable, Executable {
    * @param name - Name your job with a unique identifier
    * @param executor - The reusable executor to use for this job. The Executor must have already been instantiated and added to the config.
    * @param steps - A list of Commands to execute within the job in the order which they were added.
+   * @param properties - Optional extra properties like Parallelism, shell, working_directory or env
    * @see {@link https://circleci.com/docs/2.0/configuration-reference/?section=configuration#jobs}
    */
   constructor(
@@ -56,7 +57,7 @@ export class Job implements Generable, Executable {
     this.environment = properties?.environment;
     this.shell = properties?.shell;
     this.working_directory = properties?.working_directory;
-    this.parallelism = properties?.parallelism || 1;
+    this.parallelism = properties?.parallelism;
   }
 
   /**
@@ -75,6 +76,7 @@ export class Job implements Generable, Executable {
       environment: this.environment,
       shell: this.shell,
       working_directory: this.working_directory,
+      parallelism: this.parallelism,
     };
   }
   /**
