@@ -1,6 +1,6 @@
 import { StringParameter } from '../../Parameters/types';
 import { DockerImageShape } from '../exports/DockerImage';
-import { AnyResourceClass, AnyResourceClassBase } from './Executor.types';
+import { AnyResourceClassBase } from './Executor.types';
 /**
  * A JSON representation of the Docker Executor Schema
  * To be converted to YAML
