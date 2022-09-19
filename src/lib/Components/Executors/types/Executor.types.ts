@@ -5,6 +5,11 @@ import { CustomParametersList } from '../../Parameters';
 import { ExecutorParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import { ReusableExecutor } from '../exports/ReusableExecutor';
 import { ExecutableProperties } from './ExecutorParameters.types';
+import {
+  MachineResourceClassArm,
+  MachineResourceClassGPU,
+} from './MachineExecutor.types';
+import { MacOSResourceClassAdvanced } from './MacOSExecutor.types';
 import { ReusedExecutorShape } from './ReusableExecutor.types';
 
 export type UnknownExecutableShape = {
@@ -23,9 +28,9 @@ export type ExecutorShape = {
 export type AnyExecutorShape = ExecutorShape | ReusedExecutorShape;
 
 /**
- * The valid resource classes found for an executor object
+ * All valid resource classes found for an executor object for standard use cases
  */
-export type AnyResourceClass =
+export type AnyResourceClassBase =
   | 'small'
   | 'medium'
   | 'medium+'
@@ -33,6 +38,19 @@ export type AnyResourceClass =
   | 'xlarge'
   | '2xlarge'
   | '2xlarge+';
+
+/**
+ * The valid resource classes for advanced use cases
+ */
+export type AnyResourceClassExtended =
+  | MachineResourceClassArm
+  | MachineResourceClassGPU
+  | MacOSResourceClassAdvanced;
+
+/**
+ * All valid resource classes found for an executor object
+ */
+export type AnyResourceClass = AnyResourceClassBase | AnyResourceClassExtended;
 
 /**
  * The valid executors found on an executor object
