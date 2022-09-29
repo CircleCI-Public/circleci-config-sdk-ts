@@ -34,7 +34,7 @@ export class SetupRemoteDocker implements Command {
 
   /**
    * Enable docker image layer caching
-   * @param {boolean} enabled - If true, docker layer caching is enabled for the job.
+   * @param enabled - If true, docker layer caching is enabled for the job.
    * @returns SetupRemoteDocker - The current instance of the SetupRemoteDocker Command.
    * @see {@link https://circleci.com/docs/2.0/docker-layer-caching/}
    */
