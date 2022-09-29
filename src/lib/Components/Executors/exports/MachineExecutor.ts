@@ -46,7 +46,7 @@ export class MachineExecutor extends Executor<MachineResourceClass> {
   /**
    * Enable docker image layer caching
    * @param enabled - If true, docker layer caching is enabled for the machine executor.
-   * @returns {MachineExecutor} - The current instance of the MachineExecutor Command.
+   * @returns MachineExecutor - The current instance of the MachineExecutor Command.
    * @see {@link https://circleci.com/docs/2.0/docker-layer-caching/}
    */
   setDockerLayerCaching(enabled: boolean): MachineExecutor {
