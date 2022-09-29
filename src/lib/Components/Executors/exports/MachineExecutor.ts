@@ -16,13 +16,22 @@ export class MachineExecutor extends Executor<MachineResourceClass> {
    * @see - https://circleci.com/developer/machine
    */
   image = 'ubuntu-2004:202010-01';
-  constructor(resource_class: MachineResourceClass = 'medium', image?: string) {
+  docker_layer_caching?: boolean;
+
+  constructor(
+    resource_class: MachineResourceClass = 'medium',
+    image?: string,
+    docker_layer_caching?: boolean,
+  ) {
     super(resource_class);
     this.image = image || this.image;
+    this.docker_layer_caching = docker_layer_caching;
   }
+
   generateContents(): MachineExecutorShape {
     return {
       image: this.image,
+      docker_layer_caching: this.docker_layer_caching,
     };
   }
 
@@ -32,5 +41,16 @@ export class MachineExecutor extends Executor<MachineResourceClass> {
 
   get executorLiteral(): ExecutorLiteral {
     return 'machine';
+  }
+
+  /**
+   * Enable docker image layer caching
+   * @param enabled - If true, docker layer caching is enabled for the machine executor.
+   * @returns MachineExecutor - The current instance of the MachineExecutor Command.
+   * @see {@link https://circleci.com/docs/2.0/docker-layer-caching/}
+   */
+  setDockerLayerCaching(enabled: boolean): MachineExecutor {
+    this.docker_layer_caching = enabled;
+    return this;
   }
 }
