@@ -315,7 +315,10 @@ describe('Generate a config with a Reusable Executor with parameters', () => {
 describe('Generate a config with a Reusable Executor', () => {
   const myConfig = new CircleCI.Config();
 
-  const machine = new CircleCI.executors.MachineExecutor('large');
+  const machine = new CircleCI.executors.MachineExecutor(
+    'large',
+  ).setDockerLayerCaching(true);
+
   const dockerBase = new CircleCI.executors.DockerExecutor(
     'cimg/base:<< parameters.tag >>',
   );
@@ -370,6 +373,7 @@ describe('Generate a config with a Reusable Executor', () => {
         default: {
           machine: {
             image: 'ubuntu-2004:202010-01',
+            docker_layer_caching: true,
           },
           parameters: {
             version: {

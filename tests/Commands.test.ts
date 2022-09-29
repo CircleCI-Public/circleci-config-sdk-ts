@@ -83,6 +83,20 @@ describe('Instantiate a Setup_Remote_Docker step', () => {
     );
     expect(srdExample.name).toBe('setup_remote_docker');
   });
+
+  const srdWithDlcExample =
+    new CircleCI.commands.SetupRemoteDocker().setDockerLayerCaching(true);
+
+  const srdWithDlcResult = {
+    setup_remote_docker: {
+      version: '20.10.6',
+      docker_layer_caching: true,
+    },
+  };
+
+  it('Should produce setup_remote_docker step and enable docker layer caching', () => {
+    expect(srdWithDlcExample.generate()).toEqual(srdWithDlcResult);
+  });
 });
 
 describe('Save and load cache', () => {
