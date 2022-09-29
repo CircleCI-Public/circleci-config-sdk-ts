@@ -31,6 +31,17 @@ export class SetupRemoteDocker implements Command {
   get generableType(): GenerableType {
     return GenerableType.SETUP_REMOTE_DOCKER;
   }
+
+  /**
+   * Enable docker image layer caching
+   * @param {boolean} enabled - If true, docker layer caching is enabled for the job.
+   * @returns {SetupRemoteDocker} - The current instance of the SetupRemoteDocker Command.
+   * @see {@link https://circleci.com/docs/2.0/docker-layer-caching/}
+   */
+  setDockerLayerCaching(enabled: boolean): SetupRemoteDocker {
+    this.parameters.docker_layer_caching = enabled;
+    return this;
+  }
 }
 
 /**
@@ -42,6 +53,7 @@ export interface SetupRemoteDockerParameters extends CommandParameters {
    * Will be interpreted relative to the working_directory of the job.
    */
   version: StringParameter;
+  docker_layer_caching?: boolean;
 }
 
 /**
