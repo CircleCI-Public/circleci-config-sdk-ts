@@ -34,6 +34,30 @@ describe('Instantiate Docker Executor', () => {
     expect(docker instanceof CircleCI.executors.Executor).toBeTruthy();
   });
 
+  const dockerWithMultipleImage = new CircleCI.executors.DockerExecutor(
+    'cimg/node:lts',
+  );
+  dockerWithMultipleImage.addServiceImage({
+    image: 'cimg/mysql:5.7',
+  });
+  const expectedShapeWithMultipleImage = {
+    docker: [
+      {
+        image: 'cimg/node:lts',
+      },
+      {
+        image: 'cimg/mysql:5.7',
+      },
+    ],
+    resource_class: 'medium',
+  };
+
+  it('Should match the expected outputh with two images', () => {
+    expect(dockerWithMultipleImage.generate()).toEqual(
+      expectedShapeWithMultipleImage,
+    );
+  });
+
   const reusableExecutor = new CircleCI.reusable.ReusableExecutor(
     'default',
     docker,

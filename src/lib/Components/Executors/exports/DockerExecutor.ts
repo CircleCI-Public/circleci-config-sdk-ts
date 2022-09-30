@@ -49,9 +49,7 @@ export class DockerExecutor extends Executor {
    */
   generateContents(): DockerExecutorContentsShape {
     const imagesArray: DockerImage[] = [this.image];
-    imagesArray.concat(this.serviceImages);
-
-    return imagesArray;
+    return imagesArray.concat(this.serviceImages);
   }
 
   get generableType(): GenerableType {
