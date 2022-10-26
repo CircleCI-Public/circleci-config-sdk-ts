@@ -224,7 +224,7 @@ export class Config
    */
   stringify(flatten?: boolean, options?: YAML.ToStringOptions): string {
     const generatedConfig = this.generate(flatten);
-    const defaultOptions: YAML.ToStringOptions = {
+    const defaultOptions: YAML.ToStringOptions & YAML.CreateNodeOptions = {
       aliasDuplicateObjects: false,
       defaultStringType: YAML.Scalar.PLAIN,
       doubleQuotedMinMultiLineLength: 999,
