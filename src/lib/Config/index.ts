@@ -224,11 +224,12 @@ export class Config
    */
   stringify(flatten?: boolean, options?: YAML.ToStringOptions): string {
     const generatedConfig = this.generate(flatten);
-    const defaultOptions: YAML.ToStringOptions = {
+    const defaultOptions: YAML.ToStringOptions & YAML.CreateNodeOptions = {
+      aliasDuplicateObjects: false,
       defaultStringType: YAML.Scalar.PLAIN,
+      doubleQuotedMinMultiLineLength: 999,
       lineWidth: 0,
       minContentWidth: 0,
-      doubleQuotedMinMultiLineLength: 999,
     };
     return this._prependVersionComment(
       YAML.stringify(generatedConfig, options ?? defaultOptions),
