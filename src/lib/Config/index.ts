@@ -229,6 +229,7 @@ export class Config
       lineWidth: 0,
       minContentWidth: 0,
       doubleQuotedMinMultiLineLength: 999,
+      aliasDuplicateObjects: false,
     };
     return this._prependVersionComment(
       YAML.stringify(generatedConfig, options ?? defaultOptions),
