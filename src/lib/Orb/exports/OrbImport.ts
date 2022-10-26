@@ -20,9 +20,9 @@ export class OrbImport implements Generable {
   name: string;
   version: string;
 
-  jobs: Record<string, OrbRef<JobParameterLiteral>> = {};
-  commands: Record<string, OrbRef<CommandParameterLiteral>> = {};
-  executors: Record<string, OrbRef<ExecutorParameterLiteral>> = {};
+  jobs?: Record<string, OrbRef<JobParameterLiteral>> = {};
+  commands?: Record<string, OrbRef<CommandParameterLiteral>> = {};
+  executors?: Record<string, OrbRef<ExecutorParameterLiteral>> = {};
 
   description?: string;
   display?: OrbDisplayMeta;
