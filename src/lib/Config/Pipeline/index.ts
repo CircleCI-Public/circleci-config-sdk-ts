@@ -1,5 +1,6 @@
 import { Project } from './Project';
 import { Git } from './Git';
+import { isNode } from 'browser-or-node';
 /**
  * Not fully implemented yet. Fetch pipeline parameters from inside a CircleCI job.
  * @alpha
@@ -13,8 +14,12 @@ export class Pipeline {
    * Array of user defined parameters
    */
   constructor() {
-    if (process.env.CIRCLECI == 'true') {
-      this._isLocal = false;
+    if (isNode) {
+      if (process.env.CIRCLECI == 'true') {
+        this._isLocal = false;
+      } else {
+        this._isLocal = true;
+      }
     } else {
       this._isLocal = true;
     }

@@ -52,6 +52,7 @@
     "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
+    "browser-or-node": "^2.0.0",
     "yaml": "2.1.1"
   },
   "directories": {
