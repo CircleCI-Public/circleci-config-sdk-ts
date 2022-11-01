@@ -1,6 +1,7 @@
 import * as YAML from 'yaml';
 import * as CircleCI from '../src/index';
 import { version as SDKVersion } from '../package-version.json';
+import fs from 'fs';
 
 describe('Generate a Setup workflow config', () => {
   const myConfig = new CircleCI.Config(true).stringify();
@@ -112,4 +113,24 @@ describe('Parse a fully complete config', () => {
   it('Should have the correct static properties', () => {
     expect(myConfig.generableType).toBe(CircleCI.mapping.GenerableType.CONFIG);
   });
+});
+
+describe('Save config to file in Node environment', () => {
+  const myConfig = new CircleCI.Config();
+  const executor = new CircleCI.executors.DockerExecutor('cimg/node:16.3');
+  const job = new CircleCI.Job('my-job', executor, [
+    new CircleCI.commands.Run({ command: 'echo hello world' }),
+  ]);
+  myConfig.addJob(job);
+  const myWorkflow = new CircleCI.Workflow('my-workflow');
+  myWorkflow.addJob(job);
+  myConfig.addWorkflow(myWorkflow);
+  myConfig.writeFile('/tmp/test-config.yml');
+  it('Should write a file to the specified path', () => {
+    expect(fs.existsSync('/tmp/test-config.yml')).toBe(true);
+  });
+});
+
+afterAll(() => {
+  fs.rmSync('/tmp/test-config.yml');
 });

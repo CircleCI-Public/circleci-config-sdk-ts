@@ -19,7 +19,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "lib": ["es2017"]
+    "lib": ["es2017", "dom"],
+    "types": ["@types/wicg-file-system-access", "node", "jest"]
   },
   "include": ["src/**/*.ts", "**/*.test.ts"],
   "exclude": ["node_modules", "**/*.d.ts"],

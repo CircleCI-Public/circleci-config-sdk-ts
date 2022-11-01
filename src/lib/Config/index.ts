@@ -1,3 +1,4 @@
+import { isBrowser, isNode } from 'browser-or-node';
 import * as YAML from 'yaml';
 import { version as SDKVersion } from '../../../package-version.json';
 import { Generable } from '../Components';
@@ -238,6 +239,40 @@ export class Config
 
   get generableType(): GenerableType {
     return GenerableType.CONFIG;
+  }
+
+  /**
+   * Agnostic method to save a config file to disk via Node or the Browser.
+   * Note: If you are accessing this method from the browser, it must be triggered by a user action.
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Window/showSaveFilePicker#security}
+   * @param path - The path to write the config to. ONLY USED IN NODE.JS
+   */
+  async writeFile(path?: string) {
+    if (isBrowser) {
+      const newHandle = await window.showSaveFilePicker({
+        suggestedName: 'config.yml',
+        types: [
+          {
+            description: 'CircleCI Config YAML file',
+            accept: {
+              'text/yaml': ['.yml', '.yaml'],
+            },
+          },
+        ],
+      });
+      (await newHandle.createWritable()).write(this.stringify()).catch((e) => {
+        throw new Error(e);
+      });
+    } else if (isNode) {
+      const fsw = await import('fs/promises');
+      const filepath = path || 'config.yml';
+      // eslint-disable-next-line security/detect-non-literal-fs-filename
+      await fsw.writeFile(filepath, this.stringify()).catch((e) => {
+        throw new Error(e);
+      });
+    } else {
+      throw new Error('Unsupported environment');
+    }
   }
 }
 
