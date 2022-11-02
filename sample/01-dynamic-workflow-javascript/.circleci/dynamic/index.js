@@ -1,5 +1,4 @@
 const CircleCI = require("@circleci/circleci-config-sdk");
-const fs = require('fs');
 
 // Import Config Components
 const jobA = require("./jobs/jobA");
@@ -27,14 +26,5 @@ if (1 == 1) {
 // Add the dynamic workflow to the config
 myConfig.addWorkflow(dynamicWorkflow);
 
-// New Config file
-const MyNewConfigYAML = myConfig.stringify();
-
 // Write the config to file
-fs.writeFile('./dynamicConfig.yml', MyNewConfigYAML, (err) => {
-  if (err) {
-    console.error(err);
-    return
-  }
-})
-
+myConfig.writeFile('config.yml');
