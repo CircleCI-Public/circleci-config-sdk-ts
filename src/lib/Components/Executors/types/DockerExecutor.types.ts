@@ -1,5 +1,10 @@
 import { StringParameter } from '../../Parameters/types';
-import { DockerImageShape } from '../exports/DockerImage';
+import {
+  DockerImageShape,
+  DockerImage,
+  DockerAuth,
+  DockerAuthAWS,
+} from '../exports/DockerImage';
 import { AnyResourceClassBase } from './Executor.types';
 /**
  * A JSON representation of the Docker Executor Schema
@@ -16,3 +21,5 @@ export type DockerImageMap = {
  * @see {@link https://circleci.com/docs/2.0/configuration-reference/#docker-executor} for specifications of each class.
  */
 export type DockerResourceClass = AnyResourceClassBase;
+
+export { DockerImageShape, DockerImage, DockerAuth, DockerAuthAWS };
