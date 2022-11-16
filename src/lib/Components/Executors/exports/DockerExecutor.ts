@@ -26,7 +26,7 @@ export class DockerExecutor extends Executor {
   constructor(
     image: string,
     resource_class: DockerResourceClass = 'medium',
-    properties?: Exclude<DockerImageShape, 'image'>,
+    properties?: Omit<DockerImageShape, 'image'>,
     serviceImages?: DockerImage[],
   ) {
     super(resource_class);
