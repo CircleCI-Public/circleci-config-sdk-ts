@@ -27,4 +27,4 @@ if (1 == 1) {
 myConfig.addWorkflow(dynamicWorkflow);
 
 // Write the config to file
-myConfig.writeFile('config.yml');
+myConfig.writeFile('dynamicConfig.yml');
