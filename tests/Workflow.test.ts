@@ -296,17 +296,16 @@ describe('Add pre/post steps to workflow', () => {
     postSteps: [helloWorld],
   });
   it('Should match the expected output', () => {
-    const expectedYaml = `workflows:
-  my-workflow:
-    jobs:
-      - my-job:
-          name: custom-name
-          pre-steps:
-            - run:
-                command: echo hello world
-          post-steps:
-            - run:
-                command: echo hello world
+    const expectedYaml = `my-workflow:
+  jobs:
+    - my-job:
+        name: custom-name
+        pre-steps:
+          - run:
+              command: echo hello world
+        post-steps:
+          - run:
+              command: echo hello world
 `;
     const expected = YAML.parse(expectedYaml);
 
