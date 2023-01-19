@@ -1,5 +1,7 @@
 import { GenerableType } from '../../../Config/exports/Mapping';
+import { AnyCommandShape } from '../../Commands/types/Command.types';
 import { Generable } from '../../index';
+import { StepsParameter } from '../../Parameters/types';
 import {
   WorkflowJobContentsShape,
   WorkflowJobParameters,
@@ -35,10 +37,10 @@ export abstract class WorkflowJobAbstract implements Generable {
       }
 
       if (preSteps) {
-        parameters['pre-steps'] = preSteps.map((step) => step.generate());
+        parameters['pre-steps'] = this.generateSteps(preSteps, flatten);
       }
       if (postSteps) {
-        parameters['post-steps'] = postSteps.map((step) => step.generate());
+        parameters['post-steps'] = this.generateSteps(postSteps, flatten);
       }
     }
 
@@ -47,6 +49,13 @@ export abstract class WorkflowJobAbstract implements Generable {
 
   get generableType(): GenerableType {
     return GenerableType.WORKFLOW_JOB;
+  }
+
+  private generateSteps(
+    steps?: StepsParameter,
+    flatten?: boolean,
+  ): AnyCommandShape[] | undefined {
+    return steps?.map((step) => step.generate(flatten));
   }
 
   abstract get name(): string;

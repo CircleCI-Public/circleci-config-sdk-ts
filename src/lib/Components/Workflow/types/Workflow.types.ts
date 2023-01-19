@@ -4,13 +4,13 @@ import { WorkflowJobShape } from './WorkflowJob.types';
 
 export type WorkflowsShape = {
   [workflowName: string]: {
-    when: AnyConditionShape;
+    when?: AnyConditionShape;
     jobs: WorkflowJobShape[];
   };
 };
 
 export type WorkflowContentsShape = {
-  when: AnyConditionShape;
+  when?: AnyConditionShape;
   jobs: WorkflowJobShape[];
 };
 

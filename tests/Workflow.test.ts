@@ -301,11 +301,9 @@ describe('Add pre/post steps to workflow', () => {
     - my-job:
         name: custom-name
         pre-steps:
-          - run:
-              command: echo hello world
+          - run: echo hello world
         post-steps:
-          - run:
-              command: echo hello world
+          - run: echo hello world
 `;
     const expected = YAML.parse(expectedYaml);
 

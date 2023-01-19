@@ -1,7 +1,5 @@
 import { OrbRef } from '../../../Orb/exports/OrbRef';
-import { AnyCommandShape } from '../../Commands/types/Command.types';
 import { Job } from '../../Job';
-import { StepsParameter } from '../../Parameters/types';
 import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiterals.types';
 import {
   WorkflowJobContentsShape,
@@ -45,12 +43,5 @@ export class WorkflowJob extends WorkflowJobAbstract {
 
   get name(): string {
     return this.job.name;
-  }
-  // currently unused
-  private generateSteps(
-    steps?: StepsParameter,
-    flatten?: boolean,
-  ): AnyCommandShape[] | undefined {
-    return steps?.map((step) => step.generate(flatten));
   }
 }

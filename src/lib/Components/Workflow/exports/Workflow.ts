@@ -1,6 +1,5 @@
 import { Generable } from '../..';
 import { GenerableType } from '../../../Config/exports/Mapping';
-import { Command } from '../../Commands/types/Command.types';
 import { Job } from '../../Job';
 import { When } from '../../Logic';
 import { Conditional } from '../../Logic/exports/Conditional';
@@ -72,10 +71,13 @@ export class Workflow implements Generable, Conditional {
 
     const generatedWhen = this.when?.generate();
 
-    return {
-      when: generatedWhen,
+    const workflowContents: WorkflowContentsShape = {
       jobs: generatedWorkflowJobs,
     };
+
+    generatedWhen ? (workflowContents.when = generatedWhen) : null;
+
+    return workflowContents;
   }
 
   /**
