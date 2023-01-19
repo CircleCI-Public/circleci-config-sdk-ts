@@ -23,6 +23,8 @@ export interface WorkflowJobParameters
   requires?: ListParameter;
   name?: StringParameter;
   context?: ListParameter;
+  preSteps?: StepsParameter;
+  postSteps?: StepsParameter;
   /**
    * {@link https://circleci.com/docs/2.0/configuration-reference/#filters} Filter workflow job's execution by branch or git tag.
    */
@@ -35,9 +37,6 @@ export interface WorkflowJobParameters
    * An "approval" type job is a special job which pauses the workflow. This "job" is not defined outside of the workflow, you may enter any potential name for the job name. As long as the parameter of "type" is present and equal to "approval" this job will act as a placeholder that awaits user input to continue.
    */
   type?: approval;
-
-  pre_steps?: StepsParameter;
-  post_steps?: StepsParameter;
 }
 
 export type approval = 'approval';
@@ -62,8 +61,6 @@ export interface WorkflowJobParametersShape {
   type?: approval;
   filters?: FilterParameter;
   matrix?: WorkflowMatrixShape;
-  'pre-steps'?: AnyCommandShape[];
-  'post-steps'?: AnyCommandShape[];
   [key: string]:
     | JobParameterTypes
     | WorkflowMatrixShape

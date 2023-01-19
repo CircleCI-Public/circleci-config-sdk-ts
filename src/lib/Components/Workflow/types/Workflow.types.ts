@@ -23,8 +23,6 @@ export type UnknownWorkflowJobShape = {
   parameters?: { [key: string]: unknown };
   name?: string;
   type?: 'approval';
-  // 'pre-steps'?: { [key: string]: unknown }[];
-  // 'post-steps'?: { [key: string]: unknown }[];
 };
 
 export type WorkflowDependencies = {

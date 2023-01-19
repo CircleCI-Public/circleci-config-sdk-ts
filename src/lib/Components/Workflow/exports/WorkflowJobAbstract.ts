@@ -25,13 +25,20 @@ export abstract class WorkflowJobAbstract implements Generable {
     let parameters: WorkflowJobParametersShape | undefined;
 
     if (this.parameters) {
-      const { matrix, ...jobParameters } = this.parameters;
+      const { matrix, preSteps, postSteps, ...jobParameters } = this.parameters;
       parameters = jobParameters;
 
       if (matrix) {
         parameters.matrix = {
           parameters: matrix,
         };
+      }
+
+      if (preSteps) {
+        parameters['pre-steps'] = preSteps.map((step) => step.generate());
+      }
+      if (postSteps) {
+        parameters['post-steps'] = postSteps.map((step) => step.generate());
       }
     }
 

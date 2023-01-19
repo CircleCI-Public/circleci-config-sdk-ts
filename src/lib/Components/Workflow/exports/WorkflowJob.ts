@@ -18,26 +18,18 @@ import { WorkflowJobAbstract } from './WorkflowJobAbstract';
  */
 export class WorkflowJob extends WorkflowJobAbstract {
   job: Job | OrbRef<JobParameterLiteral>;
-  pre_steps?: StepsParameter;
-  post_steps?: StepsParameter;
 
   constructor(
     job: Job | OrbRef<JobParameterLiteral>,
     parameters?: Exclude<WorkflowJobParameters, 'type'>,
-    pre_steps?: StepsParameter,
-    post_steps?: StepsParameter,
   ) {
     super(parameters);
     this.job = job;
-    this.pre_steps = pre_steps;
-    this.post_steps = post_steps;
   }
 
   generateContents(flatten?: boolean): WorkflowJobContentsShape {
     return {
       ...super.generateContents(flatten),
-      'pre-steps': this.generateSteps(this.pre_steps, flatten),
-      'post-steps': this.generateSteps(this.post_steps, flatten),
     };
   }
 
@@ -54,7 +46,7 @@ export class WorkflowJob extends WorkflowJobAbstract {
   get name(): string {
     return this.job.name;
   }
-
+  // currently unused
   private generateSteps(
     steps?: StepsParameter,
     flatten?: boolean,
