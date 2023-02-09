@@ -18,5 +18,5 @@ export interface Generable {
   /**
    * Type of generable object
    */
-  get generableType(): GenerableType;
+  readonly generableType: GenerableType;
 }
