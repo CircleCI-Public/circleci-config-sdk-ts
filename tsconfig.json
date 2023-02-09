@@ -6,6 +6,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+    "stripInternal": true,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
