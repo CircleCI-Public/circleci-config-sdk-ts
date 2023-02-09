@@ -11,6 +11,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@circleci/circleci-config-sdk-ts": "*"
+    "@circleci/circleci-config-sdk": "file:../../../.."
   }
 }
