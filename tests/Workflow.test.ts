@@ -1,4 +1,5 @@
 import * as CircleCI from '../src/index';
+import * as YAML from 'yaml';
 
 describe('Instantiate Workflow', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
@@ -289,28 +290,23 @@ describe('Add pre/post steps to workflow', () => {
   });
   const job = new CircleCI.Job('my-job', docker, [helloWorld]);
   const myWorkflow = new CircleCI.Workflow('my-workflow');
-  myWorkflow.addJob(
-    job,
-    {
-      name: 'custom-name',
-    },
-    [helloWorld],
-    [helloWorld],
-  );
+  myWorkflow.addJob(job, {
+    name: 'custom-name',
+    preSteps: [helloWorld],
+    postSteps: [helloWorld],
+  });
   it('Should match the expected output', () => {
-    const expected = {
-      'my-workflow': {
-        jobs: [
-          {
-            'my-job': {
-              name: 'custom-name',
-              'post-steps': [{ run: 'echo hello world' }],
-              'pre-steps': [{ run: 'echo hello world' }],
-            },
-          },
-        ],
-      },
-    };
+    const expectedYaml = `my-workflow:
+  jobs:
+    - my-job:
+        name: custom-name
+        pre-steps:
+          - run: echo hello world
+        post-steps:
+          - run: echo hello world
+`;
+    const expected = YAML.parse(expectedYaml);
+
     const generatedWorkflow = myWorkflow.generate(true);
     expect(generatedWorkflow).toEqual(expected);
   });

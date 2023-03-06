@@ -4,13 +4,13 @@ import { WorkflowJobShape } from './WorkflowJob.types';
 
 export type WorkflowsShape = {
   [workflowName: string]: {
-    when: AnyConditionShape;
+    when?: AnyConditionShape;
     jobs: WorkflowJobShape[];
   };
 };
 
 export type WorkflowContentsShape = {
-  when: AnyConditionShape;
+  when?: AnyConditionShape;
   jobs: WorkflowJobShape[];
 };
 
@@ -23,8 +23,6 @@ export type UnknownWorkflowJobShape = {
   parameters?: { [key: string]: unknown };
   name?: string;
   type?: 'approval';
-  // 'pre-steps'?: { [key: string]: unknown }[];
-  // 'post-steps'?: { [key: string]: unknown }[];
 };
 
 export type WorkflowDependencies = {
