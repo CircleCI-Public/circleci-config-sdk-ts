@@ -1,0 +1,21 @@
+version: 2.1
+orbs:
+  continuation: circleci/continuation@0.3.1
+  node: circleci/node@5.0.2
+setup: true
+jobs:
+  generate-config:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: .circleci/src
+      - run:
+          name: Generate config
+          command: cd .circleci/src && npm run generate
+      - continuation/continue:
+          configuration_path: .circleci/src/dynamicConfig.yml
+workflows:
+  dynamic-workflow:
+    jobs:
+      - generate-config
