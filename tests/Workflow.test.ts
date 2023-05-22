@@ -241,6 +241,7 @@ describe('Instantiate a Workflow with sequential jobs', () => {
     expect(generatedWorkflow).toEqual(expected);
   });
 });
+
 describe('Instantiate a Workflow with 2 jobs', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({ command: 'echo hello world' });
