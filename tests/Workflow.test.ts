@@ -241,6 +241,7 @@ describe('Instantiate a Workflow with sequential jobs', () => {
     expect(generatedWorkflow).toEqual(expected);
   });
 });
+
 describe('Instantiate a Workflow with 2 jobs', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({ command: 'echo hello world' });
@@ -308,6 +309,29 @@ describe('Add pre/post steps to workflow', () => {
     const expected = YAML.parse(expectedYaml);
 
     const generatedWorkflow = myWorkflow.generate(true);
+    expect(generatedWorkflow).toEqual(expected);
+  });
+});
+
+describe('Instantiate a deployment job with a context', () => {
+  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
+  const deployCommand = new CircleCI.commands.Run({
+    command: 'npm run deploy',
+  });
+  const deployJob = new CircleCI.Job('deploy-job', docker, [deployCommand]);
+  const deployWorkflow = new CircleCI.Workflow('deploy');
+  deployWorkflow.addJob(deployJob, {
+    context: ['deployment-context'],
+  });
+  it('Should match the expected output', () => {
+    const expectedYaml = `deploy:
+  jobs:
+    - deploy-job:
+        context:
+          - deployment-context
+`;
+    const expected = YAML.parse(expectedYaml);
+    const generatedWorkflow = deployWorkflow.generate(true);
     expect(generatedWorkflow).toEqual(expected);
   });
 });
