@@ -1,0 +1,112 @@
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>@circleci/circleci-config-sdk</title><meta name="description" content="Documentation for @circleci/circleci-config-sdk"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">@circleci/circleci-config-sdk</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>@circleci/circleci-config-sdk </h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#circleci-config-sdk" id="circleci-config-sdk" style="color: inherit; text-decoration: none;">
+  <h1>CircleCI Config SDK</h1>
+</a>
+<p><a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/main/LICENSE"><img src="https://img.shields.io/github/license/CircleCI-Public/circleci-config-sdk-ts" alt="GitHub"></a>
+<a href="https://app.circleci.com/pipelines/github/CircleCI-Public/circleci-config-sdk-ts"><img src="https://img.shields.io/circleci/build/gh/CircleCI-Public/circleci-config-sdk-ts/main?logo=circleci&token=5fcb5715c180e9f7d3a076d95779cd88f75d2093" alt="CircleCI"></a>
+<a href="https://www.npmjs.com/package/@circleci/circleci-config-sdk"><img src="https://img.shields.io/npm/v/@circleci/circleci-config-sdk?logo=npm" alt="npm"></a>
+<a href="https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts"><img src="https://codecov.io/gh/CircleCI-Public/circleci-config-sdk-ts/branch/main/graph/badge.svg?token=Z4C4RXABS7" alt="codecov"></a>
+<a href="https://www.npmjs.com/package/@circleci/circleci-config-sdk"><img src="https://img.shields.io/npm/dm/@circleci/circleci-config-sdk?logo=npm" alt="npm"></a>
+<img src="https://img.shields.io/github/stars/CircleCI-Public/circleci-config-sdk-ts?style=social" alt="GitHub Repo stars"></p>
+<p>Create and manage your <a href="https://circleci.com/">CircleCI</a> configuration files with JavaScript and
+TypeScript.</p>
+
+<a href="#table-of-contents" id="table-of-contents" style="color: inherit; text-decoration: none;">
+  <h2>Table of Contents</h2>
+</a>
+<ul>
+<li><a href="#circleci-config-sdk">CircleCI Config SDK</a><ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#getting-started">Getting Started</a><ul>
+<li><a href="#installation">Installation</a><ul>
+<li><a href="#usage">Usage</a></li>
+</ul>
+</li>
+<li><a href="#example">Example</a></li>
+</ul>
+</li>
+<li><a href="#getting-help">Getting Help</a><ul>
+<li><a href="#resources">Resources</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#related">Related</a></li>
+</ul>
+
+<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+  <h2>Getting Started</h2>
+</a>
+<p>📖 <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki">Getting Started Wiki</a></p>
+<p>📖 <a href="https://circleci-public.github.io/circleci-config-sdk-ts/">SDK API Docs</a></p>
+<p>💻 <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/tree/main/sample">Examples</a></p>
+<hr>
+
+<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+  <h3>Installation</h3>
+</a>
+<p>Using npm:</p>
+<pre><code class="language-shell"><span class="hl-0">$ npm i @circleci/circleci-config-sdk</span>
+</code></pre>
+<p>Using yarn:</p>
+<pre><code class="language-shell"><span class="hl-0">$ yarn add @circleci/circleci-config-sdk</span>
+</code></pre>
+
+<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+  <h4>Usage</h4>
+</a>
+<p>In Browser:</p>
+<pre><code class="language-typescript"><span class="hl-1">import</span><span class="hl-0"> </span><span class="hl-2">CircleCI</span><span class="hl-0"> </span><span class="hl-1">from</span><span class="hl-0"> </span><span class="hl-3">&#39;@circleci/circleci-config-sdk&#39;</span><span class="hl-0">;</span>
+</code></pre>
+<p>In Node.js:</p>
+<pre><code class="language-javascript"><span class="hl-4">const</span><span class="hl-0"> </span><span class="hl-5">CircleCI</span><span class="hl-0"> = </span><span class="hl-6">require</span><span class="hl-0">(</span><span class="hl-3">&#39;@circleci/circleci-config-sdk&#39;</span><span class="hl-0">);</span>
+</code></pre>
+
+<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+  <h3>Example</h3>
+</a>
+<p>Generate a CircleCI config using TypeScript/Javascript, properly typed for full
+IntelliSense support.</p>
+<pre><code class="language-typescript"><span class="hl-4">const</span><span class="hl-0"> </span><span class="hl-5">CircleCI</span><span class="hl-0"> = </span><span class="hl-6">require</span><span class="hl-0">(</span><span class="hl-3">&#39;@circleci/circleci-config-sdk&#39;</span><span class="hl-0">);</span><br/><span class="hl-7">// Instantiate new Config</span><br/><span class="hl-4">const</span><span class="hl-0"> </span><span class="hl-5">myConfig</span><span class="hl-0"> = </span><span class="hl-4">new</span><span class="hl-0"> </span><span class="hl-2">CircleCI</span><span class="hl-0">.</span><span class="hl-6">Config</span><span class="hl-0">();</span><br/><span class="hl-7">// Create new Workflow</span><br/><span class="hl-4">const</span><span class="hl-0"> </span><span class="hl-5">myWorkflow</span><span class="hl-0"> = </span><span class="hl-4">new</span><span class="hl-0"> </span><span class="hl-2">CircleCI</span><span class="hl-0">.</span><span class="hl-6">Workflow</span><span class="hl-0">(</span><span class="hl-3">&#39;myWorkflow&#39;</span><span class="hl-0">);</span><br/><span class="hl-2">myConfig</span><span class="hl-0">.</span><span class="hl-6">addWorkflow</span><span class="hl-0">(</span><span class="hl-2">myWorkflow</span><span class="hl-0">);</span><br/><br/><span class="hl-7">// Create an executor instance</span><br/><span class="hl-7">// Executors are used directly in jobs</span><br/><span class="hl-7">// and do not need to be added to the config separately</span><br/><span class="hl-4">const</span><span class="hl-0"> </span><span class="hl-5">nodeExecutor</span><span class="hl-0"> = </span><span class="hl-4">new</span><span class="hl-0"> </span><span class="hl-2">CircleCI</span><span class="hl-0">.</span><span class="hl-2">executors</span><span class="hl-0">.</span><span class="hl-6">DockerExecutor</span><span class="hl-0">(</span><span class="hl-3">&#39;cimg/node:lts&#39;</span><span class="hl-0">);</span><br/><br/><span class="hl-7">// Create Job and add it to the config</span><br/><span class="hl-4">const</span><span class="hl-0"> </span><span class="hl-5">nodeTestJob</span><span class="hl-0"> = </span><span class="hl-4">new</span><span class="hl-0"> </span><span class="hl-2">CircleCI</span><span class="hl-0">.</span><span class="hl-6">Job</span><span class="hl-0">(</span><span class="hl-3">&#39;node-test&#39;</span><span class="hl-0">, </span><span class="hl-2">nodeExecutor</span><span class="hl-0">);</span><br/><span class="hl-2">myConfig</span><span class="hl-0">.</span><span class="hl-6">addJob</span><span class="hl-0">(</span><span class="hl-2">nodeTestJob</span><span class="hl-0">);</span><br/><br/><span class="hl-7">// Add steps to job</span><br/><span class="hl-2">nodeTestJob</span><br/><span class="hl-0">  .</span><span class="hl-6">addStep</span><span class="hl-0">(</span><span class="hl-4">new</span><span class="hl-0"> </span><span class="hl-2">CircleCI</span><span class="hl-0">.</span><span class="hl-2">commands</span><span class="hl-0">.</span><span class="hl-6">Checkout</span><span class="hl-0">())</span><br/><span class="hl-0">  .</span><span class="hl-6">addStep</span><span class="hl-0">(</span><br/><span class="hl-0">    </span><span class="hl-4">new</span><span class="hl-0"> </span><span class="hl-2">CircleCI</span><span class="hl-0">.</span><span class="hl-2">commands</span><span class="hl-0">.</span><span class="hl-6">Run</span><span class="hl-0">({</span><br/><span class="hl-0">      </span><span class="hl-2">command:</span><span class="hl-0"> </span><span class="hl-3">&#39;npm install&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">      </span><span class="hl-2">name:</span><span class="hl-0"> </span><span class="hl-3">&#39;NPM Install&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    }),</span><br/><span class="hl-0">  )</span><br/><span class="hl-0">  .</span><span class="hl-6">addStep</span><span class="hl-0">(</span><br/><span class="hl-0">    </span><span class="hl-4">new</span><span class="hl-0"> </span><span class="hl-2">CircleCI</span><span class="hl-0">.</span><span class="hl-2">commands</span><span class="hl-0">.</span><span class="hl-6">Run</span><span class="hl-0">({</span><br/><span class="hl-0">      </span><span class="hl-2">command:</span><span class="hl-0"> </span><span class="hl-3">&#39;npm run test&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">      </span><span class="hl-2">name:</span><span class="hl-0"> </span><span class="hl-3">&#39;Run tests&#39;</span><span class="hl-0">,</span><br/><span class="hl-0">    }),</span><br/><span class="hl-0">  );</span><br/><br/><span class="hl-7">// Add Jobs to Workflow</span><br/><span class="hl-2">myWorkflow</span><span class="hl-0">.</span><span class="hl-6">addJob</span><span class="hl-0">(</span><span class="hl-2">nodeTestJob</span><span class="hl-0">);</span><br/><br/><span class="hl-7">// The `stringify()` function on `CircleCI.Config` will return the CircleCI YAML equivalent.</span><br/><span class="hl-4">const</span><span class="hl-0"> </span><span class="hl-5">MyYamlConfig</span><span class="hl-0"> = </span><span class="hl-2">myConfig</span><span class="hl-0">.</span><span class="hl-6">stringify</span><span class="hl-0">();</span><br/><br/><span class="hl-7">// Save the config to a file in Node.js or the browser. Note, use in the browser requires user interaction.</span><br/><span class="hl-2">myConfig</span><span class="hl-0">.</span><span class="hl-6">writeFile</span><span class="hl-0">(</span><span class="hl-3">&#39;config.yml&#39;</span><span class="hl-0">);</span>
+</code></pre>
+<p><code>MyYamlConfig</code> will hold the following string (A valid CircleCI Config).</p>
+<pre><code class="language-yaml"><span class="hl-8">version</span><span class="hl-0">: </span><span class="hl-9">2.1</span><br/><span class="hl-8">setup</span><span class="hl-0">: </span><span class="hl-4">false</span><br/><span class="hl-8">jobs</span><span class="hl-0">:</span><br/><span class="hl-0">  </span><span class="hl-8">node-test</span><span class="hl-0">:</span><br/><span class="hl-0">    </span><span class="hl-8">docker</span><span class="hl-0">:</span><br/><span class="hl-0">      - </span><span class="hl-8">image</span><span class="hl-0">: </span><span class="hl-10">cimg/node:lts</span><br/><span class="hl-0">    </span><span class="hl-8">resource_class</span><span class="hl-0">: </span><span class="hl-10">medium</span><br/><span class="hl-0">    </span><span class="hl-8">steps</span><span class="hl-0">:</span><br/><span class="hl-0">      - </span><span class="hl-8">checkout</span><span class="hl-0">: {}</span><br/><span class="hl-0">      - </span><span class="hl-8">run</span><span class="hl-0">:</span><br/><span class="hl-0">          </span><span class="hl-8">command</span><span class="hl-0">: </span><span class="hl-10">npm install</span><br/><span class="hl-0">          </span><span class="hl-8">name</span><span class="hl-0">: </span><span class="hl-10">NPM Install</span><br/><span class="hl-0">      - </span><span class="hl-8">run</span><span class="hl-0">:</span><br/><span class="hl-0">          </span><span class="hl-8">command</span><span class="hl-0">: </span><span class="hl-10">npm run test</span><br/><span class="hl-0">          </span><span class="hl-8">name</span><span class="hl-0">: </span><span class="hl-10">Run tests</span><br/><span class="hl-8">workflows</span><span class="hl-0">:</span><br/><span class="hl-0">  </span><span class="hl-8">myWorkflow</span><span class="hl-0">:</span><br/><span class="hl-0">    </span><span class="hl-8">jobs</span><span class="hl-0">:</span><br/><span class="hl-0">      - </span><span class="hl-8">node-test</span><span class="hl-0">: {}</span>
+</code></pre>
+
+<a href="#getting-help" id="getting-help" style="color: inherit; text-decoration: none;">
+  <h2>Getting Help</h2>
+</a>
+<p>This open-source project utilized GitHub issues and project boards to manage
+requests and support.</p>
+<p>If you can not find an answer to your question in an existing
+<a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/issues?q=">issue</a>,
+you may open a new issue with the appropriate template. Issues are the best way
+for the CircleCI team and the open-source community to track and interact with
+your questions.</p>
+
+<a href="#resources" id="resources" style="color: inherit; text-decoration: none;">
+  <h3>Resources</h3>
+</a>
+<p>Consider checking the following common resources before opening a new issue.</p>
+<ul>
+<li><a href="https://circleci.com/docs/2.0/configuration-reference/">CircleCI Config Reference</a></li>
+<li><a href="https://circleci-public.github.io/circleci-config-sdk-ts/">Config SDK API Documentation</a></li>
+<li><a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/wiki/FAQ#what-features-of-circleci-config-are-not-supported-by-this-sdk">FAQ</a></li>
+</ul>
+
+<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+  <h1>Contributing</h1>
+</a>
+<p>This <a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts">repository</a> welcomes community contributions! See our
+<a href="https://github.com/CircleCI-Public/circleci-config-sdk-ts/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>
+for guidance on configuring your development environment and how to submit
+quality pull requests.</p>
+
+<a href="#related" id="related" style="color: inherit; text-decoration: none;">
+  <h1>Related</h1>
+</a>
+<ul>
+<li><a href="https://github.com/CircleCI-Public/visual-config-editor">Visual Config Editor</a></li>
+</ul>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Exports</a></li><li class=" tsd-kind-namespace"><a href="modules/commands.html">commands</a></li><li class=" tsd-kind-namespace"><a href="modules/executors.html">executors</a></li><li class=" tsd-kind-namespace"><a href="modules/internalTypes.html">internal<wbr/>Types</a></li><li class=" tsd-kind-namespace"><a href="modules/logic.html">logic</a></li><li class=" tsd-kind-namespace"><a href="modules/mapping.html">mapping</a></li><li class=" tsd-kind-namespace"><a href="modules/orb.html">orb</a></li><li class=" tsd-kind-namespace"><a href="modules/parameters.html">parameters</a></li><li class=" tsd-kind-namespace"><a href="modules/reusable.html">reusable</a></li><li class=" tsd-kind-namespace"><a href="modules/types.html">types</a></li><li class=" tsd-kind-namespace"><a href="modules/workflow.html">workflow</a></li></ul></nav><nav class="tsd-navigation secondary menu-sticky"><ul><li class="tsd-kind-class"><a href="classes/Config.html" class="tsd-kind-icon">Config</a></li><li class="tsd-kind-class"><a href="classes/Job.html" class="tsd-kind-icon">Job</a></li><li class="tsd-kind-class"><a href="classes/Pipeline.html" class="tsd-kind-icon">Pipeline</a></li><li class="tsd-kind-class"><a href="classes/Workflow.html" class="tsd-kind-icon">Workflow</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li><li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li><li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li><li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
