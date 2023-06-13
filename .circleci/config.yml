@@ -44,7 +44,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - 'fe:98:73:d4:14:87:89:62:38:63:9f:be:33:14:32:01'
+            - 'b4:e5:85:38:ad:95:24:26:ab:28:74:80:2b:95:3f:85'
       - node/install-packages
       - update-version
       - run:
