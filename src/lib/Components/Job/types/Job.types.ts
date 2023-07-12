@@ -15,6 +15,7 @@ import { JobParameterLiteral } from '../../Parameters/types/CustomParameterLiter
 export type JobContentsShape = {
   steps: unknown[];
   parallelism?: number;
+  circleci_ip_ranges?: boolean;
 } & AnyExecutorShape &
   JobEnvironmentShape;
 
@@ -40,6 +41,7 @@ export type JobDependencies = {
 
 export type JobOptionalProperties = {
   parallelism?: number;
+  circleci_ip_ranges?: boolean;
 } & ExecutableProperties;
 
 export type UnknownJobShape = {
