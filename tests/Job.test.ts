@@ -26,6 +26,35 @@ describe('Instantiate Docker Job', () => {
   });
 });
 
+describe('Instantiate Docker Job with custom properties', () => {
+  const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
+  const helloWorld = new CircleCI.commands.Run({
+    command: 'echo hello world',
+  });
+  const jobName = 'my-job';
+  const job = new CircleCI.Job(jobName, docker, [helloWorld], {
+    parallelism: 3,
+    circleci_ip_ranges: true,
+  });
+  const jobContents = {
+    docker: [{ image: 'cimg/node:lts' }],
+    resource_class: 'medium',
+    parallelism: 3,
+    circleci_ip_ranges: true,
+    steps: [{ run: 'echo hello world' }],
+  };
+
+  it('Should match the expected output', () => {
+    expect(job.generate(true)).toEqual({ [jobName]: jobContents });
+  });
+
+  it('Add job to config and validate', () => {
+    const myConfig = new CircleCI.Config();
+    myConfig.addJob(job);
+    expect(myConfig.jobs.length).toBeGreaterThan(0);
+  });
+});
+
 describe('Instantiate Parameterized Docker Job With Custom Parameters', () => {
   const docker = new CircleCI.executors.DockerExecutor('cimg/node:lts');
   const helloWorld = new CircleCI.commands.Run({

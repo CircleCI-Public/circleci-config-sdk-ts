@@ -3,6 +3,7 @@ import { Command } from '../Commands/exports/Command';
 import { Executable } from '../Executors/types/ExecutorParameters.types';
 import { Generable } from '../index';
 import {
+  BooleanParameter,
   EnvironmentParameter,
   IntegerParameter,
   StringParameter,
@@ -34,6 +35,10 @@ export class Job implements Generable, Executable {
    * Number of parallel instances of this job to run (defaults to 1 if undefined)
    */
   parallelism: IntegerParameter | undefined;
+  /**
+   * Whether to use CircleCI IP Ranges for the job (defaults to false if undefined)
+   */
+  circleci_ip_ranges: BooleanParameter | undefined;
 
   // Execution environment properties
 
@@ -62,6 +67,7 @@ export class Job implements Generable, Executable {
     this.shell = properties?.shell;
     this.working_directory = properties?.working_directory;
     this.parallelism = properties?.parallelism;
+    this.circleci_ip_ranges = properties?.circleci_ip_ranges;
   }
 
   /**
@@ -81,6 +87,7 @@ export class Job implements Generable, Executable {
       shell: this.shell,
       working_directory: this.working_directory,
       parallelism: this.parallelism,
+      circleci_ip_ranges: this.circleci_ip_ranges,
     };
   }
   /**
