@@ -28,6 +28,9 @@ export abstract class WorkflowJobAbstract implements Generable {
 
     if (this.parameters) {
       const { matrix, preSteps, postSteps, ...jobParameters } = this.parameters;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { requires, context, filters, name, type, ...customParameters } =
+        jobParameters;
       parameters = jobParameters;
 
       if (matrix) {
@@ -41,6 +44,18 @@ export abstract class WorkflowJobAbstract implements Generable {
       }
       if (postSteps) {
         parameters['post-steps'] = this.generateSteps(postSteps, flatten);
+      }
+
+      for (const [name, jp] of Object.entries(customParameters)) {
+        if (jp && Array.isArray(jp)) {
+          parameters[name] = jp.map(function (param) {
+            if (typeof param === 'string') {
+              return param;
+            }
+
+            return param.generate(flatten);
+          });
+        }
       }
     }
 
